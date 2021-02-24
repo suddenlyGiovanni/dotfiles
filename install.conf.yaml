@@ -4,7 +4,9 @@
 
 - clean: ['~']
 
-# - link:
+- link:
+   ~/.vim: vim
+   ~/.zshrc: zshrc
 
 - create:
   - ~/Projects
