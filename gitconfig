@@ -1,0 +1,60 @@
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[user]
+    name = Giovanni Ravalico
+    email = 15946771+suddenlyGiovanni@users.noreply.github.com
+
+[color]
+    ui = auto
+
+[alias]
+    # One letter short aliases
+    a = add -p
+    c = commit
+    f = fetch -p
+    p = push -u
+    r = reset
+
+    # Two letter short aliases
+    st = status -sb
+    co = checkout
+    df = difftool
+    dc = diff --cached
+    cp = cherry-pick
+
+    # Log aliases
+    lg = log --color --graph --date=iso --pretty=format:'%C(yellow)%h%C(reset) %C(green)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %<(20)%C(blue)%an%C(reset) %C(red)%d%C(reset) %s' --abbrev-commit
+
+[pull]
+    rebase = true
+
+[rebase]
+    autoStash = true
+
+[push]
+    default = simple
+
+[merge]
+    conflictstyle = diff3
+
+[core]
+    hooksPath = /Users/suddenlyGiovanni/git-hooks
+    editor = code-insiders --wait
+    excludesfile = /Users/suddenlyGiovanni/.gitignore_global
+    pager = delta --plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+
+[interactive]
+    diffFilter = delta --color-only
+
+[difftool]
+    prompt = true
+
+[mergetool]
+    prompt = true
+
+[commit]
+    template = /Users/suddenlyGiovanni/..git-standard-commit-message
