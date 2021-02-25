@@ -26,7 +26,7 @@ brew list httpie || brew install httpie # User-friendly cURL replacement (comman
 # brew install --cask dash4
 
 # Text editors/IDEs
-brew list --cask visual-studio-code-insiders || brew install --cask visual-studio-code-insiders
+brew list --cask visual-studio-code-insiders || brew install --cask --no-quarantine visual-studio-code-insiders
 
 # JetBrains
 # brew install --cask intellij-idea
@@ -57,7 +57,7 @@ brew list --cask visual-studio-code-insiders || brew install --cask visual-studi
 # ___PRODUCTIVITY___
 
 # Efficiency booster
-# brew install --cask alfred
+brew list --cask alfred || brew install --cask --no-quarantine alfred
 
 # Slack
 # brew install --cask slack-beta
@@ -78,7 +78,7 @@ brew list --cask visual-studio-code-insiders || brew install --cask visual-studi
 # mas install 1166066070
 
 # ___BROWSERS___
-brew list --cask google-chrome || brew install --cask google-chrome
+brew list --cask google-chrome || brew install --cask --no-quarantine google-chrome
 # brew list --cask safari-technology-preview || brew install --cask safari-technology-preview
 # brew install --cask firefox-developer-edition
 # brew install --cask raindropio
