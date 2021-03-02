@@ -5,21 +5,37 @@
 - clean: ["~"]
 
 - link:
+      # Bash
+      ~/.bashrc:
+
+      # Zsh
       ~/.zshrc:
       ~/.zshenv:
+
+      # Git
       ~/.gitconfig:
+
+      # Bat
       ~/.config/bat:
           create: true
           path: config/bat
+
+      # Fish
       ~/.config/fish:
           create: true
           path: config/fish
+
+      # Starship Shell Prompt
+      ~/.config/starship.toml: config/starship.toml
+
+      # Iterm2
       ~/.config/iterm2:
           create: true
           path: config/iterm2
 
 - create:
       - ~/Projects
+      - ~/.config
 
 - shell:
       - command: ./setup_homebrew.zsh

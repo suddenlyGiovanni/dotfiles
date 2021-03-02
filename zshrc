@@ -13,10 +13,7 @@ alias tree="exa --tree --level=2"
 alias man="batman"
 
 # Customize Prompt(s)
-PROMPT='
-%1~ %L %# '
-
-RPROMPT='%*'
+eval "$(starship init zsh)"
 
 # Add Locations to $PATH Variable
 # Add Visual Studio Code Insiders (code)
