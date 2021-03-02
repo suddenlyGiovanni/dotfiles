@@ -11,9 +11,9 @@
       ~/.config/bat:
           create: true
           path: config/bat
-      #   ~/.config/fish:
-      #       create: true
-      #       path: config/fish
+      ~/.config/fish:
+          create: true
+          path: config/fish
       ~/.config/iterm2:
           create: true
           path: config/iterm2
