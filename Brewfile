@@ -20,6 +20,8 @@ brew "deno", link: false
 brew "exa"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+# User-friendly command-line shell for UNIX-like operating systems
+brew "fish"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GNU compiler collection
