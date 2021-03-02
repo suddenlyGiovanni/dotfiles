@@ -2,6 +2,7 @@ tap "eth-p/software"
 tap "github/gh"
 tap "homebrew/bundle"
 tap "homebrew/cask"
+tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
 # Interpreted, interactive, object-oriented programming language
@@ -70,6 +71,7 @@ cask "calibre"
 cask "docker"
 # Web browser
 cask "firefox-developer-edition"
+cask "font-fira-code-nerd-font"
 # Git client focusing on productivity
 cask "gitkraken"
 # Web browser
