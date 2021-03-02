@@ -20,8 +20,6 @@ brew "deno", link: false
 brew "exa"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
-# User-friendly command-line shell for UNIX-like operating systems
-brew "fish"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GNU compiler collection
@@ -34,8 +32,6 @@ brew "git"
 brew "git-delta"
 # Extensions to follow Vincent Driessen's branching model
 brew "git-flow"
-# Simplified version control system on top of git
-brew "gitless"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # User-friendly cURL replacement (command-line HTTP client)
@@ -62,8 +58,6 @@ brew "watchman"
 brew "wget"
 # JavaScript package manager
 brew "yarn"
-# Fish shell like syntax highlighting for zsh
-brew "zsh-syntax-highlighting"
 # Bash scripts that integrate bat with various command-line tools
 brew "eth-p/software/bat-extras"
 # Application launcher and productivity software
