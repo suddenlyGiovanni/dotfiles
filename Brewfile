@@ -54,6 +54,8 @@ brew "thefuck"
 brew "tldr", link: false
 # Language for application scale JavaScript development
 brew "typescript"
+# JavaScript toolchain manager for reproducible environments
+brew "volta"
 # Watch files and take action when they change
 brew "watchman"
 # Internet file retriever
