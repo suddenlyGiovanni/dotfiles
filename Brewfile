@@ -1,11 +1,9 @@
-tap "d12frosted/emacs-plus"
+tap "eth-p/software"
 tap "github/gh"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
-tap "jesseduffield/lazygit"
-tap "nvie/tap"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.9"
 # Official Amazon AWS command-line interface
@@ -18,8 +16,6 @@ brew "glib"
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
 brew "deno", link: false
-# Good-lookin' diffs with diff-highlight and more
-brew "diff-so-fancy"
 # Modern replacement for 'ls'
 brew "exa"
 # Simple, fast and user-friendly alternative to find
@@ -42,20 +38,12 @@ brew "git-flow"
 brew "gitless"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
-# Colorize logfiles and command output
-brew "grc"
-# OpenType text shaping engine
-brew "harfbuzz"
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
-# Add GitHub support to git on the command-line
-brew "hub"
 # Mac App Store command-line interface
 brew "mas"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
-# Framework for layout and rendering of i18n text
-brew "pango"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Tool to build, change, and version infrastructure
@@ -64,8 +52,6 @@ brew "terraform"
 brew "thefuck"
 # Simplified and community-driven man pages
 brew "tldr", link: false
-# Display directories as trees (with optional color/HTML output)
-brew "tree"
 # Language for application scale JavaScript development
 brew "typescript"
 # Watch files and take action when they change
@@ -76,10 +62,8 @@ brew "wget"
 brew "yarn"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
-# A simple terminal UI for git commands, written in Go
-brew "jesseduffield/lazygit/lazygit"
-# Suite of useful Git commands
-brew "nvie/tap/git-toolbelt"
+# Bash scripts that integrate bat with various command-line tools
+brew "eth-p/software/bat-extras"
 # Application launcher and productivity software
 cask "alfred"
 # E-books management software
@@ -88,6 +72,8 @@ cask "calibre"
 cask "docker"
 # Web browser
 cask "firefox-developer-edition"
+# Git client focusing on productivity
+cask "gitkraken"
 # Web browser
 cask "google-chrome"
 # Terminal emulator as alternative to Apple's Terminal app
@@ -126,4 +112,6 @@ mas "Grammarly for Safari", id: 1462114288
 mas "Magnet", id: 441258766
 mas "NewsGuard", id: 1438657064
 mas "NordVPN IKE", id: 1116599239
+mas "Playgrounds", id: 1496833156
+mas "Raindrop.io for Safari", id: 957810159
 mas "Twitter", id: 1482454543
