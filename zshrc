@@ -27,3 +27,5 @@ function mkcd() {
 # Use ZSH Plugins
 
 # ...and Other Surprises
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
