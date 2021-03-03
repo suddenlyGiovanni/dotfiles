@@ -24,6 +24,14 @@
       ~/.config/fish:
           create: true
           path: config/fish
+      ~/.config/fish/functions:
+          path: fish/functions/*.fish
+          glob: true
+          create: true
+      ~/.config/fish/completions:
+          path: fish/completions/*.fish
+          glob: true
+          create: true
 
       # Starship Shell Prompt
       ~/.config/starship.toml: config/starship.toml
