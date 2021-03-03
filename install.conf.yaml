@@ -1,6 +1,7 @@
 - defaults:
       link:
           relink: true
+          create: true
 
 - clean: ["~"]
 
@@ -21,9 +22,12 @@
           path: config/bat
 
       # Fish
-      ~/.config/fish:
-          create: true
-          path: config/fish
+      ~/.config/fish/config.fish: fish/config.fish
+      ~/.config/fish/fish_plugins: fish/fish_plugins
+      ~/.config/fish/fish_variables: fish/fish_variables
+      ~/.config/fish/conf.d:
+          path: fish/conf.d/*.fish
+          glob: true
       ~/.config/fish/functions:
           path: fish/functions/*.fish
           glob: true
