@@ -26,7 +26,7 @@
       # Bat
       ~/.config/bat:
           create: true
-          path: config/bat
+          path: bat
 
       # Fish
       ~/.config/fish/config.fish: fish/config.fish
