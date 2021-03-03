@@ -13,3 +13,8 @@ suddenlyGiovanni's dotfiles
 - Git (config and SSH)
 - Alfred (turn off Spotlight shortcut and use for Alfred )
 - Find a way to install Fisher
+- Install brews the regular way, then execute this command to dump the operations to a brew file:
+
+```bash
+ brew bundle dump --force --describe --file=brew/Brewfile
+```

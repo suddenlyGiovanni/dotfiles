@@ -19,7 +19,7 @@ fi
 # which makes them available to Homebrew for the
 # first install (before our `zshrc` is sourced).
 
-brew bundle --verbose
+brew bundle --verbose --file=brew/Brewfile
 
 # ___DEVELOPMENT___
 # Git-related
