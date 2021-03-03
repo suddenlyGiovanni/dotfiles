@@ -1,0 +1,24 @@
+function repos-update --description 'Development projects update'
+    pushd (pwd)
+    if not test -d ~/Projects
+        echo "Cannot find ~/Projects dir"
+        return
+    end
+    cd ~/Projects
+    for project in */
+        echo "Updating project $project"
+        pushd $project
+        if not test -d .git
+            echo "Not a git directory, skipping"
+            popd
+            continue
+        end
+        echo "Running git pull"
+        git pull --quiet --recurse-submodules 2>/dev/null
+        echo "Trimming dead branches"
+        git-trim --no-confirm
+        echo Done
+        popd
+    end
+    popd
+end
