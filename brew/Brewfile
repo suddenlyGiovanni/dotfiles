@@ -38,6 +38,8 @@ brew "git"
 brew "git-delta"
 # Extensions to follow Vincent Driessen's branching model
 brew "git-flow"
+# Trim your git remote tracking branches that are merged or gone
+brew "git-trim"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # User-friendly cURL replacement (command-line HTTP client)
