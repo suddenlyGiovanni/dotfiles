@@ -6,7 +6,7 @@
 
 - link:
       # Bash
-      ~/.bashrc:
+      ~/.bashrc: bash/bashrc
 
       # Zsh
       ~/.zshrc: zsh/zshrc
