@@ -16,6 +16,13 @@
       # Git
       ~/.gitconfig: git/gitconfig
 
+      # gh
+      ~/.config/gh:
+          glob: true
+          path: gh/*
+          exclude: [gh/hosts.yml]
+          relink: true
+
       # Bat
       ~/.config/bat:
           create: true
