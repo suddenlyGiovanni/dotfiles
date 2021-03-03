@@ -13,7 +13,7 @@
       ~/.zshenv: zsh/zshenv
 
       # Git
-      ~/.gitconfig:
+      ~/.gitconfig: git/gitconfig
 
       # Bat
       ~/.config/bat:
