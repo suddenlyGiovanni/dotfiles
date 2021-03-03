@@ -34,7 +34,7 @@
           create: true
 
       # Starship Shell Prompt
-      ~/.config/starship.toml: config/starship.toml
+      ~/.config/starship.toml: starship/starship.toml
 
       # Iterm2
       ~/.config/iterm2:
