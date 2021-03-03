@@ -5,6 +5,7 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
+tap "jesseduffield/lazygit"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.9"
 # Official Amazon AWS command-line interface
@@ -65,6 +66,8 @@ brew "wget"
 brew "yarn"
 # Bash scripts that integrate bat with various command-line tools
 brew "eth-p/software/bat-extras"
+# A simple terminal UI for git commands, written in Go
+brew "jesseduffield/lazygit/lazygit"
 # GPU-accelerated terminal emulator
 cask "alacritty"
 # Application launcher and productivity software
