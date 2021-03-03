@@ -13,21 +13,6 @@
       ~/.zshrc: zsh/zshrc
       ~/.zshenv: zsh/zshenv
 
-      # Git
-      ~/.gitconfig: git/gitconfig
-
-      # gh
-      ~/.config/gh:
-          glob: true
-          path: gh/*
-          exclude: [gh/hosts.yml]
-          relink: true
-
-      # Bat
-      ~/.config/bat:
-          create: true
-          path: bat
-
       # Fish
       ~/.config/fish/config.fish: fish/config.fish
       ~/.config/fish/fish_plugins: fish/fish_plugins
@@ -44,6 +29,21 @@
           glob: true
           create: true
 
+      # Git
+      ~/.gitconfig: git/gitconfig
+
+      # gh
+      ~/.config/gh:
+          glob: true
+          path: gh/*
+          exclude: [gh/hosts.yml]
+          relink: true
+
+      # Bat
+      ~/.config/bat:
+          create: true
+          path: bat
+
       # Starship Shell Prompt
       ~/.config/starship.toml: starship/starship.toml
 
@@ -51,6 +51,9 @@
       ~/.config/iterm2:
           create: true
           path: config/iterm2
+
+      # Editor config
+      ~/.editorconfig:
 
 - create:
       - ~/Projects
