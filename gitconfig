@@ -45,7 +45,7 @@
     hooksPath = /Users/suddenlyGiovanni/git-hooks
     editor = code-insiders --wait
     excludesfile = /Users/suddenlyGiovanni/.gitignore_global
-    pager = delta --plus-color="#012800" --minus-color="#340001" --theme='Monokai Extended'
+    pager = delta
 
 [interactive]
     diffFilter = delta --color-only
@@ -58,3 +58,9 @@
 
 [commit]
     template = /Users/suddenlyGiovanni/..git-standard-commit-message
+
+[delta]
+    plus-color = "#012800"
+    minus-color = "#340001"
+    syntax-theme = Monokai Extended
+    side-by-side = true
