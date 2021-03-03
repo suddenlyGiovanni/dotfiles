@@ -9,8 +9,8 @@
       ~/.bashrc:
 
       # Zsh
-      ~/.zshrc:
-      ~/.zshenv:
+      ~/.zshrc: zsh/zshrc
+      ~/.zshenv: zsh/zshenv
 
       # Git
       ~/.gitconfig:
