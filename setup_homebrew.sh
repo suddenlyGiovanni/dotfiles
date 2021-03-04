@@ -1,6 +1,10 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 
-echo "\n<<< Starting Homebrew Setup >>>\n"
+printf "\n<<< Starting Homebrew Setup >>>\n"
+
+exists() {
+  command -v "$1" >/dev/null 2>&1
+}
 
 if exists brew; then
   echo "brew exists, skipping install"

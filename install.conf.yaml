@@ -60,6 +60,6 @@
       - ~/.config
 
 - shell:
-      - command: ./setup_homebrew.zsh
+      - command: ./setup_homebrew.sh
         stdout: true
         stderr: true
