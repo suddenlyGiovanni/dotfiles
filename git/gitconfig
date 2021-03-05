@@ -43,7 +43,7 @@
 
 [core]
     hooksPath = /Users/suddenlyGiovanni/git-hooks
-    editor = code-insiders --wait
+    editor = code --wait
     excludesfile = /Users/suddenlyGiovanni/.gitignore_global
     pager = delta
 
@@ -57,7 +57,7 @@
     prompt = true
 
 [commit]
-    template = /Users/suddenlyGiovanni/..git-standard-commit-message
+    # template = /Users/suddenlyGiovanni/..git-standard-commit-message
 
 [delta]
     plus-color = "#012800"

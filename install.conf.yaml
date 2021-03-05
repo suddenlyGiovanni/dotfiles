@@ -1,63 +1,66 @@
 - defaults:
-      link:
-          relink: true
-          create: true
+    link:
+      relink: true
+      create: true
 
 - clean: ["~"]
 
 - link:
-      # Bash
-      ~/.bashrc: bash/bashrc
+    # Bash
+    ~/.bashrc: bash/bashrc
 
-      # Zsh
-      ~/.zshrc: zsh/zshrc
-      ~/.zshenv: zsh/zshenv
+    # Zsh
+    ~/.zshrc: zsh/zshrc
+    ~/.zshenv: zsh/zshenv
 
-      # Fish
-      ~/.config/fish/config.fish: fish/config.fish
-      ~/.config/fish/fish_plugins: fish/fish_plugins
-      ~/.config/fish/fish_variables: fish/fish_variables
-      ~/.config/fish/conf.d:
-          path: fish/conf.d/*.fish
-          glob: true
-      ~/.config/fish/functions:
-          path: fish/functions/*.fish
-          glob: true
-          create: true
-      ~/.config/fish/completions:
-          path: fish/completions/*.fish
-          glob: true
-          create: true
+    # Fish
+    ~/.config/fish/config.fish: fish/config.fish
+    ~/.config/fish/fish_plugins: fish/fish_plugins
+    ~/.config/fish/fish_variables: fish/fish_variables
+    ~/.config/fish/conf.d:
+      path: fish/conf.d/*.fish
+      glob: true
+    ~/.config/fish/functions:
+      path: fish/functions/*.fish
+      glob: true
+      create: true
+    ~/.config/fish/completions:
+      path: fish/completions/*.fish
+      glob: true
+      create: true
 
-      # Git
-      ~/.gitconfig: git/gitconfig
+    # Git
+    ~/.gitconfig: git/gitconfig
 
-      # gh
-      ~/.config/gh:
-          glob: true
-          path: gh/*
-          exclude: [gh/hosts.yml]
-          relink: true
+    # gh
+    ~/.config/gh:
+      glob: true
+      path: gh/*
+      exclude: [gh/hosts.yml]
+      relink: true
 
-      # Bat
-      ~/.config/bat:
-          create: true
-          path: bat
+    # Bat
+    ~/.config/bat:
+      create: true
+      path: bat
 
-      # Starship Shell Prompt
-      ~/.config/starship.toml: starship/starship.toml
+    # Starship Shell Prompt
+    ~/.config/starship.toml: starship/starship.toml
 
-      # Iterm2
-      ~/com.googlecode.iterm2.plist: iterm2/com.googlecode.iterm2.plist
+    # Iterm2
+    ~/com.googlecode.iterm2.plist: iterm2/com.googlecode.iterm2.plist
 
-      # Editor config
-      ~/.editorconfig:
+    # Editor config
+    ~/.editorconfig:
 
 - create:
-      - ~/Projects
-      - ~/.config
+    - ~/Projects
+    - ~/.config
 
 - shell:
-      - command: ./setup_homebrew.sh
-        stdout: true
-        stderr: true
+    - command: ./scripts/setup_homebrew.sh
+      stdout: true
+      stderr: true
+    - command: ./scripts/setup_fish.sh
+      stdout: true
+      stderr: true
