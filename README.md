@@ -6,14 +6,14 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
 
 ## TODOS
 
-- Terminal Preferences
-- Changed Shell to Fish
+- ~~Terminal Preferences~~
+- ~~Changed Shell to Fish~~
 - Dock Preferences
 - Mission Control Preference (don't rearrange spaces)
 - Finder Show Path Bar
 - Trackpad (Three Finger Drag and Tap to Click)
-- Git (config and SSH)
-- Alfred (turn off Spotlight shortcut and use for Alfred )
+- ~~Git (config and SSH)~~
+- ~~Alfred (turn off Spotlight shortcut and use for Alfred )~~
 - Find a way to install Fisher
 - Install brews the regular way, then execute this command to dump the operations to a brew file:
 
@@ -110,3 +110,4 @@ Deactivate licenses:
 
 - [eieioxyz/dotfiles_macos](https://github.com/eieioxyz/dotfiles_macos)
 - [pgilad/dotfiles](https://github.com/pgilad/dotfiles)
+- [rkalis/dotfiles](https://github.com/rkalis/dotfiles)
