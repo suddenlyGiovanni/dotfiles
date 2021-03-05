@@ -14,20 +14,9 @@
     ~/.zshenv: zsh/zshenv
 
     # Fish
-    ~/.config/fish/config.fish: fish/config.fish
-    ~/.config/fish/fish_plugins: fish/fish_plugins
-    ~/.config/fish/fish_variables: fish/fish_variables
-    ~/.config/fish/conf.d:
-      path: fish/conf.d/*.fish
-      glob: true
-    ~/.config/fish/functions:
-      path: fish/functions/*.fish
-      glob: true
-      create: true
-    ~/.config/fish/completions:
-      path: fish/completions/*.fish
-      glob: true
-      create: true
+    ~/.config/fish:
+      path: fish
+      relink: true
 
     # Git
     ~/.gitconfig: git/gitconfig

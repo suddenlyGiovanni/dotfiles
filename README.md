@@ -7,7 +7,7 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
 ## TODOS
 
 - Terminal Preferences
-- Changed Shell to ZSH
+- Changed Shell to Fish
 - Dock Preferences
 - Mission Control Preference (don't rearrange spaces)
 - Finder Show Path Bar
@@ -17,7 +17,7 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
 - Find a way to install Fisher
 - Install brews the regular way, then execute this command to dump the operations to a brew file:
 
-```bash
+```sh
  brew bundle dump --force --describe --file=brew/Brewfile
 ```
 
