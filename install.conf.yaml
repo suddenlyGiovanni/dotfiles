@@ -36,6 +36,9 @@
     # Starship Shell Prompt
     ~/.config/starship.toml: starship/starship.toml
 
+    # The fuck
+    ~/.config/thefuck: thefuck
+
     # Iterm2
     ~/com.googlecode.iterm2.plist: iterm2/com.googlecode.iterm2.plist
 
