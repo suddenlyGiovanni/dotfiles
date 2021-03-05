@@ -48,9 +48,7 @@
       ~/.config/starship.toml: starship/starship.toml
 
       # Iterm2
-      ~/.config/iterm2:
-          create: true
-          path: config/iterm2
+      ~/com.googlecode.iterm2.plist: iterm2/com.googlecode.iterm2.plist
 
       # Editor config
       ~/.editorconfig:
