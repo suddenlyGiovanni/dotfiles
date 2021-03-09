@@ -54,6 +54,8 @@ brew "lolcat"
 brew "mas"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
+# Modern shell for the GitHub era
+brew "nushell"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Tool to build, change, and version infrastructure
