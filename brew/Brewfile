@@ -82,6 +82,8 @@ brew "jesseduffield/lazygit/lazygit"
 cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
+# Application uninstaller
+cask "appcleaner"
 # E-books management software
 cask "calibre"
 # App to build and share containerized applications and microservices
