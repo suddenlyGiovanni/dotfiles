@@ -21,6 +21,9 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
  brew bundle dump --force --describe --file=brew/Brewfile
 ```
 
+- ~~add [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)~~
+- enable [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)
+
 ## Decommission Computer
 
 [Create a bootable USB installer for macOS](https://support.apple.com/en-us/HT201372).

@@ -82,6 +82,8 @@ brew "jesseduffield/lazygit/lazygit"
 cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
+# Inspect application bundles
+cask "apparency"
 # Application uninstaller
 cask "appcleaner"
 # E-books management software
@@ -105,12 +107,24 @@ cask "nordvpn"
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# QuickLook plug-in that renders source code with syntax highlighting
+cask "qlcolorcode"
+# Display image info and preview unsupported formats in QuickLook
+cask "qlimagesize"
+# QuickLook generator for Markdown files
+cask "qlmarkdown"
+cask "qlstephen"
+cask "qlvideo"
+cask "quicklook-json"
+cask "quicklookase"
 # Web browser
 cask "safari-technology-preview"
 # Team communication and collaboration software
 cask "slack-beta"
 # Music streaming service
 cask "spotify"
+# Application for inspecting installer packages
+cask "suspicious-package"
 # Open-source BitTorrent client
 cask "transmission"
 # Configurable document editor that supports Markdown
