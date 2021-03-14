@@ -97,6 +97,8 @@ cask "font-fira-code-nerd-font"
 cask "gitkraken"
 # Web browser
 cask "google-chrome"
+# Access the HEY email service
+cask "hey"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2-beta"
 cask "microsoft-teams"
