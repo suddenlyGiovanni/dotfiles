@@ -42,6 +42,9 @@
     # Iterm2
     ~/com.googlecode.iterm2.plist: iterm2/com.googlecode.iterm2.plist
 
+    # Iterm2 Shell integration
+    ~/.iterm2_shell_integration.fish:
+
     # Editor config
     ~/.editorconfig:
 

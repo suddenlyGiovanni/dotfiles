@@ -23,6 +23,7 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
 
 - ~~add [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)~~
 - enable [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)
+- ~~enable [iTerm2 shell integration](https://iterm2.com/documentation-shell-integration.html)~~
 
 ## Decommission Computer
 
