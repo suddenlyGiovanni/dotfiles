@@ -12,4 +12,4 @@ set -gx LC_ALL en_US.UTF-8
 
 # Opt out of brew analytics
 set -gx HOMEBREW_NO_ANALYTICS 1
-set -q HOMEBREW_CASK_OPTS; or set -gx set -gx HOMEBREW_CASK_OPTS --no-quarantine
+set -q HOMEBREW_CASK_OPTS; or set -gx set -gx HOMEBREW_CASK_OPTS "--no-quarantine --appdir=/Applications"

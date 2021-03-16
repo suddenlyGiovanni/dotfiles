@@ -1,5 +1,8 @@
 echo 'Hello from .zshenv'
 
+# Specify your defaults in this environment variable
+export HOMEBREW_CASK_OPTS="--no-quarantine --appdir=/Applications"
+
 function exists() {
   command -v $1 >/dev/null 2>&1
 }

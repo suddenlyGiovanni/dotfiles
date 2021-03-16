@@ -24,6 +24,7 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
 - ~~add [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)~~
 - enable [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)
 - ~~enable [iTerm2 shell integration](https://iterm2.com/documentation-shell-integration.html)~~
+- enable Alfred powerpack workflow
 
 ## Decommission Computer
 
@@ -109,6 +110,16 @@ Deactivate licenses:
 3. `Alfred Preferences > General > Request Permissions`.
 4. `Alfred Preferences > General > Alfred Hotkey` change to `cmd+space`.
 5. `Alfred Preferences > Advanced > Set preferences folder` and set to `~/Dropbox/dotfiles/Alfred`.
+6. Workflow: Custom Alfred [iTerm Scripts](https://github.com/vitorgalvao/custom-alfred-iterm-scripts#copy-the-script)
+7. Workflow: [Spotify mini player](https://alfred-spotify-mini-player.com)
+8. Workflow: [Dash](https://www.alfredapp.com/blog/productivity/dash-quicker-api-documentation-search/)
+9. Workflow: [GitHub](https://github.com/edgarjs/alfred-github-repos)
+10. Workflow: [slack](https://github.com/yannickglt/alfred-slack)
+11. Workflow: [Brew](https://github.com/fniephaus/alfred-homebrew)
+12. Workflow: [Git Repos](https://github.com/deanishe/alfred-repos)
+13. Workflow: [Faker](https://github.com/deanishe/alfred-fakeum)
+14. Workflow: [Raindrop](https://github.com/westerlind/alfred-raindrop-search)
+15. Workflow: [MDN](https://github.com/gilbarbara/alfred-workflows/tree/master/mdn-search)
 
 ## Inspirations
 
