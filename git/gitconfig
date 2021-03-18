@@ -1,33 +1,133 @@
-[filter "lfs"]
-    clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
-    process = git-lfs filter-process
-    required = true
-
 [user]
+    # enter your name here
     name = Giovanni Ravalico
+    # insert your email
     email = 15946771+suddenlyGiovanni@users.noreply.github.com
+    # signingkey = key
+
+[core]
+    # Use custom `.gitignore` and `.gitattributes`.
+    excludesfile = ~/.gitignore
+    attributesfile = ~/.gitattributes
+
+    # Treat spaces before tabs and all kinds of trailing whitespace as an error.
+    # [default] trailing-space: looks for spaces at the end of a line
+    # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+    # Make `git rebase` safer on macOS.
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
+
+    # Prevent showing files whose names contain non-ASCII symbols as unversioned.
+    # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+    precomposeunicode = false
+
+    # Speed up commands involving untracked files such as `git status`.
+    # https://git-scm.com/docs/git-update-index#_untracked_cache
+    untrackedCache = true
+
+    hooksPath = ~/git-hooks
+
+    editor = code --wait
+
+    pager = delta
 
 [color]
-    ui = auto
+
+	# Use colors in Git commands that are capable of colored output when
+	# outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
+	ui = auto
+
+[help]
+    autocorrect = 15
+
+[credential]
+    helper = osxkeychain
+
+[init]
+	defaultBranch = main
+
 
 [alias]
-    # One letter short aliases
-    a = add -p
-    c = commit
-    f = fetch -p
-    p = push -u
-    r = reset
 
-    # Two letter short aliases
-    st = status -sb
-    co = checkout
-    df = difftool
-    dc = diff --cached
-    cp = cherry-pick
+    # add
+    a = add -p                        # add
+    chunkyadd = add --patch           # stage commits chunk by chunk
 
-    # Log aliases
+    # Shows list of contributors of a repository.
+    contributors = shortlog --summary --numbered --email
+
+    # branch
+    b = branch -v                     # branch (verbose)
+
+    # commit
+    c = commit -m                     # commit with message
+    ca = commit -am                   # commit all with message
+    ci = commit                       # commit
+    amend = commit --amend            # ammend your last commit
+    ammend = commit --amend           # ammend your last commit
+
+    # checkout
+    co = checkout                     # switch branches or restore working tree files
+    nb = checkout -b                  # create and switch to a new branch (mnemonic: "git new branch branchname...")
+
+    # cherry-pick
+    cp = cherry-pick -x               # Apply the changes introduced by some existing commits (grab a change from a branch)
+
+    # diff
+    d = diff                          # diff unstaged changes
+    dc = diff --cached                # diff staged changes
+    last = diff HEAD^                 # diff last committed change
+
+    # log
+    l = log --graph --date=short
     lg = log --color --graph --date=iso --pretty=format:'%C(yellow)%h%C(reset) %C(green)%ai%x08%x08%x08%x08%x08%x08%x08%x08%x08%C(reset) %<(20)%C(blue)%an%C(reset) %C(red)%d%C(reset) %s' --abbrev-commit
+    changes = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\" --name-status
+    short = log --pretty=format:\"%h %cr %cn %Cgreen%s%Creset\"
+    simple = log --pretty=format:\" * %s\"
+    shortnocolor = log --pretty=format:\"%h %cr %cn %s\"
+
+    # fetch
+    f = fetch --prune                 # Download objects and refs from another repository (Before fetching, remove any remote-tracking references that no longer exist on the remote)
+
+    # pull
+    pl = pull                         # pull
+
+    # push
+    ps = push --set-upstream          # push
+
+    # rebase
+    rc = rebase --continue            # continue rebase
+    rs = rebase --skip                # skip rebase
+
+
+    # remote
+    r = remote -v                     # show remotes (verbose)
+
+    # reset
+    unstage = reset HEAD              # remove files from index (tracking)
+    uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
+    filelog = log -u                  # show changes to a file
+    mt = mergetool                    # fire up the merge tool
+
+
+    # stash
+    ss = stash                        # stash changes
+    sl = stash list                   # list stashes
+    sa = stash apply                  # apply stash (restore changes)
+    sd = stash drop                   # drop stashes (destory changes)
+
+
+    # status
+    s = status                        # status
+    st = status -sb                   # status branch
+    stat = status                     # status
+
+
+    # tag
+    t = tag -n                        # show tags with <n> lines of each tag message
+
 
 [pull]
     rebase = true
@@ -41,12 +141,6 @@
 [merge]
     conflictstyle = diff3
 
-[core]
-    hooksPath = /Users/suddenlyGiovanni/git-hooks
-    editor = code --wait
-    excludesfile = /Users/suddenlyGiovanni/.gitignore_global
-    pager = delta
-
 [interactive]
     diffFilter = delta --color-only
 
@@ -57,10 +151,19 @@
     prompt = true
 
 [commit]
-    # template = /Users/suddenlyGiovanni/..git-standard-commit-message
+    template = ~/.config/git/.gitmessage
 
 [delta]
     plus-color = "#012800"
     minus-color = "#340001"
     syntax-theme = Monokai Extended
     side-by-side = true
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[include]
+  path = ~/.gitconfig.user
