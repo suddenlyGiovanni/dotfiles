@@ -42,8 +42,15 @@
     # Iterm2
     ~/com.googlecode.iterm2.plist: iterm2/com.googlecode.iterm2.plist
 
+    # Iterm2 Automatic theme switcher
+    ~/Library/Application Support/iTerm2/Scripts/AutoLaunch/switch_automatic.py:
+      path: iterm2/switch_automatic.py
+      create: true
+      relink: true
+
     # Iterm2 Shell integration
     ~/.iterm2_shell_integration.fish:
+      path: iterm2/iterm2_shell_integration
 
     # Editor config
     ~/.editorconfig:
