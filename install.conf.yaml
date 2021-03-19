@@ -57,6 +57,13 @@
     # Editor config
     ~/.editorconfig:
 
+    # Fonts:
+    ~/Library/Fonts:
+      path: fonts/operator-mono-ligature/*
+      glob: true
+      create: true
+      relink: true
+
 - create:
     - ~/Projects
     - ~/.config
