@@ -63,6 +63,9 @@
     - ~/repos
 
 - shell:
+    - command: ./scripts/install_homebrew.sh
+      stdout: true
+      stderr: true
     - command: ./scripts/setup_homebrew.sh
       stdout: true
       stderr: true
