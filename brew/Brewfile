@@ -52,6 +52,8 @@ brew "less"
 brew "lolcat"
 # Mac App Store command-line interface
 brew "mas"
+# Show markdown documents on text terminals
+brew "mdcat"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
 # Modern shell for the GitHub era
