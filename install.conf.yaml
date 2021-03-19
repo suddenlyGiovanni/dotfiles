@@ -20,6 +20,7 @@
 
     # Git
     ~/.gitconfig: git/gitconfig
+    ~/.config/git/.gitmessage: git/gitmessage
 
     # gh
     ~/.config/gh:
@@ -50,7 +51,8 @@
 
     # Iterm2 Shell integration
     ~/.iterm2_shell_integration.fish:
-      path: iterm2/iterm2_shell_integration
+      path: iterm2/iterm2_shell_integration.fish
+      relink: true
 
     # Editor config
     ~/.editorconfig:
@@ -58,6 +60,7 @@
 - create:
     - ~/Projects
     - ~/.config
+    - ~/repos
 
 - shell:
     - command: ./scripts/setup_homebrew.sh
