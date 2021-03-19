@@ -58,6 +58,8 @@ brew "mdcat"
 brew "moreutils"
 # Modern shell for the GitHub era
 brew "nushell"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Tool to build, change, and version infrastructure
