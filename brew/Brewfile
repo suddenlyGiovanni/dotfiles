@@ -82,6 +82,8 @@ brew "yarn"
 brew "eth-p/software/bat-extras"
 # A simple terminal UI for git commands, written in Go
 brew "jesseduffield/lazygit/lazygit"
+# Command-line helper for the 1Password password manager
+cask "1password-cli"
 # GPU-accelerated terminal emulator
 cask "alacritty"
 # Application launcher and productivity software
