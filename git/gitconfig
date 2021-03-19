@@ -144,6 +144,9 @@
 [interactive]
     diffFilter = delta --color-only
 
+[diff]
+    colorMoved = default
+
 [difftool]
     prompt = true
 
@@ -154,10 +157,14 @@
     template = ~/.config/git/.gitmessage
 
 [delta]
-    plus-color = "#012800"
-    minus-color = "#340001"
-    syntax-theme = Monokai Extended
-    side-by-side = true
+    features = side-by-side line-numbers decorations
+    syntax-theme = GitHub
+    whitespace-error-style = 22 reverse
+
+[delta "decorations"]
+    commit-decoration-style = bold yellow box ul
+    file-style = bold yellow ul
+    file-decoration-style = none
 
 [filter "lfs"]
     clean = git-lfs clean -- %f
