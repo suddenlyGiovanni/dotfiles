@@ -20,6 +20,7 @@
 
     # Git
     ~/.gitconfig: git/gitconfig
+    ~/.gitignore: git/gitignore
     ~/.config/git/.gitmessage: git/gitmessage
 
     # gh
