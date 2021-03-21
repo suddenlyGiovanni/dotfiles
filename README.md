@@ -26,6 +26,7 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
 - ~~enable [iTerm2 shell integration](https://iterm2.com/documentation-shell-integration.html)~~
 - enable Alfred powerpack workflow
 - write documentation for implementing the auto theme switcher in iTerm2 following [this](https://gist.github.com/jamesmacfie/2061023e5365e8b6bfbbc20792ac90f8#file-auto_dark_mode-py) gist
+- write documentation for sourcing user defined variables. (expect the user to have a `~/.secrets` defined)
 
 ## Decommission Computer
 
