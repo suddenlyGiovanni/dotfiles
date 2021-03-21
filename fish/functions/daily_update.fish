@@ -3,6 +3,7 @@ function daily_update --description 'Keep everithing up to date'
         echo "Please install cowsay"
         return 1
     end
+
     if not type -q lolcat
         echo "Please install lolcat"
         return 1
@@ -44,25 +45,28 @@ function daily_update --description 'Keep everithing up to date'
     install-dotfiles
 
     __echo-phase "updating `Node` to '@lts' with Volta.sh"
+    echo 'node --version: $(node --version)'
     volta fetch node@lts
 
     __echo-phase "updating 'npm' to '@latest' with Volta.sh"
+    echo 'npm --version: $(npm --version)'
     volta fetch npm@latest
 
+    __echo-phase "updating npm packages"
+    npm update -g
+
     __echo-phase "updating 'yarn' to '@latest' with Volta.sh"
+    echo 'yarn --version: $(yarn --version)'
     volta fetch yarn@latest
+
+    __echo--phase "updating yarn packages"
+    yarn global upgrade
 
     __echo-phase "Generating external fish completions"
     fish_generate_completions
 
     __echo-phase "Updating fish completions"
     fish_update_completions
-
-    __echo-phase 'updating npm'
-    npm update -g
-
-    __echo--phase 'updating yarn pacakges'
-    yarn global upgrade
 
     echo "Finished daily update routine 😄"
 
