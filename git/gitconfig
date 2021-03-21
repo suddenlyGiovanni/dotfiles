@@ -84,11 +84,11 @@
     # tag
     t = tag -n                        # show tags with <n> lines of each tag message
 
-[user]
+# [user]
     # enter your name here
-    name = Giovanni Ravalico
+    # name = Giovanni Ravalico
     # insert your email
-    email = 15946771+suddenlyGiovanni@users.noreply.github.com
+    # email = 15946771+suddenlyGiovanni@users.noreply.github.com
     # signingkey = key
 
 [core]

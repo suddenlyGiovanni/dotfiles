@@ -123,6 +123,23 @@ Deactivate licenses:
 14. Workflow: [Raindrop](https://github.com/westerlind/alfred-raindrop-search)
 15. Workflow: [MDN](https://github.com/gilbarbara/alfred-workflows/tree/master/mdn-search)
 
+### Git customization
+
+These are the aliases and abbreviation made available
+
+- **`git l`** or **`gl`** - a much more usable git log
+- **`git b`** or **`gb`** - a list of branches with summary of last commit
+- **`git r`** - a list of remotes with info
+- **`git t`** or **`gt`** - a list of tags with info
+- **`git nb`** or **`gnb`** - a (n)ew (b)ranch - like checkout -b
+- **`git cp`** or **`gcp`** - cherry-pick -x (showing what was cherrypicked)
+- **`git simple`** - a clean format for creating changelogs
+- **`git recent-branches`** - if you forgot what you've been working on
+- **`git unstage`** / **`guns`** (remove from index) and **`git uncommit`** / **`gunc`** (revert to the time prior to the last commit - dangerous if already pushed) aliases
+- Some sensible default configs, such as improving merge messages, push only pushes the current branch, removing status hints, and using mnemonic prefixes in diff: (i)ndex, (w)ork tree, (c)ommit and (o)bject
+- Slightly improved colors for diff
+- **`gdmb`** (g)it (d)elete (m)erged (b)ranches - Deletes all branches already merged on current branch
+
 ## Inspirations
 
 - [eieioxyz/dotfiles_macos](https://github.com/eieioxyz/dotfiles_macos)
