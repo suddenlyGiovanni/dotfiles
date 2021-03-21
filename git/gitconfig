@@ -15,11 +15,11 @@
     contributors = shortlog --summary --numbered --email
 
     # branch
-    b = branch -v                     # branch (verbose)
+    b = branch --verbose              # branch (verbose)
 
     # commit
-    c = commit -m                     # commit with message
-    ca = commit -am                   # commit all with message
+    c = commit --message              # commit with message
+    ca = commit --all --message       # commit all with message
     ci = commit                       # commit
     amend = commit --amend            # ammend your last commit
     ammend = commit --amend           # ammend your last commit
