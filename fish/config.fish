@@ -114,3 +114,5 @@ if status --is-interactive
     abbr --add --global gdmb git branch --merged | grep -v "\*" | xargs -n 1 git branch -d
 
 end
+
+set -x PATH (pwd)"/git-fuzzy/bin:$PATH"
