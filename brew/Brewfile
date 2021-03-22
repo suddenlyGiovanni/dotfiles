@@ -10,10 +10,14 @@ tap "jesseduffield/lazygit"
 brew "python@3.9"
 # Official Amazon AWS command-line interface
 brew "awscli"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Core application library for C
 brew "glib"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
 # Configurable talking characters in ASCII art
 brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
@@ -24,6 +28,8 @@ brew "deno", link: false
 brew "exa"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
+# Collection of GNU find, xargs, and locate
+brew "findutils"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
 # Command-line fuzzy finder written in Go
@@ -42,6 +48,8 @@ brew "git-flow"
 brew "git-trim"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
+# GNU grep, egrep and fgrep
+brew "grep"
 # User-friendly cURL replacement (command-line HTTP client)
 brew "httpie"
 # Add GitHub support to git on the command-line
@@ -56,10 +64,16 @@ brew "mas"
 brew "mdcat"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
+# Free (GNU) replacement for the Pico text editor
+brew "nano"
 # Modern shell for the GitHub era
 brew "nushell"
+# OpenBSD freely-licensed SSH connectivity tools
+brew "openssh"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Terminal multiplexer with VT100/ANSI terminal emulation
+brew "screen"
 # Cross-shell prompt for astronauts
 brew "starship"
 # Tool to build, change, and version infrastructure
@@ -70,6 +84,8 @@ brew "thefuck"
 brew "tldr", link: false
 # Language for application scale JavaScript development
 brew "typescript"
+# Vi 'workalike' with many additional features
+brew "vim"
 # JavaScript toolchain manager for reproducible environments
 brew "volta"
 # Watch files and take action when they change

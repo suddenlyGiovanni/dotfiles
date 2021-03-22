@@ -117,7 +117,12 @@
 
     editor = code --wait
 
-    pager = delta
+
+[pager]
+
+    diff = delta
+
+    show = delta
 
 [color]
 
@@ -354,4 +359,5 @@
 
 
 [include]
+  # use separate file for username / github token / etc
   path = ~/.gitconfig.user
