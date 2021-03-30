@@ -72,6 +72,8 @@ brew "nushell"
 brew "openssh"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# Rust toolchain installer
+brew "rustup-init"
 # Terminal multiplexer with VT100/ANSI terminal emulation
 brew "screen"
 # Cross-shell prompt for astronauts
