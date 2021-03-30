@@ -122,6 +122,8 @@ cask "gitkraken"
 cask "google-chrome"
 # Access the HEY email service
 cask "hey"
+# IDE for Java development - community edition
+cask "intellij-idea-ce"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2-beta"
 cask "microsoft-teams"
@@ -155,7 +157,7 @@ cask "suspicious-package"
 cask "transmission"
 # Configurable document editor that supports Markdown
 cask "typora"
-# Integrated development environment
+# Code editor
 cask "visual-studio-code-insiders"
 # Desktop client for WhatsApp
 cask "whatsapp"
