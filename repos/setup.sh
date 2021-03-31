@@ -18,7 +18,7 @@ find * -name "*.list" | while read fn; do
       continue
     else
       pushd "$REPO_PATH/$folder" &>/dev/null
-      git clone "$repo" &>/dev/null
+      git clone "git@github.com:$repo.git" &>/dev/null
       if [[ $? -eq 128 ]]; then
         # echo substep_success
         echo "$repo already exists."
