@@ -16,7 +16,8 @@ SETUVAR _fisher_gazorby_2F_fish_2D_abbreviation_2D_tips_files:/Users/suddenlyGio
 SETUVAR _fisher_jethrokuan_2F_z_files:/Users/suddenlyGiovanni/\x2econfig/fish/functions/__z\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/__z_add\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/__z_clean\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/__z_complete\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/conf\x2ed/z\x2efish
 SETUVAR _fisher_jorgebucaran_2F_autopair_2E_fish_files:/Users/suddenlyGiovanni/\x2econfig/fish/functions/_autopair_backspace\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/_autopair_insert_left\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/_autopair_insert_right\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/_autopair_insert_same\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/_autopair_tab\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/conf\x2ed/autopair\x2efish
 SETUVAR _fisher_jorgebucaran_2F_fisher_files:/Users/suddenlyGiovanni/\x2econfig/fish/functions/fisher\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/completions/fisher\x2efish
-SETUVAR _fisher_plugins:jorgebucaran/fisher\x1ejethrokuan/z\x1ePatrickF1/fzf\x2efish\x1ejorgebucaran/autopair\x2efish\x1egazorby/fish\x2dabbreviation\x2dtips\x1eedc/bass
+SETUVAR _fisher_jorgebucaran_2F_nvm_2E_fish_files:/Users/suddenlyGiovanni/\x2econfig/fish/functions/_nvm_index_update\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/_nvm_list\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/_nvm_version_activate\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/_nvm_version_deactivate\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/functions/nvm\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/conf\x2ed/nvm\x2efish\x1e/Users/suddenlyGiovanni/\x2econfig/fish/completions/nvm\x2efish
+SETUVAR _fisher_plugins:jorgebucaran/fisher\x1ejethrokuan/z\x1ePatrickF1/fzf\x2efish\x1ejorgebucaran/autopair\x2efish\x1egazorby/fish\x2dabbreviation\x2dtips\x1eedc/bass\x1ejorgebucaran/nvm\x2efish
 SETUVAR fish_color_autosuggestion:555\x1ebrblack
 SETUVAR fish_color_cancel:\x2dr
 SETUVAR fish_color_command:005fd7
@@ -45,3 +46,5 @@ SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:white\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_user_paths:/usr/local/sbin\x1e/usr/local/opt/fzf/bin\x1e/Users/suddenlyGiovanni/\x2ecargo/bin
+SETUVAR nvm_data:/Users/suddenlyGiovanni/\x2elocal/share/nvm
+SETUVAR nvm_mirror:https\x3a//nodejs\x2eorg/dist

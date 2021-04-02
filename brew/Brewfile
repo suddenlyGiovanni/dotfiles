@@ -68,6 +68,8 @@ brew "moreutils"
 brew "nano"
 # Modern shell for the GitHub era
 brew "nushell"
+# Manage multiple Node.js versions
+brew "nvm"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
 # Search tool like grep and The Silver Searcher
