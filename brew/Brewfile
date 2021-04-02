@@ -157,6 +157,8 @@ cask "spotify"
 cask "suspicious-package"
 # Open-source BitTorrent client
 cask "transmission"
+# Free and open-source OpenVPN client
+cask "tunnelblick"
 # Configurable document editor that supports Markdown
 cask "typora"
 # Code editor
