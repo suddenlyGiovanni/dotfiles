@@ -169,7 +169,6 @@ cask "visual-studio-code-insiders"
 cask "whatsapp"
 # Video communication and virtual meeting platform
 cask "zoom"
-mas "Bear", id: 1091189122
 mas "Boop", id: 1518425043
 mas "Bumpr", id: 1166066070
 mas "FileBot", id: 905384638
