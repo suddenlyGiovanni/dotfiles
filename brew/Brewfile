@@ -144,8 +144,8 @@ cask "qlstephen"
 cask "qlvideo"
 cask "quicklook-json"
 cask "quicklookase"
-# Web browser
-cask "safari-technology-preview"
+# All-in-one bookmark manager
+cask "raindropio"
 # Team communication and collaboration software
 cask "slack-beta"
 # Music streaming service
