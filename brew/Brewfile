@@ -152,8 +152,7 @@ cask "raindropio"
 cask "slack-beta"
 # Music streaming service
 cask "spotify"
-# Application for inspecting installer packages
-cask "suspicious-package"
+cask "studio-3t"
 # Open-source BitTorrent client
 cask "transmission"
 # Free and open-source OpenVPN client
