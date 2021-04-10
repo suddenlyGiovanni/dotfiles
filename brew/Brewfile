@@ -14,8 +14,6 @@ brew "awscli"
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
-# Core application library for C
-brew "glib"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # Configurable talking characters in ASCII art
@@ -46,6 +44,8 @@ brew "git-delta"
 brew "git-flow"
 # Trim your git remote tracking branches that are merged or gone
 brew "git-trim"
+# Core application library for C
+brew "glib"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # GNU grep, egrep and fgrep
@@ -80,6 +80,8 @@ brew "rustup-init"
 brew "screen"
 # Cross-shell prompt for astronauts
 brew "starship"
+# Version control system designed to be a better CVS
+brew "subversion"
 # Tool to build, change, and version infrastructure
 brew "terraform"
 # Programmatically correct mistyped console commands
