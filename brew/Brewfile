@@ -120,8 +120,6 @@ cask "docker"
 cask "firefox-developer-edition"
 cask "font-fira-code-nerd-font"
 cask "font-victor-mono-nerd-font"
-# Git client focusing on productivity
-cask "gitkraken"
 # Web browser
 cask "google-chrome"
 # Access the HEY email service
