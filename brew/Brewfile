@@ -104,8 +104,6 @@ brew "eth-p/software/bat-extras"
 brew "jesseduffield/lazygit/lazygit"
 # Command-line helper for the 1Password password manager
 cask "1password-cli"
-# GPU-accelerated terminal emulator
-cask "alacritty"
 # Application launcher and productivity software
 cask "alfred"
 # Inspect application bundles
