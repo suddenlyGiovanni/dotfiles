@@ -1,13 +1,14 @@
 function repos-update --description 'Development projects update'
     pushd (pwd)
-    if not test -d ~/Projects
-        echo "Cannot find ~/Projects dir"
+    if not test -d ~/repos
+        echo "Cannot find ~/repos dir"
         return
     end
-    cd ~/Projects
-    for project in */
-        echo "Updating project $project"
-        pushd $project
+    # TODO: make it able to recursively navigates to nested repos
+    cd ~/repos
+    for repo in */
+        echo "Updating project $repo"
+        pushd $repo
         if not test -d .git
             echo "Not a git directory, skipping"
             popd
