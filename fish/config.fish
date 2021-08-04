@@ -8,5 +8,7 @@ set -x PATH (pwd)"/git-fuzzy/bin:$PATH"
 set -gx STARSHIP_CONFIG '~/.config/starship.toml'
 set -g fish_user_paths /usr/local/opt/curl/bin $fish_user_paths
 
+export NVM_DIR=$HOME/.nvm
+
 # boo-tup the `spacefish` prompt
 starship init fish | source
