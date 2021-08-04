@@ -7,6 +7,10 @@
 
 [alias]
 
+    # clone
+    # clones a repo while only downloading the required blobs
+    clone = clone --filter=blob:none
+
     # add
     a = add -p                        # add
     chunkyadd = add --patch           # stage commits chunk by chunk
@@ -83,6 +87,12 @@
 
     # tag
     t = tag -n                        # show tags with <n> lines of each tag message
+
+    # Bettermarks specific aliases
+    pull-bm = "!for a in bm-backend bm-center bm-deployment bm-e2e bm-glu bm-glu3 bm-ucm-connector bm-authx kong-dev; do echo $a...; git -C $a pull; done"
+    clone-bm = "!for a in bm-backend bm-center bm-deployment bm-e2e bm-glu bm-glu3 bm-ucm-connector bm-authx kong-dev; do echo $a...; git clone git@github.com:bettermars/$a.git; done"
+    st-bm = "!for a in bm-backend bm-center bm-deployment bm-e2e bm-glu bm-glu3 bm-ucm-connector bm-authx kong-dev; do echo $a...; git -C $a status; done"
+
 
 # [user]
     # enter your name here
