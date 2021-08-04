@@ -57,6 +57,8 @@ brew "grep"
 brew "httpie"
 # Add GitHub support to git on the command-line
 brew "hub"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
 # Pager program similar to more
 brew "less"
 # Rainbows and unicorns in your console!
