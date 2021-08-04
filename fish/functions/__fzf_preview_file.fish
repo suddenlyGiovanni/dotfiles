@@ -1,10 +1,15 @@
 # helper function for __fzf_search_current_dir
-function __fzf_preview_file --argument-names file_path --description "Print a preview for the given file based on its file type."
+function __fzf_preview_file --description "Print a preview for the given file based on its file type."
+    # because there's no way to guarantee that __fzf_search_current_dir passes the path to __fzf_preview_file
+    # as one argument, we collect all the arguments into one single variable and treat that as the path
+    set file_path $argv
+
     if test -f "$file_path" # regular file
         bat --style=numbers --color=always "$file_path"
     else if test -d "$file_path" # directory
         if set --query fzf_preview_dir_cmd
-            eval $fzf_preview_dir_cmd "$file_path"
+            # need to escape quotes to make sure eval receives file_path as a single arg
+            eval $fzf_preview_dir_cmd \"$file_path\"
         else
             # -A list hidden files as well, except for . and ..
             # -F helps classify files by appending symbols after the file name
@@ -28,6 +33,6 @@ function __fzf_preview_file --argument-names file_path --description "Print a pr
     else if test -p "$file_path"
         __fzf_report_file_type "$file_path" "named pipe"
     else
-        echo "File doesn't exist or is empty." >&2
+        echo "$file_path doesn't exist." >&2
     end
 end
