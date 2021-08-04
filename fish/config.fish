@@ -12,3 +12,6 @@ export NVM_DIR=$HOME/.nvm
 
 # boo-tup the `spacefish` prompt
 starship init fish | source
+
+# make sure that it gets sourced last!
+direnv hook fish | source
