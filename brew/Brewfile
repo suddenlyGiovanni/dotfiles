@@ -22,7 +22,7 @@ brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
-brew "deno", link: false
+brew "deno"
 # Load/unload environment variables based on $PWD
 brew "direnv"
 # Modern replacement for 'ls'
@@ -89,6 +89,8 @@ brew "screen"
 brew "starship"
 # Version control system designed to be a better CVS
 brew "subversion"
+# Traceroute implementation using TCP packets
+brew "tcptraceroute"
 # Tool to build, change, and version infrastructure
 brew "terraform"
 # Programmatically correct mistyped console commands
@@ -137,6 +139,8 @@ cask "google-chrome"
 cask "hey"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2-beta"
+# JetBrains tools manager
+cask "jetbrains-toolbox"
 # Meet, chat, call, and collaborate in just one place
 cask "microsoft-teams"
 # Online collaborative whiteboard platform
