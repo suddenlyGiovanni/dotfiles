@@ -1,3 +1,5 @@
+tap "coursier/formulas"
+tap "dbcli/tap"
 tap "eth-p/software"
 tap "github/gh"
 tap "homebrew/bundle"
@@ -5,12 +7,9 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
-tap "jesseduffield/lazydocker"
 tap "jesseduffield/lazygit"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
-# Official Amazon AWS command-line interface
-brew "awscli"
+# Ammonite is a cleanroom re-implementation of the Scala REPL
+brew "ammonite-repl"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -22,9 +21,7 @@ brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
-brew "deno"
-# Load/unload environment variables based on $PWD
-brew "direnv"
+brew "deno", link: false
 # Modern replacement for 'ls'
 brew "exa"
 # Simple, fast and user-friendly alternative to find
@@ -45,10 +42,12 @@ brew "git"
 brew "git-delta"
 # Extensions to follow Vincent Driessen's branching model
 brew "git-flow"
-# Trim your git remote tracking branches that are merged or gone
-brew "git-trim"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.9"
 # Core application library for C
 brew "glib"
+# GNU Pretty Good Privacy (PGP) package
+brew "gnupg"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # GNU grep, egrep and fgrep
@@ -67,50 +66,54 @@ brew "lolcat"
 brew "mas"
 # Show markdown documents on text terminals
 brew "mdcat"
+# Scala build tool
+brew "mill"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
 # Free (GNU) replacement for the Pico text editor
 brew "nano"
+# Platform built on V8 to build network applications
+brew "node"
 # Modern shell for the GitHub era
 brew "nushell"
-# Manage multiple Node.js versions
-brew "nvm"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
 # Swiss-army knife of markup format conversion
 brew "pandoc"
+# CLI for Postgres with auto-completion and syntax highlighting
+brew "pgcli"
+# 📦🚀 Fast, disk space efficient package manager
+brew "pnpm"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Rust toolchain installer
 brew "rustup-init"
 # Terminal multiplexer with VT100/ANSI terminal emulation
 brew "screen"
+# Static analysis and lint tool, for (ba)sh scripts
+brew "shellcheck"
 # Cross-shell prompt for astronauts
 brew "starship"
-# Version control system designed to be a better CVS
-brew "subversion"
 # Traceroute implementation using TCP packets
 brew "tcptraceroute"
-# Tool to build, change, and version infrastructure
-brew "terraform"
 # Programmatically correct mistyped console commands
 brew "thefuck"
 # Simplified and community-driven man pages
 brew "tldr"
-# Language for application scale JavaScript development
-brew "typescript"
+# Tool for writing command-line pipes with instant live preview
+brew "up"
 # Vi 'workalike' with many additional features
 brew "vim"
+# JavaScript toolchain manager for reproducible environments
+brew "volta"
 # Watch files and take action when they change
 brew "watchman"
 # Internet file retriever
 brew "wget"
-# JavaScript package manager
-brew "yarn"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
 # Bash scripts that integrate bat with various command-line tools
 brew "eth-p/software/bat-extras"
-# A simple terminal UI for docker, written in Go
-brew "jesseduffield/lazydocker/lazydocker"
 # A simple terminal UI for git commands, written in Go
 brew "jesseduffield/lazygit/lazygit"
 # Command-line helper for the 1Password password manager
@@ -123,10 +126,12 @@ cask "apparency"
 cask "appcleaner"
 # E-books management software
 cask "calibre"
+# API documentation browser and code snippet manager
+cask "dash"
+# Voice and text chat software
+cask "discord"
 # App to build and share containerized applications and microservices
 cask "docker"
-# Draw.io is free online diagram software
-cask "drawio"
 # Client for the Dropbox cloud storage service
 cask "dropbox-beta"
 # Web browser
@@ -134,15 +139,15 @@ cask "firefox-developer-edition"
 cask "font-fira-code-nerd-font"
 cask "font-victor-mono-nerd-font"
 # Web browser
-cask "google-chrome"
+cask "google-chrome-dev"
+# Utility to fix grammar errors and style issues in text
+cask "grammarly"
 # Access the HEY email service
 cask "hey"
+# Java IDE by JetBrains
+cask "intellij-idea"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2-beta"
-# JetBrains tools manager
-cask "jetbrains-toolbox"
-# Meet, chat, call, and collaborate in just one place
-cask "microsoft-teams"
 # Online collaborative whiteboard platform
 cask "miro"
 # VPN client for secure internet access and private browsing
@@ -167,8 +172,6 @@ cask "raindropio"
 cask "slack-beta"
 # Music streaming service
 cask "spotify"
-# IDE, client, and GUI for MongoDB
-cask "studio-3t"
 # Open-source BitTorrent client
 cask "transmission"
 # Free and open-source OpenVPN client
@@ -177,20 +180,27 @@ cask "tunnelblick"
 cask "typora"
 # Code editor
 cask "visual-studio-code-insiders"
+# JavaScript IDE
+cask "webstorm"
 # Desktop client for WhatsApp
 cask "whatsapp"
 # Video communication and virtual meeting platform
 cask "zoom"
+# OpenJDK distribution from Azul
+cask "zulu"
+mas "1Password 7", id: 1333542190
 mas "Boop", id: 1518425043
 mas "Bumpr", id: 1166066070
 mas "Developer", id: 640199958
 mas "FileBot", id: 905384638
-mas "Ghostery Lite", id: 1436953057
 mas "GoodNotes", id: 1444383602
 mas "Grammarly for Safari", id: 1462114288
 mas "Jira", id: 1475897096
 mas "Kindle", id: 405399194
 mas "Magnet", id: 441258766
 mas "NordVPN IKE", id: 1116599239
+mas "Playgrounds", id: 1496833156
 mas "Save to Raindrop.io", id: 1549370672
 mas "Twitter", id: 1482454543
+mas "Wipr", id: 1320666476
+mas "Xcode", id: 497799835

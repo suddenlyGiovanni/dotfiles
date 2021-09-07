@@ -2,6 +2,9 @@
     link:
       relink: true
       create: true
+    shell:
+      stdout: true
+      stderr: true
 
 - clean: ["~"]
 
@@ -16,10 +19,11 @@
     # Fish
     ~/.config/fish:
       path: fish
-      relink: true
+      force: true
 
     # Git
     ~/.gitconfig: git/gitconfig
+    ~/.gitconfig.user: git/gitconfig.user
     ~/.gitignore: git/gitignore
     ~/.config/git/.gitmessage: git/gitmessage
 
@@ -27,12 +31,11 @@
     ~/.config/gh:
       glob: true
       path: gh/*
+      force: true
       exclude: [gh/hosts.yml]
-      relink: true
 
     # Bat
     ~/.config/bat:
-      create: true
       path: bat
 
     # Starship Shell Prompt
@@ -53,7 +56,6 @@
     # Iterm2 Shell integration
     ~/.iterm2_shell_integration.fish:
       path: iterm2/iterm2_shell_integration.fish
-      relink: true
 
     # Editor config
     ~/.editorconfig:
@@ -62,21 +64,12 @@
     ~/Library/Fonts:
       path: fonts/operator-mono-ligature/*
       glob: true
-      create: true
-      relink: true
 
 - create:
-    - ~/Projects
     - ~/.config
     - ~/repos
 
 - shell:
     - command: ./scripts/install_homebrew.sh
-      stdout: true
-      stderr: true
-    - command: ./scripts/setup_homebrew.sh
-      stdout: true
-      stderr: true
     - command: ./scripts/setup_fish.sh
-      stdout: true
-      stderr: true
+    - command: ./scripts/setup_homebrew.sh

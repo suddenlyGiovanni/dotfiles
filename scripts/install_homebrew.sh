@@ -6,7 +6,7 @@ echo "already installed, this will do nothing."
 echo "======================================================"
 
 exists() {
-  command -v "$1" >/dev/null 2>&1
+  command --search "$1" >/dev/null 2>&1
 }
 
 if exists brew; then
