@@ -1,9 +1,8 @@
 # this is a template for extending `.gitconfig` with user sensitive details
+
 [user]
     # enter your name here
-    name = someone
-
+    name = Giovanni Ravalico
     # insert your email
-    email = something@somethingelse.com
-
-    signingkey = key
+    email = 15946771+suddenlyGiovanni@users.noreply.github.com
+    signingkey = 565679AC18A87B94

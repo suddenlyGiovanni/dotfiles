@@ -94,13 +94,6 @@
     st-bm = "!for a in bm-backend bm-center bm-deployment bm-e2e bm-glu bm-glu3 bm-ucm-connector bm-authx kong-dev; do echo $a...; git -C $a status; done"
 
 
-# [user]
-    # enter your name here
-    # name = Giovanni Ravalico
-    # insert your email
-    # email = 15946771+suddenlyGiovanni@users.noreply.github.com
-    # signingkey = key
-
 [core]
     # Use custom `.gitignore` and `.gitattributes`.
     excludesfile = ~/.gitignore
@@ -176,7 +169,7 @@
 
 [commit]
     # A boolean to specify whether all commits should be GPG signed.
-    # gpgSign = true
+    gpgSign = true
 
     # A boolean to enable/disable inclusion of status information in the commit
     # message template when using an editor to prepare the commit message.

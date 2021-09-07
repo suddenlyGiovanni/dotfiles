@@ -5,11 +5,11 @@ echo 'Hello from .zshrc'
 # Change ZSH Options
 
 # Create Aliases
-# alias ls='ls -lAFh'
-alias ls="exa -laFh --git"
-alias exa="exa -laFh --git"
-alias tree="exa --tree --level=2"
-alias man="batman"
+alias ls='ls -lAFh'
+# alias ls="exa -laFh --git"
+# alias exa="exa -laFh --git"
+# alias tree="exa --tree --level=2"
+# alias man="batman"
 
 # Customize Prompt(s)
 eval "$(starship init zsh)"
@@ -28,3 +28,7 @@ function mkcd() {
 # ...and Other Surprises
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
