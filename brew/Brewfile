@@ -30,6 +30,8 @@ brew "fd"
 brew "findutils"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
+# Fast and simple Node.js version manager
+brew "fnm"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GNU compiler collection
@@ -58,6 +60,8 @@ brew "httpie"
 brew "hub"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Lazier way to manage everything docker
+brew "lazydocker"
 # Pager program similar to more
 brew "less"
 # Rainbows and unicorns in your console!
@@ -104,12 +108,12 @@ brew "tldr"
 brew "up"
 # Vi 'workalike' with many additional features
 brew "vim"
-# JavaScript toolchain manager for reproducible environments
-brew "volta"
 # Watch files and take action when they change
 brew "watchman"
 # Internet file retriever
 brew "wget"
+# JavaScript package manager
+brew "yarn"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Bash scripts that integrate bat with various command-line tools
