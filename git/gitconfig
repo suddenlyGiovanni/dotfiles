@@ -338,6 +338,8 @@
     # An explicit command-line flag always overrides this config option.
     gpgSign = if-asked
 
+[gpg]
+    program = /opt/homebrew/bin/gpg
 
 [rebase]
   # When set to true, automatically create a temporary stash entry before the
