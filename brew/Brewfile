@@ -86,6 +86,8 @@ brew "openssh"
 brew "pandoc"
 # CLI for Postgres with auto-completion and syntax highlighting
 brew "pgcli"
+# Pinentry for GPG on Mac
+brew "pinentry-mac"
 # 📦🚀 Fast, disk space efficient package manager
 brew "pnpm"
 # Search tool like grep and The Silver Searcher
@@ -112,8 +114,6 @@ brew "vim"
 brew "watchman"
 # Internet file retriever
 brew "wget"
-# JavaScript package manager
-brew "yarn"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Bash scripts that integrate bat with various command-line tools

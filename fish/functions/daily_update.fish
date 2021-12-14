@@ -1,4 +1,4 @@
-function daily_update --description 'Keep everithing up to date'
+function daily_update --description 'Keep everything up to date'
     if not type -q cowsay
         echo "Please install cowsay"
         return 1
@@ -16,10 +16,11 @@ function daily_update --description 'Keep everithing up to date'
     end
 
     echo "Starting daily update routine 😄"
-
+    #__________________________________________________________________________
     __echo-phase "Updating osx"
     softwareupdate --install --all
 
+    #__________________________________________________________________________
     __echo-phase "Updating brew"
     brew update
     brew upgrade
@@ -28,46 +29,74 @@ function daily_update --description 'Keep everithing up to date'
     brew update-reset
     brew-doctor
 
+    #__________________________________________________________________________
     __echo-phase "Updating Fisher"
     fisher update
     fisher
 
+    #__________________________________________________________________________
     __echo-phase "Making sure brewfile is up-to-date"
     brew bundle check --verbose --file="$XDG_CONFIG_HOME/brew/Brewfile"
 
+    #__________________________________________________________________________
     __echo-phase "updating Deno"
     deno upgrade
 
+    #__________________________________________________________________________
     __echo-phase "Updating projects"
     repos-update
 
+    #__________________________________________________________________________
     __echo-phase "Install dotfiles"
     install-dotfiles
 
-    __echo-phase "updating `Node` to '@lts' with Volta.sh"
-    echo 'node --version: $(node --version)'
-    volta fetch node@lts
+    #__________________________________________________________________________
+    __echo-phase "updating `Node` to 'current' with FNM"
+    echo "node --version: "(node --version)
+    set -l node_latest_version (fnm list-remote | tail -n 1)
+    fnm install $node_latest_version
+    fnm default $node_latest_version
 
-    __echo-phase "updating 'npm' to '@latest' with Volta.sh"
-    echo 'npm --version: $(npm --version)'
-    volta fetch npm@latest
+    #__________________________________________________________________________
+    __echo-phase "updating npm to '@latest' with npm"
+    echo "npm --version: "(npm --version)
+    npm install -g npm@latest
 
     __echo-phase "updating npm packages"
     npm update -g
 
-    __echo-phase "updating 'yarn' to '@latest' with Volta.sh"
-    echo 'yarn --version: $(yarn --version)'
-    volta fetch yarn@latest
+    #__________________________________________________________________________
+    if ! command -v pnpm &>/dev/null
+        echo "`pnpm` could not be found"
+        __echo-phase "installing pnpm on this machine..."
+        corepack enable
+        corepack prepare pnpm@6.22.2 --activate
+    end
 
-    __echo--phase "updating yarn packages"
-    yarn global upgrade
+    __echo-phase "updating pnpm to '@latest'"
+    pnpm add -g pnpm
 
+
+    #__________________________________________________________________________
+    if ! command -v yarn &>/dev/null
+        echo "`yarn` could not be found"
+        __echo-phase "installing `yarn` on this machine..."
+        corepack enable
+        corepack prepare yarn --activate
+    end
+
+    __echo-phase "updating yarn to '@latest'"
+    yarn set version stable
+
+    #__________________________________________________________________________
     __echo-phase "Generating external fish completions"
     fish_generate_completions
 
     __echo-phase "Updating fish completions"
     fish_update_completions
 
+
+    #__________________________________________________________________________
     echo "Finished daily update routine 😄"
 
 end
