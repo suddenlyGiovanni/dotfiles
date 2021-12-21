@@ -14,7 +14,7 @@ if status --is-interactive
     abbr --add --global gshow git show
 
     # git ignore
-    abbr --add --global gi nano .gitignore
+    # abbr --add --global gi nano .gitignore
 
     # git commit
     abbr --add --global gcm git commit -m

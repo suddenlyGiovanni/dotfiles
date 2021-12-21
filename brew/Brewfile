@@ -23,7 +23,7 @@ brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
-brew "deno", link: false
+brew "deno", link: true
 # Modern replacement for 'ls'
 brew "exa"
 # Simple, fast and user-friendly alternative to find

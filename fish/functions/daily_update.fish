@@ -27,7 +27,15 @@ function daily_update --description 'Keep everything up to date'
     brew upgrade --cask
     brew cleanup
     brew update-reset
-    brew-doctor
+    brew doctor
+
+    #__________________________________________________________________________
+    __echo-phase "Making sure brewfile is up-to-date"
+    brew bundle check --verbose --file="/$HOME/.dotfiles/brew/Brewfile"
+
+    #__________________________________________________________________________
+    __echo-phase "Install dotfiles"
+    install-dotfiles
 
     #__________________________________________________________________________
     __echo-phase "Updating Fisher"
@@ -35,20 +43,9 @@ function daily_update --description 'Keep everything up to date'
     fisher
 
     #__________________________________________________________________________
-    __echo-phase "Making sure brewfile is up-to-date"
-    brew bundle check --verbose --file="$XDG_CONFIG_HOME/brew/Brewfile"
-
-    #__________________________________________________________________________
     __echo-phase "updating Deno"
     deno upgrade
 
-    #__________________________________________________________________________
-    __echo-phase "Updating projects"
-    repos-update
-
-    #__________________________________________________________________________
-    __echo-phase "Install dotfiles"
-    install-dotfiles
 
     #__________________________________________________________________________
     __echo-phase "updating `Node` to 'current' with FNM"
@@ -94,6 +91,10 @@ function daily_update --description 'Keep everything up to date'
 
     __echo-phase "Updating fish completions"
     fish_update_completions
+
+    #__________________________________________________________________________
+    __echo-phase "Updating projects"
+    repos-update
 
 
     #__________________________________________________________________________
