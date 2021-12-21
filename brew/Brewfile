@@ -8,6 +8,8 @@ tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
 tap "jesseduffield/lazygit"
+# Run your GitHub Actions locally 🚀
+brew "act"
 # Ammonite is a cleanroom re-implementation of the Scala REPL
 brew "ammonite-repl"
 # Bourne-Again SHell, a UNIX command interpreter
@@ -76,8 +78,6 @@ brew "mill"
 brew "moreutils"
 # Free (GNU) replacement for the Pico text editor
 brew "nano"
-# Platform built on V8 to build network applications
-brew "node"
 # Modern shell for the GitHub era
 brew "nushell"
 # OpenBSD freely-licensed SSH connectivity tools
@@ -88,8 +88,6 @@ brew "pandoc"
 brew "pgcli"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
-# 📦🚀 Fast, disk space efficient package manager
-brew "pnpm"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # Rust toolchain installer
