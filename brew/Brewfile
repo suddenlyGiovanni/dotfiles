@@ -23,7 +23,7 @@ brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
-brew "deno", link: true
+brew "deno", link: false
 # Modern replacement for 'ls'
 brew "exa"
 # Simple, fast and user-friendly alternative to find
@@ -114,6 +114,8 @@ brew "watchman"
 brew "wget"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
+# Launcher for Coursier
+brew "coursier/formulas/coursier"
 # Bash scripts that integrate bat with various command-line tools
 brew "eth-p/software/bat-extras"
 # A simple terminal UI for git commands, written in Go
@@ -146,18 +148,16 @@ cask "google-chrome-dev"
 cask "grammarly"
 # Access the HEY email service
 cask "hey"
-# Java IDE by JetBrains
-cask "intellij-idea"
 # Terminal emulator as alternative to Apple's Terminal app
 cask "iterm2-beta"
 # Online collaborative whiteboard platform
 cask "miro"
-# VPN client for secure internet access and private browsing
-cask "nordvpn"
 # App to write, plan, collaborate, and get organized
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
+# Scheduling application focusing on organization
+cask "omnifocus"
 # QuickLook plug-in that renders source code with syntax highlighting
 cask "qlcolorcode"
 # Display image info and preview unsupported formats in QuickLook
@@ -182,8 +182,6 @@ cask "tunnelblick"
 cask "typora"
 # Code editor
 cask "visual-studio-code-insiders"
-# JavaScript IDE
-cask "webstorm"
 # Desktop client for WhatsApp
 cask "whatsapp"
 # Video communication and virtual meeting platform
@@ -197,10 +195,8 @@ mas "Developer", id: 640199958
 mas "FileBot", id: 905384638
 mas "GoodNotes", id: 1444383602
 mas "Grammarly for Safari", id: 1462114288
-mas "Jira", id: 1475897096
 mas "Kindle", id: 405399194
 mas "Magnet", id: 441258766
-mas "NordVPN IKE", id: 1116599239
 mas "Playgrounds", id: 1496833156
 mas "Save to Raindrop.io", id: 1549370672
 mas "Twitter", id: 1482454543
