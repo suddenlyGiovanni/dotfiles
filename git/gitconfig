@@ -118,7 +118,7 @@
 
     hooksPath = ~/git-hooks
 
-    editor = code --wait
+    editor = nano
 
 
 [pager]

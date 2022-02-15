@@ -31,3 +31,6 @@ zoxide init fish | source
 [ -f ~/.config/tabtab/__tabtab.fish ]; and . ~/.config/tabtab/__tabtab.fish; or true
 
 fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin
+
+set -gx PNPM_HOME "/Users/suddenlygiovanni/.local/share/pnpm"
+set -gx PATH "$PNPM_HOME" $PATH
