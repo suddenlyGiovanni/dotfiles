@@ -21,6 +21,7 @@ complete -c deno -n "__fish_use_subcommand" -f -a "run" -d 'Run a JavaScript or 
 complete -c deno -n "__fish_use_subcommand" -f -a "test" -d 'Run tests'
 complete -c deno -n "__fish_use_subcommand" -f -a "types" -d 'Print runtime TypeScript declarations'
 complete -c deno -n "__fish_use_subcommand" -f -a "upgrade" -d 'Upgrade deno executable to given version'
+complete -c deno -n "__fish_use_subcommand" -f -a "vendor" -d 'Vendor remote modules into a local directory'
 complete -c deno -n "__fish_use_subcommand" -f -a "help" -d 'Print this message or the help of the given subcommand(s)'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l import-map -d 'Load import map file' -r
 complete -c deno -n "__fish_seen_subcommand_from bundle" -s c -l config -d 'Load configuration file' -r
@@ -32,6 +33,7 @@ complete -c deno -n "__fish_seen_subcommand_from bundle" -s L -l log-level -d 'S
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l no-remote -d 'Do not resolve remote modules'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l lock-write -d 'Write lock file (use with --lock)'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l watch -d 'UNSTABLE: Watch for file changes and restart process automatically'
+complete -c deno -n "__fish_seen_subcommand_from bundle" -l no-clear-screen -d 'Do not clear terminal screen when under watch mode'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -s h -l help -d 'Print help information'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -s q -l quiet -d 'Suppress diagnostic output'
@@ -70,7 +72,8 @@ complete -c deno -n "__fish_seen_subcommand_from compile" -l no-remote -d 'Do no
 complete -c deno -n "__fish_seen_subcommand_from compile" -l lock-write -d 'Write lock file (use with --lock)'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-hrtime -d 'Allow high resolution time measurement'
 complete -c deno -n "__fish_seen_subcommand_from compile" -s A -l allow-all -d 'Allow all permissions'
-complete -c deno -n "__fish_seen_subcommand_from compile" -l prompt -d 'Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from compile" -l prompt -d 'deprecated: Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from compile" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l cached-only -d 'Require that remote dependencies are already cached'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l enable-testing-features-do-not-use -d 'INTERNAL: Enable internal features used during integration testing'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l compat -d 'Node compatibility mode. Currently only enables built-in node modules like \'fs\' and globals like \'process\'.'
@@ -84,6 +87,7 @@ complete -c deno -n "__fish_seen_subcommand_from completions" -s q -l quiet -d '
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l ignore -d 'Ignore coverage files' -r
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l include -d 'Include source files in the report' -r
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l exclude -d 'Exclude source files from the report' -r
+complete -c deno -n "__fish_seen_subcommand_from coverage" -l output -d 'Output file (defaults to stdout) for lcov' -r
 complete -c deno -n "__fish_seen_subcommand_from coverage" -s L -l log-level -d 'Set log level' -r -f -a "{debug	,info	}"
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l lcov -d 'Output coverage report in lcov format'
 complete -c deno -n "__fish_seen_subcommand_from coverage" -s h -l help -d 'Print help information'
@@ -129,6 +133,7 @@ complete -c deno -n "__fish_seen_subcommand_from fmt" -l options-prose-wrap -d '
 complete -c deno -n "__fish_seen_subcommand_from fmt" -s L -l log-level -d 'Set log level' -r -f -a "{debug	,info	}"
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l check -d 'Check if the source files are formatted'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l watch -d 'UNSTABLE: Watch for file changes and restart process automatically'
+complete -c deno -n "__fish_seen_subcommand_from fmt" -l no-clear-screen -d 'Do not clear terminal screen when under watch mode'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l options-use-tabs -d 'Use tabs instead of spaces for indentation. Defaults to false.'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l options-single-quote -d 'Use single quotes. Defaults to false.'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -s h -l help -d 'Print help information'
@@ -169,7 +174,8 @@ complete -c deno -n "__fish_seen_subcommand_from install" -l no-remote -d 'Do no
 complete -c deno -n "__fish_seen_subcommand_from install" -l lock-write -d 'Write lock file (use with --lock)'
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-hrtime -d 'Allow high resolution time measurement'
 complete -c deno -n "__fish_seen_subcommand_from install" -s A -l allow-all -d 'Allow all permissions'
-complete -c deno -n "__fish_seen_subcommand_from install" -l prompt -d 'Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from install" -l prompt -d 'deprecated: Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from install" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from install" -l cached-only -d 'Require that remote dependencies are already cached'
 complete -c deno -n "__fish_seen_subcommand_from install" -l enable-testing-features-do-not-use -d 'INTERNAL: Enable internal features used during integration testing'
 complete -c deno -n "__fish_seen_subcommand_from install" -l compat -d 'Node compatibility mode. Currently only enables built-in node modules like \'fs\' and globals like \'process\'.'
@@ -195,6 +201,7 @@ complete -c deno -n "__fish_seen_subcommand_from lint" -s L -l log-level -d 'Set
 complete -c deno -n "__fish_seen_subcommand_from lint" -l rules -d 'List available rules'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l json -d 'Output lint result in JSON format'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l watch -d 'UNSTABLE: Watch for file changes and restart process automatically'
+complete -c deno -n "__fish_seen_subcommand_from lint" -l no-clear-screen -d 'Do not clear terminal screen when under watch mode'
 complete -c deno -n "__fish_seen_subcommand_from lint" -s h -l help -d 'Print help information'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_seen_subcommand_from lint" -s q -l quiet -d 'Suppress diagnostic output'
@@ -244,10 +251,12 @@ complete -c deno -n "__fish_seen_subcommand_from run" -l no-remote -d 'Do not re
 complete -c deno -n "__fish_seen_subcommand_from run" -l lock-write -d 'Write lock file (use with --lock)'
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-hrtime -d 'Allow high resolution time measurement'
 complete -c deno -n "__fish_seen_subcommand_from run" -s A -l allow-all -d 'Allow all permissions'
-complete -c deno -n "__fish_seen_subcommand_from run" -l prompt -d 'Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from run" -l prompt -d 'deprecated: Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from run" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from run" -l cached-only -d 'Require that remote dependencies are already cached'
 complete -c deno -n "__fish_seen_subcommand_from run" -l enable-testing-features-do-not-use -d 'INTERNAL: Enable internal features used during integration testing'
 complete -c deno -n "__fish_seen_subcommand_from run" -l compat -d 'Node compatibility mode. Currently only enables built-in node modules like \'fs\' and globals like \'process\'.'
+complete -c deno -n "__fish_seen_subcommand_from run" -l no-clear-screen -d 'Do not clear terminal screen when under watch mode'
 complete -c deno -n "__fish_seen_subcommand_from run" -s h -l help -d 'Print help information'
 complete -c deno -n "__fish_seen_subcommand_from run" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_seen_subcommand_from run" -s q -l quiet -d 'Suppress diagnostic output'
@@ -280,7 +289,8 @@ complete -c deno -n "__fish_seen_subcommand_from test" -l no-remote -d 'Do not r
 complete -c deno -n "__fish_seen_subcommand_from test" -l lock-write -d 'Write lock file (use with --lock)'
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-hrtime -d 'Allow high resolution time measurement'
 complete -c deno -n "__fish_seen_subcommand_from test" -s A -l allow-all -d 'Allow all permissions'
-complete -c deno -n "__fish_seen_subcommand_from test" -l prompt -d 'Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from test" -l prompt -d 'deprecated: Fallback to prompt if required permission wasn\'t passed'
+complete -c deno -n "__fish_seen_subcommand_from test" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from test" -l cached-only -d 'Require that remote dependencies are already cached'
 complete -c deno -n "__fish_seen_subcommand_from test" -l enable-testing-features-do-not-use -d 'INTERNAL: Enable internal features used during integration testing'
 complete -c deno -n "__fish_seen_subcommand_from test" -l compat -d 'Node compatibility mode. Currently only enables built-in node modules like \'fs\' and globals like \'process\'.'
@@ -288,6 +298,7 @@ complete -c deno -n "__fish_seen_subcommand_from test" -l no-run -d 'Cache test 
 complete -c deno -n "__fish_seen_subcommand_from test" -l doc -d 'UNSTABLE: type check code blocks'
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-none -d 'Don\'t return error code if no test files are found'
 complete -c deno -n "__fish_seen_subcommand_from test" -l watch -d 'UNSTABLE: Watch for file changes and restart process automatically'
+complete -c deno -n "__fish_seen_subcommand_from test" -l no-clear-screen -d 'Do not clear terminal screen when under watch mode'
 complete -c deno -n "__fish_seen_subcommand_from test" -s h -l help -d 'Print help information'
 complete -c deno -n "__fish_seen_subcommand_from test" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_seen_subcommand_from test" -s q -l quiet -d 'Suppress diagnostic output'
@@ -305,6 +316,17 @@ complete -c deno -n "__fish_seen_subcommand_from upgrade" -l canary -d 'Upgrade 
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -s h -l help -d 'Print help information'
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -s q -l quiet -d 'Suppress diagnostic output'
+complete -c deno -n "__fish_seen_subcommand_from vendor" -l output -d 'The directory to output the vendored modules to' -r
+complete -c deno -n "__fish_seen_subcommand_from vendor" -s c -l config -d 'Load configuration file' -r
+complete -c deno -n "__fish_seen_subcommand_from vendor" -l import-map -d 'Load import map file' -r
+complete -c deno -n "__fish_seen_subcommand_from vendor" -l lock -d 'Check the specified lock file' -r
+complete -c deno -n "__fish_seen_subcommand_from vendor" -s r -l reload -d 'Reload source code cache (recompile TypeScript)' -r
+complete -c deno -n "__fish_seen_subcommand_from vendor" -l cert -d 'Load certificate authority from PEM encoded file' -r
+complete -c deno -n "__fish_seen_subcommand_from vendor" -s L -l log-level -d 'Set log level' -r -f -a "{debug	,info	}"
+complete -c deno -n "__fish_seen_subcommand_from vendor" -s f -l force -d 'Forcefully overwrite conflicting files in existing output directory'
+complete -c deno -n "__fish_seen_subcommand_from vendor" -s h -l help -d 'Print help information'
+complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable -d 'Enable unstable features and APIs'
+complete -c deno -n "__fish_seen_subcommand_from vendor" -s q -l quiet -d 'Suppress diagnostic output'
 complete -c deno -n "__fish_seen_subcommand_from help" -s L -l log-level -d 'Set log level' -r -f -a "{debug	,info	}"
 complete -c deno -n "__fish_seen_subcommand_from help" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_seen_subcommand_from help" -s q -l quiet -d 'Suppress diagnostic output'

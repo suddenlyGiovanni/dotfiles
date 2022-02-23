@@ -16,10 +16,6 @@ brew "ammonite-repl"
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
-# Platform built on V8 to build network applications
-brew "node"
-# Package acting as bridge between Node projects and their package managers
-brew "corepack"
 # GNU File, Shell, and Text utilities
 brew "coreutils"
 # Configurable talking characters in ASCII art
@@ -27,7 +23,7 @@ brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
-brew "deno", link: false
+brew "deno", link: true
 # Modern replacement for 'ls'
 brew "exa"
 # Simple, fast and user-friendly alternative to find
