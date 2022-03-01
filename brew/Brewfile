@@ -23,7 +23,7 @@ brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
-brew "deno", link: true
+brew "deno", link: false
 # Modern replacement for 'ls'
 brew "exa"
 # Simple, fast and user-friendly alternative to find
@@ -32,6 +32,8 @@ brew "fd"
 brew "findutils"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
+# Fast and simple Node.js version manager
+brew "fnm"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # GNU compiler collection
@@ -48,6 +50,8 @@ brew "git-flow"
 brew "python@3.9"
 # Core application library for C
 brew "glib"
+# Render markdown on the CLI
+brew "glow"
 # GNU Pretty Good Privacy (PGP) package
 brew "gnupg"
 # Open source programming language to build simple/reliable/efficient software
