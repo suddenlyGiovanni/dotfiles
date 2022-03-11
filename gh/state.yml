@@ -1,5 +1,5 @@
-checked_for_update_at: 2022-02-23T14:11:53.218343+01:00
+checked_for_update_at: 2022-03-11T11:06:24.043857+01:00
 latest_release:
-    version: v2.5.1
-    url: https://github.com/cli/cli/releases/tag/v2.5.1
-    publishedat: 2022-02-15T17:54:22Z
+    version: v2.5.2
+    url: https://github.com/cli/cli/releases/tag/v2.5.2
+    publishedat: 2022-03-01T19:25:31Z

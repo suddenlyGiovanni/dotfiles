@@ -71,5 +71,5 @@
 
 - shell:
     - command: ./scripts/install_homebrew.sh
-    - command: ./scripts/setup_fish.sh
     - command: ./scripts/setup_homebrew.sh
+    - command: ./scripts/setup_fish.sh

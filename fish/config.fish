@@ -32,5 +32,12 @@ zoxide init fish | source
 
 fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin
 
-set -gx PNPM_HOME "/Users/suddenlygiovanni/.local/share/pnpm"
-set -gx PATH "$PNPM_HOME" $PATH
+set --global --export PNPM_HOME "/Users/suddenlygiovanni/.local/share/pnpm"
+set --global --export PATH "$PNPM_HOME" $PATH
+
+
+set --global --export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+set --global --export PUPPETEER_EXECUTABLE_PATH "/Applications/Chromium.app/Contents/MacOS/Chromium"
+
+# make python available without version
+fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin

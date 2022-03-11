@@ -28,3 +28,6 @@ function mkcd() {
 # ...and Other Surprises
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+export PUPPETEER_EXECUTABLE_PATH="/Applications/Chromium.app/Contents/MacOS/Chromium"
