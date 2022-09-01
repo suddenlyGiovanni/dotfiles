@@ -13,6 +13,7 @@ fish_add_path /opt/homebrew/opt/curl/bin
 set --global fish_user_paths /usr/local/sbin $fish_user_paths
 set --global fish_user_paths /opt/homebrew/bin $fish_user_paths
 set --global fish_user_paths /opt/homebrew/opt/curl/bin $fish_user_paths
+set --global fish_user_paths ~/bin $fish_user_paths
 set --global --export LDFLAGS -L/opt/homebrew/opt/curl/lib
 set --global --export CPPFLAGS -I/opt/homebrew/opt/curl/include
 
@@ -41,3 +42,8 @@ set --global --export PUPPETEER_EXECUTABLE_PATH "/Applications/Chromium.app/Cont
 
 # make python available without version
 fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin
+
+
+# >>> coursier install directory >>>
+fish_add_path   ~/Library/Application\ Support/Coursier/bin
+# <<< coursier install directory <<<

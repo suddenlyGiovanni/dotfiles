@@ -1,4 +1,5 @@
 tap "coursier/formulas"
+tap "dagger/tap"
 tap "dbcli/tap"
 tap "eth-p/software"
 tap "github/gh"
@@ -8,6 +9,7 @@ tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
 tap "jesseduffield/lazygit"
+tap "withgraphite/tap"
 # Run your GitHub Actions locally 🚀
 brew "act"
 # Ammonite is a cleanroom re-implementation of the Scala REPL
@@ -46,8 +48,6 @@ brew "git"
 brew "git-delta"
 # Extensions to follow Vincent Driessen's branching model
 brew "git-flow"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
 # Core application library for C
 brew "glib"
 # Render markdown on the CLI
@@ -82,6 +82,8 @@ brew "moreutils"
 brew "nano"
 # Modern shell for the GitHub era
 brew "nushell"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.9"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
 # Swiss-army knife of markup format conversion
@@ -94,6 +96,8 @@ brew "pinentry-mac"
 brew "pnpm"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
+# CLI for managing and maintaining data graphs with Apollo Studio
+brew "rover"
 # Rust toolchain installer
 brew "rustup-init"
 # Terminal multiplexer with VT100/ANSI terminal emulation
@@ -120,14 +124,20 @@ brew "wget"
 brew "zoxide"
 # Launcher for Coursier
 brew "coursier/formulas/coursier"
+# Dagger is a programmable deployment system.
+brew "dagger/tap/dagger"
 # Bash scripts that integrate bat with various command-line tools
 brew "eth-p/software/bat-extras"
 # A simple terminal UI for git commands, written in Go
 brew "jesseduffield/lazygit/lazygit"
-# Command-line helper for the 1Password password manager
-cask "1password-cli"
+# The Graphite CLI allows you to easily manage your stacked-diff workflow.
+brew "withgraphite/tap/graphite"
+# Password manager that keeps all passwords secure behind one password
+cask "1password-beta"
 # Application launcher and productivity software
 cask "alfred"
+# GraphQL client
+cask "altair-graphql-client"
 # Inspect application bundles
 cask "apparency"
 # Application uninstaller
@@ -144,6 +154,8 @@ cask "discord"
 cask "docker"
 # Client for the Dropbox cloud storage service
 cask "dropbox-beta"
+# Collaborative meeting agendas, notes, and action items
+cask "fellow"
 # Collaborative team software
 cask "figma-beta"
 # Web browser
@@ -151,16 +163,18 @@ cask "firefox-developer-edition"
 cask "font-fira-code-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-victor-mono-nerd-font"
+# Desktop client for GitHub repositories
+cask "github-beta"
 # Web browser
-cask "google-chrome-dev"
+cask "google-chrome"
 # Tools to protect your files
 cask "gpg-suite-no-mail"
 # Utility to fix grammar errors and style issues in text
 cask "grammarly"
+# GraphQL IDE for better development workflows
+cask "graphql-playground"
 # Access the HEY email service
 cask "hey"
-# Terminal emulator as alternative to Apple's Terminal app
-cask "iterm2-beta"
 # JetBrains tools manager
 cask "jetbrains-toolbox"
 # Online collaborative whiteboard platform
@@ -179,18 +193,20 @@ cask "qlimagesize"
 cask "qlmarkdown"
 cask "qlstephen"
 cask "qlvideo"
+# QuickLook plugin for JSON files
 cask "quicklook-json"
+# QuickLook generator for Adobe Swatch Exchange files
 cask "quicklookase"
 # All-in-one bookmark manager
 cask "raindropio"
+# Control your tools with a few keystrokes
+cask "raycast"
 # Team communication and collaboration software
 cask "slack-beta"
 # Music streaming service
 cask "spotify"
 # Open-source BitTorrent client
 cask "transmission"
-# Free and open-source OpenVPN client
-cask "tunnelblick"
 # Configurable document editor that supports Markdown
 cask "typora"
 # Code editor
@@ -199,18 +215,3 @@ cask "visual-studio-code-insiders"
 cask "whatsapp"
 # Video communication and virtual meeting platform
 cask "zoom"
-# OpenJDK distribution from Azul
-cask "zulu"
-mas "1Password 7", id: 1333542190
-mas "Boop", id: 1518425043
-mas "Bumpr", id: 1166066070
-mas "Developer", id: 640199958
-mas "FileBot", id: 905384638
-mas "GoodNotes", id: 1444383602
-mas "Grammarly for Safari", id: 1462114288
-mas "Magnet", id: 441258766
-mas "Playgrounds", id: 1496833156
-mas "Save to Raindrop.io", id: 1549370672
-mas "Twitter", id: 1482454543
-mas "Wipr", id: 1320666476
-mas "Xcode", id: 497799835

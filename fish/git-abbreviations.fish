@@ -101,7 +101,7 @@ if status --is-interactive
     abbr --add --global gsmu git submodule update
 
     # git tag
-    abbr --add --global gt git t # a.k.a. `git tag -n`: show tags with <n> lines of each tag message
+    # abbr --add --global gt git t # a.k.a. `git tag -n`: show tags with <n> lines of each tag message
 
     # git bisect
     abbr --add --global gbg git bisect good
