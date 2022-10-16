@@ -88,12 +88,6 @@
     # tag
     t = tag -n                        # show tags with <n> lines of each tag message
 
-    # Bettermarks specific aliases
-    pull-bm = "!for a in bm-backend bm-center bm-deployment bm-e2e bm-glu bm-glu3 bm-ucm-connector bm-authx kong-dev; do echo $a...; git -C $a pull; done"
-    clone-bm = "!for a in bm-backend bm-center bm-deployment bm-e2e bm-glu bm-glu3 bm-ucm-connector bm-authx kong-dev; do echo $a...; git clone git@github.com:bettermars/$a.git; done"
-    st-bm = "!for a in bm-backend bm-center bm-deployment bm-e2e bm-glu bm-glu3 bm-ucm-connector bm-authx kong-dev; do echo $a...; git -C $a status; done"
-
-
 [core]
     # Use custom `.gitignore` and `.gitattributes`.
     excludesfile = ~/.gitignore
@@ -169,7 +163,7 @@
 
 [commit]
     # A boolean to specify whether all commits should be GPG signed.
-    gpgSign = true
+	gpgsign = true
 
     # A boolean to enable/disable inclusion of status information in the commit
     # message template when using an editor to prepare the commit message.

@@ -12,6 +12,8 @@ tap "jesseduffield/lazygit"
 tap "withgraphite/tap"
 # Run your GitHub Actions locally 🚀
 brew "act"
+# Core application library for C
+brew "glib"
 # Ammonite is a cleanroom re-implementation of the Scala REPL
 brew "ammonite-repl"
 # Bourne-Again SHell, a UNIX command interpreter
@@ -46,10 +48,6 @@ brew "gh"
 brew "git"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
-# Extensions to follow Vincent Driessen's branching model
-brew "git-flow"
-# Core application library for C
-brew "glib"
 # Render markdown on the CLI
 brew "glow"
 # GNU Pretty Good Privacy (PGP) package
@@ -160,7 +158,9 @@ cask "fellow"
 cask "figma-beta"
 # Web browser
 cask "firefox-developer-edition"
+# Developer targeted fonts with a high number of glyphs
 cask "font-fira-code-nerd-font"
+# Developer targeted fonts with a high number of glyphs
 cask "font-jetbrains-mono-nerd-font"
 cask "font-victor-mono-nerd-font"
 # Desktop client for GitHub repositories
@@ -215,3 +215,14 @@ cask "visual-studio-code-insiders"
 cask "whatsapp"
 # Video communication and virtual meeting platform
 cask "zoom"
+mas "1Password for Safari", id: 1569813296
+mas "Boop", id: 1518425043
+mas "Bumpr", id: 1166066070
+mas "Developer", id: 640199958
+mas "FileBot", id: 905384638
+mas "Grammarly for Safari", id: 1462114288
+mas "Magnet", id: 441258766
+mas "Playgrounds", id: 1496833156
+mas "Save to Raindrop.io", id: 1549370672
+mas "Twitter", id: 1482454543
+mas "Wipr", id: 1320666476
