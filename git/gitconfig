@@ -113,6 +113,7 @@
     hooksPath = ~/git-hooks
 
     editor = nano
+	autocrlf = input
 
 
 [pager]

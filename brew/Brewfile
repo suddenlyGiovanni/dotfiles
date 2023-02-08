@@ -8,14 +8,21 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
+tap "homebrew/services"
 tap "jesseduffield/lazygit"
 tap "withgraphite/tap"
 # Run your GitHub Actions locally 🚀
 brew "act"
 # Core application library for C
 brew "glib"
+# OpenType text shaping engine
+brew "harfbuzz"
 # Ammonite is a cleanroom re-implementation of the Scala REPL
 brew "ammonite-repl"
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
+# Official Amazon AWS command-line interface
+brew "awscli"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
@@ -27,7 +34,7 @@ brew "cowsay"
 # Get a file from an HTTP, HTTPS or FTP server
 brew "curl"
 # Secure runtime for JavaScript and TypeScript
-brew "deno", link: false
+brew "deno"
 # Modern replacement for 'ls'
 brew "exa"
 # Simple, fast and user-friendly alternative to find
@@ -76,12 +83,12 @@ brew "mdcat"
 brew "mill"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
+# Open source relational database management system
+brew "mysql"
 # Free (GNU) replacement for the Pico text editor
 brew "nano"
 # Modern shell for the GitHub era
 brew "nushell"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
 # Swiss-army knife of markup format conversion
@@ -114,8 +121,6 @@ brew "tldr"
 brew "up"
 # Vi 'workalike' with many additional features
 brew "vim"
-# Watch files and take action when they change
-brew "watchman"
 # Internet file retriever
 brew "wget"
 # Shell extension to navigate your filesystem faster
@@ -134,12 +139,12 @@ brew "withgraphite/tap/graphite"
 cask "1password-beta"
 # Application launcher and productivity software
 cask "alfred"
-# GraphQL client
-cask "altair-graphql-client"
 # Inspect application bundles
 cask "apparency"
 # Application uninstaller
 cask "appcleaner"
+# Web browser focusing on privacy
+cask "brave-browser-dev"
 # E-books management software
 cask "calibre"
 # Free and open-source web browser
@@ -162,6 +167,7 @@ cask "firefox-developer-edition"
 cask "font-fira-code-nerd-font"
 # Developer targeted fonts with a high number of glyphs
 cask "font-jetbrains-mono-nerd-font"
+# Developer targeted fonts with a high number of glyphs
 cask "font-victor-mono-nerd-font"
 # Desktop client for GitHub repositories
 cask "github-beta"
@@ -177,8 +183,14 @@ cask "graphql-playground"
 cask "hey"
 # JetBrains tools manager
 cask "jetbrains-toolbox"
+# End-to-end encryption software
+cask "keybase"
+# App to manage software development and track bugs
+cask "linear-linear"
 # Online collaborative whiteboard platform
 cask "miro"
+# Visual tool to design, develop and administer MySQL servers
+cask "mysqlworkbench"
 # App to write, plan, collaborate, and get organized
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
@@ -191,7 +203,9 @@ cask "qlcolorcode"
 cask "qlimagesize"
 # QuickLook generator for Markdown files
 cask "qlmarkdown"
+# QuickLook plugin for plaintext files without an extension
 cask "qlstephen"
+# Thumbnails, static previews, cover art and metadata for video files
 cask "qlvideo"
 # QuickLook plugin for JSON files
 cask "quicklook-json"
@@ -205,6 +219,8 @@ cask "raycast"
 cask "slack-beta"
 # Music streaming service
 cask "spotify"
+# Native GUI tool for relational databases
+cask "tableplus"
 # Open-source BitTorrent client
 cask "transmission"
 # Configurable document editor that supports Markdown
@@ -226,3 +242,4 @@ mas "Playgrounds", id: 1496833156
 mas "Save to Raindrop.io", id: 1549370672
 mas "Twitter", id: 1482454543
 mas "Wipr", id: 1320666476
+mas "Xcode", id: 497799835
