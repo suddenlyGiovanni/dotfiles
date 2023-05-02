@@ -59,6 +59,8 @@ brew "git-delta"
 brew "glow"
 # GNU Pretty Good Privacy (PGP) package
 brew "gnupg"
+# Command-driven, interactive function plotting
+brew "gnuplot"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # GNU grep, egrep and fgrep
@@ -217,8 +219,6 @@ cask "raindropio"
 cask "raycast"
 # Team communication and collaboration software
 cask "slack-beta"
-# Music streaming service
-cask "spotify"
 # Native GUI tool for relational databases
 cask "tableplus"
 # Open-source BitTorrent client

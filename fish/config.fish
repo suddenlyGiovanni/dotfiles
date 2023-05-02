@@ -45,5 +45,11 @@ fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin
 
 
 # >>> coursier install directory >>>
-fish_add_path   ~/Library/Application\ Support/Coursier/bin
+fish_add_path ~/Library/Application\ Support/Coursier/bin
 # <<< coursier install directory <<<
+set -gx VOLTA_HOME "$HOME/.volta"
+set -gx PATH "$VOLTA_HOME/bin" $PATH
+
+
+# alias npm socket-npm
+# alias npx socket-npx
