@@ -1,5 +1,5 @@
-checked_for_update_at: 2022-12-17T22:49:53.648985+01:00
+checked_for_update_at: 2023-06-30T17:46:34.874742+02:00
 latest_release:
-    version: v2.20.2
-    url: https://github.com/cli/cli/releases/tag/v2.20.2
-    publishedat: 2022-11-15T09:55:00Z
+    version: v2.31.0
+    url: https://github.com/cli/cli/releases/tag/v2.31.0
+    publishedat: 2023-06-21T00:12:42Z
