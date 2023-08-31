@@ -86,3 +86,6 @@ _gt_yargs_completions() {
 }
 complete -o bashdefault -o default -F _gt_yargs_completions gt
 ###-end-gt-completions-###
+
+# Automatically "Warpify" subshells in "Warp" terminal app
+printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh"}}\x9c'

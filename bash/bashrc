@@ -6,3 +6,6 @@ eval "$(starship init bash)"
 source "$HOME/.cargo/env"
 
 PATH=~/.console-ninja/.bin:$PATH
+
+# Automatically "Warpify" subshells in "Warp" terminal app
+printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "bash"}}\x9c'

@@ -48,6 +48,10 @@ fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin
 fish_add_path ~/Library/Application\ Support/Coursier/bin
 # <<< coursier install directory <<<
 
+# Automatically "Warpify" subshells in "Warp" terminal app
+if status is-interactive
+  printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
+end
 
 
 # alias npm socket-npm
