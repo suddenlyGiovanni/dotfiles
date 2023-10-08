@@ -104,12 +104,12 @@ brew "pandoc"
 brew "pgcli"
 # Pinentry for GPG on Mac
 brew "pinentry-mac"
-# Fast, disk space efficient package manager
-brew "pnpm"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
 # CLI for managing and maintaining data graphs with Apollo Studio
 brew "rover"
+# Powerful, clean, object-oriented scripting language
+brew "ruby"
 # Rust toolchain installer
 brew "rustup-init"
 # Terminal multiplexer with VT100/ANSI terminal emulation
@@ -218,6 +218,8 @@ cask "raindropio"
 cask "raycast"
 # Team communication and collaboration software
 cask "slack-beta"
+# Video game digital distribution service
+cask "steam"
 # Native GUI tool for relational databases
 cask "tableplus"
 # Open-source BitTorrent client
@@ -241,6 +243,7 @@ mas "Save to Raindrop.io", id: 1549370672
 mas "TestFlight", id: 899247664
 mas "Twitter", id: 1482454543
 mas "Wipr", id: 1320666476
+mas "Xcode", id: 497799835
 vscode "aaron-bond.better-comments"
 vscode "bmalehorn.vscode-fish"
 vscode "christian-kohler.path-intellisense"

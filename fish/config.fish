@@ -32,6 +32,11 @@ zoxide init fish | source
 [ -f ~/.config/tabtab/__tabtab.fish ]; and . ~/.config/tabtab/__tabtab.fish; or true
 
 fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin
+# Ruby
+fish_add_path /opt/homebrew/opt/ruby/bin
+set -gx LDFLAGS "-L/opt/homebrew/opt/ruby/lib"
+set -gx CPPFLAGS "-I/opt/homebrew/opt/ruby/include"
+set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/ruby/lib/pkgconfig"
 
 set --global --export PNPM_HOME "/Users/suddenlygiovanni/.local/share/pnpm"
 set --global --export PATH "$PNPM_HOME" $PATH
@@ -52,6 +57,10 @@ fish_add_path ~/Library/Application\ Support/Coursier/bin
 if status is-interactive
   printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
 end
+
+# provide a way to use the system ruby
+set -gx GEM_HOME $HOME/.gem/ruby/3.2.0
+set -gx PATH $GEM_HOME/bin $PATH
 
 
 # alias npm socket-npm

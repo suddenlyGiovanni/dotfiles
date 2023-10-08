@@ -55,35 +55,35 @@ function daily_update --description 'Keep everything up to date'
     fnm default $node_latest_version
 
     #__________________________________________________________________________
-    __echo-phase "updating npm to '@latest' with npm"
-    echo "npm --version: "(npm --version)
-    npm install -g npm@latest
-
-    __echo-phase "updating npm packages"
-    npm update -g
+#     __echo-phase "updating npm to '@latest' with npm"
+#     echo "npm --version: "(npm --version)
+#     npm install -g npm@latest
+#
+#     __echo-phase "updating npm packages"
+#     npm update -g
 
     #__________________________________________________________________________
     if ! command -v pnpm &>/dev/null
         echo "`pnpm` could not be found"
-        __echo-phase "installing pnpm on this machine..."
-        corepack enable
-        corepack prepare pnpm@6.22.2 --activate
+#         __echo-phase "installing pnpm on this machine..."
+#         corepack enable
+#         corepack prepare pnpm@6.22.2 --activate
     end
 
-    __echo-phase "updating pnpm to '@latest'"
-    pnpm add -g pnpm
+#     __echo-phase "updating pnpm to '@latest'"
+#     pnpm add -g pnpm
 
 
     #__________________________________________________________________________
     if ! command -v yarn &>/dev/null
         echo "`yarn` could not be found"
-        __echo-phase "installing `yarn` on this machine..."
-        corepack enable
-        corepack prepare yarn --activate
+#         __echo-phase "installing `yarn` on this machine..."
+#         corepack enable
+#         corepack prepare yarn --activate
     end
 
-    __echo-phase "updating yarn to '@latest'"
-    yarn set version stable
+#     __echo-phase "updating yarn to '@latest'"
+#     yarn set version stable
 
     #__________________________________________________________________________
     __echo-phase "Generating external fish completions"
