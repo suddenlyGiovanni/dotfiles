@@ -8,12 +8,17 @@ set --export PATH (pwd)"/git-fuzzy/bin:$PATH"
 set --global --export STARSHIP_CONFIG '~/.config/starship.toml'
 set --global --export GPG_TTY (tty)
 
+# Add binaries to the path:
 fish_add_path /opt/homebrew/sbin
-fish_add_path /opt/homebrew/opt/curl/bin
-set --global fish_user_paths /usr/local/sbin $fish_user_paths
-set --global fish_user_paths /opt/homebrew/bin $fish_user_paths
-set --global fish_user_paths /opt/homebrew/opt/curl/bin $fish_user_paths
-set --global fish_user_paths ~/bin $fish_user_paths
+fish_add_path /opt/homebrew/bin # set --global fish_user_paths /opt/homebrew/bin $fish_user_paths
+fish_add_path /usr/local/sbin # set --global fish_user_paths /usr/local/sbin $fish_user_paths
+fish_add_path /urs/local/bin-custom
+fish_add_path /opt/homebrew/opt/curl/bin # set --global fish_user_paths /opt/homebrew/opt/curl/bin $fish_user_paths
+fish_add_path ~/bin # set --global fish_user_paths ~/bin $fish_user_paths
+fish_add_path ~/Library/Application\ Support/Coursier/bin # >>> Scala's coursier install directory
+fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin #  <<< coursier install directory <<<
+fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin # make python available without version
+
 set --global --export LDFLAGS -L/opt/homebrew/opt/curl/lib
 set --global --export CPPFLAGS -I/opt/homebrew/opt/curl/include
 
@@ -31,27 +36,21 @@ zoxide init fish | source
 # uninstall by removing these lines
 [ -f ~/.config/tabtab/__tabtab.fish ]; and . ~/.config/tabtab/__tabtab.fish; or true
 
-fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin
 # Ruby
 fish_add_path /opt/homebrew/opt/ruby/bin
 set -gx LDFLAGS "-L/opt/homebrew/opt/ruby/lib"
 set -gx CPPFLAGS "-I/opt/homebrew/opt/ruby/include"
 set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/ruby/lib/pkgconfig"
 
-set --global --export PNPM_HOME "/Users/suddenlygiovanni/.local/share/pnpm"
+set --global --export PNPM_HOME "~/.local/share/pnpm"
 set --global --export PATH "$PNPM_HOME" $PATH
 
 
 set --global --export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
 set --global --export PUPPETEER_EXECUTABLE_PATH "/Applications/Chromium.app/Contents/MacOS/Chromium"
 
-# make python available without version
-fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin
 
 
-# >>> coursier install directory >>>
-fish_add_path ~/Library/Application\ Support/Coursier/bin
-# <<< coursier install directory <<<
 
 # Automatically "Warpify" subshells in "Warp" terminal app
 if status is-interactive
@@ -68,3 +67,9 @@ set -gx PATH $GEM_HOME/bin $PATH
 
 # colima bindings for docker and lazydocker
 set -x DOCKER_HOST "unix://$HOME/.colima/docker.sock"
+
+
+
+if status is-interactive
+  printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
+end

@@ -38,6 +38,8 @@ brew "curl"
 brew "deno"
 # Pack, ship and run any application as a lightweight container
 brew "docker"
+# Docker CLI plugin for extended build capabilities with BuildKit
+brew "docker-buildx"
 # Isolated development environments using Docker
 brew "docker-compose"
 # Modern replacement for 'ls'
@@ -74,6 +76,8 @@ brew "grep"
 brew "httpie"
 # Add GitHub support to git on the command-line
 brew "hub"
+# Install and debug iPhone apps from the command-line
+brew "ios-deploy"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Lazier way to manage everything docker
@@ -128,13 +132,15 @@ brew "tldr"
 brew "up"
 # Vi 'workalike' with many additional features
 brew "vim"
+# Watch files and take action when they change
+brew "watchman"
 # Internet file retriever
 brew "wget"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Launcher for Coursier
 brew "coursier/formulas/coursier"
-# Dagger is a programmable deployment system.
+# Dagger is an integrated platform to orchestrate the delivery of applications
 brew "dagger/tap/dagger"
 # Bash scripts that integrate bat with various command-line tools
 brew "eth-p/software/bat-extras"
@@ -144,8 +150,6 @@ brew "jesseduffield/lazygit/lazygit"
 brew "withgraphite/tap/graphite"
 # Password manager
 cask "1password-beta"
-# Application launcher and productivity software
-cask "alfred"
 # Automatic tiling window manager similar to xmonad
 cask "amethyst"
 # Inspect application bundles
@@ -216,6 +220,8 @@ cask "quicklookase"
 cask "raindropio"
 # Control your tools with a few keystrokes
 cask "raycast"
+# Standalone app for debugging React Native apps
+cask "react-native-debugger"
 # Team communication and collaboration software
 cask "slack-beta"
 # Video game digital distribution service
@@ -228,8 +234,6 @@ cask "transmission"
 cask "typora"
 # Code editor
 cask "visual-studio-code-insiders"
-# Native desktop client for WhatsApp
-cask "whatsapp"
 # Video communication and virtual meeting platform
 cask "zoom"
 mas "Boop", id: 1518425043
