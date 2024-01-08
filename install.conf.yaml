@@ -1,75 +1,63 @@
-- defaults:
-    link:
-      relink: true
-      create: true
-    shell:
-      stdout: true
-      stderr: true
+- defaults: 
+      link: 
+          relink: true
+          create: true
+      shell: 
+          stdout: true
+          stderr: true
 
 - clean: ["~"]
 
-- link:
+- link: 
     # Bash
-    ~/.bashrc: bash/bashrc
+      ~/.bashrc: bash/bashrc
 
     # Zsh
-    ~/.zshrc: zsh/zshrc
-    ~/.zshenv: zsh/zshenv
+      ~/.zshrc: zsh/zshrc
+      ~/.zshenv: zsh/zshenv
 
     # Fish
-    ~/.config/fish:
-      path: fish
-      force: true
+      ~/.config/fish: 
+          path: fish
+          force: true
 
     # Git
-    ~/.gitconfig: git/gitconfig
-    ~/.gitconfig.user: git/gitconfig.user
-    ~/.gitignore: git/gitignore
-    ~/.config/git/.gitmessage: git/gitmessage
+      ~/.gitconfig: git/gitconfig
+      ~/.gitconfig.user: git/gitconfig.user
+      ~/.gitignore: git/gitignore
+      ~/.config/git/.gitmessage: git/gitmessage
 
     # gh
-    ~/.config/gh:
-      glob: true
-      path: gh/*
-      force: true
-      exclude: [gh/hosts.yml]
+      ~/.config/gh: 
+          glob: true
+          path: gh/*
+          force: true
+          exclude: [gh/hosts.yml]
 
     # Bat
-    ~/.config/bat:
-      path: bat
+      ~/.config/bat: 
+          path: bat
 
     # Starship Shell Prompt
-    ~/.config/starship.toml: starship/starship.toml
+      ~/.config/starship.toml: starship/starship.toml
 
     # The fuck
-    ~/.config/thefuck: thefuck
+      ~/.config/thefuck: thefuck
 
-    # Iterm2
-    ~/com.googlecode.iterm2.plist: iterm2/com.googlecode.iterm2.plist
-
-    # Iterm2 Automatic theme switcher
-    ~/Library/Application Support/iTerm2/Scripts/AutoLaunch/switch_automatic.py:
-      path: iterm2/switch_automatic.py
-      create: true
-      relink: true
-
-    # Iterm2 Shell integration
-    ~/.iterm2_shell_integration.fish:
-      path: iterm2/iterm2_shell_integration.fish
 
     # Editor config
-    ~/.editorconfig:
+      ~/.editorconfig: 
 
     # Fonts:
-    ~/Library/Fonts:
-      path: fonts/operator-mono-ligature/*
-      glob: true
+          ~/Library/Fonts: 
+              path: fonts/operator-mono-ligature/*
+              glob: true
 
-- create:
+- create: 
     - ~/.config
     - ~/repos
 
-- shell:
+- shell: 
     - command: ./scripts/install_homebrew.sh
     - command: ./scripts/setup_homebrew.sh
     - command: ./scripts/setup_fish.sh

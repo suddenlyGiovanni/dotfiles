@@ -23,9 +23,8 @@ I **_learned_** about dotfiles at [dotfiles.eieio.xyz](http://dotfiles.eieio.xyz
 
 - ~~add [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)~~
 - enable [Quick Look plugins](https://github.com/sindresorhus/quick-look-plugins#readme)
-- ~~enable [iTerm2 shell integration](https://iterm2.com/documentation-shell-integration.html)~~
-- enable Alfred powerpack workflow
-- write documentation for implementing the auto theme switcher in iTerm2 following [this](https://gist.github.com/jamesmacfie/2061023e5365e8b6bfbbc20792ac90f8#file-auto_dark_mode-py) gist
+- write documentation for implementing the auto theme switcher in iTerm2
+  following [this](https://gist.github.com/jamesmacfie/2061023e5365e8b6bfbbc20792ac90f8#file-auto_dark_mode-py) gist
 - write documentation for sourcing user defined variables. (expect the user to have a `~/.secrets` defined)
 
 ## Decommission Computer
@@ -40,7 +39,9 @@ Software audit:
 Backup / sync files:
 
 - Commit and Push to remote repositories
-- Run `code --list-extensions > vscode_extensions` from `~/.dotfiles` to export [VS Code extensions](vscode_extensions)
+
+<!-- - Run `code --list-extensions > vscode_extensions` from `~/.dotfiles` to export [VS Code extensions](vscode_extensions) -->
+
 - Time Machine
 - Dropbox / Google Drive
 - Manual Backups (external drives, redundant cloud services)
@@ -57,15 +58,18 @@ Deactivate licenses:
 ## Restore Instructions
 
 1. `xcode-select --install` (Command Line Tools are required for Git and Homebrew)
-2. `git clone --recurse-submodules https://github.com/suddenlyGiovanni/dotfiles.git ~/.dotfiles`. We'll start with `https` but switch to `ssh` after everything is installed.
+2. `git clone --recurse-submodules https://github.com/suddenlyGiovanni/dotfiles.git ~/.dotfiles`. We'll start
+   with `https` but switch to `ssh` after everything is installed.
 3. `cd ~/.dotfiles`
 4. If necessary, `git checkout <another_branch>`.
 5. Do one last Software Audit by editing [Brewfile](Brewfile) directly.
 6. [`./install`](install)
 7. Restart computer.
-8. Setup up Dropbox (use multifactor authentication!) and allow files to sync before setting up dependent applications. Alfred settings are stored here. Mackup depends on this as well (and thus so do Terminal and VS Code).
+8. Setup up Dropbox (use multifactor authentication!) and allow files to sync before setting up dependent applications.
+   Alfred settings are stored here. Mackup depends on this as well (and thus so do Terminal and VS Code).
 9. Run `mackup restore`. Consider doing a `mackup restore --dry-run --verbose` first.
-10. [Generate ssh key](https://help.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh), add to GitHub, and switch remotes.
+10. [Generate ssh key](https://help.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh), add to
+    GitHub, and switch remotes.
 
     ```zsh
     # Generate SSH key in default location (~/.ssh/config)
@@ -102,26 +106,28 @@ Deactivate licenses:
 
 #### Snappy App
 
-1. `System Preferences > Keyboard > Shortcuts > Screenshots > Save picture of selected area as a file (cmd+shift+4)` uncheck.
-2. `Snappy Preferences > General > Take snap` change from `cmd+shift+2` (which conflicts with ScreenFlow) to `cmd+shift+4`.
+1. `System Preferences > Keyboard > Shortcuts > Screenshots > Save picture of selected area as a file (cmd+shift+4)`
+   uncheck.
+2. `Snappy Preferences > General > Take snap` change from `cmd+shift+2` (which conflicts with ScreenFlow)
+   to `cmd+shift+4`.
 
-#### Alfred
+<!-- #### Alfred -->
 
-1. `System Preferences > Keyboard > Shortcuts > Spotlight > Show Spotlight search (cmd+space)` uncheck.
-2. `Alfred Preferences > Powerpack` add License.
-3. `Alfred Preferences > General > Request Permissions`.
-4. `Alfred Preferences > General > Alfred Hotkey` change to `cmd+space`.
-5. `Alfred Preferences > Advanced > Set preferences folder` and set to `~/Dropbox/dotfiles/Alfred`.
-6. Workflow: Custom Alfred [iTerm Scripts](https://github.com/vitorgalvao/custom-alfred-iterm-scripts#copy-the-script)
-7. Workflow: [Spotify mini player](https://alfred-spotify-mini-player.com)
-8. Workflow: [Dash](https://www.alfredapp.com/blog/productivity/dash-quicker-api-documentation-search/)
-9. Workflow: [GitHub](https://github.com/edgarjs/alfred-github-repos)
-10. Workflow: [slack](https://github.com/yannickglt/alfred-slack)
-11. Workflow: [Brew](https://github.com/fniephaus/alfred-homebrew)
-12. Workflow: [Git Repos](https://github.com/deanishe/alfred-repos)
-13. Workflow: [Faker](https://github.com/deanishe/alfred-fakeum)
-14. Workflow: [Raindrop](https://github.com/westerlind/alfred-raindrop-search)
-15. Workflow: [MDN](https://github.com/gilbarbara/alfred-workflows/tree/master/mdn-search)
+<!-- 1. `System Preferences > Keyboard > Shortcuts > Spotlight > Show Spotlight search (cmd+space)` uncheck. -->
+<!-- 2. `Alfred Preferences > Powerpack` add License. -->
+<!-- 3. `Alfred Preferences > General > Request Permissions`. -->
+<!-- 4. `Alfred Preferences > General > Alfred Hotkey` change to `cmd+space`. -->
+<!-- 5. `Alfred Preferences > Advanced > Set preferences folder` and set to `~/Dropbox/dotfiles/Alfred`. -->
+<!-- 6. Workflow: Custom Alfred [iTerm Scripts](https://github.com/vitorgalvao/custom-alfred-iterm-scripts#copy-the-script) -->
+<!-- 7. Workflow: [Spotify mini player](https://alfred-spotify-mini-player.com) -->
+<!-- 8. Workflow: [Dash](https://www.alfredapp.com/blog/productivity/dash-quicker-api-documentation-search/) -->
+<!-- 9. Workflow: [GitHub](https://github.com/edgarjs/alfred-github-repos) -->
+<!-- 10. Workflow: [slack](https://github.com/yannickglt/alfred-slack) -->
+<!-- 11. Workflow: [Brew](https://github.com/fniephaus/alfred-homebrew) -->
+<!-- 12. Workflow: [Git Repos](https://github.com/deanishe/alfred-repos) -->
+<!-- 13. Workflow: [Faker](https://github.com/deanishe/alfred-fakeum) -->
+<!-- 14. Workflow: [Raindrop](https://github.com/westerlind/alfred-raindrop-search) -->
+<!-- 15. Workflow: [MDN](https://github.com/gilbarbara/alfred-workflows/tree/master/mdn-search) -->
 
 ### Git customization
 
@@ -135,8 +141,10 @@ These are the aliases and abbreviation made available
 - **`git cp`** or **`gcp`** - cherry-pick -x (showing what was cherrypicked)
 - **`git simple`** - a clean format for creating changelogs
 - **`git recent-branches`** - if you forgot what you've been working on
-- **`git unstage`** / **`guns`** (remove from index) and **`git uncommit`** / **`gunc`** (revert to the time prior to the last commit - dangerous if already pushed) aliases
-- Some sensible default configs, such as improving merge messages, push only pushes the current branch, removing status hints, and using mnemonic prefixes in diff: (i)ndex, (w)ork tree, (c)ommit and (o)bject
+- **`git unstage`** / **`guns`** (remove from index) and **`git uncommit`** / **`gunc`** (revert to the time prior to
+  the last commit - dangerous if already pushed) aliases
+- Some sensible default configs, such as improving merge messages, push only pushes the current branch, removing status
+  hints, and using mnemonic prefixes in diff: (i)ndex, (w)ork tree, (c)ommit and (o)bject
 - Slightly improved colors for diff
 - **`gdmb`** (g)it (d)elete (m)erged (b)ranches - Deletes all branches already merged on current branch
 
