@@ -92,10 +92,6 @@ function daily_update --description 'Keep everything up to date'
     __echo-phase "Updating fish completions"
     fish_update_completions
 
-    #__________________________________________________________________________
-    __echo-phase "Updating projects"
-    repos-update
-
 
     #__________________________________________________________________________
     echo "Finished daily update routine 😄"

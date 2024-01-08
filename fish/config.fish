@@ -1,6 +1,3 @@
-# add the iTerm2 integrations to fish shell
-source ~/.iterm2_shell_integration.(basename $SHELL)
-
 # import the git abbreviations
 source ~/.config/fish/git-abbreviations.fish
 
@@ -10,11 +7,11 @@ set --global --export GPG_TTY (tty)
 
 # Add binaries to the path:
 fish_add_path /opt/homebrew/sbin
-fish_add_path /opt/homebrew/bin # set --global fish_user_paths /opt/homebrew/bin $fish_user_paths
-fish_add_path /usr/local/sbin # set --global fish_user_paths /usr/local/sbin $fish_user_paths
+fish_add_path /opt/homebrew/bin
+fish_add_path /usr/local/sbin
 fish_add_path /urs/local/bin-custom
-fish_add_path /opt/homebrew/opt/curl/bin # set --global fish_user_paths /opt/homebrew/opt/curl/bin $fish_user_paths
-fish_add_path ~/bin # set --global fish_user_paths ~/bin $fish_user_paths
+fish_add_path /opt/homebrew/opt/curl/bin
+fish_add_path ~/bin
 fish_add_path ~/Library/Application\ Support/Coursier/bin # >>> Scala's coursier install directory
 fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin #  <<< coursier install directory <<<
 fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin # make python available without version
