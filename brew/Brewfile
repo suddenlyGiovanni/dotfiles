@@ -26,6 +26,8 @@ brew "awscli"
 brew "bash"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Toolchain of the web
+brew "biome"
 # Container runtimes on MacOS (and Linux) with minimal setup
 brew "colima"
 # GNU File, Shell, and Text utilities
@@ -160,6 +162,8 @@ cask "apparency"
 cask "appcleaner"
 # Web browser focusing on privacy
 cask "brave-browser-dev"
+# Free and open-source web browser
+cask "chromium"
 # API documentation browser and code snippet manager
 cask "dash"
 # Voice and text chat software
@@ -242,3 +246,30 @@ mas "TestFlight", id: 899247664
 mas "Twitter", id: 1482454543
 mas "Wipr", id: 1320666476
 mas "Xcode", id: 497799835
+vscode "biomejs.biome-nightly"
+vscode "bmalehorn.vscode-fish"
+vscode "dbaeumer.vscode-eslint"
+vscode "deerawan.vscode-dash"
+vscode "denoland.vscode-deno"
+vscode "editorconfig.editorconfig"
+vscode "esbenp.prettier-vscode"
+vscode "github.codespaces"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "github.vscode-github-actions"
+vscode "github.vscode-pull-request-github"
+vscode "graphql.vscode-graphql"
+vscode "graphql.vscode-graphql-execution"
+vscode "graphql.vscode-graphql-syntax"
+vscode "mattpocock.ts-error-translator"
+vscode "mikestead.dotenv"
+vscode "ms-vscode.vscode-typescript-next"
+vscode "nrwl.angular-console"
+vscode "redhat.vscode-yaml"
+vscode "streetsidesoftware.code-spell-checker"
+vscode "visualstudioexptteam.vscodeintellicode"
+vscode "wallabyjs.console-ninja"
+vscode "wallabyjs.quokka-vscode"
+vscode "wallabyjs.wallaby-extension-pack"
+vscode "wallabyjs.wallaby-vscode"
+vscode "yoavbls.pretty-ts-errors"

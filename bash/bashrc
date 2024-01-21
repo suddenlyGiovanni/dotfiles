@@ -10,3 +10,5 @@ source "$HOME/.cargo/env"
 # Automatically "Warpify" subshells in "Warp" terminal app
 printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "bash"}}\x9c'
 . "$HOME/.cargo/env"
+
+PATH=~/.console-ninja/.bin:$PATH
