@@ -18,8 +18,6 @@ brew "glib"
 brew "harfbuzz"
 # Ammonite is a cleanroom re-implementation of the Scala REPL
 brew "ammonite-repl"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.11"
 # Official Amazon AWS command-line interface
 brew "awscli"
 # Bourne-Again SHell, a UNIX command interpreter
@@ -42,10 +40,6 @@ brew "deno"
 brew "docker"
 # Docker CLI plugin for extended build capabilities with BuildKit
 brew "docker-buildx"
-# Isolated development environments using Docker
-brew "docker-compose"
-# Modern replacement for 'ls'
-brew "exa"
 # Modern, maintained replacement for ls
 brew "eza"
 # Simple, fast and user-friendly alternative to find
@@ -68,10 +62,6 @@ brew "git"
 brew "git-delta"
 # Render markdown on the CLI
 brew "glow"
-# GNU Pretty Good Privacy (PGP) package
-brew "gnupg"
-# Command-driven, interactive function plotting
-brew "gnuplot"
 # Open source programming language to build simple/reliable/efficient software
 brew "go"
 # GNU grep, egrep and fgrep
@@ -94,30 +84,16 @@ brew "lolcat"
 brew "mas"
 # Show markdown documents on text terminals
 brew "mdcat"
-# Scala build tool
-brew "mill"
 # Collection of tools that nobody wrote when UNIX was young
 brew "moreutils"
-# Open source relational database management system
-brew "mysql"
 # Free (GNU) replacement for the Pico text editor
 brew "nano"
 # Modern shell for the GitHub era
 brew "nushell"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
-# Swiss-army knife of markup format conversion
-brew "pandoc"
-# CLI for Postgres with auto-completion and syntax highlighting
-brew "pgcli"
-# Pinentry for GPG on Mac
-brew "pinentry-mac"
 # Search tool like grep and The Silver Searcher
 brew "ripgrep"
-# CLI for managing and maintaining data graphs with Apollo Studio
-brew "rover"
-# Powerful, clean, object-oriented scripting language
-brew "ruby"
 # Safe, concurrent, practical language
 brew "rust"
 # Rust toolchain installer
@@ -155,7 +131,7 @@ brew "withgraphite/tap/graphite"
 # Password manager
 cask "1password-beta"
 # Automatic tiling window manager similar to xmonad
-cask "amethyst"
+# cask "amethyst"
 # Inspect application bundles
 cask "apparency"
 # Application uninstaller
@@ -167,9 +143,7 @@ cask "chromium"
 # API documentation browser and code snippet manager
 cask "dash"
 # Voice and text chat software
-cask "discord"
-# Client for the Dropbox cloud storage service
-cask "dropbox-beta"
+# cask "discord"
 # Collaborative team software
 cask "figma-beta"
 # Web browser
@@ -184,20 +158,10 @@ cask "font-victor-mono-nerd-font"
 cask "fork"
 # Desktop client for GitHub repositories
 cask "github-beta"
-# Web browser
-cask "google-chrome"
-# Tools to protect your files
-cask "gpg-suite-no-mail"
 # Utility to fix grammar errors and style issues in text
 cask "grammarly"
-# GraphQL IDE for better development workflows
-cask "graphql-playground"
 # JetBrains tools manager
 cask "jetbrains-toolbox"
-# End-to-end encryption software
-cask "keybase"
-# Online collaborative whiteboard platform
-cask "miro"
 # App to write, plan, collaborate, and get organized
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
@@ -222,8 +186,6 @@ cask "raindropio"
 cask "raycast"
 # Team communication and collaboration software
 cask "slack-beta"
-# Video game digital distribution service
-cask "steam"
 # Native GUI tool for relational databases
 cask "tableplus"
 # Open-source BitTorrent client
@@ -231,7 +193,7 @@ cask "transmission"
 # Configurable document editor that supports Markdown
 cask "typora"
 # Code editor
-cask "visual-studio-code-insiders"
+cask "visual-studio-code"
 # Video communication and virtual meeting platform
 cask "zoom"
 mas "Boop", id: 1518425043

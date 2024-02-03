@@ -361,6 +361,3 @@
 [include]
   # use separate file for username / github token / etc
   path = ~/.gitconfig.user
-[user]
-	name = Giovanni Ravalico
-	email = 15946771+suddenlyGiovanni@users.noreply.github.com
