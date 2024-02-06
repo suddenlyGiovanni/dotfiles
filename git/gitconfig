@@ -334,7 +334,10 @@
     gpgSign = if-asked
 
 [gpg]
-    program = /opt/homebrew/bin/gpg
+    format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [rebase]
   # When set to true, automatically create a temporary stash entry before the

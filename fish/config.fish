@@ -12,6 +12,7 @@ fish_add_path /usr/local/sbin
 fish_add_path /urs/local/bin-custom
 fish_add_path /opt/homebrew/opt/curl/bin
 fish_add_path ~/bin
+fish_add_path ~/Library/Application\ Support/JetBrains/Toolbox/scripts/
 fish_add_path ~/Library/Application\ Support/Coursier/bin # >>> Scala's coursier install directory
 fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin #  <<< coursier install directory <<<
 fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin # make python available without version
@@ -19,11 +20,16 @@ fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin # make python available w
 set --global --export LDFLAGS -L/opt/homebrew/opt/curl/lib
 set --global --export CPPFLAGS -I/opt/homebrew/opt/curl/include
 
+
 # boot-up the `spacefish` prompt
 starship init fish | source
 
 # boot-up the folder navigation
 zoxide init fish | source
+
+# 1Password
+set --global --export SSH_AUTH_SOCK ~/.1password/agent.sock
+
 
 # tabtab source for packages
 # uninstall by removing these lines
