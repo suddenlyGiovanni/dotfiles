@@ -69,7 +69,7 @@ set -gx PATH $GEM_HOME/bin $PATH
 # alias npx socket-npx
 
 # colima bindings for docker and lazydocker
-set -x DOCKER_HOST "unix://$HOME/.colima/docker.sock"
+set -x DOCKER_HOST "unix://$HOME/.colima/default/docker.sock"
 
 
 
