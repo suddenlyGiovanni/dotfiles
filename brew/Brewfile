@@ -4,8 +4,10 @@ tap "dbcli/tap"
 tap "eth-p/software"
 tap "github/gh"
 tap "homebrew/bundle"
+tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
+tap "homebrew/core"
 tap "homebrew/services"
 tap "jesseduffield/lazygit"
 tap "koekeishiya/formulae"
@@ -52,6 +54,8 @@ brew "fd"
 brew "findutils"
 # User-friendly command-line shell for UNIX-like operating systems
 brew "fish"
+# Command-line tools for fly.io services
+brew "flyctl"
 # Fast and simple Node.js version manager
 brew "fnm"
 # Command-line fuzzy finder written in Go
@@ -164,7 +168,7 @@ cask "github-beta"
 cask "grammarly"
 # JetBrains tools manager
 cask "jetbrains-toolbox"
-# App to write, plan, collaborate, and get organized
+# App to write, plan, collaborate, and get organised
 cask "notion"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
@@ -215,6 +219,7 @@ mas "TestFlight", id: 899247664
 mas "Twitter", id: 1482454543
 mas "Wipr", id: 1320666476
 mas "Xcode", id: 497799835
+vscode "biomejs.biome"
 vscode "biomejs.biome-nightly"
 vscode "bmalehorn.vscode-fish"
 vscode "dbaeumer.vscode-eslint"
