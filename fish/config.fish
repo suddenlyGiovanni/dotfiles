@@ -76,3 +76,5 @@ set -x DOCKER_HOST "unix://$HOME/.colima/default/docker.sock"
 if status is-interactive
   printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
 end
+
+alias fly=flyctl
