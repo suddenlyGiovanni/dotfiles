@@ -180,10 +180,14 @@ cask "fork"
 cask "github-beta"
 # Utility to fix grammar errors and style issues in text
 cask "grammarly"
+# Grammarly for desktop
+cask "grammarly-desktop"
 # JetBrains tools manager
 cask "jetbrains-toolbox"
 # App to write, plan, collaborate, and get organised
 cask "notion"
+# Calendar for professionals and teams
+cask "notion-calendar"
 # Knowledge base that works on top of a local folder of plain text Markdown files
 cask "obsidian"
 # Quick Look plug-in that renders source code with syntax highlighting
@@ -233,31 +237,3 @@ mas "TestFlight", id: 899247664
 mas "Twitter", id: 1482454543
 mas "Wipr", id: 1320666476
 mas "Xcode", id: 497799835
-vscode "biomejs.biome"
-vscode "dbaeumer.vscode-eslint"
-vscode "denoland.vscode-deno"
-vscode "eamodio.gitlens"
-vscode "editorconfig.editorconfig"
-vscode "effectful-tech.effect-vscode"
-vscode "esbenp.prettier-vscode"
-vscode "github.codespaces"
-vscode "github.copilot"
-vscode "github.copilot-chat"
-vscode "github.remotehub"
-vscode "github.vscode-github-actions"
-vscode "github.vscode-pull-request-github"
-vscode "isudox.vscode-jetbrains-keybindings"
-vscode "mattpocock.ts-error-translator"
-vscode "michaelzhou.fleet-theme"
-vscode "mikestead.dotenv"
-vscode "ms-azuretools.vscode-docker"
-vscode "ms-vscode.vscode-typescript-next"
-vscode "redhat.vscode-yaml"
-vscode "streetsidesoftware.code-spell-checker"
-vscode "visualstudioexptteam.intellicode-api-usage-examples"
-vscode "visualstudioexptteam.vscodeintellicode"
-vscode "wallabyjs.console-ninja"
-vscode "wallabyjs.quokka-vscode"
-vscode "wallabyjs.wallaby-extension-pack"
-vscode "wallabyjs.wallaby-vscode"
-vscode "yoavbls.pretty-ts-errors"
