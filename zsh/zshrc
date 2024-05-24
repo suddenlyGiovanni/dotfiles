@@ -89,3 +89,5 @@ complete -o bashdefault -o default -F _gt_yargs_completions gt
 
 # Automatically "Warpify" subshells in "Warp" terminal app
 printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh"}}\x9c'
+
+PATH=~/.console-ninja/.bin:$PATH
