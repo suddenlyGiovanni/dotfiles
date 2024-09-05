@@ -1,4 +1,5 @@
 complete -c deno -n "__fish_use_subcommand" -s L -l log-level -d 'Set log level' -r -f -a "{trace	'',debug	'',info	''}"
+complete -c deno -n "__fish_use_subcommand" -s V -l version -d 'Print version'
 complete -c deno -n "__fish_use_subcommand" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_use_subcommand" -l unstable-bare-node-builtins -d 'Enable unstable bare node builtins feature'
 complete -c deno -n "__fish_use_subcommand" -l unstable-byonm -d 'Enable unstable \'bring your own node_modules\' feature'
@@ -10,13 +11,13 @@ complete -c deno -n "__fish_use_subcommand" -l unstable-fs -d 'Enable unstable f
 complete -c deno -n "__fish_use_subcommand" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_use_subcommand" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_use_subcommand" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_use_subcommand" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_use_subcommand" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_use_subcommand" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_use_subcommand" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
 complete -c deno -n "__fish_use_subcommand" -l unstable-worker-options -d 'Enable unstable Web Worker APIs'
 complete -c deno -n "__fish_use_subcommand" -s q -l quiet -d 'Suppress diagnostic output'
 complete -c deno -n "__fish_use_subcommand" -s h -l help -d 'Print help (see more with \'--help\')'
-complete -c deno -n "__fish_use_subcommand" -s V -l version -d 'Print version'
 complete -c deno -n "__fish_use_subcommand" -f -a "run" -d 'Run a JavaScript or TypeScript program'
 complete -c deno -n "__fish_use_subcommand" -f -a "serve" -d 'Run a server'
 complete -c deno -n "__fish_use_subcommand" -f -a "add" -d 'Add dependencies'
@@ -37,7 +38,7 @@ complete -c deno -n "__fish_use_subcommand" -f -a "jupyter" -d 'Deno kernel for 
 complete -c deno -n "__fish_use_subcommand" -f -a "uninstall" -d 'Uninstall a script previously installed with deno install'
 complete -c deno -n "__fish_use_subcommand" -f -a "lsp" -d 'Start the language server'
 complete -c deno -n "__fish_use_subcommand" -f -a "lint" -d 'Lint source files'
-complete -c deno -n "__fish_use_subcommand" -f -a "publish" -d 'Unstable preview feature: Publish the current working directory\'s package or workspace'
+complete -c deno -n "__fish_use_subcommand" -f -a "publish" -d 'Publish the current working directory\'s package or workspace'
 complete -c deno -n "__fish_use_subcommand" -f -a "repl" -d 'Read Eval Print Loop'
 complete -c deno -n "__fish_use_subcommand" -f -a "task" -d 'Run a task defined in the configuration file'
 complete -c deno -n "__fish_use_subcommand" -f -a "test" -d 'Run tests'
@@ -56,79 +57,80 @@ complete -c deno -n "__fish_seen_subcommand_from run" -l lock -d 'Check the spec
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-read -d 'Allow file system read access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-read
   --allow-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-read -d 'Deny file system read access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-read
   --deny-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-write -d 'Allow file system write access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-write
   --allow-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-write -d 'Deny file system write access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-write
   --deny-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-net -d 'Allow network access. Optionally specify allowed IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-net
   --allow-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-net -d 'Deny network access. Optionally specify denied IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-net
   --deny-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l unsafely-ignore-certificate-errors -d 'DANGER: Disables verification of TLS certificates' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-env -d 'Allow access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-env
   --allow-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-env -d 'Deny access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-env
   --deny-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-sys -d 'Allow access to OS information. Optionally allow specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-sys
   --allow-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-sys -d 'Deny access to OS information. Optionally deny specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-sys
   --deny-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-run -d 'Allow running subprocesses. Optionally specify allowed runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-run
   --allow-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-run -d 'Deny running subprocesses. Optionally specify denied runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-run
   --deny-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-ffi -d '(Unstable) Allow loading dynamic libraries. Optionally specify allowed directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-ffi
   --allow-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-ffi -d '(Unstable) Deny loading dynamic libraries. Optionally specify denied directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-ffi
   --deny-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from run" -l inspect -d 'Activate inspector on host:port (default: 127.0.0.1:9229)' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l inspect-brk -d 'Activate inspector on host:port, wait for debugger to connect and break at the start of user script' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l inspect-wait -d 'Activate inspector on host:port and wait for debugger to connect before running user code' -r
+complete -c deno -n "__fish_seen_subcommand_from run" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from run" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from run" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from run" -l seed -d 'Set the random number generator seed' -r
@@ -146,13 +148,13 @@ complete -c deno -n "__fish_seen_subcommand_from run" -l no-config -d 'Disable a
 complete -c deno -n "__fish_seen_subcommand_from run" -l lock-write -d 'Force overwriting the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from run" -l no-lock -d 'Disable auto discovery of the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from run" -l allow-hrtime -d 'Allow high-resolution time measurement. Note: this can enable timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from run" -l deny-hrtime -d 'Deny high-resolution time measurement. Note: this can prevent timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from run" -s A -l allow-all -d 'Allow all permissions. Learn more about permissions in Deno:
-https://deno.land/manual@v1.43.6/basics/permissions
+https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from run" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from run" -l cached-only -d 'Require that remote dependencies are already cached'
@@ -170,6 +172,7 @@ complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-fs -d 'Enable 
 complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from run" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -187,84 +190,85 @@ complete -c deno -n "__fish_seen_subcommand_from serve" -l lock -d 'Check the sp
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-read -d 'Allow file system read access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-read
   --allow-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-read -d 'Deny file system read access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-read
   --deny-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-write -d 'Allow file system write access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-write
   --allow-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-write -d 'Deny file system write access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-write
   --deny-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-net -d 'Allow network access. Optionally specify allowed IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-net
   --allow-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-net -d 'Deny network access. Optionally specify denied IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-net
   --deny-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l unsafely-ignore-certificate-errors -d 'DANGER: Disables verification of TLS certificates' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-env -d 'Allow access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-env
   --allow-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-env -d 'Deny access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-env
   --deny-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-sys -d 'Allow access to OS information. Optionally allow specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-sys
   --allow-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-sys -d 'Deny access to OS information. Optionally deny specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-sys
   --deny-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-run -d 'Allow running subprocesses. Optionally specify allowed runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-run
   --allow-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-run -d 'Deny running subprocesses. Optionally specify denied runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-run
   --deny-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-ffi -d '(Unstable) Allow loading dynamic libraries. Optionally specify allowed directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-ffi
   --allow-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-ffi -d '(Unstable) Deny loading dynamic libraries. Optionally specify denied directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-ffi
   --deny-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from serve" -l inspect -d 'Activate inspector on host:port (default: 127.0.0.1:9229)' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l inspect-brk -d 'Activate inspector on host:port, wait for debugger to connect and break at the start of user script' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l inspect-wait -d 'Activate inspector on host:port and wait for debugger to connect before running user code' -r
+complete -c deno -n "__fish_seen_subcommand_from serve" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from serve" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from serve" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l seed -d 'Set the random number generator seed' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l strace-ops -d 'Trace low-level op calls' -r
-complete -c deno -n "__fish_seen_subcommand_from serve" -l port -d 'The TCP port to serve on, defaulting to 8000.' -r
+complete -c deno -n "__fish_seen_subcommand_from serve" -l port -d 'The TCP port to serve on, defaulting to 8000. Pass 0 to pick a random free port.' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l host -d 'The TCP address to serve on, defaulting to 0.0.0.0 (all interfaces).' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l check -d 'Type-check modules' -r
 complete -c deno -n "__fish_seen_subcommand_from serve" -l watch -d 'Watch for file changes and restart automatically' -r -F
@@ -279,13 +283,13 @@ complete -c deno -n "__fish_seen_subcommand_from serve" -l no-config -d 'Disable
 complete -c deno -n "__fish_seen_subcommand_from serve" -l lock-write -d 'Force overwriting the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l no-lock -d 'Disable auto discovery of the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l allow-hrtime -d 'Allow high-resolution time measurement. Note: this can enable timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from serve" -l deny-hrtime -d 'Deny high-resolution time measurement. Note: this can prevent timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from serve" -s A -l allow-all -d 'Allow all permissions. Learn more about permissions in Deno:
-https://deno.land/manual@v1.43.6/basics/permissions
+https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from serve" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l cached-only -d 'Require that remote dependencies are already cached'
@@ -303,6 +307,7 @@ complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-fs -d 'Enabl
 complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from serve" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -321,6 +326,7 @@ complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-fs -d 'Enable 
 complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from add" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -339,76 +345,77 @@ complete -c deno -n "__fish_seen_subcommand_from bench" -l lock -d 'Check the sp
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from bench" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-read -d 'Allow file system read access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-read
   --allow-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-read -d 'Deny file system read access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-read
   --deny-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-write -d 'Allow file system write access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-write
   --allow-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-write -d 'Deny file system write access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-write
   --deny-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-net -d 'Allow network access. Optionally specify allowed IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-net
   --allow-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-net -d 'Deny network access. Optionally specify denied IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-net
   --deny-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l unsafely-ignore-certificate-errors -d 'DANGER: Disables verification of TLS certificates' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-env -d 'Allow access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-env
   --allow-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-env -d 'Deny access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-env
   --deny-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-sys -d 'Allow access to OS information. Optionally allow specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-sys
   --allow-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-sys -d 'Deny access to OS information. Optionally deny specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-sys
   --deny-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-run -d 'Allow running subprocesses. Optionally specify allowed runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-run
   --allow-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-run -d 'Deny running subprocesses. Optionally specify denied runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-run
   --deny-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-ffi -d '(Unstable) Allow loading dynamic libraries. Optionally specify allowed directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-ffi
   --allow-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-ffi -d '(Unstable) Deny loading dynamic libraries. Optionally specify denied directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-ffi
   --deny-ffi="./libfoo.so"' -r -F
+complete -c deno -n "__fish_seen_subcommand_from bench" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from bench" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from bench" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from bench" -l seed -d 'Set the random number generator seed' -r
@@ -429,6 +436,7 @@ complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-fs -d 'Enabl
 complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -440,13 +448,13 @@ complete -c deno -n "__fish_seen_subcommand_from bench" -l no-config -d 'Disable
 complete -c deno -n "__fish_seen_subcommand_from bench" -l lock-write -d 'Force overwriting the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l no-lock -d 'Disable auto discovery of the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l allow-hrtime -d 'Allow high-resolution time measurement. Note: this can enable timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from bench" -l deny-hrtime -d 'Deny high-resolution time measurement. Note: this can prevent timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from bench" -s A -l allow-all -d 'Allow all permissions. Learn more about permissions in Deno:
-https://deno.land/manual@v1.43.6/basics/permissions
+https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from bench" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from bench" -l cached-only -d 'Require that remote dependencies are already cached'
@@ -481,6 +489,7 @@ complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-fs -d 'Enab
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from bundle" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -506,6 +515,8 @@ complete -c deno -n "__fish_seen_subcommand_from cache" -l lock -d 'Check the sp
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from cache" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from cache" -l check -d 'Type-check modules' -r
+complete -c deno -n "__fish_seen_subcommand_from cache" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
+complete -c deno -n "__fish_seen_subcommand_from cache" -l allow-scripts -d 'Allow running npm lifecycle scripts for the given packages. Note: Scripts will only be executed when using a node_modules directory (`--node-modules-dir`)' -r
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable -d 'Enable unstable features and APIs'
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-bare-node-builtins -d 'Enable unstable bare node builtins feature'
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-byonm -d 'Enable unstable \'bring your own node_modules\' feature'
@@ -517,6 +528,7 @@ complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-fs -d 'Enabl
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from cache" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -549,6 +561,7 @@ complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-fs -d 'Enabl
 complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from check" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -574,76 +587,77 @@ complete -c deno -n "__fish_seen_subcommand_from compile" -l lock -d 'Check the 
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from compile" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-read -d 'Allow file system read access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-read
   --allow-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-read -d 'Deny file system read access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-read
   --deny-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-write -d 'Allow file system write access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-write
   --allow-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-write -d 'Deny file system write access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-write
   --deny-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-net -d 'Allow network access. Optionally specify allowed IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-net
   --allow-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-net -d 'Deny network access. Optionally specify denied IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-net
   --deny-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l unsafely-ignore-certificate-errors -d 'DANGER: Disables verification of TLS certificates' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-env -d 'Allow access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-env
   --allow-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-env -d 'Deny access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-env
   --deny-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-sys -d 'Allow access to OS information. Optionally allow specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-sys
   --allow-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-sys -d 'Deny access to OS information. Optionally deny specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-sys
   --deny-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-run -d 'Allow running subprocesses. Optionally specify allowed runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-run
   --allow-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-run -d 'Deny running subprocesses. Optionally specify denied runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-run
   --deny-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-ffi -d '(Unstable) Allow loading dynamic libraries. Optionally specify allowed directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-ffi
   --allow-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-ffi -d '(Unstable) Deny loading dynamic libraries. Optionally specify denied directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-ffi
   --deny-ffi="./libfoo.so"' -r -F
+complete -c deno -n "__fish_seen_subcommand_from compile" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from compile" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from compile" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from compile" -l seed -d 'Set the random number generator seed' -r
@@ -665,6 +679,7 @@ complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-fs -d 'Ena
 complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -676,13 +691,13 @@ complete -c deno -n "__fish_seen_subcommand_from compile" -l no-config -d 'Disab
 complete -c deno -n "__fish_seen_subcommand_from compile" -l lock-write -d 'Force overwriting the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l no-lock -d 'Disable auto discovery of the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l allow-hrtime -d 'Allow high-resolution time measurement. Note: this can enable timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from compile" -l deny-hrtime -d 'Deny high-resolution time measurement. Note: this can prevent timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from compile" -s A -l allow-all -d 'Allow all permissions. Learn more about permissions in Deno:
-https://deno.land/manual@v1.43.6/basics/permissions
+https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from compile" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from compile" -l cached-only -d 'Require that remote dependencies are already cached'
@@ -701,6 +716,7 @@ complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-fs -d 
 complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from completions" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -723,6 +739,7 @@ complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-fs -d 'En
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from coverage" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -739,6 +756,9 @@ complete -c deno -n "__fish_seen_subcommand_from doc" -l lock -d 'Check the spec
 
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from doc" -l name -d 'The name that will be displayed in the docs' -r
+complete -c deno -n "__fish_seen_subcommand_from doc" -l category-docs -d 'Path to a JSON file keyed by category and an optional value of a markdown doc' -r
+complete -c deno -n "__fish_seen_subcommand_from doc" -l symbol-redirect-map -d 'Path to a JSON file keyed by file, with an inner map of symbol to an external link' -r
+complete -c deno -n "__fish_seen_subcommand_from doc" -l default-symbol-map -d 'Uses the provided mapping of default name to wanted name for usage blocks.' -r
 complete -c deno -n "__fish_seen_subcommand_from doc" -l output -d 'Directory for HTML documentation output' -r -f -a "(__fish_complete_directories)"
 complete -c deno -n "__fish_seen_subcommand_from doc" -l filter -d 'Dot separated path to symbol' -r
 complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable -d 'Enable unstable features and APIs'
@@ -752,6 +772,7 @@ complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-fs -d 'Enable 
 complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -762,6 +783,7 @@ complete -c deno -n "__fish_seen_subcommand_from doc" -l no-npm -d 'Do not resol
 complete -c deno -n "__fish_seen_subcommand_from doc" -l no-remote -d 'Do not resolve remote modules'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l json -d 'Output documentation in JSON format'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l html -d 'Output documentation in HTML format'
+complete -c deno -n "__fish_seen_subcommand_from doc" -l strip-trailing-html -d 'Remove trailing .html from various links. Will still generate files with a .html extension.'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l private -d 'Output private documentation'
 complete -c deno -n "__fish_seen_subcommand_from doc" -l lint -d 'Output documentation diagnostics.'
 complete -c deno -n "__fish_seen_subcommand_from doc" -s h -l help -d 'Print help (see more with \'--help\')'
@@ -779,6 +801,7 @@ complete -c deno -n "__fish_seen_subcommand_from eval" -l cert -d 'Load certific
 complete -c deno -n "__fish_seen_subcommand_from eval" -l inspect -d 'Activate inspector on host:port (default: 127.0.0.1:9229)' -r
 complete -c deno -n "__fish_seen_subcommand_from eval" -l inspect-brk -d 'Activate inspector on host:port, wait for debugger to connect and break at the start of user script' -r
 complete -c deno -n "__fish_seen_subcommand_from eval" -l inspect-wait -d 'Activate inspector on host:port and wait for debugger to connect before running user code' -r
+complete -c deno -n "__fish_seen_subcommand_from eval" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from eval" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from eval" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from eval" -l seed -d 'Set the random number generator seed' -r
@@ -797,6 +820,7 @@ complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-fs -d 'Enable
 complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from eval" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -834,6 +858,7 @@ complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-fs -d 'Enable 
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from fmt" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -856,11 +881,13 @@ complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-fs -d 'Enable
 complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
 complete -c deno -n "__fish_seen_subcommand_from init" -l unstable-worker-options -d 'Enable unstable Web Worker APIs'
 complete -c deno -n "__fish_seen_subcommand_from init" -s q -l quiet -d 'Suppress diagnostic output'
+complete -c deno -n "__fish_seen_subcommand_from init" -l lib
 complete -c deno -n "__fish_seen_subcommand_from init" -s h -l help -d 'Print help'
 complete -c deno -n "__fish_seen_subcommand_from info" -s L -l log-level -d 'Set log level' -r -f -a "{trace	'',debug	'',info	''}"
 complete -c deno -n "__fish_seen_subcommand_from info" -s r -l reload -d 'Reload source code cache (recompile TypeScript)' -r -F
@@ -885,6 +912,7 @@ complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-fs -d 'Enable
 complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from info" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -909,79 +937,80 @@ complete -c deno -n "__fish_seen_subcommand_from install" -l lock -d 'Check the 
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-read -d 'Allow file system read access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-read
   --allow-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-read -d 'Deny file system read access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-read
   --deny-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-write -d 'Allow file system write access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-write
   --allow-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-write -d 'Deny file system write access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-write
   --deny-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-net -d 'Allow network access. Optionally specify allowed IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-net
   --allow-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-net -d 'Deny network access. Optionally specify denied IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-net
   --deny-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l unsafely-ignore-certificate-errors -d 'DANGER: Disables verification of TLS certificates' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-env -d 'Allow access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-env
   --allow-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-env -d 'Deny access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-env
   --deny-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-sys -d 'Allow access to OS information. Optionally allow specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-sys
   --allow-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-sys -d 'Deny access to OS information. Optionally deny specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-sys
   --deny-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-run -d 'Allow running subprocesses. Optionally specify allowed runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-run
   --allow-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-run -d 'Deny running subprocesses. Optionally specify denied runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-run
   --deny-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-ffi -d '(Unstable) Allow loading dynamic libraries. Optionally specify allowed directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-ffi
   --allow-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-ffi -d '(Unstable) Deny loading dynamic libraries. Optionally specify denied directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-ffi
   --deny-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from install" -l inspect -d 'Activate inspector on host:port (default: 127.0.0.1:9229)' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l inspect-brk -d 'Activate inspector on host:port, wait for debugger to connect and break at the start of user script' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l inspect-wait -d 'Activate inspector on host:port and wait for debugger to connect before running user code' -r
+complete -c deno -n "__fish_seen_subcommand_from install" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from install" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from install" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from install" -l seed -d 'Set the random number generator seed' -r
@@ -1001,6 +1030,7 @@ complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-fs -d 'Ena
 complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from install" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1012,13 +1042,13 @@ complete -c deno -n "__fish_seen_subcommand_from install" -l no-config -d 'Disab
 complete -c deno -n "__fish_seen_subcommand_from install" -l lock-write -d 'Force overwriting the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from install" -l no-lock -d 'Disable auto discovery of the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from install" -l allow-hrtime -d 'Allow high-resolution time measurement. Note: this can enable timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from install" -l deny-hrtime -d 'Deny high-resolution time measurement. Note: this can prevent timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from install" -s A -l allow-all -d 'Allow all permissions. Learn more about permissions in Deno:
-https://deno.land/manual@v1.43.6/basics/permissions
+https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from install" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from install" -l cached-only -d 'Require that remote dependencies are already cached'
@@ -1041,6 +1071,7 @@ complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-fs -d 'Ena
 complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from jupyter" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1060,6 +1091,7 @@ complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-fs -d 'E
 complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from uninstall" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1079,6 +1111,7 @@ complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-fs -d 'Enable 
 complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from lsp" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1103,6 +1136,7 @@ complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-fs -d 'Enable
 complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from lint" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1132,6 +1166,7 @@ complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-fs -d 'Ena
 complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from publish" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1156,79 +1191,80 @@ complete -c deno -n "__fish_seen_subcommand_from repl" -l lock -d 'Check the spe
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-read -d 'Allow file system read access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-read
   --allow-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-read -d 'Deny file system read access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-read
   --deny-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-write -d 'Allow file system write access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-write
   --allow-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-write -d 'Deny file system write access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-write
   --deny-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-net -d 'Allow network access. Optionally specify allowed IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-net
   --allow-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-net -d 'Deny network access. Optionally specify denied IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-net
   --deny-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l unsafely-ignore-certificate-errors -d 'DANGER: Disables verification of TLS certificates' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-env -d 'Allow access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-env
   --allow-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-env -d 'Deny access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-env
   --deny-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-sys -d 'Allow access to OS information. Optionally allow specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-sys
   --allow-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-sys -d 'Deny access to OS information. Optionally deny specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-sys
   --deny-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-run -d 'Allow running subprocesses. Optionally specify allowed runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-run
   --allow-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-run -d 'Deny running subprocesses. Optionally specify denied runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-run
   --deny-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-ffi -d '(Unstable) Allow loading dynamic libraries. Optionally specify allowed directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-ffi
   --allow-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-ffi -d '(Unstable) Deny loading dynamic libraries. Optionally specify denied directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-ffi
   --deny-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from repl" -l inspect -d 'Activate inspector on host:port (default: 127.0.0.1:9229)' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l inspect-brk -d 'Activate inspector on host:port, wait for debugger to connect and break at the start of user script' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l inspect-wait -d 'Activate inspector on host:port and wait for debugger to connect before running user code' -r
+complete -c deno -n "__fish_seen_subcommand_from repl" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from repl" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from repl" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from repl" -l seed -d 'Set the random number generator seed' -r
@@ -1247,6 +1283,7 @@ complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-fs -d 'Enable
 complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1258,13 +1295,13 @@ complete -c deno -n "__fish_seen_subcommand_from repl" -l no-config -d 'Disable 
 complete -c deno -n "__fish_seen_subcommand_from repl" -l lock-write -d 'Force overwriting the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l no-lock -d 'Disable auto discovery of the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l allow-hrtime -d 'Allow high-resolution time measurement. Note: this can enable timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from repl" -l deny-hrtime -d 'Deny high-resolution time measurement. Note: this can prevent timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from repl" -s A -l allow-all -d 'Allow all permissions. Learn more about permissions in Deno:
-https://deno.land/manual@v1.43.6/basics/permissions
+https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from repl" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from repl" -l cached-only -d 'Require that remote dependencies are already cached'
@@ -1284,6 +1321,7 @@ complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-fs -d 'Enable
 complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from task" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1302,79 +1340,80 @@ complete -c deno -n "__fish_seen_subcommand_from test" -l lock -d 'Check the spe
 If value is not provided, defaults to "deno.lock" in the current working directory.' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l cert -d 'Load certificate authority from PEM encoded file' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-read -d 'Allow file system read access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-read
   --allow-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-read -d 'Deny file system read access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-read
   --deny-read="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-write -d 'Allow file system write access. Optionally specify allowed paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-write
   --allow-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-write -d 'Deny file system write access. Optionally specify denied paths.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-write
   --deny-write="/etc,/var/log.txt"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-net -d 'Allow network access. Optionally specify allowed IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-net
   --allow-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-net -d 'Deny network access. Optionally specify denied IP addresses and host names, with ports as necessary.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-net
   --deny-net="localhost:8080,deno.land"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l unsafely-ignore-certificate-errors -d 'DANGER: Disables verification of TLS certificates' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-env -d 'Allow access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-env
   --allow-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-env -d 'Deny access to system environment information. Optionally specify accessible environment variables.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-env
   --deny-env="PORT,HOME,PATH"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-sys -d 'Allow access to OS information. Optionally allow specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-sys
   --allow-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-sys -d 'Deny access to OS information. Optionally deny specific APIs by function name.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-sys
   --deny-sys="systemMemoryInfo,osRelease"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-run -d 'Allow running subprocesses. Optionally specify allowed runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-run
   --allow-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-run -d 'Deny running subprocesses. Optionally specify denied runnable program names.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-run
   --deny-run="whoami,ps"' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-ffi -d '(Unstable) Allow loading dynamic libraries. Optionally specify allowed directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --allow-ffi
   --allow-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-ffi -d '(Unstable) Deny loading dynamic libraries. Optionally specify denied directories or files.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 Examples:
   --deny-ffi
   --deny-ffi="./libfoo.so"' -r -F
 complete -c deno -n "__fish_seen_subcommand_from test" -l inspect -d 'Activate inspector on host:port (default: 127.0.0.1:9229)' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l inspect-brk -d 'Activate inspector on host:port, wait for debugger to connect and break at the start of user script' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l inspect-wait -d 'Activate inspector on host:port and wait for debugger to connect before running user code' -r
+complete -c deno -n "__fish_seen_subcommand_from test" -l frozen -d 'Error out if lockfile is out of date' -r -f -a "{true	'',false	''}"
 complete -c deno -n "__fish_seen_subcommand_from test" -l location -d 'Value of \'globalThis.location\' used by some web APIs' -r -f
 complete -c deno -n "__fish_seen_subcommand_from test" -l v8-flags -d 'Set V8 command line options' -r
 complete -c deno -n "__fish_seen_subcommand_from test" -l seed -d 'Set the random number generator seed' -r
@@ -1401,6 +1440,7 @@ complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-fs -d 'Enable
 complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from test" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1412,13 +1452,13 @@ complete -c deno -n "__fish_seen_subcommand_from test" -l no-config -d 'Disable 
 complete -c deno -n "__fish_seen_subcommand_from test" -l lock-write -d 'Force overwriting the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from test" -l no-lock -d 'Disable auto discovery of the lock file.'
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-hrtime -d 'Allow high-resolution time measurement. Note: this can enable timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from test" -l deny-hrtime -d 'Deny high-resolution time measurement. Note: this can prevent timing attacks and fingerprinting.
-Docs: https://deno.land/manual@v1.43.6/basics/permissions
+Docs: https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from test" -s A -l allow-all -d 'Allow all permissions. Learn more about permissions in Deno:
-https://deno.land/manual@v1.43.6/basics/permissions
+https://deno.land/manual@v1.45.5/basics/permissions
 '
 complete -c deno -n "__fish_seen_subcommand_from test" -l no-prompt -d 'Always throw if required permission wasn\'t passed'
 complete -c deno -n "__fish_seen_subcommand_from test" -l cached-only -d 'Require that remote dependencies are already cached'
@@ -1428,6 +1468,9 @@ complete -c deno -n "__fish_seen_subcommand_from test" -l trace-ops -d 'Deprecat
 complete -c deno -n "__fish_seen_subcommand_from test" -l trace-leaks -d 'Enable tracing of leaks. Useful when debugging leaking ops in test, but impacts test execution time.'
 complete -c deno -n "__fish_seen_subcommand_from test" -l doc -d 'Type-check code blocks in JSDoc and Markdown'
 complete -c deno -n "__fish_seen_subcommand_from test" -l allow-none -d 'Don\'t return error code if no test files are found'
+complete -c deno -n "__fish_seen_subcommand_from test" -l clean -d 'Empty the temporary coverage profile data directory before running tests.
+
+Note: running multiple `deno test --clean` calls in series or parallel for the same coverage directory may cause race conditions.'
 complete -c deno -n "__fish_seen_subcommand_from test" -l parallel -d 'Run test modules in parallel. Parallelism defaults to the number of available CPUs or the value in the DENO_JOBS environment variable.'
 complete -c deno -n "__fish_seen_subcommand_from test" -l watch -d 'Watch for file changes and restart automatically'
 complete -c deno -n "__fish_seen_subcommand_from test" -l no-clear-screen -d 'Do not clear terminal screen when under watch mode'
@@ -1444,6 +1487,7 @@ complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-fs -d 'Enabl
 complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from types" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1465,6 +1509,7 @@ complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-fs -d 'Ena
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from upgrade" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
@@ -1496,6 +1541,7 @@ complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-fs -d 'Enab
 complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-http -d 'Enable unstable HTTP APIs'
 complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-kv -d 'Enable unstable Key-Value store APIs'
 complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-net -d 'Enable unstable net APIs'
+complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-process -d 'Enable unstable process APIs'
 complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-temporal -d 'Enable unstable Temporal API'
 complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-unsafe-proto -d 'Enable unsafe __proto__ support. This is a security risk.'
 complete -c deno -n "__fish_seen_subcommand_from vendor" -l unstable-webgpu -d 'Enable unstable `WebGPU` API'
