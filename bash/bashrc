@@ -11,4 +11,3 @@ source "$HOME/.cargo/env"
 printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "bash"}}\x9c'
 . "$HOME/.cargo/env"
 
-PATH=~/.console-ninja/.bin:$PATH
