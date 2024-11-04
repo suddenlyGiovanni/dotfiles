@@ -1,24 +1,12 @@
 # import the git abbreviations
 source ~/.config/fish/git-abbreviations.fish
 
-set --export PATH (pwd)"/git-fuzzy/bin:$PATH"
+set --export PATH (pwd) "/git-fuzzy/bin:$PATH"
 set --global --export STARSHIP_CONFIG '~/.config/starship.toml'
 set --global --export GPG_TTY (tty)
 
 # Add binaries to the path:
-fish_add_path /opt/homebrew/sbin
-fish_add_path /opt/homebrew/bin
-fish_add_path /usr/local/sbin
-fish_add_path /urs/local/bin-custom
-fish_add_path /opt/homebrew/opt/curl/bin
-fish_add_path ~/bin
-fish_add_path ~/Library/Application\ Support/JetBrains/Toolbox/scripts/
-fish_add_path ~/Library/Application\ Support/Coursier/bin # >>> Scala's coursier install directory
-fish_add_path /Users/suddenlygiovanni/Library/Application\ Support/Coursier/bin #  <<< coursier install directory <<<
-fish_add_path /opt/homebrew/opt/python@3.9/libexec/bin # make python available without version
 
-set --global --export LDFLAGS -L/opt/homebrew/opt/curl/lib
-set --global --export CPPFLAGS -I/opt/homebrew/opt/curl/include
 
 
 # boot-up the `spacefish` prompt
@@ -29,52 +17,3 @@ zoxide init fish | source
 
 # 1Password
 set --global --export SSH_AUTH_SOCK ~/.1password/agent.sock
-
-
-# tabtab source for packages
-# uninstall by removing these lines
-[ -f ~/.config/tabtab/fish/__tabtab.fish ]; and . ~/.config/tabtab/fish/__tabtab.fish; or true
-
-# tabtab source for packages
-# uninstall by removing these lines
-[ -f ~/.config/tabtab/__tabtab.fish ]; and . ~/.config/tabtab/__tabtab.fish; or true
-
-# Ruby
-fish_add_path /opt/homebrew/opt/ruby/bin
-set -gx LDFLAGS "-L/opt/homebrew/opt/ruby/lib"
-set -gx CPPFLAGS "-I/opt/homebrew/opt/ruby/include"
-set -gx PKG_CONFIG_PATH "/opt/homebrew/opt/ruby/lib/pkgconfig"
-
-set --global --export PNPM_HOME "~/.local/share/pnpm"
-set --global --export PATH "$PNPM_HOME" $PATH
-
-
-set --global --export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-set --global --export PUPPETEER_EXECUTABLE_PATH "/Applications/Chromium.app/Contents/MacOS/Chromium"
-
-
-
-
-# Automatically "Warpify" subshells in "Warp" terminal app
-if status is-interactive
-  printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
-end
-
-# provide a way to use the system ruby
-set -gx GEM_HOME $HOME/.gem/ruby/3.2.0
-set -gx PATH $GEM_HOME/bin $PATH
-
-
-# alias npm socket-npm
-# alias npx socket-npx
-
-# colima bindings for docker and lazydocker
-set -x DOCKER_HOST "unix://$HOME/.colima/default/docker.sock"
-
-
-
-if status is-interactive
-  printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
-end
-
-alias fly=flyctl

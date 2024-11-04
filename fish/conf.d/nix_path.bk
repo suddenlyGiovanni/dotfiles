@@ -1,0 +1,3 @@
+set -gx NIX_PATH darwin-config=/Users/suddenlygiovanni/.nixpkgs/darwin-configuration.nix:/nix/var/nix/profiles/per-user/root/channels
+set -gx NIX_REMOTE daemon
+set -gx NIX_USER_PROFILE_DIR /nix/var/nix/profiles/per-user/suddenlygiovanni
