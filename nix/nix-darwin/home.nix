@@ -25,8 +25,8 @@
     # plain files is through 'home.file'.
     file = {
       ".zshrc".source = ~/dotfiles/zshrc/.zshrc;
-      ".config/nix".source = ~/dotfiles/nix;
-      ".config/nix-darwin".source = ~/dotfiles/nix-darwin;
+      ".config/nix/nix.conf".source = ~/dotfiles/nix/nix.conf;
+      ".config/nix-darwin".source = ~/dotfiles/nix/nix-darwin;
     };
 
     # This value determines the Home Manager release that your
