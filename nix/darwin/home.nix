@@ -24,9 +24,15 @@
     # Home Manager is pretty good at managing dotfiles. The primary way to manage
     # plain files is through 'home.file'.
     file = {
-      ".zshrc".source = ~/dotfiles/zshrc/.zshrc;
-      ".config/nix/nix.conf".source = ~/dotfiles/nix/nix.conf;
-      ".config/nix-darwin".source = ~/dotfiles/nix/nix-darwin;
+      ".zshrc" = {
+        source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/zshrc/.zshrc";
+      };
+      ".config/nix/nix.conf" = {
+        source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/nix/nix.conf";
+      };
+      ".config/nix-darwin" = {
+        source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/nix/darwin";
+      };
     };
 
     # This value determines the Home Manager release that your
