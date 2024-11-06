@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+# https://github.com/nix-community/home-manager/blob/master/modules/programs/zsh.nix
+{ config, pkgs }:
 {
   enable = true; # Z shell (Zsh)
   package = pkgs.zsh;
