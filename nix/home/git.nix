@@ -92,7 +92,7 @@
   # Options related to signing commits using GnuPG.
   signing = {
     key = null; # The default GPG signing key fingerprint. Set to `null` to let GnuPG decide what signing key to use depending on commit’s author.
-    signByDefault = true; # Whether commits and tags should be signed by default.
+    signByDefault = false; # Whether commits and tags should be signed by default.
   };
 
   # Additional configuration to add.
