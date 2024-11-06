@@ -63,13 +63,7 @@
 
           # Auto upgrade nix package and the daemon service.
           services.nix-daemon.enable = true;
-          # nix.package = pkgs.nix;
 
-          # Necessary for using flakes on this system.
-          nix.settings.experimental-features = [
-            "nix-command"
-            "flakes"
-          ];
           documentation = {
             enable = true; # Whether to install documentation of packages from environment.systemPackages into the generated system path.
             man.enable = true; # Whether to install manual pages and the {command}`man` command. This also includes "man" outputs.
@@ -104,8 +98,17 @@
           home-manager = {
             backupFileExtension = "backup"; # On activation move existing files by appending the given file extension rather than exiting with an error.
           };
-          nix.configureBuildUsers = true;
-          nix.useDaemon = true;
+
+          nix = {
+            configureBuildUsers = true;
+            useDaemon = true;
+            # package = pkgs.nix;
+            # Necessary for using flakes on this system.
+            settings.experimental-features = [
+              "nix-command"
+              "flakes"
+            ];
+          };
 
           system.defaults = {
             ActivityMonitor = {
