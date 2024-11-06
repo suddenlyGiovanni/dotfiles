@@ -46,23 +46,34 @@
     stateVersion = "24.05";
   };
 
-  programs.git = {
-    enable = true;
-    userName = "suddenlyGiovanni"; # Default user name to use.
-    userEmail = "15946771+suddenlyGiovanni@users.noreply.github.com"; # Default user email to use.
+  programs = {
+    git = {
+      enable = true;
+      userName = "suddenlyGiovanni"; # Default user name to use.
+      userEmail = "15946771+suddenlyGiovanni@users.noreply.github.com"; # Default user email to use.
+      ignores = [ ".DS_Store" ];
+    };
+
+    # Let Home Manager install and manage itself.
+    home-manager.enable = true;
+
+    zsh = {
+      enable = true;
+      shellAliases = {
+        ll = "ls -alt --color";
+        ".." = "cd ..";
+        switch = "darwin-rebuild switch --flake ~/dotfiles/nix/darwin";
+      };
+
+      initExtra = ''
+        # Add any additional configurations here
+        export PATH=/run/current-system/sw/bin:$HOME/.nix-profile/bin:$PATH
+        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+        fi
+      '';
+    };
+
   };
 
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
-  programs.zsh = {
-    enable = true;
-
-    initExtra = ''
-      # Add any additional configurations here
-      export PATH=/run/current-system/sw/bin:$HOME/.nix-profile/bin:$PATH
-      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-        . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-      fi
-    '';
-  };
 }
