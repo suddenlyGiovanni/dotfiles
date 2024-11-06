@@ -56,6 +56,8 @@
             bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
           ];
 
+          environment.pathsToLink = [ "/share/zsh" ]; # List of directories to be symlinked in /run/current-system/sw.
+
           # Auto upgrade nix package and the daemon service.
           services.nix-daemon.enable = true;
           # nix.package = pkgs.nix;
