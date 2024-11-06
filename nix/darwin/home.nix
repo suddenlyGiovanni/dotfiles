@@ -47,7 +47,7 @@
     git = import ../home/git.nix { inherit config pkgs; };
     starship = import ../home/starship.nix { inherit config pkgs; };
     zsh = import ../home/zsh.nix { inherit config pkgs; };
-    fd = import ../home/fd.nix { inherit config pkgs; };
+    fd = import ../home/fd.nix { inherit pkgs; };
     zoxide = import ../home/zoxide.nix { inherit config pkgs; };
     fzf = import ../home/fzf.nix { inherit config pkgs; };
     eza = import ../home/eza.nix { inherit pkgs; };
