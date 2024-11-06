@@ -3,6 +3,9 @@
 {
   enable = true; # Z shell (Zsh)
   package = pkgs.zsh;
+  shellGlobalAliases = {
+    "--help" = "--help 2>&1 | bat --language=help --style=plain";
+  };
   shellAliases = {
     ls = "eza";
 
@@ -13,6 +16,10 @@
     tree = "ls --all --long --tree --level=2 --header --classify --group --git --icons --group-directories-first --sort=type --color-scale";
 
     ".." = "cd ..";
+
+    cat = "bat --paging=never";
+
+    bathelp = "bat --plain --language=help";
 
     switch = "darwin-rebuild switch --flake ~/dotfiles/nix/darwin";
   };

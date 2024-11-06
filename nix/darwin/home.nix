@@ -51,6 +51,7 @@
     zoxide = import ../home/zoxide.nix { inherit pkgs; };
     fzf = import ../home/fzf.nix { inherit pkgs; };
     eza = import ../home/eza.nix { inherit pkgs; };
+    bat = import ../home/bat.nix { inherit pkgs; };
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
   };
