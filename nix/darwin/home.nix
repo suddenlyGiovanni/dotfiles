@@ -49,26 +49,10 @@
   programs = {
     git = import ../home/git.nix { inherit config pkgs; };
     starship = import ../home/starship.nix { inherit config pkgs; };
+    zsh = import ../home/zsh.nix { inherit config pkgs; };
+
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
-
-    zsh = {
-      enable = true;
-      shellAliases = {
-        ll = "ls -alt --color";
-        ".." = "cd ..";
-        switch = "darwin-rebuild switch --flake ~/dotfiles/nix/darwin";
-      };
-
-      initExtra = ''
-        # Add any additional configurations here
-        export PATH=/run/current-system/sw/bin:$HOME/.nix-profile/bin:$PATH
-        if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-        fi
-      '';
-    };
-
   };
 
 }
