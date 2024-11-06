@@ -48,6 +48,7 @@
     starship = import ../home/starship.nix { inherit config pkgs; };
     zsh = import ../home/zsh.nix { inherit config pkgs; };
     fd = import ../home/fd.nix { inherit config pkgs; };
+    zoxide = import ../home/zoxide.nix { inherit config pkgs; };
 
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
