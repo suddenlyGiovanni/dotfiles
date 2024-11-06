@@ -1,10 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+# https://github.com/nix-community/home-manager/blob/master/modules/programs/git.nix
+{ pkgs }:
 {
   enable = true;
+  package = pkgs.git;
 
   userName = "suddenlyGiovanni"; # Default user name to use.
 
