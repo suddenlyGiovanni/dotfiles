@@ -231,7 +231,7 @@
               };
               spaces.spans-displays = false; # Displays have separate Spaces. false = each physical display has a separate space (Mac default)
               trackpad = {
-                Clicking = true; # Whether to enable trackpad tap to click. The default is false.
+                Clicking = false; # Whether to enable trackpad tap to click. The default is false.
                 Dragging = false; # Whether to enable tap-to-drag. The default is false.
                 TrackpadRightClick = true; # Whether to enable trackpad right click.  The default is false.
                 TrackpadThreeFingerDrag = false; # Whether to enable three finger drag. The default is false.
