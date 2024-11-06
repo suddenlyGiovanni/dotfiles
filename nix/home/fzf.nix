@@ -1,8 +1,5 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+# https://github.com/nix-community/home-manager/blob/master/modules/programs/fzf.nix
+{ pkgs }:
 {
   enable = true; # fzf - a command-line fuzzy finder
   package = pkgs.fzf; # Package providing the {command}`fzf` tool.
