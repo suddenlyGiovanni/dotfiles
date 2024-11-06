@@ -4,10 +4,19 @@
   ...
 }:
 {
-  enable = true;
+  enable = true; # Z shell (Zsh)
+  package = pkgs.zsh;
   shellAliases = {
-    ll = "ls -alt --color";
+    ls = "eza";
+
+    # List contents of directory using long format
+    ll = "ls --all --long --icons --header --classify --group --group-directories-first --sort=type --time-style=default --hyperlink --git --git-repos";
+
+    # List contents of directories in a tree-like format.
+    tree = "ls --all --long --tree --level=2 --header --classify --group --git --icons --group-directories-first --sort=type --color-scale";
+
     ".." = "cd ..";
+
     switch = "darwin-rebuild switch --flake ~/dotfiles/nix/darwin";
   };
   enableCompletion = true; # Enable zsh completion.

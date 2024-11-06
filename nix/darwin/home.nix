@@ -50,7 +50,7 @@
     fd = import ../home/fd.nix { inherit config pkgs; };
     zoxide = import ../home/zoxide.nix { inherit config pkgs; };
     fzf = import ../home/fzf.nix { inherit config pkgs; };
-
+    eza = import ../home/eza.nix { inherit pkgs; };
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
   };
