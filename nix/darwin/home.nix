@@ -45,7 +45,7 @@
 
   programs = {
     git = import ../home/git.nix { inherit pkgs; };
-    starship = import ../home/starship.nix { inherit config pkgs; };
+    starship = import ../home/starship.nix { inherit pkgs; };
     zsh = import ../home/zsh.nix { inherit config pkgs; };
     fd = import ../home/fd.nix { inherit pkgs; };
     zoxide = import ../home/zoxide.nix { inherit config pkgs; };

@@ -1,10 +1,8 @@
-{
-  config,
-  pkgs,
-  ...
-}:
+# https://github.com/nix-community/home-manager/blob/master/modules/programs/starship.nix
+{ pkgs }:
 {
   enable = true; # Whether to enable starship.
+  package = pkgs.starship;
   enableBashIntegration = true;
   enableZshIntegration = true;
   enableFishIntegration = true;
