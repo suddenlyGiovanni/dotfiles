@@ -318,4 +318,6 @@
       enabled = true;
     };
   };
+
+  ignores = [ ".DS_Store" ];
 }
