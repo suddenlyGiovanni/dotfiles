@@ -22,6 +22,14 @@
         {
           ids.gids.nixbld = 350;
 
+          nixpkgs = {
+            # The platform the configuration will be used on.
+            hostPlatform = "aarch64-darwin";
+
+            # Allow unfree packages
+            config.allowUnfree = true;
+          };
+
           environment = {
             # List packages installed in system profile. To search by name, run:
             # $ nix-env -qaP | grep wget
@@ -55,6 +63,7 @@
               wget # Tool for retrieving files using HTTP, HTTPS, and FTP
               zoxide # A fast cd command that learns your habits
               bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
+              _1password # 1Password command-line tool
             ];
 
             pathsToLink = [ "/share/zsh" ]; # List of directories to be symlinked in /run/current-system/sw.
@@ -74,9 +83,6 @@
           # Create /etc/zshrc that loads the nix-darwin environment.
           programs.zsh.enable = true; # default shell on catalina
           programs.fish.enable = true;
-
-          # The platform the configuration will be used on.
-          nixpkgs.hostPlatform = "aarch64-darwin";
 
           # Enable sudo authentication with Touch ID.
           security.pam.enableSudoTouchIdAuth = true;
@@ -161,7 +167,7 @@
               SoftwareUpdate.AutomaticallyInstallMacOSUpdates = true; # Automatically install Mac OS software updates. Defaults to false.
               WindowManager = {
                 GloballyEnabled = false; # Enable Stage Manager; Stage Manager arranges your recent windows into a single strip for reduced clutter and quick access. Default is false.
-                EnableStandardClickToShowDesktop = true; # Click wallpaper to reveal desktop Clicking your wallpaper will move all windows out of the way to allow access to your desktop items and widgets. Default is true. false means “Only in Stage Manager” true means “Always”
+                EnableStandardClickToShowDesktop = false; # Click wallpaper to reveal desktop Clicking your wallpaper will move all windows out of the way to allow access to your desktop items and widgets. Default is true. false means “Only in Stage Manager” true means “Always”
                 AutoHide = false; # Auto hide stage strip showing recent apps. Default is false.
                 AppWindowGroupingBehavior = true; # Grouping strategy when showing windows from an application. false means “One at a time” true means “All at once”
                 StandardHideDesktopIcons = false; # Hide items on desktop.
