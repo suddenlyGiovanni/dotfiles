@@ -38,32 +38,8 @@
               coreutils # The GNU Core Utilities
               git # Distributed version control system
               less # A more advanced file pager than 'more'
-              #              starship # A minimal, blazing fast, and extremely customizable prompt for any shell
               wget # Tool for retrieving files using HTTP, HTTPS, and FTP
-              #              zoxide # A fast cd command that learns your habits
-              #              nixd # nix lsp deamon
-              #              nixfmt-rfc-style # nix lang formatter
-              #              colima # Container runtimes with minimal setup
-              #              awscli2 # Unified tool to manage your AWS services
-              #              bat # A cat(1) clone with syntax highlighting and Git integration
-              #              docker # An open source project to pack, ship and run any application as a lightweight container
-              #              docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
-              #              lazydocker # A simple terminal UI for both docker and docker-compose
-              #              docker-slim # Minify and secure Docker containers
-              #              eza # A modern, maintained replacement for ls
-              #              fd # A simple, fast and user-friendly alternative to find
-              #              flyctl # Command line tools for fly.io services
-              #              fnm # Fast and simple Node.js version manager
-              #              fzf # Command-line fuzzy finder written in Go
-              #              gh # GitHub CLI tool
-              #              glow # Render markdown on the CLI, with pizzazz!
-              #              httpie # A command line HTTP client whose goal is to make CLI human-friendly
-              #              jq # A lightweight and flexible command-line JSON processor
-              #              nushell # A modern shell written in Rust
-              #              shellcheck # Shell script analysis tool
-              #              shfmt # A shell parser and formatter
-              #              bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
-              #              _1password # 1Password command-line tool
+
             ];
 
             pathsToLink = [ "/share/zsh" ]; # List of directories to be symlinked in /run/current-system/sw.
@@ -329,16 +305,7 @@
               extraFlags = [ ]; # Extra flags to pass to brew bundle [install] during nix-darwin system activation.
               upgrade = false; # Whether to enable Homebrew to upgrade outdated formulae and Mac App Store apps during nix-darwin system activation. The default is false so that repeated invocations of darwin-rebuild switch are idempotent.
             };
-            taps = [
-              "coursier/formulas"
-              "dbcli/tap"
-              "eth-p/software"
-              "homebrew/bundle"
-              "homebrew/services"
-              "koekeishiya/formulae"
-              "teamookla/speedtest"
-              "withgraphite/tap"
-            ];
+            taps = [ ];
           };
 
         };
