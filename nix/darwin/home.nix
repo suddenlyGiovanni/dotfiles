@@ -44,10 +44,11 @@
   };
 
   programs = {
-    git = import ../home/git.nix { inherit pkgs; };
-    starship = import ../home/starship.nix { inherit pkgs; };
     zsh = import ../home/zsh.nix { inherit config pkgs; };
     fish = import ../home/fish.nix { inherit pkgs; };
+    nushell = import ../home/nushell.nix { inherit pkgs; };
+    git = import ../home/git.nix { inherit pkgs; };
+    starship = import ../home/starship.nix { inherit pkgs; };
     fd = import ../home/fd.nix { inherit pkgs; };
     zoxide = import ../home/zoxide.nix { inherit pkgs; };
     fzf = import ../home/fzf.nix { inherit pkgs; };
