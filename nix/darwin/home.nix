@@ -44,6 +44,7 @@
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       zoxide # A fast cd command that learns your habits
       bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
+      deno # Secure runtime for JavaScript and TypeScript
       _1password-cli # 1Password command-line tool
     ];
 
