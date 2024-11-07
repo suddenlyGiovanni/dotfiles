@@ -95,18 +95,30 @@
 
   # Additional configuration to add.
   extraConfig = {
+    user = {
+      signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
+    };
+
+    gpg = {
+      format = "ssh";
+    };
+
+    "gpg \"ssh\"" = {
+      program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+    };
+
     core = {
       # Treat spaces before tabs and all kinds of trailing whitespace as an error.
       whitespace = "space-before-tab, trailing-space, tabwidth=4";
 
       # Make `git rebase` safer on macOS.
-      trustctime = "false";
+      trustctime = false;
 
       # Prevent showing files whose names contain non-ASCII symbols as unversioned.
-      precomposeunicode = "false";
+      precomposeunicode = false;
 
       # Speed up commands involving untracked files such as `git status`.
-      untrackedCache = "true";
+      untrackedCache = true;
     };
     color = {
       # This variable determines the default value for variables such as
@@ -148,7 +160,6 @@
     };
 
     commit = {
-
       # A boolean to enable/disable inclusion of status information in the commit
       # message template when using an editor to prepare the commit message.
       # Defaults to true.
@@ -156,6 +167,8 @@
 
       # Specify the pathname of a file to use as the template for new commit messages.
       template = "~/.config/git/.gitmessage";
+
+      gpgsign = true;
     };
 
     credential = {
