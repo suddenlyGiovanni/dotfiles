@@ -14,8 +14,8 @@
       These directories are added to the PATH variable in a double-quoted context, so expressions like $HOME are expanded by the shell. However, since expressions like ~ or * are escaped, they will end up in the PATH verbatim.
     */
     sessionPath = [
-      "/run/current-system/sw/bin"
-      "$HOME/.nix-profile/bin"
+#      "/run/current-system/sw/bin"
+#      "$HOME/.nix-profile/bin"
     ];
 
     # Packages that should be installed to the user profile.

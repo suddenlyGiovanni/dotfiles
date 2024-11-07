@@ -39,11 +39,8 @@
               git # Distributed version control system
               less # A more advanced file pager than 'more'
               wget # Tool for retrieving files using HTTP, HTTPS, and FTP
-
             ];
-
             pathsToLink = [ "/share/zsh" ]; # List of directories to be symlinked in /run/current-system/sw.
-
           };
 
           # Auto upgrade nix package and the daemon service.
@@ -55,10 +52,6 @@
             info.enable = true; # Whether to install info pages and the {command}`info` command. This also includes "info" outputs.
             doc.enable = true; # Whether to install documentation distributed in packages’ /share/doc. Usually plain text and/or HTML. This also includes “doc” outputs.
           };
-
-          # Create /etc/zshrc that loads the nix-darwin environment.
-          programs.zsh.enable = true; # default shell on catalina
-          programs.fish.enable = true;
 
           # Enable sudo authentication with Touch ID.
           security.pam.enableSudoTouchIdAuth = true;
