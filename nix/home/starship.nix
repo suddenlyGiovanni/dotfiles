@@ -11,6 +11,13 @@
   settings = {
     add_newline = true;
     format = "$all";
+    shell = {
+      disabled = false;
+      fish_indicator = "󰈺 ";
+      powershell_indicator = "_";
+      unknown_indicator = "mystery shell";
+    };
+
     aws = {
       symbol = "  ";
     };
