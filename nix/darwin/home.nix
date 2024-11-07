@@ -14,8 +14,8 @@
       These directories are added to the PATH variable in a double-quoted context, so expressions like $HOME are expanded by the shell. However, since expressions like ~ or * are escaped, they will end up in the PATH verbatim.
     */
     sessionPath = [
-#      "/run/current-system/sw/bin"
-#      "$HOME/.nix-profile/bin"
+      #      "/run/current-system/sw/bin"
+      #      "$HOME/.nix-profile/bin"
     ];
 
     # Packages that should be installed to the user profile.
@@ -47,7 +47,7 @@
       _1password # 1Password command-line tool
     ];
 
-    # Home Manager is pretty good at managing dotfiles. The primary way to manage
+    # Home Manager is pretty good at managing dotf siles. The primary way to manage
     # plain files is through 'home.file'.
     file = {
       ".config/nix/nix.conf" = {
@@ -80,8 +80,8 @@
     fzf = import ../home/fzf.nix { inherit pkgs; };
     eza = import ../home/eza.nix { inherit pkgs; };
     bat = import ../home/bat.nix { inherit pkgs; };
-    # Let Home Manager install and manage itself.
-    home-manager.enable = true;
+
+    home-manager.enable = true; # Let Home Manager install and manage itself.
   };
 
 }
