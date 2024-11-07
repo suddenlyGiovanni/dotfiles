@@ -44,7 +44,7 @@
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       zoxide # A fast cd command that learns your habits
       bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
-      _1password # 1Password command-line tool
+      _1password-cli # 1Password command-line tool
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
