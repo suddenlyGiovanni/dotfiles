@@ -10,6 +10,7 @@
   enableTransience = true;
   settings = {
     add_newline = true;
+    format = "$all";
     aws = {
       symbol = "  ";
     };
