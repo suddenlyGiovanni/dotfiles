@@ -22,10 +22,8 @@
     packages = with pkgs; [
       nixd # nix lsp deamon
       nixfmt-rfc-style # nix lang formatter
-      colima # Container runtimes with minimal setup
       awscli2 # Unified tool to manage your AWS services
       bat # A cat(1) clone with syntax highlighting and Git integration
-      docker # An open source project to pack, ship and run any application as a lightweight container
       docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
       lazydocker # A simple terminal UI for both docker and docker-compose
       docker-slim # Minify and secure Docker containers

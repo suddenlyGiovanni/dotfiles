@@ -39,12 +39,37 @@
               git # Distributed version control system
               less # A more advanced file pager than 'more'
               wget # Tool for retrieving files using HTTP, HTTPS, and FTP
+              colima
+              docker
             ];
             pathsToLink = [ "/share/zsh" ]; # List of directories to be symlinked in /run/current-system/sw.
           };
 
           # Auto upgrade nix package and the daemon service.
           services.nix-daemon.enable = true;
+
+          # Colima launchd service belongs here
+          launchd.user.agents = {
+            colima = {
+              serviceConfig = {
+                Label = "com.user.colima";
+                ProgramArguments = [
+                  "${pkgs.colima}/bin/colima"
+                  "start"
+                  "--cpu"
+                  "4"
+                  "--memory"
+                  "8"
+                  "--disk"
+                  "100"
+                ];
+                RunAtLoad = true;
+                KeepAlive = false;
+                StandardOutPath = "/tmp/colima.log";
+                StandardErrorPath = "/tmp/colima.error.log";
+              };
+            };
+          };
 
           documentation = {
             enable = true; # Whether to install documentation of packages from environment.systemPackages into the generated system path.
