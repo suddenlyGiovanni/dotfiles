@@ -44,6 +44,7 @@
       bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
       deno # Secure runtime for JavaScript and TypeScript
       _1password-cli # 1Password command-line tool
+      uv # Extremely fast Python package installer and resolver, written in Rust
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
