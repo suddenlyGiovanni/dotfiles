@@ -4,7 +4,7 @@
   enable = true; # Z shell (Zsh)
   package = pkgs.zsh;
   shellGlobalAliases = {
-    "--help" = "--help 2>&1 | bat --language=help --style=plain";
+    "--help" = "--help 2>&1 | bat --language=help --style=plain --paging=never";
   };
   shellAliases = {
     ls = "eza";
