@@ -308,7 +308,7 @@
               "Goodnotes" = 1444383602;
               "Grammarly for Safari" = 1462114288;
               "Twitter" = 1482454543;
-              "Wipr" = 1320666476;
+              "Wipr 2" = 1662217862;
             };
 
             onActivation = {
