@@ -16,6 +16,7 @@
     sessionPath = [
       #      "/run/current-system/sw/bin"
       #      "$HOME/.nix-profile/bin"
+      "/usr/local/bin"
     ];
 
     # Packages that should be installed to the user profile.
