@@ -9,7 +9,7 @@
   enableNushellIntegration = true;
   enableTransience = true;
   settings = {
-    add_newline = true;
+    add_newline = false;
     format = "$all";
     shell = {
       disabled = false;
