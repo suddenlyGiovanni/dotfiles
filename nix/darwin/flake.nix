@@ -10,11 +10,11 @@
   };
 
   outputs =
-    inputs@{
-      self,
-      nix-darwin,
-      nixpkgs,
-      home-manager,
+    inputs@{ self
+    , nix-darwin
+    , nixpkgs
+    , home-manager
+    ,
     }:
     let
       configuration =
@@ -299,6 +299,9 @@
               "warp" # Rust-based terminal
               "whatsapp" # Native desktop client for WhatsApp
               "zed@preview" # Multiplayer code editor
+            ];
+            brews = [
+              "python-tk@3.9" # Python interface to Tcl/Tk
             ];
             masApps = {
               "1Password for Safari" = 1569813296;

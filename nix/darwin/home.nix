@@ -46,6 +46,7 @@
       deno # Secure runtime for JavaScript and TypeScript
       _1password-cli # 1Password command-line tool
       uv # Extremely fast Python package installer and resolver, written in Rust
+      poetry # Python dependency management and packaging made easy
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
