@@ -45,6 +45,8 @@
     if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
         . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
     fi
+
+    eval "$(fnm env --use-on-cd --shell zsh)"
   '';
 
   # Plugins to source in {file}`.zshrc`.
