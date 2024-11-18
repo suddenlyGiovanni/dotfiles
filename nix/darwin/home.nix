@@ -72,6 +72,11 @@
   };
 
   programs = {
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+    };
     zsh = import ../home/zsh.nix { inherit config pkgs; };
     fish = import ../home/fish.nix { inherit pkgs; };
     nushell = import ../home/nushell.nix { inherit pkgs; };
@@ -82,7 +87,6 @@
     fzf = import ../home/fzf.nix { inherit pkgs; };
     eza = import ../home/eza.nix { inherit pkgs; };
     bat = import ../home/bat.nix { inherit pkgs; };
-
     home-manager.enable = true; # Let Home Manager install and manage itself.
   };
 
