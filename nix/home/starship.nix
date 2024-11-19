@@ -18,6 +18,7 @@
       unknown_indicator = "mystery shell";
     };
 
+
     aws = {
       symbol = "  ";
     };
@@ -36,8 +37,33 @@
     dart = {
       symbol = " ";
     };
+    deno = {
+      disabled = false;
+      style = "green bold";
+      symbol = "🦕 ";
+      format = "via [$symbol($version )]($style)";
+      detect_files = [
+        "deno.json"
+        "deno.jsonc"
+        "deno.lock"
+        "mod.ts"
+        "mod.js"
+        "deps.ts"
+        "deps.js"
+      ];
+    };
     directory = {
+      disabled = false;
       read_only = " 󰌾";
+      format = "[$path]($style)[$read_only]($read_only_style) ";
+      truncation_symbol = "…/";
+    };
+    direnv = {
+      disabled = false;
+      style = "bold orange";
+      symbol = "direnv ";
+      format = "[$symbol$loaded/$allowed]($style) ";
+      detect_files = [ ".envrc" ];
     };
     docker_context = {
       symbol = " ";
