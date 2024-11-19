@@ -21,12 +21,12 @@
 
     # Packages that should be installed to the user profile.
     packages = with pkgs; [
-      nixd # nix lsp deamon
-      nixfmt-rfc-style # nix lang formatter
+      _1password-cli # 1Password command-line tool
       awscli2 # Unified tool to manage your AWS services
       bat # A cat(1) clone with syntax highlighting and Git integration
+      bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
+      deno # Secure runtime for JavaScript and TypeScript
       docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
-      lazydocker # A simple terminal UI for both docker and docker-compose
       docker-slim # Minify and secure Docker containers
       eza # A modern, maintained replacement for ls
       fd # A simple, fast and user-friendly alternative to find
@@ -37,16 +37,17 @@
       glow # Render markdown on the CLI, with pizzazz!
       httpie # A command line HTTP client whose goal is to make CLI human-friendly
       jq # A lightweight and flexible command-line JSON processor
+      lazydocker # A simple terminal UI for both docker and docker-compose
+      nixd # nix lsp deamon
+      nixfmt-rfc-style # nix lang formatter
       nushell # A modern shell written in Rust
+      pnpm-shell-completion # Complete your pnpm command fastly
+      poetry # Python dependency management and packaging made easy
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
-      zoxide # A fast cd command that learns your habits
-      bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
-      deno # Secure runtime for JavaScript and TypeScript
-      _1password-cli # 1Password command-line tool
       uv # Extremely fast Python package installer and resolver, written in Rust
-      poetry # Python dependency management and packaging made easy
+      zoxide # A fast cd command that learns your habits
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
