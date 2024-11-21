@@ -33,7 +33,7 @@
       flyctl # Command line tools for fly.io services
       fnm # Fast and simple Node.js version manager
       fzf # Command-line fuzzy finder written in Go
-      gh # GitHub CLI tool
+      #      gh # GitHub CLI tool
       glow # Render markdown on the CLI, with pizzazz!
       httpie # A command line HTTP client whose goal is to make CLI human-friendly
       jq # A lightweight and flexible command-line JSON processor
@@ -58,6 +58,9 @@
       };
       ".config/nix-darwin" = {
         source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/nix/darwin";
+      };
+      ".config/fish/completions" = {
+        source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/fish/completions";
       };
     };
 
@@ -88,6 +91,7 @@
     fzf = import ../home/fzf.nix { inherit pkgs; };
     eza = import ../home/eza.nix { inherit pkgs; };
     bat = import ../home/bat.nix { inherit pkgs; };
+    gh = import ../home/gh.nix { inherit pkgs; };
     home-manager.enable = true; # Let Home Manager install and manage itself.
   };
 
