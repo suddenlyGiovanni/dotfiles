@@ -26,6 +26,7 @@
       bat # A cat(1) clone with syntax highlighting and Git integration
       bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
       deno # Secure runtime for JavaScript and TypeScript
+      dive # Tool for exploring each layer in a docker image
       docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
       docker-slim # Minify and secure Docker containers
       eza # A modern, maintained replacement for ls
