@@ -33,7 +33,6 @@
       flyctl # Command line tools for fly.io services
       fnm # Fast and simple Node.js version manager
       fzf # Command-line fuzzy finder written in Go
-      #      gh # GitHub CLI tool
       glow # Render markdown on the CLI, with pizzazz!
       httpie # A command line HTTP client whose goal is to make CLI human-friendly
       jq # A lightweight and flexible command-line JSON processor
