@@ -48,6 +48,7 @@
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       uv # Extremely fast Python package installer and resolver, written in Rust
       zoxide # A fast cd command that learns your habits
+      biome # Toolchain of the web
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
