@@ -184,7 +184,7 @@
                 dashboard-in-overlay = false; # Whether to hide Dashboard as a Space. The default is false.
                 enable-spring-load-actions-on-all-items = false; # Enable spring loading for all Dock items. The default is false.
                 expose-animation-duration = 1.0; # Sets the speed of the Mission Control animations.
-                expose-group-by-app = true; # Whether to group windows by application in Mission Control's Exposé. The default is true.
+                expose-group-apps = true; # Whether to group windows by application in Mission Control's Exposé. The default is true.
                 launchanim = true; # Animate opening applications from the Dock. The default is true.
                 mineffect = "genie"; # Set the minimize/maximize window effect. The default is genie.
                 minimize-to-application = false; # Whether to minimize windows into their application icon.  The default is false.
@@ -307,8 +307,8 @@
               "FileBot" = 905384638;
               "Goodnotes" = 1444383602;
               "Grammarly for Safari" = 1462114288;
-              "Twitter" = 1482454543;
               "Wipr 2" = 1662217862;
+              "X" = 333903271;
             };
 
             onActivation = {
