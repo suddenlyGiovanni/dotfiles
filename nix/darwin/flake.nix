@@ -280,6 +280,7 @@
               "figma@beta" # Collaborative team software
               "firefox@developer-edition" # Web browser
               "font-jetbrains-mono-nerd-font"
+              "ghostty@tip" # Terminal emulator that uses platform-native UI and GPU acceleration
               "gitbutler" # Git client for simultaneous branches on top of your existing workflow
               "github@beta" # Desktop client for GitHub repositories
               "grammarly-desktop" # Grammarly for desktop
