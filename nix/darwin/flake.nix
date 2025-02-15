@@ -47,9 +47,6 @@
             pathsToLink = [ "/share/zsh" ]; # List of directories to be symlinked in /run/current-system/sw.
           };
 
-          # Auto upgrade nix package and the daemon service.
-          services.nix-daemon.enable = true;
-
           # Colima launchd service belongs here
           launchd.user.agents = {
             colima = {
@@ -95,9 +92,6 @@
           };
 
           nix = {
-            configureBuildUsers = true;
-            useDaemon = true;
-            # package = pkgs.nix;
             # Necessary for using flakes on this system.
             settings.experimental-features = [
               "nix-command"
@@ -342,7 +336,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.suddenlygiovanni = import ./home.nix; # This is symlinked to config
+            home-manager.users.suddenlygiovanni = import ./home.nix ; # This is symlinked to config
 
             # Optionally, use home-manager.extraSpecialArgs to pass
             # arguments to home.nix
