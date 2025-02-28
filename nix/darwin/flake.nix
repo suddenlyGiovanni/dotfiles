@@ -78,7 +78,7 @@
           };
 
           # Enable sudo authentication with Touch ID.
-          security.pam.enableSudoTouchIdAuth = true;
+          security.pam.services.sudo_local.touchIdAuth = true;
 
           users.users.suddenlygiovanni = {
             name = "suddenlygiovanni"; # The name of the user account. If undefined, the name of the attribute set will be used.
