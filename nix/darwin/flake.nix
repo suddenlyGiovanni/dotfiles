@@ -41,33 +41,9 @@
               git # Distributed version control system
               less # A more advanced file pager than 'more'
               wget # Tool for retrieving files using HTTP, HTTPS, and FTP
-              colima
               docker
             ];
             pathsToLink = [ "/share/zsh" ]; # List of directories to be symlinked in /run/current-system/sw.
-          };
-
-          # Colima launchd service belongs here
-          launchd.user.agents = {
-            colima = {
-              serviceConfig = {
-                Label = "com.user.colima";
-                ProgramArguments = [
-                  "${pkgs.colima}/bin/colima"
-                  "start"
-                  "--cpu"
-                  "4"
-                  "--memory"
-                  "8"
-                  "--disk"
-                  "100"
-                ];
-                RunAtLoad = true;
-                KeepAlive = false;
-                StandardOutPath = "/tmp/colima.log";
-                StandardErrorPath = "/tmp/colima.error.log";
-              };
-            };
           };
 
           documentation = {
@@ -296,6 +272,7 @@
               "warp" # Rust-based terminal
               "whatsapp" # Native desktop client for WhatsApp
               "zed@preview" # Multiplayer code editor
+              "docker"
             ];
             masApps = {
               "1Password for Safari" = 1569813296;
