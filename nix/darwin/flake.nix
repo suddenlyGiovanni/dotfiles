@@ -77,6 +77,10 @@
           };
 
           system = {
+
+            # NEW: tell nix-darwin which account owns all “per-user” options
+            primaryUser = "suddenlygiovanni";
+
             # Set Git commit hash for darwin-version.
             configurationRevision = self.rev or self.dirtyRev or null;
 

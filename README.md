@@ -27,7 +27,7 @@ https://zero-to-nix.com/start/install
 Follow the instructions on nix-darwin repos on how to install it; choose the flake version.
 
 ```shell
-nix run nix-darwin -- switch --flake ~/dotfiles/nix/darwin 
+sudo -H nix run nix-darwin -- switch --flake ~/dotfiles/nix/darwin 
 ```
 
 ## 4. Update the system
