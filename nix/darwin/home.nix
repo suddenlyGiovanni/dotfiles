@@ -46,6 +46,7 @@
       nushell # A modern shell written in Rust
       pnpm-shell-completion # Complete your pnpm command fastly
       poetry # Python dependency management and packaging made easy
+      rustup # Rust toolchain installer
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
