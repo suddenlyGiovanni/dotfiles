@@ -259,7 +259,6 @@
               "gitbutler" # Git client for simultaneous branches on top of your existing workflow
               "github@beta" # Desktop client for GitHub repositories
               "grammarly-desktop" # Grammarly for desktop
-              "jetbrains-toolbox" # JetBrains tools manager
               "notion" # App to write, plan, collaborate, and get organised
               "notion-calendar" # Calendar for professionals and teams
               "obsidian" # Knowledge base that works on top of a local folder of plain text Markdown files
