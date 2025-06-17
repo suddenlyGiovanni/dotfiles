@@ -43,6 +43,7 @@
       nixd # nix lsp deamon
       nixfmt-rfc-style # nix lang formatter
       nodejs-slim_latest # Event-driven I/O framework for the V8 JavaScript engine
+      corepack_24 # Wrappers for npm, pnpm and Yarn via Node.js Corepack
       nushell # A modern shell written in Rust
       pnpm-shell-completion # Complete your pnpm command fastly
       poetry # Python dependency management and packaging made easy
