@@ -76,6 +76,15 @@
             ];
           };
 
+          networking = {
+            applicationFirewall = {
+              enable = true; # Enable the internal firewall (replaces system.defaults.alf.globalstate = 1)
+              allowSigned = true; # Allow any signed application to accept incoming requests (replaces system.defaults.alf.allowsignedenabled = 1)
+              allowSignedApp = true; # Allow any downloaded signed application to accept incoming requests (replaces system.defaults.alf.allowdownloadsignedenabled = 1)
+              enableStealthMode = true; # Drop incoming ICMP requests like ping (replaces system.defaults.alf.stealthenabled = 1)
+            };
+          };
+
           system = {
 
             # NEW: tell nix-darwin which account owns all “per-user” options
@@ -145,13 +154,6 @@
                 HideDesktop = null; # Hide items in Stage Manager.
                 StandardHideWidgets = null; # Hide widgets on desktop.
                 StageManagerHideWidgets = null; # Hide widgets in Stage Manager.
-              };
-              alf = {
-                globalstate = 1; # Enable the internal firewall to prevent unauthorised applications, programs and services from accepting incoming connections.
-                allowsignedenabled = 1; # Allows any signed Application to accept incoming requests. Default is true.
-                allowdownloadsignedenabled = 1; # Allows any downloaded Application that has been signed to accept incoming requests. Default is 0.
-                loggingenabled = 0; # Enable logging of requests made to the firewall. Default is 0.
-                stealthenabled = 1; # Drops incoming requests via ICMP such as ping requests. Default is 0.
               };
               dock = {
                 appswitcher-all-displays = false; # Whether to display the appswitcher on all displays or only the main one. The default is false.
