@@ -42,7 +42,7 @@
       lazydocker # A simple terminal UI for both docker and docker-compose
       nixd # nix lsp deamon
       nixfmt-rfc-style # nix lang formatter
-      nodejs-slim_latest # Event-driven I/O framework for the V8 JavaScript engine
+      nodejs_latest # Event-driven I/O framework for the V8 JavaScript engine
       corepack_24 # Wrappers for npm, pnpm and Yarn via Node.js Corepack
       nushell # A modern shell written in Rust
       pnpm-shell-completion # Complete your pnpm command fastly
@@ -53,6 +53,7 @@
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       uv # Extremely fast Python package installer and resolver, written in Rust
       zoxide # A fast cd command that learns your habits
+      container # Creating and running Linux containers using lightweight virtual machines on a Mac
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
