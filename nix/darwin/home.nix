@@ -25,16 +25,13 @@
       awscli2 # Unified tool to manage your AWS services
       bat # A cat(1) clone with syntax highlighting and Git integration
       biome # Toolchain of the web
-      bun # Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one
-      corepack_latest # Wrappers for npm, pnpm and Yarn via Node.js Corepack
-      deno # Secure runtime for JavaScript and TypeScript
+      container # Creating and running Linux containers using lightweight virtual machines on a Mac
       dive # Tool for exploring each layer in a docker image
       docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
       docker-slim # Minify and secure Docker containers
       eza # A modern, maintained replacement for ls
       fd # A simple, fast and user-friendly alternative to find
       flyctl # Command line tools for fly.io services
-      fnm # Fast and simple Node.js version manager
       fzf # Command-line fuzzy finder written in Go
       glow # Render markdown on the CLI, with pizzazz!
       httpie # A command line HTTP client whose goal is to make CLI human-friendly
@@ -42,18 +39,13 @@
       lazydocker # A simple terminal UI for both docker and docker-compose
       nixd # nix lsp deamon
       nixfmt-rfc-style # nix lang formatter
-      nodejs_latest # Event-driven I/O framework for the V8 JavaScript engine
-      corepack_24 # Wrappers for npm, pnpm and Yarn via Node.js Corepack
       nushell # A modern shell written in Rust
-      pnpm-shell-completion # Complete your pnpm command fastly
-      poetry # Python dependency management and packaging made easy
       rustup # Rust toolchain installer
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       uv # Extremely fast Python package installer and resolver, written in Rust
       zoxide # A fast cd command that learns your habits
-      container # Creating and running Linux containers using lightweight virtual machines on a Mac
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage

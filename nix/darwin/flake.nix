@@ -254,12 +254,10 @@
               "chromium" # Free and open-source web browser
               "dash" # API documentation browser and code snippet manager
               "discord" # Voice and text chat software
-              "figma@beta" # Collaborative team software
               "firefox@developer-edition" # Web browser
               "font-jetbrains-mono-nerd-font"
               "ghostty@tip" # Terminal emulator that uses platform-native UI and GPU acceleration
               "gitbutler" # Git client for simultaneous branches on top of your existing workflow
-              "github@beta" # Desktop client for GitHub repositories
               "grammarly-desktop" # Grammarly for desktop
               "notion" # App to write, plan, collaborate, and get organised
               "notion-calendar" # Calendar for professionals and teams
@@ -272,7 +270,6 @@
               "qlvideo" # Thumbnails, static previews, cover art and metadata for video files
               "quicklook-json" # Quick Look plugin for JSON files
               "raycast" # Control your tools with a few keystrokes
-              "slack@beta" # Team communication and collaboration software
               "transmission" # Open-source BitTorrent client
               "visual-studio-code" # Open-source code editor
               "warp" # Rust-based terminal
