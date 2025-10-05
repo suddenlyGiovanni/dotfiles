@@ -39,7 +39,9 @@
       lazydocker # A simple terminal UI for both docker and docker-compose
       nixd # nix lsp deamon
       nixfmt-rfc-style # nix lang formatter
+      nodejs_24 # Node.js JavaScript runtime
       nushell # A modern shell written in Rust
+      pnpm # Fast, disk space efficient package manager
       rustup # Rust toolchain installer
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
