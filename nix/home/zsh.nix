@@ -38,7 +38,7 @@
     path = "${config.xdg.dataHome}/zsh/history"; # History file location
   };
 
-  initExtra = ''
+  initContent = ''
     printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh"}}\x9c'
 
     # Add any additional configurations here

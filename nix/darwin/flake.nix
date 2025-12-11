@@ -7,7 +7,7 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
 
   outputs =
@@ -246,6 +246,10 @@
               require_sha = true; # Whether to require cask(s) to have a checksum.
               no_quarantine = true; # Whether to disable quarantining of downloads.
             };
+            # Ensure the `mas` CLI is present for managing Mac App Store apps
+            brews = [
+              "mas"
+            ];
             casks = [
               "1password-cli" # Command-line interface for 1Password
               "1password@beta" # Password manager
@@ -275,18 +279,11 @@
               "warp" # Rust-based terminal
               "whatsapp" # Native desktop client for WhatsApp
               "zed@preview" # Multiplayer code editor
-              "docker"
+              "docker-desktop"
             ];
-            masApps = {
-              "1Password for Safari" = 1569813296;
-              "Boop" = 1518425043;
-              "Bumpr" = 1166066070;
-              "FileBot" = 905384638;
-              "Goodnotes" = 1444383602;
-              "Grammarly for Safari" = 1462114288;
-              "Wipr 2" = 1662217862;
-              "X" = 333903271;
-            };
+            # Temporarily disable Mac App Store installations via Brew Bundle to avoid failures
+            # when not signed into the App Store. Re-enable after signing in by restoring the set below.
+            masApps = {};
 
             onActivation = {
               autoUpdate = false; # Whether to enable Homebrew to auto-update itself and all formulae during nix-darwin system activation. The default is false so that repeated invocations of darwin-rebuild switch are idempotent.
@@ -300,6 +297,8 @@
               extraFlags = [ ]; # Extra flags to pass to brew bundle [install] during nix-darwin system activation.
               upgrade = false; # Whether to enable Homebrew to upgrade outdated formulae and Mac App Store apps during nix-darwin system activation. The default is false so that repeated invocations of darwin-rebuild switch are idempotent.
             };
+            # Do not set deprecated taps like homebrew/cask-versions or homebrew/cask-fonts;
+            # modern Homebrew migrated these into core repos and tapping them now fails.
             taps = [ ];
           };
 
