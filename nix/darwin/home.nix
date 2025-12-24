@@ -31,14 +31,12 @@
       docker-slim # Minify and secure Docker containers
       eza # A modern, maintained replacement for ls
       fd # A simple, fast and user-friendly alternative to find
-      flyctl # Command line tools for fly.io services
       fzf # Command-line fuzzy finder written in Go
       glow # Render markdown on the CLI, with pizzazz!
       httpie # A command line HTTP client whose goal is to make CLI human-friendly
       jq # A lightweight and flexible command-line JSON processor
       lazydocker # A simple terminal UI for both docker and docker-compose
       nixd # nix lsp deamon
-      nixfmt-rfc-style # nix lang formatter
       nodejs_24 # Node.js JavaScript runtime
       nushell # A modern shell written in Rust
       pnpm # Fast, disk space efficient package manager
@@ -48,6 +46,7 @@
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       uv # Extremely fast Python package installer and resolver, written in Rust
       zoxide # A fast cd command that learns your habits
+      alejandra # Uncompromising Nix Code Formatter
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
