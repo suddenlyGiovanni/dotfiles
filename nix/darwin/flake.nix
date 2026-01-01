@@ -10,12 +10,12 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
 
-  outputs = inputs @ {
+  outputs = {
     self,
     nix-darwin,
-    nixpkgs,
     home-manager,
     nix-homebrew,
+    ...
   }: let
     configuration = {pkgs, ...}: {
       ids.gids.nixbld = 350;
