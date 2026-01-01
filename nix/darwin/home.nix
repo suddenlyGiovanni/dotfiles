@@ -1,17 +1,19 @@
 # home.nix
 # home-manager switch
 # darwin-rebuild switch --flake ~/.config/nix-darwin
-
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   home = {
     # Home Manager needs a bit of information about you and the paths it should manage.
     username = "suddenlygiovanni"; # The user's username.
     homeDirectory = "/Users/suddenlygiovanni"; # The user's home directory. Must be an absolute path.
 
     /*
-      Extra directories to add to PATH.
-      These directories are added to the PATH variable in a double-quoted context, so expressions like $HOME are expanded by the shell. However, since expressions like ~ or * are escaped, they will end up in the PATH verbatim.
+    Extra directories to add to PATH.
+    These directories are added to the PATH variable in a double-quoted context, so expressions like $HOME are expanded by the shell. However, since expressions like ~ or * are escaped, they will end up in the PATH verbatim.
     */
     sessionPath = [
       #      "/run/current-system/sw/bin"
@@ -22,9 +24,11 @@
     # Packages that should be installed to the user profile.
     packages = with pkgs; [
       _1password-cli # 1Password command-line tool
+      alejandra # Uncompromising Nix Code Formatter
       awscli2 # Unified tool to manage your AWS services
       bat # A cat(1) clone with syntax highlighting and Git integration
       biome # Toolchain of the web
+      cocoapods # Manages dependencies for your Xcode projects
       container # Creating and running Linux containers using lightweight virtual machines on a Mac
       dive # Tool for exploring each layer in a docker image
       docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
@@ -46,7 +50,6 @@
       starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       uv # Extremely fast Python package installer and resolver, written in Rust
       zoxide # A fast cd command that learns your habits
-      alejandra # Uncompromising Nix Code Formatter
     ];
 
     # Home Manager is pretty good at managing dotf siles. The primary way to manage
@@ -80,18 +83,17 @@
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
-    zsh = import ../home/zsh.nix { inherit config pkgs; };
-    fish = import ../home/fish.nix { inherit pkgs; };
-    nushell = import ../home/nushell.nix { inherit pkgs; };
-    git = import ../home/git.nix { inherit pkgs; };
-    starship = import ../home/starship.nix { inherit pkgs; };
-    fd = import ../home/fd.nix { inherit pkgs; };
-    zoxide = import ../home/zoxide.nix { inherit pkgs; };
-    fzf = import ../home/fzf.nix { inherit pkgs; };
-    eza = import ../home/eza.nix { inherit pkgs; };
-    bat = import ../home/bat.nix { inherit pkgs; };
-    gh = import ../home/gh.nix { inherit pkgs; };
+    zsh = import ../home/zsh.nix {inherit config pkgs;};
+    fish = import ../home/fish.nix {inherit pkgs;};
+    nushell = import ../home/nushell.nix {inherit pkgs;};
+    git = import ../home/git.nix {inherit pkgs;};
+    starship = import ../home/starship.nix {inherit pkgs;};
+    fd = import ../home/fd.nix {inherit pkgs;};
+    zoxide = import ../home/zoxide.nix {inherit pkgs;};
+    fzf = import ../home/fzf.nix {inherit pkgs;};
+    eza = import ../home/eza.nix {inherit pkgs;};
+    bat = import ../home/bat.nix {inherit pkgs;};
+    gh = import ../home/gh.nix {inherit pkgs;};
     home-manager.enable = true; # Let Home Manager install and manage itself.
   };
-
 }
