@@ -2,6 +2,7 @@
 { pkgs }:
 {
   enable = true;
+  lfs.enable = true;
   package = pkgs.git;
 
   # All Git configuration is now under `settings` (replaces deprecated options

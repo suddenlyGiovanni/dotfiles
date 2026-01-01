@@ -39,6 +39,7 @@
       glow # Render markdown on the CLI, with pizzazz!
       httpie # A command line HTTP client whose goal is to make CLI human-friendly
       jq # A lightweight and flexible command-line JSON processor
+      just # A handy way to save and run project-specific commands
       lazydocker # A simple terminal UI for both docker and docker-compose
       nixd # nix lsp deamon
       nodejs_24 # Node.js JavaScript runtime
