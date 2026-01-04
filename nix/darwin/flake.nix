@@ -17,52 +17,52 @@
     nix-homebrew,
     ...
   }: let
-    # Define user configuration for personal machine
-    personalUser = {
-      username = "suddenlygiovanni";
-      fullName = "Giovanni Ravalico";
-      homeDirectory = "/Users/suddenlygiovanni";
-    };
+    # Import host configurations
+    personalHost = import ./hosts/personal.nix;
+
+    # Helper function to create a darwin configuration
+    mkDarwinConfig = hostConfig:
+      nix-darwin.lib.darwinSystem {
+        system = hostConfig.system;
+        specialArgs = {
+          inherit self;
+          userConfig = hostConfig.userConfig;
+        };
+        modules = [
+          ./configuration.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {
+              userConfig = hostConfig.userConfig;
+            };
+            home-manager.users.${hostConfig.userConfig.username} = import ./home.nix;
+          }
+          nix-homebrew.darwinModules.nix-homebrew
+          {
+            nix-homebrew = {
+              # Install Homebrew under the default prefix
+              enable = true;
+
+              # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
+              enableRosetta = hostConfig.homebrew.enableRosetta;
+
+              # User owning the Homebrew prefix
+              user = hostConfig.userConfig.username;
+
+              # Automatically migrate existing Homebrew installations
+              autoMigrate = true;
+            };
+          }
+        ];
+      };
   in {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Giovannis-MacBook-Air
-    darwinConfigurations."Giovannis-MacBook-Air" = nix-darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = {
-        inherit self;
-        userConfig = personalUser;
-      };
-      modules = [
-        ./configuration.nix
-        home-manager.darwinModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {
-            userConfig = personalUser;
-          };
-          home-manager.users.${personalUser.username} = import ./home.nix;
-        }
-        nix-homebrew.darwinModules.nix-homebrew
-        {
-          nix-homebrew = {
-            # Install Homebrew under the default prefix
-            enable = true;
-
-            # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-            enableRosetta = false;
-
-            # User owning the Homebrew prefix
-            user = personalUser.username;
-
-            # Automatically migrate existing Homebrew installations
-            autoMigrate = true;
-          };
-        }
-      ];
-    };
+    darwinConfigurations.${personalHost.hostname} = mkDarwinConfig personalHost;
 
     # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations."Giovannis-MacBook-Air".pkgs;
+    darwinPackages = self.darwinConfigurations.${personalHost.hostname}.pkgs;
   };
 }
