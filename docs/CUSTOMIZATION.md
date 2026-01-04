@@ -2,8 +2,11 @@
 
 This guide explains how to customize and extend the nix-darwin configuration for your needs.
 
+> **Tip:** Run `just --list` from the repository root to see all available commands.
+
 ## Table of Contents
 
+- [Quick Commands](#quick-commands)
 - [Understanding the Structure](#understanding-the-structure)
 - [Common Tasks](#common-tasks)
   - [Adding a New Package](#adding-a-new-package)
@@ -16,28 +19,47 @@ This guide explains how to customize and extend the nix-darwin configuration for
 - [Testing Changes](#testing-changes)
 - [Troubleshooting](#troubleshooting)
 
+## Quick Commands
+
+Common tasks using the `justfile` at the repository root:
+
+```shell
+# From ~/dotfiles
+just fmt         # Format all Nix files
+just lint        # Lint Nix files
+just check       # Run all checks (format, lint, deadcode)
+just build       # Build without applying
+just switch      # Apply configuration
+just update      # Update flake inputs
+just validate    # Validate flake
+```
+
 ## Understanding the Structure
 
 ```
-nix/darwin/
-├── flake.nix              # Entry point - defines inputs and mkDarwinConfig helper
+dotfiles/
+├── flake.nix              # Dev environment (formatters, linters)
+├── justfile               # Task runner commands
+├── .envrc                 # direnv integration
+└── nix/darwin/
+    ├── flake.nix              # Entry point - defines inputs and mkDarwinConfig helper
 ├── configuration.nix      # Core darwin settings (imports modules)
 ├── modules/
 │   ├── system-defaults.nix  # macOS preferences (dock, finder, trackpad)
 │   ├── homebrew.nix         # Homebrew casks and formulae
 │   └── security.nix         # Firewall, Touch ID settings
-├── hosts/
-│   ├── personal.nix       # Machine-specific: hostname, username, architecture
-│   └── work.nix           # Machine-specific: work machine settings
-├── users/
-│   ├── common.nix         # Shared home-manager: packages, programs
-│   ├── personal.nix       # User-specific: personal git email/key
-│   └── work.nix           # User-specific: work git email/key
-└── home/                   # Program-specific configurations
-    ├── git.nix
-    ├── fish.nix
-    ├── starship.nix
-    └── ...
+    ├── hosts/
+    │   ├── personal.nix       # Machine-specific: hostname, username, architecture
+    │   └── work.nix           # Machine-specific: work machine settings
+    ├── users/
+    │   ├── common.nix         # Shared home-manager: packages, programs
+    │   ├── personal.nix       # User-specific: personal git email/key
+    │   └── work.nix           # User-specific: work git email/key
+    └── home/                   # Program-specific configurations
+        ├── git.nix
+        ├── fish.nix
+        ├── starship.nix
+        └── ...
 ```
 
 ### Which file do I edit?
@@ -289,26 +311,43 @@ Configuration is applied in layers, with later layers overriding earlier ones:
 ### Build without applying
 
 ```shell
+# From ~/dotfiles
+just build
+
+# Or directly:
 darwin-rebuild build --flake ~/dotfiles/nix/darwin
 ```
 
 ### Check flake for errors
 
 ```shell
-cd ~/dotfiles/nix/darwin
-nix flake check
+# From ~/dotfiles
+just validate
+
+# Or directly:
+nix flake check ~/dotfiles/nix/darwin
+```
+
+### Run all checks (format, lint, deadcode)
+
+```shell
+just check
 ```
 
 ### See what would change
 
 ```shell
-darwin-rebuild build --flake ~/dotfiles/nix/darwin
+just build
 nvd diff /run/current-system result  # requires nvd package
 ```
 
 ### Apply changes
 
 ```shell
+# From ~/dotfiles
+just switch
+
+# Or directly:
 sudo darwin-rebuild switch --flake ~/dotfiles/nix/darwin
 ```
 
@@ -356,17 +395,20 @@ man home-configuration.nix
 ### Updating flake inputs
 
 ```shell
-cd ~/dotfiles/nix/darwin
+# From ~/dotfiles
 
 # Update all inputs
-nix flake update
+just update
 
 # Update a specific input
-nix flake lock --update-input nixpkgs
+just update-input nixpkgs
+
+# Or directly:
+nix flake update --flake ~/dotfiles/nix/darwin
 ```
 
 After updating, rebuild to apply:
 
 ```shell
-sudo darwin-rebuild switch --flake ~/dotfiles/nix/darwin
+just switch
 ```

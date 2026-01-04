@@ -17,8 +17,7 @@
   # Path to user-specific home-manager module (relative to hosts directory)
   userModule = ../users/work.nix;
 
-  # System architecture
-  # Use "aarch64-darwin" for Apple Silicon, "x86_64-darwin" for Intel
+  # System architecture (Apple Silicon)
   system = "aarch64-darwin";
 
   # Hostname (used in darwinConfigurations)

@@ -3,6 +3,7 @@
 {
   self,
   pkgs,
+  hostConfig,
   userConfig,
   ...
 }: {
@@ -17,7 +18,7 @@
 
   nixpkgs = {
     # The platform the configuration will be used on.
-    hostPlatform = "aarch64-darwin";
+    hostPlatform = hostConfig.system;
 
     # Allow unfree packages
     config.allowUnfree = true;

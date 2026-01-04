@@ -6,13 +6,9 @@
 
   # All Git configuration is now under `settings` (replaces deprecated options
   # userName, userEmail, aliases, extraConfig).
+  # Note: user.name, user.email, and user.signingkey are set in
+  # users/personal.nix or users/work.nix to allow per-machine git identities.
   settings = {
-    user = {
-      name = "suddenlyGiovanni";
-      email = "15946771+suddenlyGiovanni@users.noreply.github.com";
-      signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
-    };
-
     alias = {
       # clone
       clone = "clone --filter=blob:none"; # clones a repo while only downloading the required blobs

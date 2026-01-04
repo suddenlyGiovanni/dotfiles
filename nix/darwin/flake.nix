@@ -18,6 +18,10 @@
     nix-homebrew,
     ...
   }: let
+    # Supported systems for formatter
+    supportedSystems = ["aarch64-darwin"];
+    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+
     # Import host configurations
     personalHost = import ./hosts/personal.nix;
     workHost = import ./hosts/work.nix;
@@ -72,5 +76,8 @@
 
     # Expose the package set, including overlays, for convenience.
     darwinPackages = self.darwinConfigurations.${personalHost.hostname}.pkgs;
+
+    # Formatter for `nix fmt`
+    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
   };
 }

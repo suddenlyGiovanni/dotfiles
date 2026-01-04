@@ -8,9 +8,6 @@
   outputs = {nixpkgs, ...}: let
     systems = [
       "aarch64-darwin"
-      "x86_64-darwin"
-      "aarch64-linux"
-      "x86_64-linux"
     ];
     forAllSystems = f:
       nixpkgs.lib.genAttrs systems (
@@ -20,6 +17,9 @@
           f pkgs
       );
   in {
+    # Formatter for `nix fmt`
+    formatter = forAllSystems (pkgs: pkgs.alejandra);
+
     devShells = forAllSystems (pkgs: {
       default = pkgs.mkShell {
         name = "dotfiles-dev";

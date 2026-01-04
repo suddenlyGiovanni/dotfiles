@@ -1,7 +1,7 @@
 # Justfile for dotfiles development tasks
 # Run `just` to see available commands
-
 # Path to darwin flake
+
 darwin_flake := "./nix/darwin"
 
 # Default recipe: show help
@@ -74,6 +74,11 @@ rollback:
 # Validate darwin flake
 validate:
     nix flake check {{ darwin_flake }}
+
+# Show what would change (requires nvd: nix profile install nixpkgs#nvd)
+diff:
+    darwin-rebuild build --flake {{ darwin_flake }}
+    nvd diff /run/current-system result
 
 # Open nix repl with darwin flake loaded
 repl:
