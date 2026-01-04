@@ -16,7 +16,7 @@
   };
 
   # Path to user-specific home-manager module (relative to hosts directory)
-  userModule = ../users/work.nix;
+  userModule = ../../home/users/work.nix;
 
   # System architecture (Apple Silicon)
   system = "aarch64-darwin";

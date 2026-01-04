@@ -7,17 +7,22 @@
   ...
 }: {
   imports = [
-    ../home/fd.nix
-    ../home/eza.nix
-    ../home/bat.nix
-    ../home/zoxide.nix
-    ../home/fzf.nix
-    ../home/gh.nix
-    ../home/starship.nix
-    ../home/fish.nix
-    ../home/nushell.nix
-    ../home/zsh.nix
-    ../home/git.nix
+    # Terminal enhancements
+    ../programs/terminal/fd.nix
+    ../programs/terminal/eza.nix
+    ../programs/terminal/bat.nix
+    ../programs/terminal/zoxide.nix
+    ../programs/terminal/fzf.nix
+    ../programs/terminal/starship.nix
+
+    # Shell configurations
+    ../programs/shell/fish.nix
+    ../programs/shell/nushell.nix
+    ../programs/shell/zsh.nix
+
+    # Development tools
+    ../programs/dev/gh.nix
+    ../programs/dev/git.nix
   ];
 
   home = {
