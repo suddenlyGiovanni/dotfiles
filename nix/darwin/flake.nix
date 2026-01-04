@@ -38,7 +38,7 @@
             home-manager.extraSpecialArgs = {
               userConfig = hostConfig.userConfig;
             };
-            home-manager.users.${hostConfig.userConfig.username} = import ./home.nix;
+            home-manager.users.${hostConfig.userConfig.username} = import hostConfig.userModule;
           }
           nix-homebrew.darwinModules.nix-homebrew
           {

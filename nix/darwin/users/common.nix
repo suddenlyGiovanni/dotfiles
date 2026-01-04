@@ -1,6 +1,5 @@
-# home.nix
-# home-manager switch
-# darwin-rebuild switch --flake ~/.config/nix-darwin
+# Common home-manager configuration shared between all users
+# This module contains packages and programs used across all machines
 {
   config,
   pkgs,
@@ -9,16 +8,11 @@
 }: {
   home = {
     # Home Manager needs a bit of information about you and the paths it should manage.
-    username = userConfig.username; # The user's username.
-    homeDirectory = userConfig.homeDirectory; # The user's home directory. Must be an absolute path.
+    username = userConfig.username;
+    homeDirectory = userConfig.homeDirectory;
 
-    /*
-    Extra directories to add to PATH.
-    These directories are added to the PATH variable in a double-quoted context, so expressions like $HOME are expanded by the shell. However, since expressions like ~ or * are escaped, they will end up in the PATH verbatim.
-    */
+    # Extra directories to add to PATH.
     sessionPath = [
-      #      "/run/current-system/sw/bin"
-      #      "$HOME/.nix-profile/bin"
       "/usr/local/bin"
     ];
 
@@ -54,8 +48,7 @@
       zoxide # A fast cd command that learns your habits
     ];
 
-    # Home Manager is pretty good at managing dotf siles. The primary way to manage
-    # plain files is through 'home.file'.
+    # Symlinked configuration files
     file = {
       ".config/nix/nix.conf" = {
         source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/nix/nix.conf";
@@ -68,14 +61,6 @@
       };
     };
 
-    # This value determines the Home Manager release that your
-    # configuration is compatible with. This helps avoid breakage
-    # when a new Home Manager release introduces backwards
-    # incompatible changes.
-    #
-    # You can update Home Manager without changing this value. See
-    # the Home Manager release notes for a list of state version
-    # changes in each release.
     stateVersion = "24.05";
   };
 
@@ -85,17 +70,16 @@
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
-    zsh = import ../home/zsh.nix {inherit config pkgs;};
-    fish = import ../home/fish.nix {inherit pkgs;};
-    nushell = import ../home/nushell.nix {inherit pkgs;};
-    git = import ../home/git.nix {inherit pkgs;};
-    starship = import ../home/starship.nix {inherit pkgs;};
-    fd = import ../home/fd.nix {inherit pkgs;};
-    zoxide = import ../home/zoxide.nix {inherit pkgs;};
-    fzf = import ../home/fzf.nix {inherit pkgs;};
-    eza = import ../home/eza.nix {inherit pkgs;};
-    bat = import ../home/bat.nix {inherit pkgs;};
-    gh = import ../home/gh.nix {inherit pkgs;};
-    home-manager.enable = true; # Let Home Manager install and manage itself.
+    zsh = import ../../home/zsh.nix {inherit config pkgs;};
+    fish = import ../../home/fish.nix {inherit pkgs;};
+    nushell = import ../../home/nushell.nix {inherit pkgs;};
+    starship = import ../../home/starship.nix {inherit pkgs;};
+    fd = import ../../home/fd.nix {inherit pkgs;};
+    zoxide = import ../../home/zoxide.nix {inherit pkgs;};
+    fzf = import ../../home/fzf.nix {inherit pkgs;};
+    eza = import ../../home/eza.nix {inherit pkgs;};
+    bat = import ../../home/bat.nix {inherit pkgs;};
+    gh = import ../../home/gh.nix {inherit pkgs;};
+    home-manager.enable = true;
   };
 }

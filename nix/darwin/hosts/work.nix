@@ -14,6 +14,9 @@
     homeDirectory = "/Users/giovanni.ravalico"; # TODO: Update with your work home directory
   };
 
+  # Path to user-specific home-manager module (relative to flake.nix)
+  userModule = ./users/work.nix;
+
   # System architecture
   # Use "aarch64-darwin" for Apple Silicon, "x86_64-darwin" for Intel
   system = "aarch64-darwin";
