@@ -16,6 +16,9 @@ An ADR is a document that captures an important architectural decision made alon
 | ID | Title | Status | Date |
 |----|-------|--------|------|
 | [001](./001-multi-machine-nix-configuration.md) | Multi-Machine Nix Configuration | Accepted | 2025-01 |
+| [002](./002-xdg-compliance-session-variables.md) | XDG Compliance and Session Variables | Accepted | 2025-01 |
+| [003](./003-nix-lsp-maintainability-tradeoff.md) | Nix LSP Maintainability Trade-off | Accepted | 2025-01 |
+| [004](./004-developer-directory-structure.md) | Developer Directory Structure | Accepted | 2025-01 |
 
 ## Creating a New ADR
 
