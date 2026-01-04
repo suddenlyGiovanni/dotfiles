@@ -51,7 +51,11 @@ sudo darwin-rebuild switch --flake ~/dotfiles/nix/darwin#<hostname>
 ```
 nix/darwin/
 ├── flake.nix              # Entry point
-├── configuration.nix      # Shared macOS system settings
+├── configuration.nix      # Core system setup (imports modules)
+├── modules/
+│   ├── system-defaults.nix  # macOS preferences (dock, finder, trackpad)
+│   ├── homebrew.nix         # Homebrew casks and formulae
+│   └── security.nix         # Firewall, Touch ID settings
 ├── hosts/                 # Machine-specific configs
 ├── users/                 # User-specific configs (git email, etc.)
 └── home/                  # Program configs (git, fish, starship, etc.)

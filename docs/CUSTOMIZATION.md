@@ -21,7 +21,11 @@ This guide explains how to customize and extend the nix-darwin configuration for
 ```
 nix/darwin/
 ├── flake.nix              # Entry point - defines inputs and mkDarwinConfig helper
-├── configuration.nix      # Shared darwin settings (system packages, macOS prefs)
+├── configuration.nix      # Core darwin settings (imports modules)
+├── modules/
+│   ├── system-defaults.nix  # macOS preferences (dock, finder, trackpad)
+│   ├── homebrew.nix         # Homebrew casks and formulae
+│   └── security.nix         # Firewall, Touch ID settings
 ├── hosts/
 │   ├── personal.nix       # Machine-specific: hostname, username, architecture
 │   └── work.nix           # Machine-specific: work machine settings
@@ -41,8 +45,11 @@ nix/darwin/
 | I want to... | Edit this file |
 |-------------|----------------|
 | Add a CLI tool (nix package) | `users/common.nix` → `home.packages` |
-| Add a GUI app (Homebrew cask) | `configuration.nix` → `homebrew.casks` |
-| Change macOS Dock/Finder settings | `configuration.nix` → `system.defaults` |
+| Add a GUI app (Homebrew cask) for all machines | `modules/homebrew.nix` → `casks` |
+| Add a GUI app for personal machine only | `hosts/personal.nix` → `homebrew.casks` |
+| Add a GUI app for work machine only | `hosts/work.nix` → `homebrew.casks` |
+| Change macOS Dock/Finder settings | `modules/system-defaults.nix` → `system.defaults` |
+| Change firewall/Touch ID settings | `modules/security.nix` |
 | Change git config for all machines | `home/git.nix` |
 | Change git email for personal only | `users/personal.nix` → `programs.git.settings.user` |
 | Change git email for work only | `users/work.nix` → `programs.git.settings.user` |
@@ -78,18 +85,29 @@ nix search nixpkgs ripgrep
 
 ### Adding a New Homebrew Cask
 
-GUI applications are typically installed via Homebrew casks in `configuration.nix`:
+GUI applications are installed via Homebrew casks.
+
+**For all machines** - edit `modules/homebrew.nix`:
 
 ```nix
-# configuration.nix
+# modules/homebrew.nix
+casks = [
+  # ... existing casks ...
+  
+  # Add your new cask here
+  "spotify"
+];
+```
+
+**For a specific machine only** - edit the host file (e.g., `hosts/personal.nix`):
+
+```nix
+# hosts/personal.nix
 homebrew = {
+  enableRosetta = false;
   casks = [
-    # ... existing casks ...
-    
-    # Add your new cask here
-    "spotify"
-    "slack"
-    "zoom"
+    "discord"      # Personal only
+    "transmission" # Personal only
   ];
 };
 ```
@@ -101,10 +119,10 @@ brew search <app-name>
 
 ### Changing macOS System Preferences
 
-macOS settings are in `configuration.nix` under `system.defaults`:
+macOS settings are in `modules/system-defaults.nix`:
 
 ```nix
-# configuration.nix
+# modules/system-defaults.nix
 system.defaults = {
   # Dock settings
   dock = {
@@ -245,7 +263,7 @@ Configuration is applied in layers, with later layers overriding earlier ones:
 ```
 ┌─────────────────────────────────────────────────┐
 │  Host Config (hosts/personal.nix)               │  Machine-specific
-│  - hostname, username, architecture             │
+│  - hostname, username, architecture, host casks │
 ├─────────────────────────────────────────────────┤
 │  User Config (users/personal.nix)               │  User-specific
 │  - git email, signing keys                      │
@@ -253,8 +271,13 @@ Configuration is applied in layers, with later layers overriding earlier ones:
 │  Common User (users/common.nix)                 │  Shared user settings
 │  - packages, program configs                    │
 ├─────────────────────────────────────────────────┤
-│  Darwin Config (configuration.nix)              │  Shared system settings
-│  - macOS prefs, homebrew, system packages       │
+│  Darwin Modules (modules/*.nix)                 │  Shared system settings
+│  - system-defaults.nix: macOS prefs             │
+│  - homebrew.nix: shared casks/brews             │
+│  - security.nix: firewall, Touch ID             │
+├─────────────────────────────────────────────────┤
+│  Darwin Config (configuration.nix)              │  Core system setup
+│  - imports modules, user setup, nix settings    │
 ├─────────────────────────────────────────────────┤
 │  Program Configs (home/*.nix)                   │  Base program settings
 │  - git aliases, shell config, starship theme    │
