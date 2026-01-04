@@ -6,6 +6,10 @@
   userConfig,
   ...
 }: {
+  imports = [
+    ../home/fd.nix
+  ];
+
   home = {
     # Home Manager needs a bit of information about you and the paths it should manage.
     inherit (userConfig) username homeDirectory;
@@ -70,7 +74,7 @@
     fish = import ../home/fish.nix {inherit pkgs;};
     nushell = import ../home/nushell.nix {inherit pkgs;};
     starship = import ../home/starship.nix {inherit pkgs;};
-    fd = import ../home/fd.nix {inherit pkgs;};
+
     zoxide = import ../home/zoxide.nix {inherit pkgs;};
     fzf = import ../home/fzf.nix {inherit pkgs;};
     eza = import ../home/eza.nix {inherit pkgs;};
