@@ -7,6 +7,7 @@
 }: {
   programs.zsh = {
     enable = true; # Z shell (Zsh)
+    dotDir = "${config.xdg.configHome}/zsh"; # Use XDG-compliant location for zsh config files
     package = pkgs.zsh;
     shellGlobalAliases = {
       "--help" = "--help 2>&1 | bat --language=help --style=plain --paging=never";

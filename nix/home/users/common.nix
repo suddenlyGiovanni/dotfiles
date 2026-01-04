@@ -23,6 +23,9 @@
     # Development tools
     ../programs/dev/gh.nix
     ../programs/dev/git.nix
+
+    # XDG and non-nix managed configs
+    ../programs/xdg.nix
   ];
 
   home = {
