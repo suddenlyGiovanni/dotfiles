@@ -58,10 +58,10 @@
     # Symlinked configuration files
     file = {
       ".config/nix/nix.conf" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/nix/nix.conf";
+        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/nix/nix.conf";
       };
       ".config/nix-darwin" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/nix/darwin";
+        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/nix/darwin";
       };
     };
 

@@ -2,6 +2,7 @@
 {
   config,
   pkgs,
+  userConfig,
   ...
 }: {
   programs.zsh = {
@@ -25,7 +26,7 @@
 
       bathelp = "bat --plain --language=help";
 
-      switch = "darwin-rebuild switch --flake ~/dotfiles/nix/darwin";
+      switch = "darwin-rebuild switch --flake ${userConfig.dotfilesPath}/nix/darwin";
     };
     enableCompletion = true; # Enable zsh completion.
 
