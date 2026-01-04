@@ -7,7 +7,7 @@
 
   # Personal git configuration
   programs.git = let
-    baseGit = import ../../home/git.nix {inherit pkgs;};
+    baseGit = import ../home/git.nix {inherit pkgs;};
   in
     baseGit
     // {

@@ -66,16 +66,16 @@
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
-    zsh = import ../../home/zsh.nix {inherit config pkgs;};
-    fish = import ../../home/fish.nix {inherit pkgs;};
-    nushell = import ../../home/nushell.nix {inherit pkgs;};
-    starship = import ../../home/starship.nix {inherit pkgs;};
-    fd = import ../../home/fd.nix {inherit pkgs;};
-    zoxide = import ../../home/zoxide.nix {inherit pkgs;};
-    fzf = import ../../home/fzf.nix {inherit pkgs;};
-    eza = import ../../home/eza.nix {inherit pkgs;};
-    bat = import ../../home/bat.nix {inherit pkgs;};
-    gh = import ../../home/gh.nix {inherit pkgs;};
+    zsh = import ../home/zsh.nix {inherit config pkgs;};
+    fish = import ../home/fish.nix {inherit pkgs;};
+    nushell = import ../home/nushell.nix {inherit pkgs;};
+    starship = import ../home/starship.nix {inherit pkgs;};
+    fd = import ../home/fd.nix {inherit pkgs;};
+    zoxide = import ../home/zoxide.nix {inherit pkgs;};
+    fzf = import ../home/fzf.nix {inherit pkgs;};
+    eza = import ../home/eza.nix {inherit pkgs;};
+    bat = import ../home/bat.nix {inherit pkgs;};
+    gh = import ../home/gh.nix {inherit pkgs;};
     home-manager.enable = true;
   };
 }
