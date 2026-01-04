@@ -13,6 +13,7 @@
     ../home/zoxide.nix
     ../home/fzf.nix
     ../home/gh.nix
+    ../home/starship.nix
   ];
 
   home = {
@@ -78,7 +79,6 @@
     zsh = import ../home/zsh.nix {inherit config pkgs;};
     fish = import ../home/fish.nix {inherit pkgs;};
     nushell = import ../home/nushell.nix {inherit pkgs;};
-    starship = import ../home/starship.nix {inherit pkgs;};
 
     home-manager.enable = true;
   };
