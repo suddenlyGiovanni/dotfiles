@@ -8,8 +8,8 @@
     homeDirectory = "/Users/suddenlygiovanni";
   };
 
-  # Path to user-specific home-manager module (relative to flake.nix)
-  userModule = ./users/personal.nix;
+  # Path to user-specific home-manager module (relative to hosts directory)
+  userModule = ../users/personal.nix;
 
   # System architecture
   system = "aarch64-darwin";
