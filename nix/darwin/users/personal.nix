@@ -1,11 +1,6 @@
 # Personal user home-manager configuration
 # Imports common settings and adds personal-specific configurations (git, etc.)
-{
-  config,
-  pkgs,
-  userConfig,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./common.nix
   ];

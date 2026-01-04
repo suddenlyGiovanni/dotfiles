@@ -24,21 +24,23 @@
     # Helper function to create a darwin configuration
     mkDarwinConfig = hostConfig:
       nix-darwin.lib.darwinSystem {
-        system = hostConfig.system;
+        inherit (hostConfig) system;
         specialArgs = {
           inherit self;
-          userConfig = hostConfig.userConfig;
+          inherit (hostConfig) userConfig;
         };
         modules = [
           ./configuration.nix
           home-manager.darwinModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {
-              userConfig = hostConfig.userConfig;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = {
+                inherit (hostConfig) userConfig;
+              };
+              users.${hostConfig.userConfig.username} = import hostConfig.userModule;
             };
-            home-manager.users.${hostConfig.userConfig.username} = import hostConfig.userModule;
           }
           nix-homebrew.darwinModules.nix-homebrew
           {
@@ -47,7 +49,7 @@
               enable = true;
 
               # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-              enableRosetta = hostConfig.homebrew.enableRosetta;
+              inherit (hostConfig.homebrew) enableRosetta;
 
               # User owning the Homebrew prefix
               user = hostConfig.userConfig.username;

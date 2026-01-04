@@ -5,12 +5,7 @@
 # - user.name: Your name as it appears in work git commits
 # - user.email: Your work email address
 # - user.signingkey: Your work SSH signing key (if different from personal)
-{
-  config,
-  pkgs,
-  userConfig,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./common.nix
   ];

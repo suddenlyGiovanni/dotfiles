@@ -8,8 +8,7 @@
 }: {
   home = {
     # Home Manager needs a bit of information about you and the paths it should manage.
-    username = userConfig.username;
-    homeDirectory = userConfig.homeDirectory;
+    inherit (userConfig) username homeDirectory;
 
     # Extra directories to add to PATH.
     sessionPath = [
