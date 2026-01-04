@@ -53,6 +53,18 @@
       fi
     '';
 
+    # XDG compliance: move completion dump to cache directory
+    initExtraBeforeCompInit = ''
+      # Ensure cache directory exists
+      mkdir -p "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+    '';
+
+    completionInit = ''
+      # Use XDG-compliant location for completion dump
+      autoload -U compinit
+      compinit -d "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
+    '';
+
     # Plugins to source in {file}`.zshrc`.
     plugins = [
       #    {

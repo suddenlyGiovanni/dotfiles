@@ -46,6 +46,9 @@
     # GnuPG
     GNUPGHOME = "${config.xdg.dataHome}/gnupg";
 
+    # Fly.io
+    FLY_CONFIG_DIR = "${config.xdg.stateHome}/fly";
+
     # Readline (inputrc)
     INPUTRC = "${config.xdg.configHome}/readline/inputrc";
 
