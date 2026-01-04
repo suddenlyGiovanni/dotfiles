@@ -55,9 +55,6 @@
       ".config/nix-darwin" = {
         source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/nix/darwin";
       };
-      ".config/fish/completions" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/fish/completions";
-      };
     };
 
     stateVersion = "24.05";
