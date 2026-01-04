@@ -3,13 +3,14 @@
 {
   # User configuration for this host
   userConfig = {
-    username = "giovanni.ravalico"; # Update with your work username if different
+    username = "suddenlygiovanni";  # Same username across all machines
     fullName = "Giovanni Ravalico";
-    homeDirectory = "/Users/giovanni.ravalico"; # Update with your work home directory if different
-    dotfilesPath = "/Users/giovanni.ravalico/Developer/dotfiles";
+    homeDirectory = "/Users/suddenlygiovanni";
+    dotfilesPath = "/Users/suddenlygiovanni/Developer/dotfiles";
   };
 
   # Path to user-specific home-manager module (relative to hosts directory)
+  # This is where work-specific git identity and configs live
   userModule = ../../home/users/work.nix;
 
   # System architecture (Apple Silicon)
