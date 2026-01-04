@@ -1,6 +1,9 @@
 # Justfile for dotfiles development tasks
 # Run `just` to see available commands
 
+# Path to darwin flake
+darwin_flake := "./nix/darwin"
+
 # Default recipe: show help
 default:
     @just --list
@@ -26,31 +29,31 @@ check: fmt-check lint deadcode
 
 # Build the current host's configuration without applying
 build:
-    darwin-rebuild build --flake .
+    darwin-rebuild build --flake {{ darwin_flake }}
 
 # Build a specific host's configuration
 build-host host:
-    darwin-rebuild build --flake ".#{{host}}"
+    darwin-rebuild build --flake "{{ darwin_flake }}#{{ host }}"
 
 # Apply the current host's configuration
 switch:
-    sudo darwin-rebuild switch --flake .
+    sudo darwin-rebuild switch --flake {{ darwin_flake }}
 
 # Apply a specific host's configuration
 switch-host host:
-    sudo darwin-rebuild switch --flake ".#{{host}}"
+    sudo darwin-rebuild switch --flake "{{ darwin_flake }}#{{ host }}"
 
 # Show available darwin configurations
 show:
-    nix flake show
+    nix flake show {{ darwin_flake }}
 
-# Update all flake inputs
+# Update darwin flake inputs
 update:
-    nix flake update
+    nix flake update --flake {{ darwin_flake }}
 
-# Update a specific flake input
+# Update a specific darwin flake input
 update-input input:
-    nix flake lock --update-input {{input}}
+    nix flake lock --flake {{ darwin_flake }} --update-input {{ input }}
 
 # Garbage collect old generations (keeps last 7 days)
 gc:
@@ -68,10 +71,10 @@ generations:
 rollback:
     sudo darwin-rebuild switch --rollback
 
-# Validate flake
+# Validate darwin flake
 validate:
-    nix flake check
+    nix flake check {{ darwin_flake }}
 
-# Open nix repl with flake loaded
+# Open nix repl with darwin flake loaded
 repl:
-    nix repl --expr 'builtins.getFlake (toString ./.)'
+    nix repl --expr 'builtins.getFlake (toString {{ darwin_flake }})'

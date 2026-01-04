@@ -1,6 +1,5 @@
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/zoxide.nix
-{ pkgs }:
-{
+{pkgs}: {
   enable = true;
   package = pkgs.zoxide; # Zoxide package to install.
   # List of options to pass to zoxide init.

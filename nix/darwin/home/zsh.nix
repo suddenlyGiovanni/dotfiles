@@ -1,6 +1,8 @@
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/zsh.nix
-{ config, pkgs }:
 {
+  config,
+  pkgs,
+}: {
   enable = true; # Z shell (Zsh)
   package = pkgs.zsh;
   shellGlobalAliases = {
@@ -28,7 +30,7 @@
   autosuggestion = {
     enable = true; # Enable zsh autosuggestions
     highlight = null; # Custom styles for autosuggestion highlighting.
-    strategy = [ "history" ]; # an array that specifies how suggestions should be generated.
+    strategy = ["history"]; # an array that specifies how suggestions should be generated.
   };
 
   # Options related to commands history configuration.

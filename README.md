@@ -4,6 +4,28 @@ Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/
 
 Supports multiple machines with shared and host-specific settings.
 
+## Development
+
+This repo includes a Nix flake for development tooling. With [direnv](https://direnv.net/) installed:
+
+```shell
+cd ~/dotfiles
+direnv allow
+```
+
+This provides: `alejandra` (formatter), `statix` (linter), `deadnix` (dead code finder), `nixd`/`nil` (LSP), and `just` (task runner).
+
+### Common Tasks
+
+```shell
+just --list      # Show all available tasks
+just fmt         # Format all Nix files
+just lint        # Lint Nix files
+just check       # Run all checks (format, lint, deadcode)
+just switch      # Apply darwin configuration
+just build       # Build without applying
+```
+
 ## Quick Start
 
 ```shell
@@ -49,16 +71,20 @@ sudo darwin-rebuild switch --flake ~/dotfiles/nix/darwin#<hostname>
 ## Project Structure
 
 ```
-nix/darwin/
-├── flake.nix              # Entry point
-├── configuration.nix      # Core system setup (imports modules)
-├── modules/
-│   ├── system-defaults.nix  # macOS preferences (dock, finder, trackpad)
-│   ├── homebrew.nix         # Homebrew casks and formulae
-│   └── security.nix         # Firewall, Touch ID settings
-├── hosts/                 # Machine-specific configs
-├── users/                 # User-specific configs (git email, etc.)
-└── home/                  # Program configs (git, fish, starship, etc.)
+dotfiles/
+├── flake.nix              # Development environment (linters, formatters)
+├── justfile               # Task runner commands
+├── .envrc                 # direnv integration
+└── nix/darwin/
+    ├── flake.nix              # Darwin system configuration entry point
+    ├── configuration.nix      # Core system setup (imports modules)
+    ├── modules/
+    │   ├── system-defaults.nix  # macOS preferences (dock, finder, trackpad)
+    │   ├── homebrew.nix         # Homebrew casks and formulae
+    │   └── security.nix         # Firewall, Touch ID settings
+    ├── hosts/                 # Machine-specific configs
+    ├── users/                 # User-specific configs (git email, etc.)
+    └── home/                  # Program configs (git, fish, starship, etc.)
 ```
 
 See the [Customization Guide](./docs/CUSTOMIZATION.md) for details on which file to edit for common tasks.

@@ -1,6 +1,5 @@
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/starship.nix
-{ pkgs }:
-{
+{pkgs}: {
   enable = true; # Whether to enable starship.
   package = pkgs.starship;
   enableBashIntegration = true;
@@ -17,7 +16,6 @@
       powershell_indicator = "_";
       unknown_indicator = "mystery shell";
     };
-
 
     aws = {
       symbol = "  ";
@@ -63,7 +61,7 @@
       style = "bold orange";
       symbol = "direnv ";
       format = "[$symbol$loaded/$allowed]($style) ";
-      detect_files = [ ".envrc" ];
+      detect_files = [".envrc"];
     };
     docker_context = {
       symbol = " ";
@@ -218,5 +216,4 @@
       symbol = " ";
     };
   };
-
 }

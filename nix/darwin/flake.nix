@@ -18,9 +18,6 @@
     nix-homebrew,
     ...
   }: let
-    # Supported systems for devShell
-    supportedSystems = ["aarch64-darwin" "x86_64-darwin"];
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     # Import host configurations
     personalHost = import ./hosts/personal.nix;
     workHost = import ./hosts/work.nix;
@@ -30,7 +27,7 @@
       nix-darwin.lib.darwinSystem {
         inherit (hostConfig) system;
         specialArgs = {
-          inherit self hostConfig;
+          inherit self nixpkgs hostConfig;
           inherit (hostConfig) userConfig;
         };
         modules = [
@@ -75,36 +72,5 @@
 
     # Expose the package set, including overlays, for convenience.
     darwinPackages = self.darwinConfigurations.${personalHost.hostname}.pkgs;
-
-    # Development shell for working on this configuration
-    devShells = forAllSystems (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      default = pkgs.mkShell {
-        name = "dotfiles-dev";
-        packages = with pkgs; [
-          # Nix tools
-          nixd # Nix language server
-          alejandra # Nix formatter
-          statix # Nix linter
-          deadnix # Find dead code in Nix
-          nil # Another Nix LSP
-
-          # Utilities
-          just # Task runner
-        ];
-
-        shellHook = ''
-          echo "dotfiles development shell"
-          echo ""
-          echo "Available commands:"
-          echo "  alejandra .      - Format all Nix files"
-          echo "  statix check .   - Lint Nix files"
-          echo "  deadnix .        - Find unused code"
-          echo "  darwin-rebuild switch --flake . - Apply configuration"
-          echo ""
-        '';
-      };
-    });
   };
 }

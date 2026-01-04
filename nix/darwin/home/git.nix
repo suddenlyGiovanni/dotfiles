@@ -1,6 +1,5 @@
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/git.nix
-{ pkgs }:
-{
+{pkgs}: {
   enable = true;
   lfs.enable = true;
   package = pkgs.git;
@@ -92,8 +91,8 @@
     };
 
     # Everything below was previously in `extraConfig`
-    gpg = { format = "ssh"; };
-    "gpg \"ssh\"" = { program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"; };
+    gpg = {format = "ssh";};
+    "gpg \"ssh\"" = {program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";};
     core = {
       # Treat spaces before tabs and all kinds of trailing whitespace as an error.
       whitespace = "space-before-tab, trailing-space, tabwidth=4";
@@ -117,7 +116,7 @@
       template = "~/.config/git/.gitmessage";
       gpgsign = true;
     };
-    credential = { helper = "osxkeychain"; };
+    credential = {helper = "osxkeychain";};
     diff = {
       algorithm = "patience";
       mnemonicPrefix = true;
@@ -148,5 +147,5 @@
     signByDefault = false; # Whether commits and tags should be signed by default.
   };
 
-  ignores = [ ".DS_Store" ];
+  ignores = [".DS_Store"];
 }
