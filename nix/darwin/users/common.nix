@@ -11,6 +11,7 @@
     ../home/eza.nix
     ../home/bat.nix
     ../home/zoxide.nix
+    ../home/fzf.nix
   ];
 
   home = {
@@ -77,8 +78,6 @@
     fish = import ../home/fish.nix {inherit pkgs;};
     nushell = import ../home/nushell.nix {inherit pkgs;};
     starship = import ../home/starship.nix {inherit pkgs;};
-
-    fzf = import ../home/fzf.nix {inherit pkgs;};
 
     gh = import ../home/gh.nix {inherit pkgs;};
     home-manager.enable = true;
