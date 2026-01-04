@@ -4,6 +4,7 @@
   self,
   pkgs,
   userConfig,
+  hostConfig,
   ...
 }: {
   ids.gids.nixbld = 350;
@@ -234,33 +235,33 @@
     brews = [
       "mas"
     ];
-    casks = [
-      "1password-cli" # Command-line interface for 1Password
-      "1password@beta" # Password manager
-      "chatgpt" # OpenAI's official ChatGPT desktop app
-      "chromium" # Free and open-source web browser
-      "discord" # Voice and text chat software
-      "font-jetbrains-mono-nerd-font"
-      "ghostty@tip" # Terminal emulator that uses platform-native UI and GPU acceleration
-      "gitbutler" # Git client for simultaneous branches on top of your existing workflow
-      "notion" # App to write, plan, collaborate, and get organised
-      "notion-calendar" # Calendar for professionals and teams
-      "obsidian" # Knowledge base that works on top of a local folder of plain text Markdown files
-      "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
-      "qlcolorcode" # Quick Look plug-in that renders source code with syntax highlighting
-      "qlimagesize" # Display image info and preview unsupported formats in QuickLook
-      "qlmarkdown" # Quick Look generator for Markdown files
-      "qlstephen" # Quick Look plugin for plaintext files without an extension
-      "qlvideo" # Thumbnails, static previews, cover art and metadata for video files
-      "quicklook-json" # Quick Look plugin for JSON files
-      "raycast" # Control your tools with a few keystrokes
-      "transmission" # Open-source BitTorrent client
-      "visual-studio-code" # Open-source code editor
-      "warp" # Rust-based terminal
-      "whatsapp" # Native desktop client for WhatsApp
-      "zed@preview" # Multiplayer code editor
-      "docker-desktop"
-    ];
+    # Shared casks installed on all machines
+    casks =
+      [
+        "1password-cli" # Command-line interface for 1Password
+        "1password@beta" # Password manager
+        "chatgpt" # OpenAI's official ChatGPT desktop app
+        "chromium" # Free and open-source web browser
+        "font-jetbrains-mono-nerd-font"
+        "ghostty@tip" # Terminal emulator that uses platform-native UI and GPU acceleration
+        "gitbutler" # Git client for simultaneous branches on top of your existing workflow
+        "notion" # App to write, plan, collaborate, and get organised
+        "notion-calendar" # Calendar for professionals and teams
+        "obsidian" # Knowledge base that works on top of a local folder of plain text Markdown files
+        "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
+        "qlcolorcode" # Quick Look plug-in that renders source code with syntax highlighting
+        "qlimagesize" # Display image info and preview unsupported formats in QuickLook
+        "qlmarkdown" # Quick Look generator for Markdown files
+        "qlstephen" # Quick Look plugin for plaintext files without an extension
+        "qlvideo" # Thumbnails, static previews, cover art and metadata for video files
+        "quicklook-json" # Quick Look plugin for JSON files
+        "raycast" # Control your tools with a few keystrokes
+        "visual-studio-code" # Open-source code editor
+        "warp" # Rust-based terminal
+        "zed@preview" # Multiplayer code editor
+        "docker-desktop"
+      ]
+      ++ (hostConfig.homebrew.casks or []); # Merge host-specific casks
     # Temporarily disable Mac App Store installations via Brew Bundle to avoid failures
     # when not signed into the App Store. Re-enable after signing in by restoring the set below.
     masApps = {};

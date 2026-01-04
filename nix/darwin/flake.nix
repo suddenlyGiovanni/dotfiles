@@ -30,7 +30,7 @@
       nix-darwin.lib.darwinSystem {
         inherit (hostConfig) system;
         specialArgs = {
-          inherit self;
+          inherit self hostConfig;
           inherit (hostConfig) userConfig;
         };
         modules = [

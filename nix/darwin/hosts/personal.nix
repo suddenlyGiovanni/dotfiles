@@ -21,5 +21,12 @@
   homebrew = {
     # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
     enableRosetta = false;
+
+    # Personal-only casks (not needed on work machine)
+    casks = [
+      "discord" # Voice and text chat software
+      "transmission" # Open-source BitTorrent client
+      "whatsapp" # Native desktop client for WhatsApp
+    ];
   };
 }

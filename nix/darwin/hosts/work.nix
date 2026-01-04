@@ -30,5 +30,13 @@
     # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
     # Set to true if you need to run Intel-only brew packages
     enableRosetta = false;
+
+    # Work-only casks (not needed on personal machine)
+    # TODO: Update with your actual work applications
+    casks = [
+      # "slack"           # Team communication
+      # "zoom"            # Video conferencing
+      # "microsoft-teams" # Microsoft Teams
+    ];
   };
 }
