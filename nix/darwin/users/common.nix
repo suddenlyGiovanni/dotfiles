@@ -10,6 +10,7 @@
     ../home/fd.nix
     ../home/eza.nix
     ../home/bat.nix
+    ../home/zoxide.nix
   ];
 
   home = {
@@ -77,7 +78,6 @@
     nushell = import ../home/nushell.nix {inherit pkgs;};
     starship = import ../home/starship.nix {inherit pkgs;};
 
-    zoxide = import ../home/zoxide.nix {inherit pkgs;};
     fzf = import ../home/fzf.nix {inherit pkgs;};
 
     gh = import ../home/gh.nix {inherit pkgs;};
