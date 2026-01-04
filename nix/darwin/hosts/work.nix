@@ -12,7 +12,7 @@
     username = "giovanni.ravalico"; # TODO: Update with your work username
     fullName = "Giovanni Ravalico";
     homeDirectory = "/Users/giovanni.ravalico"; # TODO: Update with your work home directory
-    dotfilesPath = "/Users/giovanni.ravalico/dotfiles"; # TODO: Update if dotfiles are cloned elsewhere
+    dotfilesPath = "/Users/giovanni.ravalico/Developer/dotfiles"; # TODO: Update if dotfiles are cloned elsewhere
   };
 
   # Path to user-specific home-manager module (relative to hosts directory)

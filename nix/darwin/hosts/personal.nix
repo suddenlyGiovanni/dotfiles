@@ -6,7 +6,7 @@
     username = "suddenlygiovanni";
     fullName = "Giovanni Ravalico";
     homeDirectory = "/Users/suddenlygiovanni";
-    dotfilesPath = "/Users/suddenlygiovanni/dotfiles";
+    dotfilesPath = "/Users/suddenlygiovanni/Developer/dotfiles";
   };
 
   # Path to user-specific home-manager module (relative to hosts directory)
