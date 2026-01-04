@@ -17,6 +17,7 @@
     ../home/fish.nix
     ../home/nushell.nix
     ../home/zsh.nix
+    ../home/git.nix
   ];
 
   home = {

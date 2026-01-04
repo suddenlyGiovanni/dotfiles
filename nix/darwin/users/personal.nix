@@ -5,20 +5,15 @@
     ./common.nix
   ];
 
-  # Personal git configuration
-  programs.git = let
-    baseGit = import ../home/git.nix {inherit pkgs;};
-  in
-    baseGit
-    // {
-      settings =
-        baseGit.settings
-        // {
-          user = {
-            name = "suddenlyGiovanni";
-            email = "15946771+suddenlyGiovanni@users.noreply.github.com";
-            signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
-          };
-        };
+  # Personal git configuration - override the base git config with user identity
+  programs.git = {
+    settings.user = {
+      name = "suddenlyGiovanni";
+      email = "15946771+suddenlyGiovanni@users.noreply.github.com";
+      signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
     };
+    signing = {
+      signByDefault = true;
+    };
+  };
 }
