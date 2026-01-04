@@ -16,19 +16,32 @@
     home-manager,
     nix-homebrew,
     ...
-  }: {
+  }: let
+    # Define user configuration for personal machine
+    personalUser = {
+      username = "suddenlygiovanni";
+      fullName = "Giovanni Ravalico";
+      homeDirectory = "/Users/suddenlygiovanni";
+    };
+  in {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Giovannis-MacBook-Air
     darwinConfigurations."Giovannis-MacBook-Air" = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
-      specialArgs = {inherit self;};
+      specialArgs = {
+        inherit self;
+        userConfig = personalUser;
+      };
       modules = [
         ./configuration.nix
         home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.suddenlygiovanni = import ./home.nix;
+          home-manager.extraSpecialArgs = {
+            userConfig = personalUser;
+          };
+          home-manager.users.${personalUser.username} = import ./home.nix;
         }
         nix-homebrew.darwinModules.nix-homebrew
         {
@@ -40,7 +53,7 @@
             enableRosetta = false;
 
             # User owning the Homebrew prefix
-            user = "suddenlygiovanni";
+            user = personalUser.username;
 
             # Automatically migrate existing Homebrew installations
             autoMigrate = true;

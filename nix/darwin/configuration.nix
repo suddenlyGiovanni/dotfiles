@@ -3,6 +3,7 @@
 {
   self,
   pkgs,
+  userConfig,
   ...
 }: {
   ids.gids.nixbld = 350;
@@ -39,10 +40,10 @@
   # Enable sudo authentication with Touch ID.
   security.pam.services.sudo_local.touchIdAuth = true;
 
-  users.users.suddenlygiovanni = {
-    name = "suddenlygiovanni"; # The name of the user account. If undefined, the name of the attribute set will be used.
-    description = "Giovanni Ravalico"; # A short description of the user account, typically the user's full name.
-    home = "/Users/suddenlygiovanni"; # The user's home directory. This defaults to `null`.
+  users.users.${userConfig.username} = {
+    name = userConfig.username; # The name of the user account. If undefined, the name of the attribute set will be used.
+    description = userConfig.fullName; # A short description of the user account, typically the user's full name.
+    home = userConfig.homeDirectory; # The user's home directory. This defaults to `null`.
     isHidden = false; # Whether to make the user account hidden.
     shell = null; # The user's shell. This defaults to `null`.
   };
@@ -71,7 +72,7 @@
 
   system = {
     # NEW: tell nix-darwin which account owns all "per-user" options
-    primaryUser = "suddenlygiovanni";
+    primaryUser = userConfig.username;
 
     # Set Git commit hash for darwin-version.
     configurationRevision = self.rev or self.dirtyRev or null;

@@ -4,12 +4,13 @@
 {
   config,
   pkgs,
+  userConfig,
   ...
 }: {
   home = {
     # Home Manager needs a bit of information about you and the paths it should manage.
-    username = "suddenlygiovanni"; # The user's username.
-    homeDirectory = "/Users/suddenlygiovanni"; # The user's home directory. Must be an absolute path.
+    username = userConfig.username; # The user's username.
+    homeDirectory = userConfig.homeDirectory; # The user's home directory. Must be an absolute path.
 
     /*
     Extra directories to add to PATH.
@@ -57,13 +58,13 @@
     # plain files is through 'home.file'.
     file = {
       ".config/nix/nix.conf" = {
-        source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/nix/nix.conf";
+        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/nix/nix.conf";
       };
       ".config/nix-darwin" = {
-        source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/nix/darwin";
+        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/nix/darwin";
       };
       ".config/fish/completions" = {
-        source = config.lib.file.mkOutOfStoreSymlink "/Users/suddenlygiovanni/dotfiles/fish/completions";
+        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.homeDirectory}/dotfiles/fish/completions";
       };
     };
 
