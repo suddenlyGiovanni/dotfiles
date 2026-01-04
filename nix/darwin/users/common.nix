@@ -16,6 +16,7 @@
     ../home/starship.nix
     ../home/fish.nix
     ../home/nushell.nix
+    ../home/zsh.nix
   ];
 
   home = {
@@ -78,7 +79,6 @@
       enableZshIntegration = true;
       nix-direnv.enable = true;
     };
-    zsh = import ../home/zsh.nix {inherit config pkgs;};
 
     home-manager.enable = true;
   };
