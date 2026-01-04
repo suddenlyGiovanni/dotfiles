@@ -12,6 +12,7 @@
     ../home/bat.nix
     ../home/zoxide.nix
     ../home/fzf.nix
+    ../home/gh.nix
   ];
 
   home = {
@@ -79,7 +80,6 @@
     nushell = import ../home/nushell.nix {inherit pkgs;};
     starship = import ../home/starship.nix {inherit pkgs;};
 
-    gh = import ../home/gh.nix {inherit pkgs;};
     home-manager.enable = true;
   };
 }
