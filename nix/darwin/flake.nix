@@ -19,6 +19,7 @@
   }: let
     # Import host configurations
     personalHost = import ./hosts/personal.nix;
+    workHost = import ./hosts/work.nix;
 
     # Helper function to create a darwin configuration
     mkDarwinConfig = hostConfig:
@@ -60,7 +61,11 @@
   in {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#Giovannis-MacBook-Air
-    darwinConfigurations.${personalHost.hostname} = mkDarwinConfig personalHost;
+    # $ darwin-rebuild build --flake .#Work-MacBook
+    darwinConfigurations = {
+      ${personalHost.hostname} = mkDarwinConfig personalHost;
+      ${workHost.hostname} = mkDarwinConfig workHost;
+    };
 
     # Expose the package set, including overlays, for convenience.
     darwinPackages = self.darwinConfigurations.${personalHost.hostname}.pkgs;
