@@ -34,16 +34,12 @@
       _1password-cli # 1Password command-line tool
       alejandra # Uncompromising Nix Code Formatter
       awscli2 # Unified tool to manage your AWS services
-      bat # A cat(1) clone with syntax highlighting and Git integration
       biome # Toolchain of the web
       cocoapods # Manages dependencies for your Xcode projects
       container # Creating and running Linux containers using lightweight virtual machines on a Mac
       dive # Tool for exploring each layer in a docker image
       docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
       docker-slim # Minify and secure Docker containers
-      eza # A modern, maintained replacement for ls
-      fd # A simple, fast and user-friendly alternative to find
-      fzf # Command-line fuzzy finder written in Go
       glow # Render markdown on the CLI, with pizzazz!
       httpie # A command line HTTP client whose goal is to make CLI human-friendly
       jq # A lightweight and flexible command-line JSON processor
@@ -51,14 +47,12 @@
       lazydocker # A simple terminal UI for both docker and docker-compose
       nixd # nix lsp deamon
       nodejs_24 # Node.js JavaScript runtime
-      nushell # A modern shell written in Rust
       pnpm # Fast, disk space efficient package manager
       rustup # Rust toolchain installer
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
-      starship # A minimal, blazing fast, and extremely customizable prompt for any shell
       uv # Extremely fast Python package installer and resolver, written in Rust
-      zoxide # A fast cd command that learns your habits
+      # Note: bat, eza, fd, fzf, starship, zoxide, nushell are installed via programs.* modules
     ];
 
     # Symlinked configuration files
