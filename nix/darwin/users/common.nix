@@ -9,6 +9,7 @@
   imports = [
     ../home/fd.nix
     ../home/eza.nix
+    ../home/bat.nix
   ];
 
   home = {
@@ -79,7 +80,6 @@
     zoxide = import ../home/zoxide.nix {inherit pkgs;};
     fzf = import ../home/fzf.nix {inherit pkgs;};
 
-    bat = import ../home/bat.nix {inherit pkgs;};
     gh = import ../home/gh.nix {inherit pkgs;};
     home-manager.enable = true;
   };
