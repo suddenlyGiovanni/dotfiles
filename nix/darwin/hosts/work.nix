@@ -3,7 +3,7 @@
 {
   # User configuration for this host
   userConfig = {
-    username = "suddenlygiovanni";  # Same username across all machines
+    username = "suddenlygiovanni"; # Same username across all machines
     fullName = "Giovanni Ravalico";
     homeDirectory = "/Users/suddenlygiovanni";
     dotfilesPath = "/Users/suddenlygiovanni/Developer/dotfiles";

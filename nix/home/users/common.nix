@@ -26,6 +26,7 @@
 
     # XDG and non-nix managed configs
     ../programs/xdg.nix
+    ../programs/session.nix
   ];
 
   home = {
