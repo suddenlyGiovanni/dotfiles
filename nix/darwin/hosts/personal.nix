@@ -1,5 +1,5 @@
 # Host-specific configuration for personal MacBook Air
-# Machine: Giovannis-MacBook-Air
+# Machine: suddenlyGiovannis-MacBook-Personal
 {
   # User configuration for this host
   userConfig = {
@@ -16,7 +16,7 @@
   system = "aarch64-darwin";
 
   # Hostname (used in darwinConfigurations)
-  hostname = "Giovannis-MacBook-Air";
+  hostname = "suddenlyGiovannis-MacBook-Personal";
 
   # Homebrew settings specific to this host
   homebrew = {
