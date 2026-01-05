@@ -7,7 +7,7 @@
 }: {
   programs.zsh = {
     enable = true; # Z shell (Zsh)
-    dotDir = ".config/zsh"; # Use XDG-compliant location for zsh config files (relative to $HOME)
+    dotDir = "${config.xdg.configHome}/zsh"; # Use XDG-compliant location for zsh config files
     package = pkgs.zsh;
     shellGlobalAliases = {
       "--help" = "--help 2>&1 | bat --language=help --style=plain --paging=never";
@@ -44,6 +44,7 @@
       path = "${config.xdg.dataHome}/zsh/history"; # History file location
     };
 
+    # Initialization content
     initContent = ''
       printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh"}}\x9c'
 
@@ -53,13 +54,11 @@
       fi
     '';
 
-    # XDG compliance: move completion dump to cache directory
-    initExtraBeforeCompInit = ''
-      # Ensure cache directory exists
-      mkdir -p "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
-    '';
-
+    # XDG compliance: ensure cache directory exists and use it for completion dump
     completionInit = ''
+      # Ensure cache directory exists before compinit
+      mkdir -p "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+
       # Use XDG-compliant location for completion dump
       autoload -U compinit
       compinit -d "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
