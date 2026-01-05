@@ -9,31 +9,11 @@
 }: let
   inherit (lib) mkDefault;
 in {
+  # Auto-discover all program modules from ../programs/
+  # To add a new program, simply create a new .nix file in programs/
+  # Files starting with _ are excluded (convention for drafts/helpers)
   imports = [
-    # Programs (alphabetical order)
-    ../programs/bat.nix
-    ../programs/eza.nix
-    ../programs/fd.nix
-    ../programs/fish.nix
-    ../programs/fzf.nix
-    ../programs/terminal/ghostty.nix
-    ../programs/gh.nix
-    ../programs/git.nix
-    ../programs/nushell.nix
-    ../programs/starship.nix
-    ../programs/zoxide.nix
-    ../programs/zsh.nix
-
-    # Development tools
-    ../programs/dev/bun.nix
-    ../programs/dev/direnv.nix
-    ../programs/dev/gh.nix
-    ../programs/dev/git.nix
-
-    # ── System Configuration ────────────────────────────────────────────────
-    ../programs/xdg.nix
-    ../programs/session.nix
-    ../programs/xdg.nix
+    ../programs # imports default.nix which auto-discovers all modules
   ];
 
   home = {

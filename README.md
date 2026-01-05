@@ -67,7 +67,8 @@ dotfiles/
 │   │       ├── personal.nix     # Personal MacBook Air
 │   │       └── work.nix         # Work laptop (template)
 │   └── home/                    # home-manager user environment
-│       ├── programs/            # Program configurations (flat structure)
+│       ├── programs/            # Program configurations (auto-discovered)
+│       │   ├── default.nix      # Auto-discovery module (imports all *.nix)
 │       │   ├── bat.nix          # bat - cat clone with syntax highlighting
 │       │   ├── eza.nix          # eza - modern ls replacement
 │       │   ├── fd.nix           # fd - fast file finder
@@ -125,9 +126,10 @@ just build       # Build configuration without applying
 ### Making Changes
 
 1. **Adding packages**: Edit `nix/home/users/common.nix` → `home.packages`
-2. **Configuring programs**: Add/edit modules in `nix/home/programs/`
-3. **System preferences**: Edit `nix/darwin/modules/system-defaults.nix`
-4. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
+2. **Adding a new program**: Create a new `.nix` file in `nix/home/programs/` — it's auto-discovered!
+3. **Drafting a module**: Prefix with `_` (e.g., `_tmux.nix`) to exclude from auto-discovery
+4. **System preferences**: Edit `nix/darwin/modules/system-defaults.nix`
+5. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
 5. **Per-machine settings**: Edit files in `nix/darwin/hosts/`
 
 See [CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) for detailed examples.
