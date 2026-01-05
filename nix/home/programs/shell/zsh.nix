@@ -39,7 +39,7 @@
 
     # Options related to commands history configuration.
     history = {
-      append = false; # If set, zsh sessions will append their history list to the history file, rather than replace it.
+      append = true; # If set, zsh sessions will append their history list to the history file, rather than replace it.
       size = 10000; # Number of history lines to keep.
       path = "${config.xdg.dataHome}/zsh/history"; # History file location
     };
