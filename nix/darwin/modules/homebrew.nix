@@ -25,7 +25,7 @@
       vst3_plugindir = "~/Library/Audio/Plug-Ins/VST3"; # Target location for VST3 Plugins.
       screen_saverdir = "~/Library/Screen Savers"; # Target location for Screen Savers.
       require_sha = true; # Whether to require cask(s) to have a checksum.
-      no_quarantine = true; # Whether to disable quarantining of downloads.
+      no_quarantine = false; # Keep macOS Gatekeeper quarantine enabled for security.
     };
 
     # Ensure the `mas` CLI is present for managing Mac App Store apps
