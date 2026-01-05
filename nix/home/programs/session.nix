@@ -6,7 +6,21 @@
 # 3. Reduce home directory pollution
 #
 # Reference: https://wiki.archlinux.org/title/XDG_Base_Directory
-{config, ...}: {
+{
+  config,
+  lib,
+  ...
+}: {
+  # Ensure XDG state subdirectories exist for tools that write history files
+  # home-manager creates the base directories but not nested subdirs
+  home.activation.createXdgStateDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    mkdir -p "${config.xdg.stateHome}/less"
+    mkdir -p "${config.xdg.stateHome}/node"
+    mkdir -p "${config.xdg.stateHome}/fly"
+    mkdir -p "${config.xdg.stateHome}/python"
+    mkdir -p "${config.xdg.stateHome}/sqlite"
+  '';
+
   home.sessionVariables = {
     # ===== Editors =====
     EDITOR = "nvim";
@@ -68,8 +82,7 @@
     # SQLite
     SQLITE_HISTORY = "${config.xdg.stateHome}/sqlite/history";
 
-    # Vim (if used as fallback)
-    VIMINIT = "set nocp | source ${config.xdg.configHome}/vim/vimrc";
+    # Note: VIMINIT removed - no vimrc exists and nvim is the primary editor
 
     # ===== Shell behavior =====
 
