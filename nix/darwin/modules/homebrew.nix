@@ -51,7 +51,6 @@
         "chromium" # Free and open-source web browser
 
         # Development
-        "font-jetbrains-mono-nerd-font"
         "ghostty@tip" # Terminal emulator that uses platform-native UI and GPU acceleration
         "gitbutler" # Git client for simultaneous branches on top of your existing workflow
         "visual-studio-code" # Open-source code editor

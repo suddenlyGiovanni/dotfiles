@@ -34,6 +34,7 @@
       less # A more advanced file pager than 'more'
       wget # Tool for retrieving files using HTTP, HTTPS, and FTP
       docker
+      nerd-fonts.jetbrains-mono
     ];
     pathsToLink = ["/share/zsh"]; # List of directories to be symlinked in /run/current-system/sw.
   };
