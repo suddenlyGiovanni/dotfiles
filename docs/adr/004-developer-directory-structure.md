@@ -13,7 +13,7 @@ Accepted
 The local development environment had a flat directory structure under `~/repos/` that contained all
 git repositories without any categorization:
 
-```
+```text
 ~/repos/
 ├── some-work-project/
 ├── my-personal-app/
@@ -40,7 +40,7 @@ Additionally, the `repos` name was generic and didn't convey the purpose of the 
 
 We migrated to a categorized directory structure under `~/Developer/`:
 
-```
+```text
 ~/Developer/
 ├── dotfiles/           # This repository (special case, top-level)
 ├── personal/           # Personal projects and side projects
@@ -130,7 +130,7 @@ separation.
 
 ### 2. Organize by technology/language
 
-```
+```text
 ~/Developer/
 ├── rust/
 ├── typescript/
@@ -156,7 +156,7 @@ source code only (not all repos are source), `code` is generic.
 
 ### 5. Organization by git remote host
 
-```
+```text
 ~/Developer/
 ├── github.com/
 │   ├── suddenlygiovanni/

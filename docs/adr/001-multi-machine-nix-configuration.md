@@ -97,7 +97,7 @@ dotfiles/
 - **Shared configuration changes** propagate to all machines automatically
 - **Machine-specific customization** is isolated and easy to find
 - **Different git identities** (personal vs work email) are cleanly separated
-- **Clear separation of concerns**: System vs user, shared vs specific
+- **Clear separation of concerns**: System vs user, shared-vs-specific
 - **Easy to locate configs**: Logical directory structure by category
 - **Non-Nix configs tracked**: Application configs in `config/` are version-controlled
 - **Safe refactoring** was possible with incremental commits that could be tested and rolled back

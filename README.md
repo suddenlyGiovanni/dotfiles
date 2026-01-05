@@ -47,7 +47,7 @@ just switch
 
 ## 📁 Project Structure
 
-```
+```text
 dotfiles/
 ├── flake.nix                    # Development environment (linters, formatters, LSP)
 ├── justfile                     # Task runner commands (fmt, lint, switch, etc.)
@@ -145,7 +145,7 @@ just switch
 
 | Hostname                | Machine                | Location                        |
 | ----------------------- | ---------------------- | ------------------------------- |
-| `Giovannis-MacBook-Air` | Personal MacBook Air   | `nix/darwin/hosts/personal.nix` |
+| `suddenlyGiovannis-MacBook-Personal` | Personal MacBook Air   | `nix/darwin/hosts/personal.nix` |
 | `Work-MacBook`          | Work laptop (template) | `nix/darwin/hosts/work.nix`     |
 
 ### Adding a New Machine
