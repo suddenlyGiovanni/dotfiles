@@ -13,6 +13,7 @@
     # Shell script code called during interactive fish shell initialisation.
     interactiveShellInit = ''
       if status is-interactive
+          # Warp terminal integration - safe to execute on non-Warp terminals
           printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "fish"}}\x9c'
       end
     '';
