@@ -1,58 +1,73 @@
+# zsh - The Z shell
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/zsh.nix
 {
   config,
+  lib,
   pkgs,
   userConfig,
   ...
-}: {
+}: let
+  inherit (lib) mkDefault;
+in {
   programs.zsh = {
-    enable = true; # Z shell (Zsh)
-    dotDir = "${config.xdg.configHome}/zsh"; # Use XDG-compliant location for zsh config files
-    package = pkgs.zsh;
+    enable = true;
+    package = mkDefault pkgs.zsh;
+
+    # Use XDG-compliant location for zsh config files
+    dotDir = "${config.xdg.configHome}/zsh";
+
+    # Enable zsh completion
+    enableCompletion = mkDefault true;
+
+    # ── Aliases ─────────────────────────────────────────────────────────────
+
+    # Global aliases (expanded anywhere in command line)
     shellGlobalAliases = {
       "--help" = "--help 2>&1 | bat --language=help --style=plain --paging=never";
     };
+
+    # Regular shell aliases
     shellAliases = {
+      # Use eza as ls replacement
       ls = "eza";
 
       # List contents of directory using long format
       ll = "ls --all --long --icons --header --classify --group --group-directories-first --sort=type --time-style=default --hyperlink --git --git-repos";
 
-      # List contents of directories in a tree-like format.
+      # List contents of directories in a tree-like format
       tree = "ls --all --long --tree --level=2 --header --classify --group --git --icons --group-directories-first --sort=type --color-scale";
 
+      # Navigation
       ".." = "cd ..";
 
+      # Use bat as cat replacement
       cat = "bat --paging=never";
-
       bathelp = "bat --plain --language=help";
 
+      # Darwin rebuild shortcut
       switch = "darwin-rebuild switch --flake ${userConfig.dotfilesPath}/nix/darwin";
     };
-    enableCompletion = true; # Enable zsh completion.
+
+    # ── Autosuggestion ──────────────────────────────────────────────────────
 
     autosuggestion = {
-      enable = true; # Enable zsh autosuggestions
-      highlight = null; # Custom styles for autosuggestion highlighting.
-      strategy = ["history"]; # an array that specifies how suggestions should be generated.
+      enable = mkDefault true;
+      highlight = mkDefault null;
+      strategy = ["history"];
     };
 
-    # Options related to commands history configuration.
+    # ── History ─────────────────────────────────────────────────────────────
+
     history = {
-      append = true; # If set, zsh sessions will append their history list to the history file, rather than replace it.
-      size = 10000; # Number of history lines to keep.
-      path = "${config.xdg.dataHome}/zsh/history"; # History file location
+      # Append to history file rather than replace it
+      append = true;
+      # Number of history lines to keep
+      size = 10000;
+      # XDG-compliant history file location
+      path = "${config.xdg.dataHome}/zsh/history";
     };
 
-    # Initialization content
-    initContent = ''
-      printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh"}}\x9c'
-
-      # Add any additional configurations here
-      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-      fi
-    '';
+    # ── Initialization ──────────────────────────────────────────────────────
 
     # XDG compliance: ensure cache directory exists and use it for completion dump
     completionInit = ''
@@ -70,14 +85,26 @@
       compinit -d "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
     '';
 
-    # Plugins to source in {file}`.zshrc`.
+    # Main initialization content
+    initContent = ''
+      # Warp terminal integration
+      printf '\eP$f{"hook": "SourcedRcFileForWarp", "value": { "shell": "zsh"}}\x9c'
+
+      # Source nix-daemon if available
+      if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+          . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+      fi
+    '';
+
+    # ── Plugins ─────────────────────────────────────────────────────────────
+
     plugins = [
-      #    {
-      #      # will source zsh-autosuggestions.plugin.zsh
-      #      name = "zsh-autosuggestions";
-      #      src = pkgs.zsh-autosuggestions;
-      #      file = "share/zsh-autosuggestions/zsh-autosuggestions.zsh";
-      #    }
+      # Example plugin configuration:
+      # {
+      #   name = "zsh-autosuggestions";
+      #   src = pkgs.zsh-autosuggestions;
+      #   file = "share/zsh-autosuggestions/zsh-autosuggestions.zsh";
+      # }
     ];
   };
 }

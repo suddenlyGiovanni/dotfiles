@@ -1,16 +1,26 @@
+# zoxide - A smarter cd command that learns your habits
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/zoxide.nix
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit (lib) mkDefault;
+in {
   programs.zoxide = {
     enable = true;
-    package = pkgs.zoxide; # Zoxide package to install.
-    # List of options to pass to zoxide init.
+    package = mkDefault pkgs.zoxide;
+
+    # Options to pass to zoxide init
     options = [
-      #    "--no-cmd" # Prevents zoxide from defining the z and zi commands.
-      "--cmd cd" # Replace the cd command.
+      "--cmd cd" # Replace the cd command with zoxide
     ];
-    enableBashIntegration = false; # Whether to enable Bash integration.
-    enableZshIntegration = true; # Whether to enable Zsh integration.
-    enableFishIntegration = true; # Whether to enable Fish integration.
-    enableNushellIntegration = true; # Whether to enable Nushell integration.
+
+    # Shell integrations
+    enableBashIntegration = mkDefault false;
+    enableZshIntegration = mkDefault true;
+    enableFishIntegration = mkDefault true;
+    enableNushellIntegration = mkDefault true;
   };
 }

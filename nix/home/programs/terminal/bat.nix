@@ -1,15 +1,31 @@
+# bat - A cat clone with syntax highlighting and Git integration
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/bat.nix
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit (lib) mkDefault;
+in {
   programs.bat = {
-    enable = true; # bat, a cat clone with wings
-    package = pkgs.bat;
+    enable = true;
+    package = mkDefault pkgs.bat;
+
     config = {
-      theme = "ansi";
-    }; # Bat configuration.
-    extraPackages = [
-      pkgs.bat-extras.batman
-    ]; # Additional bat packages to install.
-    themes = {}; # Additional themes to provide.
-    syntaxes = {}; # Additional syntaxes to provide.
+      # Use a theme that works well in both light and dark terminals
+      theme = mkDefault "ansi";
+    };
+
+    # Additional bat packages to install
+    extraPackages = with pkgs.bat-extras; [
+      batman # View man pages with bat
+    ];
+
+    # Additional themes to provide (empty by default)
+    themes = {};
+
+    # Additional syntaxes to provide (empty by default)
+    syntaxes = {};
   };
 }

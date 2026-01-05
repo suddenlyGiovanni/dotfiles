@@ -1,16 +1,15 @@
 # Session variables and XDG compliance
-#
-# This module sets environment variables to:
-# 1. Make more tools respect XDG base directory specification
-# 2. Set sensible defaults for common tools (EDITOR, PAGER, etc.)
-# 3. Reduce home directory pollution
+# This module sets environment variables to make tools respect XDG base directories
 #
 # Reference: https://wiki.archlinux.org/title/XDG_Base_Directory
 {
   config,
   lib,
+  pkgs,
   ...
-}: {
+}: let
+  inherit (lib) mkDefault;
+in {
   # Ensure XDG state subdirectories exist for tools that write history files
   # home-manager creates the base directories but not nested subdirs
   home.activation.createXdgStateDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -22,13 +21,14 @@
   '';
 
   home.sessionVariables = {
-    # ===== Editors =====
-    EDITOR = "nvim";
-    VISUAL = "zed --wait";
+    # ── Editors ─────────────────────────────────────────────────────────────
+    EDITOR = mkDefault "nvim";
+    VISUAL = mkDefault "zed --wait";
 
-    # ===== Pager =====
-    PAGER = "less";
-    MANPAGER = "less -R";
+    # ── Pager ───────────────────────────────────────────────────────────────
+    PAGER = mkDefault "less";
+    MANPAGER = mkDefault "less -R";
+
     # Move less history to XDG state
     LESSHISTFILE = "${config.xdg.stateHome}/less/history";
 

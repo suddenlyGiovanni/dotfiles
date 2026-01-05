@@ -1,5 +1,13 @@
+# fish - The friendly interactive shell
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/fish.nix
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit (lib) mkDefault;
+in {
   programs.fish = {
     enable = true; # fish, the friendly interactive shell
     package = pkgs.fish; # The fish package to install. May be used to change the version.
@@ -14,7 +22,13 @@
     '';
     loginShellInit = ""; # Shell script code called during fish login shell initialisation.
 
-    # Shell script code called during interactive fish shell initialisation.
+    # Shell script code called during fish shell initialisation
+    shellInit = "";
+
+    # Shell script code called during fish login shell initialisation
+    loginShellInit = "";
+
+    # Shell script code called during interactive fish shell initialisation
     interactiveShellInit = ''
       if status is-interactive
           # Warp terminal integration - safe to execute on non-Warp terminals

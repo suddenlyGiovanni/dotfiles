@@ -2,12 +2,15 @@
 # This module contains packages and programs used across all machines
 {
   config,
+  lib,
   pkgs,
   userConfig,
   ...
-}: {
+}: let
+  inherit (lib) mkDefault;
+in {
   imports = [
-    # Terminal enhancements
+    # ── CLI Tools ───────────────────────────────────────────────────────────
     ../programs/terminal/bat.nix
     ../programs/terminal/eza.nix
     ../programs/terminal/fd.nix
@@ -16,7 +19,7 @@
     ../programs/terminal/starship.nix
     ../programs/terminal/zoxide.nix
 
-    # Shell configurations
+    # ── Shell Configurations ────────────────────────────────────────────────
     ../programs/shell/fish.nix
     ../programs/shell/nushell.nix
     ../programs/shell/zsh.nix
@@ -27,23 +30,24 @@
     ../programs/dev/gh.nix
     ../programs/dev/git.nix
 
-    # XDG and non-nix managed configs
+    # ── System Configuration ────────────────────────────────────────────────
     ../programs/xdg.nix
     ../programs/session.nix
   ];
 
   home = {
-    # Home Manager needs a bit of information about you and the paths it should manage.
+    # Home Manager needs a bit of information about you and the paths it should manage
     inherit (userConfig) username homeDirectory;
 
-    # Extra directories to add to PATH.
+    # Extra directories to add to PATH
     sessionPath = [
       "/usr/local/bin"
     ];
 
-    # Packages that should be installed to the user profile.
+    # ── Packages ────────────────────────────────────────────────────────────
+    # Note: bat, eza, fd, fzf, starship, zoxide, nushell are installed via programs.* modules
     packages = with pkgs; [
-      # Note: bat, eza, fd, fzf, starship, zoxide, nushell are installed via programs.* modules
+
       _1password-cli # 1Password command-line tool
       alejandra # Uncompromising Nix Code Formatter
       awscli2 # Unified tool to manage your AWS services
@@ -66,9 +70,30 @@
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
       uv # Extremely fast Python package installer and resolver, written in Rust
+      _1password-cli
+      alejandra
+      nixd
+      awscli2
+      container
+      dive
+      docker-buildx
+      docker-slim
+      lazydocker
+      nodejs_24
+      pnpm
+      biome
+      uv
+      rustup
+      cocoapods
+      glow
+      httpie
+      jq
+      just
+      shellcheck
+      shfmt
     ];
 
-    # Symlinked configuration files
+    # ── Symlinked Configuration Files ───────────────────────────────────────
     file = {
       ".config/nix/nix.conf" = {
         source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/nix/nix.conf";
@@ -78,10 +103,20 @@
       };
     };
 
-    stateVersion = "24.05";
+    stateVersion = mkDefault "24.05";
   };
 
+  # ── Programs ──────────────────────────────────────────────────────────────
+
   programs = {
+    # Enable home-manager itself
     home-manager.enable = true;
+
+    # direnv - Automatic environment switching
+    direnv = {
+      enable = true;
+      enableZshIntegration = mkDefault true;
+      nix-direnv.enable = mkDefault true;
+    };
   };
 }

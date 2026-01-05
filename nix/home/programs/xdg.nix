@@ -1,26 +1,29 @@
 # XDG Base Directory configuration and non-nix managed config symlinks
-#
-# This module:
-# 1. Explicitly sets XDG base directories
-# 2. Symlinks config files from the dotfiles repo's config/ directory
+# This module explicitly sets XDG directories and symlinks configs from dotfiles repo
 #
 # Reference: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
 {
   config,
+  lib,
+  pkgs,
   userConfig,
   ...
-}: {
+}: let
+  inherit (lib) mkDefault;
+in {
   xdg = {
     enable = true;
 
+    # ── XDG Base Directories ────────────────────────────────────────────────
     # Explicitly set XDG directories (these are the defaults, but being explicit is good)
-    cacheHome = "${config.home.homeDirectory}/.cache";
-    configHome = "${config.home.homeDirectory}/.config";
-    dataHome = "${config.home.homeDirectory}/.local/share";
-    stateHome = "${config.home.homeDirectory}/.local/state";
+    cacheHome = mkDefault "${config.home.homeDirectory}/.cache";
+    configHome = mkDefault "${config.home.homeDirectory}/.config";
+    dataHome = mkDefault "${config.home.homeDirectory}/.local/share";
+    stateHome = mkDefault "${config.home.homeDirectory}/.local/state";
 
     # Note: xdg.userDirs is Linux-only, macOS has its own ~/Desktop, ~/Documents, etc.
 
+    # ── Config File Symlinks ────────────────────────────────────────────────
     # Symlink non-nix managed configs from dotfiles/config/
     configFile = {
       # Zed editor configuration
@@ -39,7 +42,8 @@
         source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/config/git/.gitmessage";
       };
 
-      # Readline config for consistent line editing
+      # ── Readline Configuration ────────────────────────────────────────────
+      # Consistent line editing across tools that use readline
       "readline/inputrc".text = ''
         # Be 8 bit clean
         set input-meta on

@@ -1,14 +1,30 @@
+# eza - A modern replacement for ls
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/eza.nix
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit (lib) mkDefault;
+in {
   programs.eza = {
-    enable = true; # eza, a modern replacement for {command}`ls`
-    enableBashIntegration = true; # Bash integration
-    enableZshIntegration = true; # Zsh integration
-    enableFishIntegration = true; # Fish integration
-    enableNushellIntegration = false; # Nushell integration
-    extraOptions = []; # Extra command line options passed to eza.
-    icons = null; # Display icons next to file names ({option}`--icons` argument).
-    git = true; # List each file's Git status if tracked or ignored ({option}`--git` argument).
-    package = pkgs.eza;
+    enable = true;
+    package = mkDefault pkgs.eza;
+
+    # Shell integrations
+    enableBashIntegration = mkDefault true;
+    enableZshIntegration = mkDefault true;
+    enableFishIntegration = mkDefault true;
+    enableNushellIntegration = mkDefault false;
+
+    # Extra command line options passed to eza
+    extraOptions = [];
+
+    # Display icons next to file names (--icons argument)
+    icons = mkDefault "auto";
+
+    # List each file's Git status if tracked or ignored (--git argument)
+    git = mkDefault true;
   };
 }

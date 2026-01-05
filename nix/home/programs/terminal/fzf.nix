@@ -1,24 +1,41 @@
+# fzf - A command-line fuzzy finder
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/fzf.nix
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  inherit (lib) mkDefault;
+in {
   programs.fzf = {
-    enable = true; # fzf - a command-line fuzzy finder
-    package = pkgs.fzf; # Package providing the {command}`fzf` tool.
-    defaultCommand = null; # The command that gets executed as the default source for fzf when running.
-    defaultOptions = []; # Extra command line options given to fzf by default.
-    fileWidgetCommand = null; # The command that gets executed as the source for fzf for the CTRL-T keybinding.
-    fileWidgetOptions = []; # Command line options for the CTRL-T keybinding.
-    changeDirWidgetCommand = null; # The command that gets executed as the source for fzf for the ALT-C keybinding.
-    changeDirWidgetOptions = []; # Command line options for the ALT-C keybinding.
-    historyWidgetOptions = []; # Command line options for the CTRL-R keybinding.
-    colors = {
-      /*
-      Color scheme options added to `FZF_DEFAULT_OPTS`.
-      See <https://github.com/junegunn/fzf/wiki/Color-schemes> for documentation.
-      */
-    };
+    enable = true;
+    package = mkDefault pkgs.fzf;
 
-    enableBashIntegration = false; # Whether to enable Bash integration.
-    enableZshIntegration = true; # Whether to enable Zsh integration.
-    enableFishIntegration = true; # Whether to enable Fish integration.
+    # The command that gets executed as the default source for fzf
+    defaultCommand = mkDefault null;
+
+    # Extra command line options given to fzf by default
+    defaultOptions = [];
+
+    # CTRL-T: File widget configuration
+    fileWidgetCommand = mkDefault null;
+    fileWidgetOptions = [];
+
+    # ALT-C: Change directory widget configuration
+    changeDirWidgetCommand = mkDefault null;
+    changeDirWidgetOptions = [];
+
+    # CTRL-R: History widget configuration
+    historyWidgetOptions = [];
+
+    # Color scheme options added to FZF_DEFAULT_OPTS
+    # See: https://github.com/junegunn/fzf/wiki/Color-schemes
+    colors = {};
+
+    # Shell integrations
+    enableBashIntegration = mkDefault false;
+    enableZshIntegration = mkDefault true;
+    enableFishIntegration = mkDefault true;
   };
 }
