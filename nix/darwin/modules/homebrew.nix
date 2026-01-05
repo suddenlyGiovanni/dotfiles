@@ -28,11 +28,6 @@
       no_quarantine = false; # Keep macOS Gatekeeper quarantine enabled for security.
     };
 
-    # Ensure the `mas` CLI is present for managing Mac App Store apps
-    brews = [
-      "mas"
-    ];
-
     # Shared casks installed on all machines
     casks =
       [
@@ -43,7 +38,6 @@
         # Productivity
         "chatgpt" # OpenAI's official ChatGPT desktop app
         "notion-calendar" # Calendar for professionals and teams
-        "obsidian" # Knowledge base that works on top of a local folder of plain text Markdown files
 
         # Browsers
         "ungoogled-chromium" # Google Chromium, sans integration with Google
@@ -63,7 +57,13 @@
 
     # Temporarily disable Mac App Store installations via Brew Bundle to avoid failures
     # when not signed into the App Store. Re-enable after signing in by restoring the set below.
-    masApps = {};
+    masApps = {
+      "1Password for Safari" = 1569813296;
+      "Microsoft Outlook" = 985367838;
+      "WhatsApp Messenger" = 310633997;
+      "Wipr 2" = 1662217862;
+      Xcode = 497799835;
+    };
 
     onActivation = {
       autoUpdate = false; # Whether to enable Homebrew to auto-update itself and all formulae during nix-darwin system activation. The default is false so that repeated invocations of darwin-rebuild switch are idempotent.
@@ -74,7 +74,7 @@
       - When set to "zap", nix-darwin invokes brew bundle [install] with the --cleanup --zap flags. This uninstalls all formulae not listed in the generated Brewfile, and if the formula is a cask, removes all files associated with that cask. In other words, brew uninstall --zap is run for all those formulae.
       */
       cleanup = "zap";
-      extraFlags = []; # Extra flags to pass to brew bundle [install] during nix-darwin system activation.
+      extraFlags = ["--verbose"]; # Extra flags to pass to brew bundle [install] during nix-darwin system activation.
       upgrade = false; # Whether to enable Homebrew to upgrade outdated formulae and Mac App Store apps during nix-darwin system activation. The default is false so that repeated invocations of darwin-rebuild switch are idempotent.
     };
 
