@@ -124,7 +124,7 @@
       commit = {
         status = "true";
         template = "${config.xdg.configHome}/git/.gitmessage";
-        gpgsign = true;
+        gpgsign = lib.mkDefault true;
       };
       credential = {helper = "osxkeychain";};
       diff = {
@@ -154,7 +154,7 @@
     # Options related to signing commits using GnuPG.
     signing = {
       key = lib.mkDefault null; # The default GPG signing key fingerprint. Set to `null` to let GnuPG decide what signing key to use depending on commit's author.
-      signByDefault = lib.mkDefault false; # Whether commits and tags should be signed by default.
+      signByDefault = lib.mkDefault true; # Whether commits and tags should be signed by default.
     };
 
     ignores = [".DS_Store"];
