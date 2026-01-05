@@ -67,11 +67,20 @@ dotfiles/
 │   │       ├── personal.nix     # Personal MacBook Air
 │   │       └── work.nix         # Work laptop (template)
 │   └── home/                    # home-manager user environment
-│       ├── programs/            # Program configurations
-│       │   ├── shell/           # zsh, fish, nushell
-│       │   ├── terminal/        # starship, bat, eza, fd, fzf, zoxide
-│       │   ├── dev/             # git, gh (GitHub CLI)
-│       │   └── xdg.nix          # XDG base directories & config symlinks
+│       ├── programs/            # Program configurations (flat structure)
+│       │   ├── bat.nix          # bat - cat clone with syntax highlighting
+│       │   ├── eza.nix          # eza - modern ls replacement
+│       │   ├── fd.nix           # fd - fast file finder
+│       │   ├── fish.nix         # fish shell
+│       │   ├── fzf.nix          # fzf - fuzzy finder
+│       │   ├── gh.nix           # GitHub CLI
+│       │   ├── git.nix          # git configuration
+│       │   ├── nushell.nix      # nushell
+│       │   ├── session.nix      # Session variables, XDG compliance
+│       │   ├── starship.nix     # starship prompt
+│       │   ├── xdg.nix          # XDG base directories & config symlinks
+│       │   ├── zoxide.nix       # zoxide - smarter cd
+│       │   └── zsh.nix          # zsh shell
 │       └── users/               # User-specific configs
 │           ├── common.nix       # Shared packages and programs
 │           ├── personal.nix     # Personal git identity

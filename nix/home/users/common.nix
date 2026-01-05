@@ -10,19 +10,19 @@
   inherit (lib) mkDefault;
 in {
   imports = [
-    # ── CLI Tools ───────────────────────────────────────────────────────────
-    ../programs/terminal/bat.nix
-    ../programs/terminal/eza.nix
-    ../programs/terminal/fd.nix
-    ../programs/terminal/fzf.nix
+    # Programs (alphabetical order)
+    ../programs/bat.nix
+    ../programs/eza.nix
+    ../programs/fd.nix
+    ../programs/fish.nix
+    ../programs/fzf.nix
     ../programs/terminal/ghostty.nix
-    ../programs/terminal/starship.nix
-    ../programs/terminal/zoxide.nix
-
-    # ── Shell Configurations ────────────────────────────────────────────────
-    ../programs/shell/fish.nix
-    ../programs/shell/nushell.nix
-    ../programs/shell/zsh.nix
+    ../programs/gh.nix
+    ../programs/git.nix
+    ../programs/nushell.nix
+    ../programs/starship.nix
+    ../programs/zoxide.nix
+    ../programs/zsh.nix
 
     # Development tools
     ../programs/dev/bun.nix
@@ -33,6 +33,7 @@ in {
     # ── System Configuration ────────────────────────────────────────────────
     ../programs/xdg.nix
     ../programs/session.nix
+    ../programs/xdg.nix
   ];
 
   home = {
