@@ -16,7 +16,8 @@
   # System architecture (Apple Silicon)
   system = "aarch64-darwin";
 
-  # Hostname (used in darwinConfigurations)
+  # Hostname (used in darwinConfigurations). This must match your Mac's LocalHostName.
+  # To get the correct value for your machine, run: scutil --get LocalHostName
   hostname = "suddenlyGiovannis-MacBook-Work";
 
   # Homebrew settings specific to this host
