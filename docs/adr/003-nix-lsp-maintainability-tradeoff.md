@@ -62,7 +62,7 @@ We chose to **prioritize maintainability over LSP completeness**.
 
 The modular file structure is retained despite the LSP limitations:
 
-```
+```text
 nix/
 ├── darwin/
 │   ├── flake.nix              # Entry point
