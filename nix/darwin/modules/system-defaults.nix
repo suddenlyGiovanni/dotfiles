@@ -7,7 +7,7 @@ _: {
       OpenMainWindow = true; # Open the main window when opening Activity Monitor. Default is true.
       ShowCategory = 101; # Change which processes to show.
       SortColumn = "CPUUsage"; # Which column to sort the main activity page
-      SortDirection = 0; # The sort direction of the sort column (0 is decending).
+      SortDirection = 0; # The sort direction of the sort column (0 is descending).
     };
 
     NSGlobalDomain = {
@@ -81,7 +81,7 @@ _: {
       persistent-apps = ["/Applications/Safari.app"]; # Persistent applications in the dock.
       persistent-others = null; # Persistent folders in the dock.
       show-process-indicators = true; # Show indicator lights for open applications in the Dock. The default is true.
-      showhidden = true; # Whether to make icons of hidden applications tranclucent.  The default is false.
+      showhidden = true; # Whether to make icons of hidden applications translucent.  The default is false.
       show-recents = true; # Show recent applications in the dock. The default is true.
       static-only = false; # Show only open applications in the Dock. The default is false.
       tilesize = 48; # Size of the icons in the dock.  The default is 64.

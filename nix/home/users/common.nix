@@ -54,7 +54,7 @@
       jq # A lightweight and flexible command-line JSON processor
       just # A handy way to save and run project-specific commands
       lazydocker # A simple terminal UI for both docker and docker-compose
-      nixd # nix lsp deamon
+      nixd # nix lsp daemon
       nodejs_24 # Node.js JavaScript runtime
       pnpm # Fast, disk space efficient package manager
       rustup # Rust toolchain installer

@@ -7,7 +7,7 @@
     defaultOptions = []; # Extra command line options given to fzf by default.
     fileWidgetCommand = null; # The command that gets executed as the source for fzf for the CTRL-T keybinding.
     fileWidgetOptions = []; # Command line options for the CTRL-T keybinding.
-    changeDirWidgetCommand = null; # he command that gets executed as the source for fzf for the ALT-C keybinding.
+    changeDirWidgetCommand = null; # The command that gets executed as the source for fzf for the ALT-C keybinding.
     changeDirWidgetOptions = []; # Command line options for the ALT-C keybinding.
     historyWidgetOptions = []; # Command line options for the CTRL-R keybinding.
     colors = {
