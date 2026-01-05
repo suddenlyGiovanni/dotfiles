@@ -1,5 +1,6 @@
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/git.nix
 {
+  config,
   pkgs,
   lib,
   ...
@@ -122,7 +123,7 @@
       };
       commit = {
         status = "true";
-        template = "~/.config/git/.gitmessage";
+        template = "${config.xdg.configHome}/git/.gitmessage";
         gpgsign = true;
       };
       credential = {helper = "osxkeychain";};
