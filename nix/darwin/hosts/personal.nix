@@ -28,7 +28,6 @@
     casks = [
       "discord" # Voice and text chat software
       "transmission" # Open-source BitTorrent client
-      "whatsapp" # Native desktop client for WhatsApp
     ];
   };
 }
