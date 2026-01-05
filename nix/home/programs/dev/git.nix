@@ -96,7 +96,12 @@
       };
 
       gpg = {format = "ssh";};
-      "gpg \"ssh\"" = {program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";};
+      # 1Password SSH signing path - override in user/host config if using different location
+      # Common paths:
+      #   macOS App Store: /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+      #   Homebrew: /opt/homebrew/bin/op-ssh-sign
+      #   Linux: /opt/1Password/op-ssh-sign
+      "gpg \"ssh\"".program = lib.mkDefault "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       core = {
         # Treat spaces before tabs and all kinds of trailing whitespace as an error.
         whitespace = "space-before-tab, trailing-space, tabwidth=4";
