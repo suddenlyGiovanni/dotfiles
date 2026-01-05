@@ -82,4 +82,4 @@ diff:
 
 # Open nix repl with darwin flake loaded
 repl:
-    nix repl --expr 'builtins.getFlake (toString {{ darwin_flake }})'
+    nix repl --expr 'builtins.getFlake "path:{{ darwin_flake }}"'
