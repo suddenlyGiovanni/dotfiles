@@ -72,19 +72,19 @@ dotfiles/
 
 ### Which file do I edit?
 
-| I want to... | Edit this file |
-|-------------|----------------|
-| Add a CLI tool (nix package) | `nix/home/users/common.nix` → `home.packages` |
-| Add a GUI app (Homebrew cask) for all machines | `nix/darwin/modules/homebrew.nix` → `casks` |
-| Add a GUI app for personal machine only | `nix/darwin/hosts/personal.nix` → `homebrew.casks` |
-| Add a GUI app for work machine only | `nix/darwin/hosts/work.nix` → `homebrew.casks` |
-| Change macOS Dock/Finder settings | `nix/darwin/modules/system-defaults.nix` |
-| Change firewall/Touch ID settings | `nix/darwin/modules/security.nix` |
-| Configure a program (git, fish, etc.) | `nix/home/programs/{dev,shell,terminal}/` |
-| Change git email for personal only | `nix/home/users/personal.nix` → `programs.git.settings.user` |
-| Change git email for work only | `nix/home/users/work.nix` → `programs.git.settings.user` |
-| Add a new machine | Create `nix/darwin/hosts/new-machine.nix` + update `flake.nix` |
-| Add config files (non-Nix) | Add to `config/` + symlink in `nix/home/programs/xdg.nix` |
+| I want to...                                   | Edit this file                                                 |
+| ---------------------------------------------- | -------------------------------------------------------------- |
+| Add a CLI tool (nix package)                   | `nix/home/users/common.nix` → `home.packages`                  |
+| Add a GUI app (Homebrew cask) for all machines | `nix/darwin/modules/homebrew.nix` → `casks`                    |
+| Add a GUI app for personal machine only        | `nix/darwin/hosts/personal.nix` → `homebrew.casks`             |
+| Add a GUI app for work machine only            | `nix/darwin/hosts/work.nix` → `homebrew.casks`                 |
+| Change macOS Dock/Finder settings              | `nix/darwin/modules/system-defaults.nix`                       |
+| Change firewall/Touch ID settings              | `nix/darwin/modules/security.nix`                              |
+| Configure a program (git, fish, etc.)          | `nix/home/programs/{dev,shell,terminal}/`                      |
+| Change git email for personal only             | `nix/home/users/personal.nix` → `programs.git.settings.user`   |
+| Change git email for work only                 | `nix/home/users/work.nix` → `programs.git.settings.user`       |
+| Add a new machine                              | Create `nix/darwin/hosts/new-machine.nix` + update `flake.nix` |
+| Add config files (non-Nix)                     | Add to `config/` + symlink in `nix/home/programs/xdg.nix`      |
 
 ## Common Tasks
 
@@ -109,6 +109,7 @@ Packages installed via Nix go in `nix/home/users/common.nix`:
 ```
 
 **Finding package names:**
+
 ```shell
 # Search for packages
 nix search nixpkgs <package-name>
@@ -158,6 +159,7 @@ GUI applications are installed via Homebrew casks.
 ```
 
 **Finding cask names:**
+
 ```shell
 brew search <app-name>
 ```
@@ -198,7 +200,9 @@ _: {
 }
 ```
 
-**Reference:** See [nix-darwin options](https://daiderd.com/nix-darwin/manual/index.html#sec-options) for all available settings.
+**Reference:** See
+[nix-darwin options](https://daiderd.com/nix-darwin/manual/index.html#sec-options) for all available
+settings.
 
 ### Adding a New Program Configuration
 
@@ -439,6 +443,7 @@ git add <new-file>
 ### "error: attribute 'xyz' missing"
 
 Usually means a typo in an attribute name or missing import. Check:
+
 - Spelling of attribute names
 - All required arguments are passed to functions
 - Imports point to correct paths (relative to the importing file)

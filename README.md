@@ -1,6 +1,7 @@
 # Dotfiles
 
-Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager).
+Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/nix-darwin) and
+[home-manager](https://github.com/nix-community/home-manager).
 
 Supports multiple machines with shared and host-specific settings.
 
@@ -94,6 +95,7 @@ direnv allow
 ```
 
 This automatically provides:
+
 - `alejandra` - Nix code formatter
 - `statix` - Nix linter
 - `deadnix` - Dead code finder
@@ -141,10 +143,10 @@ just switch
 
 ### Available Configurations
 
-| Hostname | Machine | Location |
-|----------|---------|----------|
-| `Giovannis-MacBook-Air` | Personal MacBook Air | `nix/darwin/hosts/personal.nix` |
-| `Work-MacBook` | Work laptop (template) | `nix/darwin/hosts/work.nix` |
+| Hostname                | Machine                | Location                        |
+| ----------------------- | ---------------------- | ------------------------------- |
+| `Giovannis-MacBook-Air` | Personal MacBook Air   | `nix/darwin/hosts/personal.nix` |
+| `Work-MacBook`          | Work laptop (template) | `nix/darwin/hosts/work.nix`     |
 
 ### Adding a New Machine
 
@@ -236,6 +238,7 @@ This is a personal dotfiles repo, but if you find bugs or have suggestions:
 ## 🙏 Acknowledgments
 
 Built with:
+
 - [nix-darwin](https://github.com/LnL7/nix-darwin) by @LnL7
 - [home-manager](https://github.com/nix-community/home-manager) by @nix-community
 - [nix-homebrew](https://github.com/zhaofengli/nix-homebrew) by @zhaofengli
