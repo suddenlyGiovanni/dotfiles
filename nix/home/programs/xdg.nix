@@ -37,10 +37,7 @@ in {
         source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/config/zed/tasks.json";
       };
 
-      # Git commit message template
-      "git/.gitmessage" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/config/git/.gitmessage";
-      };
+      # Note: git/.gitmessage is now managed by programs/git/default.nix
 
       # ── Readline Configuration ────────────────────────────────────────────
       # Consistent line editing across tools that use readline

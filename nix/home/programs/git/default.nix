@@ -1,4 +1,6 @@
 # git - Distributed version control system
+# This module co-locates git program configuration with its config files
+#
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/git.nix
 {
   config,
@@ -7,7 +9,19 @@
   ...
 }: let
   inherit (lib) mkDefault;
+
+  # Directory containing this module and its config files
+  gitConfigDir = ./.;
 in {
+  # ── Config Files ────────────────────────────────────────────────────────
+  # Co-located config files are symlinked to their expected locations
+  xdg.configFile = {
+    "git/.gitmessage" = {
+      source = "${gitConfigDir}/.gitmessage";
+    };
+  };
+
+  # ── Git Program Configuration ───────────────────────────────────────────
   programs.git = {
     enable = true;
     package = mkDefault pkgs.git;
