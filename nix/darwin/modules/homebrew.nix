@@ -37,7 +37,6 @@
 
         # Productivity
         "chatgpt" # OpenAI's official ChatGPT desktop app
-        "notion-calendar" # Calendar for professionals and teams
 
         # Browsers
         "ungoogled-chromium" # Google Chromium, sans integration with Google
@@ -49,14 +48,18 @@
         "warp" # Rust-based terminal
         "zed@preview" # Multiplayer code editor
         "docker-desktop"
+        "microsoft-teams"
 
         # Utilities
         "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
       ]
       ++ (hostConfig.homebrew.casks or []); # Merge host-specific casks
-
-    # Temporarily disable Mac App Store installations via Brew Bundle to avoid failures
-    # when not signed into the App Store. Re-enable after signing in by restoring the set below.
+    /*
+    Mac App Store apps managed via Brew Bundle
+    Note: You must be signed into the App Store for these installations to succeed.
+    To disable: set masApps = {}; or comment out individual apps if not signed in.
+    Find app IDs with: mas search "App Name"
+    */
     masApps = {
       "1Password for Safari" = 1569813296;
       "Microsoft Outlook" = 985367838;
