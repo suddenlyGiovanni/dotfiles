@@ -37,7 +37,7 @@
     casks =
       [
         # Password management
-        "1password-cli" # Command-line interface for 1Password
+        # Note: 1password-cli is installed via Nix packages (see common.nix)
         "1password@beta" # Password manager
 
         # Productivity
