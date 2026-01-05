@@ -68,20 +68,11 @@ dotfiles/
 │   │       └── work.nix         # Work laptop (template)
 │   └── home/                    # home-manager user environment
 │       ├── programs/            # Program configurations (auto-discovered)
-│       │   ├── default.nix      # Auto-discovery module (imports all *.nix)
-│       │   ├── bat.nix          # bat - cat clone with syntax highlighting
-│       │   ├── eza.nix          # eza - modern ls replacement
-│       │   ├── fd.nix           # fd - fast file finder
-│       │   ├── fish.nix         # fish shell
-│       │   ├── fzf.nix          # fzf - fuzzy finder
-│       │   ├── gh.nix           # GitHub CLI
-│       │   ├── git.nix          # git configuration
-│       │   ├── nushell.nix      # nushell
-│       │   ├── session.nix      # Session variables, XDG compliance
-│       │   ├── starship.nix     # starship prompt
-│       │   ├── xdg.nix          # XDG base directories & config symlinks
-│       │   ├── zoxide.nix       # zoxide - smarter cd
-│       │   └── zsh.nix          # zsh shell
+│       │   ├── default.nix      # Auto-discovery module
+│       │   ├── bat.nix          # Simple module: single file
+│       │   ├── git/             # Complex module: directory with default.nix
+│       │   │   └── default.nix
+│       │   ├── ...              # Other program modules (auto-discovered)
 │       └── users/               # User-specific configs
 │           ├── common.nix       # Shared packages and programs
 │           ├── personal.nix     # Personal git identity
@@ -126,11 +117,12 @@ just build       # Build configuration without applying
 ### Making Changes
 
 1. **Adding packages**: Edit `nix/home/users/common.nix` → `home.packages`
-2. **Adding a new program**: Create a new `.nix` file in `nix/home/programs/` — it's auto-discovered!
-3. **Drafting a module**: Prefix with `_` (e.g., `_tmux.nix`) to exclude from auto-discovery
-4. **System preferences**: Edit `nix/darwin/modules/system-defaults.nix`
-5. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
-5. **Per-machine settings**: Edit files in `nix/darwin/hosts/`
+2. **Adding a simple program**: Create `nix/home/programs/foo.nix` — auto-discovered!
+3. **Adding a complex program**: Create `nix/home/programs/foo/default.nix` — also auto-discovered!
+4. **Drafting a module**: Prefix with `_` (e.g., `_tmux.nix` or `_neovim/`) to exclude from auto-discovery
+5. **System preferences**: Edit `nix/darwin/modules/system-defaults.nix`
+6. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
+7. **Per-machine settings**: Edit files in `nix/darwin/hosts/`
 
 See [CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) for detailed examples.
 
