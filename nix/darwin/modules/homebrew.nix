@@ -42,13 +42,11 @@
 
         # Productivity
         "chatgpt" # OpenAI's official ChatGPT desktop app
-        "notion" # App to write, plan, collaborate, and get organised
         "notion-calendar" # Calendar for professionals and teams
         "obsidian" # Knowledge base that works on top of a local folder of plain text Markdown files
-        "raycast" # Control your tools with a few keystrokes
 
         # Browsers
-        "chromium" # Free and open-source web browser
+        "ungoogled-chromium" # Google Chromium, sans integration with Google
 
         # Development
         "ghostty@tip" # Terminal emulator that uses platform-native UI and GPU acceleration
@@ -57,14 +55,6 @@
         "warp" # Rust-based terminal
         "zed@preview" # Multiplayer code editor
         "docker-desktop"
-
-        # QuickLook plugins
-        "qlcolorcode" # Quick Look plug-in that renders source code with syntax highlighting
-        "qlimagesize" # Display image info and preview unsupported formats in QuickLook
-        "qlmarkdown" # Quick Look generator for Markdown files
-        "qlstephen" # Quick Look plugin for plaintext files without an extension
-        "qlvideo" # Thumbnails, static previews, cover art and metadata for video files
-        "quicklook-json" # Quick Look plugin for JSON files
 
         # Utilities
         "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
