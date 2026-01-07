@@ -40,10 +40,12 @@
 
     # Packages that should be installed to the user profile.
     packages = with pkgs; [
+      # Note: bat, eza, fd, fzf, starship, zoxide, nushell are installed via programs.* modules
       _1password-cli # 1Password command-line tool
       alejandra # Uncompromising Nix Code Formatter
       awscli2 # Unified tool to manage your AWS services
       biome # Toolchain of the web
+      bun
       cocoapods # Manages dependencies for your Xcode projects
       container # Creating and running Linux containers using lightweight virtual machines on a Mac
       dive # Tool for exploring each layer in a docker image
@@ -61,7 +63,6 @@
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
       uv # Extremely fast Python package installer and resolver, written in Rust
-      # Note: bat, eza, fd, fzf, starship, zoxide, nushell are installed via programs.* modules
     ];
 
     # Symlinked configuration files
