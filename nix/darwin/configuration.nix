@@ -38,6 +38,8 @@
     pathsToLink = ["/share/zsh"]; # List of directories to be symlinked in /run/current-system/sw.
   };
 
+  fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
+
   documentation = {
     enable = true; # Whether to install documentation of packages from environment.systemPackages into the generated system path.
     man.enable = true; # Whether to install manual pages and the {command}`man` command. This also includes "man" outputs.

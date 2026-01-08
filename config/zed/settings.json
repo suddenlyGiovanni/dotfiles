@@ -7,6 +7,9 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "terminal": {
+    "font_family": "JetBrainsMono Nerd Font"
+  },
   "vim_mode": false,
   "colorize_brackets": true,
   "context_servers": {
