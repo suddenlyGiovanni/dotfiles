@@ -82,7 +82,13 @@
     "edit_prediction_provider": "copilot",
   },
   "base_keymap": "JetBrains",
-
+  "agent_servers": {
+    "claude": {
+      "env": {
+        "CLAUDE_CODE_EXECUTABLE": "/etc/profiles/per-user/suddenlygiovanni/bin/claude",
+      },
+    },
+  },
   "agent": {
     "favorite_models": [
       {
