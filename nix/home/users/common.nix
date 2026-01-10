@@ -21,6 +21,7 @@
     ../programs/shell/zsh.nix
 
     # Development tools
+    ../programs/dev/direnv.nix
     ../programs/dev/gh.nix
     ../programs/dev/git.nix
 
@@ -79,12 +80,6 @@
   };
 
   programs = {
-    direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      nix-direnv.enable = true;
-    };
-
     home-manager.enable = true;
   };
 }
