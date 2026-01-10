@@ -64,7 +64,7 @@ This module sets environment variables to make various tools respect XDG locatio
 ```nix
 home.sessionVariables = {
   # Editors
-  EDITOR = "nvim";
+  EDITOR = "vim";
   VISUAL = "zed --wait";
   PAGER = "less";
 
