@@ -82,12 +82,31 @@
     "edit_prediction_provider": "copilot",
   },
   "base_keymap": "JetBrains",
+
   "agent": {
+    "favorite_models": [
+      {
+        "provider": "copilot_chat",
+        "model": "claude-sonnet-4.5",
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "claude-opus-4.5",
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "gpt-5.2",
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "gemini-3-pro-preview",
+      },
+    ],
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "claude-opus-4.5",
+      "model": "gemini-3-pro-preview",
     },
     "play_sound_when_agent_done": true,
     "model_parameters": [],
