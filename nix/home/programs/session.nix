@@ -85,6 +85,11 @@
     # SQLite
     SQLITE_HISTORY = "${config.xdg.stateHome}/sqlite/history";
 
+    # Claude Code - Force XDG compliance
+    # Note: home-manager's programs.claude-code module uses hardcoded .claude/ paths
+    # This env var overrides the default location to be XDG compliant
+    CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude-code";
+
     # Note: VIMINIT removed - no vimrc exists and nvim is the primary editor
 
     # ===== Shell behavior =====
