@@ -7,8 +7,9 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "tab_size": 2,
   "terminal": {
-    "font_family": "JetBrainsMono Nerd Font"
+    "font_family": "JetBrainsMono Nerd Font",
   },
   "vim_mode": false,
   "colorize_brackets": true,
@@ -70,7 +71,7 @@
   "icon_theme": {
     "mode": "system",
     "light": "Zed (Default)",
-    "dark": "Zed (Default)",
+    "dark": "Colored Zed Icons Theme Light",
   },
   "diagnostics": {
     "inline": {
