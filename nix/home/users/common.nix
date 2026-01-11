@@ -8,12 +8,13 @@
 }: {
   imports = [
     # Terminal enhancements
-    ../programs/terminal/fd.nix
-    ../programs/terminal/eza.nix
     ../programs/terminal/bat.nix
-    ../programs/terminal/zoxide.nix
+    ../programs/terminal/eza.nix
+    ../programs/terminal/fd.nix
     ../programs/terminal/fzf.nix
+    ../programs/terminal/ghostty.nix
     ../programs/terminal/starship.nix
+    ../programs/terminal/zoxide.nix
 
     # Shell configurations
     ../programs/shell/fish.nix

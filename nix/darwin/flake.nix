@@ -8,6 +8,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    mac-app-util.url = "github:hraban/mac-app-util";
   };
 
   outputs = {
@@ -16,6 +17,7 @@
     nix-darwin,
     home-manager,
     nix-homebrew,
+    mac-app-util,
     ...
   }: let
     # Supported systems for formatter
@@ -36,11 +38,15 @@
         };
         modules = [
           ./configuration.nix
+          mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager
           {
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
+              sharedModules = [
+                mac-app-util.homeManagerModules.default
+              ];
               extraSpecialArgs = {
                 inherit (hostConfig) userConfig;
               };

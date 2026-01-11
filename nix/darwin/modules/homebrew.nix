@@ -42,7 +42,6 @@
         "ungoogled-chromium" # Google Chromium, sans integration with Google
 
         # Development
-        "ghostty@tip" # Terminal emulator that uses platform-native UI and GPU acceleration
         "gitbutler" # Git client for simultaneous branches on top of your existing workflow
         "visual-studio-code" # Open-source code editor
         "warp" # Rust-based terminal
