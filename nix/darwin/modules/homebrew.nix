@@ -52,6 +52,7 @@
 
         # Utilities
         "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
+        "figma@beta" # Collaborative team software
       ]
       ++ (hostConfig.homebrew.casks or []); # Merge host-specific casks
     /*
