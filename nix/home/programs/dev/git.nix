@@ -10,14 +10,39 @@
     lfs.enable = true;
     package = pkgs.git;
 
+    # Directory-based identity configuration using conditional includes
+    # This allows different git identities based on repository location
+    includes = [
+      {
+        condition = "gitdir:~/Developer/personal/";
+        contents = {
+          user = {
+            name = "suddenlyGiovanni";
+            email = "15946771+suddenlyGiovanni@users.noreply.github.com";
+            signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
+          };
+        };
+      }
+      {
+        condition = "gitdir:~/Developer/work/";
+        contents = {
+          user = {
+            name = "suddenlyGiovanni";
+            email = "giovanni.ravalico@haefele.com";
+            signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIBn88uA0HDdb7kKZm99kWyhKOYwwVi84pP3TaNoY53W";
+          };
+        };
+      }
+    ];
+
     # All Git configuration is now under `settings` (replaces deprecated options)
-    # User identity is set in user-specific configs (personal.nix, work.nix)
     settings = {
-      # User identity - will be overridden in user-specific configs
+      # Fallback user identity for repositories outside of ~/Developer/personal/ and ~/Developer/work/
+      # Will be overridden by conditional includes above when in those directories
       user = {
-        name = lib.mkDefault null;
-        email = lib.mkDefault null;
-        signingkey = lib.mkDefault null;
+        name = lib.mkDefault "suddenlyGiovanni";
+        email = lib.mkDefault "15946771+suddenlyGiovanni@users.noreply.github.com";
+        signingkey = lib.mkDefault "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
       };
       alias = {
         # clone
