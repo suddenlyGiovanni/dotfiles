@@ -59,6 +59,12 @@
       # Ensure cache directory exists before compinit
       mkdir -p "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 
+      # Add home-manager per-user profile to FPATH for completions (e.g., bun, gh)
+      # This path contains completions from packages installed via home-manager
+      if [[ -d "/etc/profiles/per-user/$USER/share/zsh/site-functions" ]]; then
+        fpath=("/etc/profiles/per-user/$USER/share/zsh/site-functions" $fpath)
+      fi
+
       # Use XDG-compliant location for completion dump
       autoload -U compinit
       compinit -d "''${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-$ZSH_VERSION"
