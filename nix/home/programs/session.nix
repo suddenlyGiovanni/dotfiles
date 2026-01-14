@@ -91,16 +91,5 @@
     CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude-code";
 
     # Note: VIMINIT removed - no vimrc exists and nvim is the primary editor
-
-    # ===== Shell behavior =====
-
-    # Colored man pages
-    LESS_TERMCAP_mb = "\\033[1;31m"; # begin bold
-    LESS_TERMCAP_md = "\\033[1;36m"; # begin blink
-    LESS_TERMCAP_me = "\\033[0m"; # reset bold/blink
-    LESS_TERMCAP_so = "\\033[01;44;33m"; # begin reverse video
-    LESS_TERMCAP_se = "\\033[0m"; # reset reverse video
-    LESS_TERMCAP_us = "\\033[1;32m"; # begin underline
-    LESS_TERMCAP_ue = "\\033[0m"; # reset underline
   };
 }

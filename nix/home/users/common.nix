@@ -22,6 +22,7 @@
     ../programs/shell/zsh.nix
 
     # Development tools
+    ../programs/dev/bun.nix
     ../programs/dev/direnv.nix
     ../programs/dev/gh.nix
     ../programs/dev/git.nix
@@ -47,7 +48,6 @@
       alejandra # Uncompromising Nix Code Formatter
       awscli2 # Unified tool to manage your AWS services
       biome # Toolchain of the web
-      bun
       claude-code # Claude AI-powered code editor
       cocoapods # Manages dependencies for your Xcode projects
       container # Creating and running Linux containers using lightweight virtual machines on a Mac

@@ -171,6 +171,7 @@
       push = {
         default = "simple";
         gpgSign = "if-asked";
+        autoSetupRemote = true;
       };
       rebase.autoStash = true;
       rerere.enabled = true;
