@@ -37,6 +37,10 @@
         cache = {
           dir = "${config.xdg.cacheHome}/bun/install/cache";
         };
+
+        # Installation strategy - hardlink for Nix-like deduplication
+        # Packages exist only once on disk, node_modules uses hardlinks
+        backend = "hardlink";
       };
 
       # ===== Run Behavior =====
