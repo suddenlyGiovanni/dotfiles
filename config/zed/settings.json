@@ -7,6 +7,18 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "use_system_window_tabs": true,
+  "outline_panel": {
+    "dock": "right"
+  },
+  "audio": {
+    "experimental.legacy_audio_compatible": false,
+    "experimental.auto_microphone_volume": true,
+    "experimental.rodio_audio": true
+  },
+  "calls": {
+    "mute_on_join": true
+  },
   "tab_size": 2,
   "terminal": {
     "font_family": "JetBrainsMono Nerd Font",
@@ -32,8 +44,9 @@
     "mode": "subtle",
   },
   "git_panel": {
+    "status_style": "icon",
     "tree_view": true,
-    "sort_by_path": false,
+    "sort_by_path": true,
   },
   "git": {
     "inline_blame": {
@@ -114,7 +127,7 @@
     "default_profile": "write",
     "default_model": {
       "provider": "copilot_chat",
-      "model": "gemini-3-pro-preview",
+      "model": "claude-sonnet-4.5",
     },
     "model_parameters": [],
     "inline_assistant_model": {
@@ -135,6 +148,21 @@
     "enabled": true,
   },
   "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        }
+      },
+      "enable_lsp_tasks": true
+    },
     "biome": {
       "settings": {
         "require_config_file": true,
