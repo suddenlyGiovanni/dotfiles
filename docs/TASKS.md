@@ -1,10 +1,12 @@
-# Task Tracker: Home-Manager Module Structure Refactoring
+# Task Tracker: Dotfiles Optimization
 
 > **Branch**: `refactor/structure-improvements`
 > **Related ADR**: [ADR-005: Home-Manager Module Structure](./adr/005-home-manager-module-structure.md)
+> **Analysis**: [Upstream Pattern Analysis](./UPSTREAM-ANALYSIS.md)
 > **Started**: 2026-01
 
-This document tracks the progress of the home-manager module structure refactoring effort.
+This document tracks the progress of optimizing this dotfiles repository to align with upstream
+nix-darwin and home-manager conventions.
 
 ---
 
@@ -56,6 +58,19 @@ This document tracks the progress of the home-manager module structure refactori
   - Update git module to manage symlink via `xdg.configFile`
   - Remove `.gitmessage` entry from `xdg.nix`
 
+### Phase 5: Documentation
+
+- [x] **Add ADR-005** (`b7f07f3`)
+  - Document home-manager module structure decisions
+  - Record rationale for flat structure, auto-discovery, co-location
+
+- [x] **Create task tracker** (`b7f07f3`)
+  - Initial TASKS.md with kanban-style tracking
+
+- [x] **Upstream analysis** (`current`)
+  - Analyze nix-darwin and home-manager source patterns
+  - Document gaps and recommendations in UPSTREAM-ANALYSIS.md
+
 ---
 
 ## 🚧 In Progress
@@ -66,7 +81,44 @@ _No tasks currently in progress_
 
 ## 📋 To Do
 
-### Phase 5: Additional Asset Co-location
+### Phase 6: High Priority Fixes (Correctness)
+
+- [ ] **H1: Remove duplicate packages in `common.nix`**
+  - Duplicates found: `_1password-cli`, `alejandra`, `nixd`, `awscli2`, `container`,
+    `dive`, `docker-buildx`, `docker-slim`, `lazydocker`, `nodejs_24`, `pnpm`,
+    `biome`, `uv`, `rustup`, `cocoapods`, `glow`, `httpie`, `jq`, `just`,
+    `shellcheck`, `shfmt`
+  - Remove the duplicate entries at the bottom of the list
+
+- [ ] **H2: Consolidate direnv configuration**
+  - Remove `programs.direnv` block from `common.nix`
+  - Keep configuration only in `programs/direnv.nix`
+  - Verify direnv still works after change
+
+### Phase 7: Medium Priority (Consistency)
+
+- [ ] **M1: Standardize `let` block formatting**
+  - Update all modules to use multi-line inherit with trailing semicolon
+  - Example:
+    ```nix
+    let
+      inherit (lib)
+        mkDefault
+        ;
+    in
+    ```
+  - Files to update: All modules in `nix/home/programs/`
+
+- [ ] **M2: Add `cfg` pattern to complex modules**
+  - Add `cfg = config.programs.X;` to modules that reference their own config
+  - Priority modules: `git/default.nix`, `zsh.nix`
+
+- [ ] **M3: Consider splitting `system-defaults.nix`** (optional)
+  - Split into: `dock.nix`, `finder.nix`, `trackpad.nix`, `nsglobaldomain.nix`
+  - Create `system-defaults/default.nix` to import all
+  - Trade-off: More files vs easier navigation
+
+### Phase 8: Additional Asset Co-location
 
 - [ ] **Audit remaining assets in `config/`**
   - Review `config/` directory for other assets that should be co-located
@@ -77,12 +129,13 @@ _No tasks currently in progress_
   - Update modules to manage their own assets
   - Remove entries from `xdg.nix`
 
-### Phase 6: Documentation & Cleanup
+### Phase 9: Documentation & Cleanup
 
 - [ ] **Update AGENTS.md**
   - Reflect new flat structure in architecture section
   - Update "Add a program" instructions
   - Document `_` prefix convention for draft modules
+  - Document upstream alignment decisions
 
 - [ ] **Update README.md**
   - Ensure project README reflects current structure
@@ -92,7 +145,7 @@ _No tasks currently in progress_
   - Remove empty directories after asset migration
   - Document any remaining non-Nix configs and why they stay
 
-### Phase 7: Validation & Merge
+### Phase 10: Validation & Merge
 
 - [ ] **Run full validation**
   - `just fmt` - Format all files
@@ -101,12 +154,12 @@ _No tasks currently in progress_
   - `just build` - Build without applying
   - `just switch` - Apply and verify functionality
 
-- [ ] **Squash/rebase commits** (optional)
-  - Consider squashing related commits for cleaner history
-  - Ensure commit messages are clear and follow conventions
+- [ ] **Final review**
+  - Review all changes for consistency
+  - Ensure no regressions in functionality
 
-- [ ] **Create PR / Merge to main**
-  - Final review of all changes
+- [ ] **Merge to main**
+  - Squash/rebase commits if desired
   - Merge `refactor/structure-improvements` → `main`
 
 ---
@@ -135,26 +188,42 @@ These are potential future enhancements, not part of the current refactoring:
   - Create `_template.nix` as a starting point for new programs
   - Include standard sections and conventions
 
+- [ ] **Consider explicit module list**
+  - Replace auto-discovery with explicit list for more control
+  - Trade-off: More maintenance vs explicit ordering
+
+- [ ] **Document `userConfig` pattern**
+  - Add ADR explaining the custom `userConfig` specialArgs approach
+  - Or migrate to standard `config.home.*` patterns
+
 ---
 
 ## Notes
 
 ### Why This Refactoring?
 
-1. **Upstream alignment**: Match official home-manager patterns
+1. **Upstream alignment**: Match official nix-darwin and home-manager patterns
 2. **Reduced friction**: Auto-discovery means no import maintenance
 3. **Better organization**: Co-located assets are easier to understand
 4. **Consistency**: Standard module signatures across all programs
+5. **Portability**: Easier to set up on new machines
 
 ### Key Files Changed
 
-| File | Purpose |
-|------|---------|
-| `nix/home/programs/default.nix` | Auto-discovery logic |
-| `nix/home/programs/git/default.nix` | Example directory module |
-| `nix/home/programs/git/.gitmessage` | Co-located asset |
-| `nix/home/users/common.nix` | Simplified imports |
-| `nix/home/programs/xdg.nix` | Removed migrated symlinks |
+| File                                 | Purpose                        |
+| ------------------------------------ | ------------------------------ |
+| `nix/home/programs/default.nix`      | Auto-discovery logic           |
+| `nix/home/programs/git/default.nix`  | Example directory module       |
+| `nix/home/programs/git/.gitmessage`  | Co-located asset               |
+| `nix/home/users/common.nix`          | Simplified imports             |
+| `nix/home/programs/xdg.nix`          | Removed migrated symlinks      |
+| `docs/UPSTREAM-ANALYSIS.md`          | Gap analysis and recommendations |
+
+### Upstream References
+
+- [home-manager modules/programs/](https://github.com/nix-community/home-manager/tree/master/modules/programs)
+- [nix-darwin modules/](https://github.com/nix-darwin/nix-darwin/tree/master/modules)
+- [NixOS Module System](https://nixos.org/manual/nixos/stable/#sec-writing-modules)
 
 ### Commands Reference
 
@@ -169,4 +238,8 @@ just switch
 # View git changes
 git diff main..HEAD --stat
 git log main..HEAD --oneline
+
+# Inspect upstream repos
+gh api repos/nix-community/home-manager/contents/modules/programs --jq '.[].name'
+gh api repos/nix-darwin/nix-darwin/contents/modules --jq '.[].name'
 ```
