@@ -1,15 +1,15 @@
 # gh - GitHub's official command line tool
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/gh.nix
+#
+# Note: The gh package is installed via 1password.nix shell plugins
+# for biometric-authenticated credential management.
+# This module configures gh settings and extensions.
 {
-  config,
   lib,
   pkgs,
   ...
 }: let
-  inherit
-    (lib)
-    mkDefault
-    ;
+  inherit (lib) mkDefault;
 in {
   programs.gh = {
     enable = true;

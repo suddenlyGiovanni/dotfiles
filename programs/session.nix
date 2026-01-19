@@ -42,12 +42,8 @@ in {
     # Move less history to XDG state
     LESSHISTFILE = "${config.xdg.stateHome}/less/history";
 
-    # ── 1Password SSH Agent ─────────────────────────────────────────────────
-    # Set globally for tools that need SSH agent access (git, etc.)
-    # Note: SSH client config is in ssh.nix (IdentityAgent)
-    SSH_AUTH_SOCK = "${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
-
     # ── XDG compliance for tools without dedicated modules ──────────────────
+    # Note: SSH_AUTH_SOCK is configured in 1password.nix
 
     # Readline (inputrc) - pairs with config in xdg.nix
     INPUTRC = "${config.xdg.configHome}/readline/inputrc";

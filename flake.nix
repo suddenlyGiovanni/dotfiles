@@ -9,6 +9,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     mac-app-util.url = "github:hraban/mac-app-util";
+    onepassword-shell-plugins.url = "github:1Password/shell-plugins";
   };
 
   outputs = {
@@ -18,6 +19,7 @@
     home-manager,
     nix-homebrew,
     mac-app-util,
+    onepassword-shell-plugins,
     ...
   }: let
     # Supported systems
@@ -46,6 +48,7 @@
               useUserPackages = true;
               sharedModules = [
                 mac-app-util.homeManagerModules.default
+                onepassword-shell-plugins.hmModules.default
               ];
               extraSpecialArgs = {
                 inherit (hostConfig) userConfig;
