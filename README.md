@@ -51,7 +51,8 @@ just switch
 dotfiles/
 ├── flake.nix                    # Unified flake (darwin configs + dev environment)
 ├── flake.lock                   # Pinned flake inputs
-├── darwin.nix                   # Core darwin system configuration
+├── darwin.nix                   # Darwin system configuration (imports modules/)
+├── home.nix                     # Home-manager user configuration (imports programs/)
 ├── nix.conf                     # Nix configuration (symlinked to ~/.config/nix/)
 ├── justfile                     # Task runner commands (fmt, lint, switch, etc.)
 ├── .envrc                       # direnv integration for auto-loading dev env
@@ -72,10 +73,6 @@ dotfiles/
 │   │   ├── settings.json
 │   │   └── keymap.json
 │   └── ...                      # Other program modules (auto-discovered)
-├── users/                       # User-specific configs
-│   ├── common.nix               # Shared packages and programs
-│   ├── personal.nix             # Personal git identity
-│   └── work.nix                 # Work git identity
 └── docs/
     ├── adr/                     # Architecture Decision Records
     └── CUSTOMIZATION.md         # How to customize this config
@@ -117,7 +114,7 @@ just gc          # Garbage collect (keeps last 7 days)
 
 ### Making Changes
 
-1. **Adding packages**: Edit `users/common.nix` → `home.packages`
+1. **Adding packages**: Edit `home.nix` → `home.packages`
 2. **Adding a simple program**: Create `programs/foo.nix` — auto-discovered!
 3. **Adding a complex program**: Create `programs/foo/default.nix` — also auto-discovered!
 4. **Co-locating config files**: Put JSON/YAML alongside `default.nix` in the program directory

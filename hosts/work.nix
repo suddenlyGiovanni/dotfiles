@@ -9,9 +9,8 @@
     dotfilesPath = "/Users/suddenlygiovanni/Developer/dotfiles";
   };
 
-  # Path to user-specific home-manager module (relative to hosts directory)
-  # This is where work-specific git identity and configs live
-  userModule = ../users/work.nix;
+  # Path to home-manager module (relative to hosts directory)
+  userModule = ../home.nix;
 
   # System architecture (Apple Silicon)
   system = "aarch64-darwin";

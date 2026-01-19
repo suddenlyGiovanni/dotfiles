@@ -41,7 +41,8 @@ just gc          # Garbage collect (keeps last 7 days)
 dotfiles/
 ├── flake.nix        # Unified flake (darwin configs + dev environment)
 ├── flake.lock       # Pinned flake inputs
-├── darwin.nix       # Core darwin system configuration
+├── darwin.nix       # Darwin system configuration (imports modules/)
+├── home.nix         # Home-manager user configuration (imports programs/)
 ├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
 ├── justfile         # Task runner commands
 ├── .envrc           # direnv integration
@@ -62,10 +63,6 @@ dotfiles/
 │   │   ├── settings.json
 │   │   └── keymap.json
 │   └── ...          # Other program modules (auto-discovered)
-├── users/           # User-specific configs
-│   ├── common.nix   # Shared packages and programs
-│   ├── personal.nix # Personal git identity
-│   └── work.nix     # Work git identity
 └── docs/
     ├── adr/         # Architecture Decision Records
     └── CUSTOMIZATION.md  # This file
@@ -75,7 +72,7 @@ dotfiles/
 
 | I want to...                                   | Edit this file                                     |
 | ---------------------------------------------- | -------------------------------------------------- |
-| Add a CLI tool (nix package)                   | `users/common.nix` → `home.packages`               |
+| Add a CLI tool (nix package)                   | `home.nix` → `home.packages`                       |
 | Add a GUI app (Homebrew cask) for all machines | `modules/homebrew.nix` → `casks`                   |
 | Add a GUI app for personal machine only        | `hosts/personal.nix` → `homebrew.casks`            |
 | Add a GUI app for work machine only            | `hosts/work.nix` → `homebrew.casks`                |
@@ -84,8 +81,7 @@ dotfiles/
 | Change macOS trackpad settings                 | `modules/system-defaults/trackpad.nix`             |
 | Change firewall/Touch ID settings              | `modules/security.nix`                             |
 | Configure a program (git, fish, etc.)          | `programs/` (flat structure, auto-discovered)      |
-| Change git email for personal only             | `users/personal.nix` → `programs.git.settings.user`|
-| Change git email for work only                 | `users/work.nix` → `programs.git.settings.user`    |
+| Change git identity                            | `programs/git/default.nix` (uses directory-based conditional includes) |
 | Add a new machine                              | Create `hosts/new-machine.nix` + update `flake.nix`|
 | Add config files (non-Nix)                     | Co-locate in `programs/<name>/` or add to root     |
 
@@ -93,11 +89,11 @@ dotfiles/
 
 ### Adding a New Package
 
-Packages installed via Nix go in `users/common.nix`:
+Packages installed via Nix go in `home.nix`:
 
 ```nix
-# users/common.nix
-{userConfig}: {
+# home.nix
+{userConfig, pkgs, ...}: {
   home.packages = with pkgs; [
     # ... existing packages ...
 
@@ -283,8 +279,8 @@ _neovim/
     dotfilesPath = "/Users/myuser/Developer/dotfiles";
   };
 
-  # Point to the appropriate user module
-  userModule = ../users/personal.nix;  # or work.nix
+  # Path to home-manager module
+  userModule = ../home.nix;
 
   system = "aarch64-darwin";  # or "x86_64-darwin" for Intel
 
@@ -324,30 +320,34 @@ in {
 sudo darwin-rebuild switch --flake ~/Developer/dotfiles#New-Laptop
 ```
 
-### Customizing Git for a Specific Machine
+### Customizing Git Identity
 
-User-specific git settings are in `users/personal.nix` or `work.nix`:
+Git identity is handled via conditional includes in `programs/git/default.nix` based on directory paths:
 
 ```nix
-# users/work.nix
-{userConfig}: {
-  imports = [
-    ./common.nix
+# programs/git/default.nix
+programs.git = {
+  # ...
+  includes = [
+    {
+      condition = "gitdir:~/Developer/work/";
+      contents.user = {
+        email = "giovanni@company.com";
+        signingkey = "ssh-ed25519 AAAA...work-key";
+      };
+    }
+    {
+      condition = "gitdir:~/Developer/personal/";
+      contents.user = {
+        email = "giovanni@personal.com";
+        signingkey = "ssh-ed25519 AAAA...personal-key";
+      };
+    }
   ];
-
-  # Override git settings for work
-  programs.git.settings = {
-    user = {
-      name = "Giovanni Ravalico";
-      email = "giovanni@company.com";
-      signingkey = "ssh-ed25519 AAAA...";
-    };
-
-    # Work-specific git URLs
-    url."git@github.company.com:".insteadOf = "https://github.company.com/";
-  };
-}
+};
 ```
+
+This approach uses a single config with directory-based identity switching.
 
 ### Adding Non-Nix Config Files
 
@@ -379,25 +379,22 @@ Configuration is applied in layers, with later layers overriding earlier ones:
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  Host Config (hosts/personal.nix)               │  Machine-specific
+│  Host Config (hosts/personal.nix)               │  Machine-specific data
 │  - hostname, username, dotfilesPath, casks      │
 ├─────────────────────────────────────────────────┤
-│  User Config (users/personal.nix)               │  User-specific
-│  - git email, signing keys, user overrides      │
-├─────────────────────────────────────────────────┤
-│  Common User (users/common.nix)                 │  Shared user settings
-│  - packages, program imports                    │
+│  Home Config (home.nix)                         │  User environment
+│  - packages, imports programs/                  │
 ├─────────────────────────────────────────────────┤
 │  Program Configs (programs/*.nix)               │  Program settings
 │  - flat structure, auto-discovered              │
 ├─────────────────────────────────────────────────┤
-│  Darwin Modules (modules/*.nix)                 │  Shared system settings
+│  Darwin Modules (modules/*.nix)                 │  System settings
 │  - system-defaults/: macOS prefs                │
 │  - homebrew.nix: shared casks/brews             │
 │  - security.nix: firewall, Touch ID             │
 ├─────────────────────────────────────────────────┤
-│  Darwin Config (darwin.nix)                     │  Core system setup
-│  - imports modules, user setup, nix settings    │
+│  Darwin Config (darwin.nix)                     │  System setup
+│  - imports modules/                             │
 └─────────────────────────────────────────────────┘
 ```
 

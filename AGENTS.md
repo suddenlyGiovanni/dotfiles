@@ -40,33 +40,35 @@ The repository uses a single `flake.nix` at the root that exposes:
 ```
 dotfiles/
 ├── flake.nix        # Unified entry point (darwin configs + dev environment)
-├── darwin.nix       # Core darwin system configuration
+├── darwin.nix       # Darwin system configuration (imports modules/)
+├── home.nix         # Home-manager user configuration (imports programs/)
 ├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
 ├── hosts/           # Machine-specific configs (personal.nix, work.nix)
 ├── modules/         # Darwin system modules (homebrew, security, system-defaults/)
-├── programs/        # Home-manager program configs (flat, auto-discovered)
-└── users/           # User-specific configs (common.nix, personal.nix, work.nix)
+└── programs/        # Home-manager program configs (flat, auto-discovered)
 ```
 
 ### Two-Layer Configuration
 
 1. **Darwin System Layer**
-   - Entry point: `darwin.nix`
+   - Entry point: `darwin.nix` (imports `modules/`)
    - Modules: `modules/` (homebrew.nix, security.nix, system-defaults/)
-   - Hosts: `hosts/` (per-machine overrides)
 
 2. **Home-Manager User Layer**
+   - Entry point: `home.nix` (imports `programs/`)
    - Programs: `programs/` (flat structure with auto-discovery)
-   - Users: `users/` (common.nix for shared packages, personal.nix/work.nix for identity)
    - Co-located configs: Some programs have their own directories (e.g., `zed/`, `git/`)
+
+3. **Machine-Specific Overrides**
+   - Hosts: `hosts/` (per-machine data: hostname, homebrew casks, etc.)
 
 ### Key Files
 
 - `flake.nix` - Unified entry point for darwin configurations and dev environment
-- `darwin.nix` - Core darwin system configuration (imports modules/)
-- `users/common.nix` - Main package list and program imports
+- `darwin.nix` - Darwin system configuration (imports modules/)
+- `home.nix` - Home-manager user configuration (imports programs/)
+- `hosts/*.nix` - Machine-specific data (hostname, homebrew casks)
 - `programs/session.nix` - Environment variables (EDITOR, XDG paths)
-- `programs/xdg.nix` - XDG directories and config symlinks
 - `modules/homebrew.nix` - GUI apps via Homebrew
 - `modules/system-defaults/` - macOS preferences (dock, finder, trackpad, etc.)
 
@@ -86,7 +88,7 @@ dotfiles/
 
 ## Common Tasks
 
-**Add a package**: Edit `home.packages` in `users/common.nix`
+**Add a package**: Edit `home.packages` in `home.nix`
 
 **Add a Homebrew cask**: Edit `modules/homebrew.nix` or host-specific file in `hosts/`
 

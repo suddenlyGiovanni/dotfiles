@@ -1,5 +1,5 @@
-# Common home-manager configuration shared between all users
-# This module contains packages and programs used across all machines
+# Home-manager user configuration
+# This module contains packages and programs for the user environment
 {
   config,
   lib,
@@ -9,11 +9,11 @@
 }: let
   inherit (lib) mkDefault;
 in {
-  # Auto-discover all program modules from ../programs/
+  # Auto-discover all program modules from ./programs/
   # To add a new program, simply create a new .nix file in programs/
   # Files starting with _ are excluded (convention for drafts/helpers)
   imports = [
-    ../programs # imports default.nix which auto-discovers all modules
+    ./programs # imports default.nix which auto-discovers all modules
   ];
 
   home = {
