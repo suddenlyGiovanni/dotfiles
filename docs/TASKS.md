@@ -4,6 +4,7 @@
 > **Related ADR**: [ADR-005: Home-Manager Module Structure](./adr/005-home-manager-module-structure.md)
 > **Analysis**: [Upstream Pattern Analysis](./UPSTREAM-ANALYSIS.md)
 > **Started**: 2025-01
+> **Last Updated**: 2025-01-20
 
 This document tracks the progress of optimizing this dotfiles repository to align with upstream
 nix-darwin and home-manager conventions.
@@ -156,6 +157,21 @@ nix-darwin and home-manager conventions.
   - Auto-fix directory permissions (chmod 700)
   - Removed `GNUPGHOME` from `session.nix` (now via `programs.gpg.homedir`)
 
+### Phase 9: Flake Consolidation
+
+- [x] **Unify root and darwin flakes** (in progress)
+  - Merged `nix/darwin/flake.nix` into root `flake.nix`
+  - Root flake now exposes: `darwinConfigurations`, `devShells`, `formatter`
+  - Updated all paths in flake to reference `./nix/darwin/...`
+  - Deleted `nix/darwin/flake.nix` and `nix/darwin/flake.lock`
+  - Updated `justfile` to use `.` instead of `./nix/darwin`
+  - Updated lock file with new unified inputs
+
+- [x] **Update documentation for flake consolidation**
+  - Updated `AGENTS.md` with unified flake architecture
+  - Updated `README.md` with new project structure and commands
+  - Updated `docs/CUSTOMIZATION.md` with new paths and examples
+
 ---
 
 ## 🚧 In Progress
@@ -166,35 +182,22 @@ _No tasks currently in progress_
 
 ## 📋 To Do
 
-### Phase 9: Documentation & Cleanup
-
-- [ ] **Update AGENTS.md**
-  - Reflect new flat structure in architecture section
-  - Update "Add a program" instructions
-  - Document `_` prefix convention for draft modules
-  - Document upstream alignment decisions
-  - Add SSH and GPG module documentation
-
-- [ ] **Update README.md**
-  - Ensure project README reflects current structure
-  - Add examples of both file and directory module patterns
-
-- [ ] **Update xdg-compliance-audit.md**
-  - Mark completed items (Cargo, Docker, GnuPG, less, etc.)
-  - Document new SSH and GPG home-manager management
-
 ### Phase 10: Validation & Merge
 
-- [ ] **Run full validation**
+- [x] **Run full validation**
   - `just fmt` - Format all files ✅
   - `just lint` - Run statix linter ✅ (minor unused import warnings)
-  - `just check` - Run all checks
+  - `just check` - Run all checks ✅
   - `just build` - Build without applying ✅
-  - `just switch` - Apply and verify functionality ✅
+  - `just switch` - Apply and verify functionality (pending)
 
 - [ ] **Final review**
   - Review all changes for consistency
   - Ensure no regressions in functionality
+
+- [ ] **Update xdg-compliance-audit.md**
+  - Mark completed items (Cargo, Docker, GnuPG, less, etc.)
+  - Document new SSH and GPG home-manager management
 
 - [ ] **Merge to main**
   - Squash/rebase commits if desired
@@ -259,6 +262,8 @@ These are potential future enhancements, not part of the current refactoring:
 
 | File                                       | Purpose                                    |
 | ------------------------------------------ | ------------------------------------------ |
+| `flake.nix`                                | Unified flake (darwin + dev environment)   |
+| `justfile`                                 | Updated to use root flake                  |
 | `nix/home/programs/default.nix`            | Auto-discovery logic                       |
 | `nix/home/programs/git/default.nix`        | Directory module with co-located asset     |
 | `nix/home/programs/zed/default.nix`        | Directory module with co-located configs   |
@@ -276,6 +281,13 @@ These are potential future enhancements, not part of the current refactoring:
 | `nix/home/programs/session.nix`            | Global env vars only (EDITOR, PAGER, etc.) |
 | `nix/darwin/modules/system-defaults/`      | Split macOS defaults (9 modules)           |
 | `docs/UPSTREAM-ANALYSIS.md`                | Gap analysis and recommendations           |
+
+### Files Removed
+
+| File                                       | Reason                                     |
+| ------------------------------------------ | ------------------------------------------ |
+| `nix/darwin/flake.nix`                     | Merged into root `flake.nix`               |
+| `nix/darwin/flake.lock`                    | Replaced by root `flake.lock`              |
 
 ### Home Directory Status (Post-Cleanup)
 
@@ -308,9 +320,12 @@ These are potential future enhancements, not part of the current refactoring:
 # Format, lint, check
 just fmt && just lint && just check
 
-# Build and test
-just build
-just switch
+# Build and test (now uses root flake)
+just build                    # darwin-rebuild build --flake .
+just switch                   # sudo darwin-rebuild switch --flake .
+
+# Show flake outputs
+nix flake show                # Shows darwinConfigurations, devShells, formatter
 
 # View git changes
 git diff main..HEAD --stat

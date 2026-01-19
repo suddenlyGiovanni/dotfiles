@@ -12,7 +12,7 @@ Supports multiple machines with shared and host-specific settings.
 - 🍺 **Homebrew integration** - GUI apps via nix-homebrew
 - 🖥️ **Multi-machine support** - Shared config with per-host overrides
 - 📦 **Modular structure** - Organized by concern (system, programs, security)
-- 🎨 **Dev tooling included** - Formatters, linters, LSP via development flake
+- 🎨 **Dev tooling included** - Formatters, linters, LSP via unified flake
 
 ## 🚀 Quick Start
 
@@ -27,7 +27,7 @@ git clone https://github.com/suddenlyGiovanni/dotfiles.git ~/Developer/dotfiles
 cd ~/Developer/dotfiles
 
 # 3. Apply the configuration (for personal machine)
-sudo darwin-rebuild switch --flake ./nix/darwin
+sudo darwin-rebuild switch --flake .
 ```
 
 ### Updating the System
@@ -36,7 +36,7 @@ After modifying any configuration files:
 
 ```shell
 cd ~/Developer/dotfiles
-sudo darwin-rebuild switch --flake ./nix/darwin
+sudo darwin-rebuild switch --flake .
 ```
 
 Or use the `just` task runner (see Development section):
@@ -49,30 +49,33 @@ just switch
 
 ```text
 dotfiles/
-├── flake.nix                    # Development environment (linters, formatters, LSP)
+├── flake.nix                    # Unified flake (darwin configs + dev environment)
+├── flake.lock                   # Pinned flake inputs
 ├── justfile                     # Task runner commands (fmt, lint, switch, etc.)
 ├── .envrc                       # direnv integration for auto-loading dev env
 ├── config/                      # Non-Nix configs symlinked via home-manager
-│   ├── zed/                     # Zed editor settings
 │   └── git/                     # Git templates
 ├── nix/
 │   ├── darwin/                  # nix-darwin system configuration
-│   │   ├── flake.nix            # Entry point - defines darwin systems
 │   │   ├── configuration.nix    # Core system settings
 │   │   ├── modules/             # System-level modules
 │   │   │   ├── homebrew.nix     # Homebrew casks, formulae, MAS apps
 │   │   │   ├── security.nix     # Firewall, Touch ID
-│   │   │   └── system-defaults.nix  # macOS preferences (dock, finder, etc.)
+│   │   │   └── system-defaults/ # macOS preferences (dock, finder, etc.)
 │   │   └── hosts/               # Machine-specific configs
-│   │       ├── personal.nix     # Personal MacBook Air
-│   │       └── work.nix         # Work laptop (template)
+│   │       ├── personal.nix     # Personal MacBook
+│   │       └── work.nix         # Work laptop
 │   └── home/                    # home-manager user environment
 │       ├── programs/            # Program configurations (auto-discovered)
 │       │   ├── default.nix      # Auto-discovery module
 │       │   ├── bat.nix          # Simple module: single file
 │       │   ├── git/             # Complex module: directory with default.nix
 │       │   │   └── default.nix
-│       │   ├── ...              # Other program modules (auto-discovered)
+│       │   ├── zed/             # Co-located config: nix + json files
+│       │   │   ├── default.nix
+│       │   │   ├── settings.json
+│       │   │   └── keymap.json
+│       │   └── ...              # Other program modules (auto-discovered)
 │       └── users/               # User-specific configs
 │           ├── common.nix       # Shared packages and programs
 │           ├── personal.nix     # Personal git identity
@@ -84,7 +87,7 @@ dotfiles/
 
 ## 🛠️ Development
 
-This repo includes a development flake with all the tools you need.
+This repo includes a unified flake with both system configurations and development tools.
 
 ### Setup Development Environment
 
@@ -110,8 +113,10 @@ just --list      # Show all available tasks
 just fmt         # Format all Nix files with alejandra
 just lint        # Lint Nix files with statix
 just check       # Run all checks (format, lint, dead code)
-just switch      # Apply darwin configuration (requires sudo)
 just build       # Build configuration without applying
+just switch      # Apply darwin configuration (requires sudo)
+just update      # Update all flake inputs
+just gc          # Garbage collect (keeps last 7 days)
 ```
 
 ### Making Changes
@@ -119,10 +124,11 @@ just build       # Build configuration without applying
 1. **Adding packages**: Edit `nix/home/users/common.nix` → `home.packages`
 2. **Adding a simple program**: Create `nix/home/programs/foo.nix` — auto-discovered!
 3. **Adding a complex program**: Create `nix/home/programs/foo/default.nix` — also auto-discovered!
-4. **Drafting a module**: Prefix with `_` (e.g., `_tmux.nix` or `_neovim/`) to exclude from auto-discovery
-5. **System preferences**: Edit `nix/darwin/modules/system-defaults.nix`
-6. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
-7. **Per-machine settings**: Edit files in `nix/darwin/hosts/`
+4. **Co-locating config files**: Put JSON/YAML alongside `default.nix` in the program directory
+5. **Drafting a module**: Prefix with `_` (e.g., `_tmux.nix` or `_neovim/`) to exclude from auto-discovery
+6. **System preferences**: Edit modules in `nix/darwin/modules/system-defaults/`
+7. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
+8. **Per-machine settings**: Edit files in `nix/darwin/hosts/`
 
 See [CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) for detailed examples.
 
@@ -146,10 +152,10 @@ just switch
 
 ### Available Configurations
 
-| Hostname                | Machine                | Location                        |
-| ----------------------- | ---------------------- | ------------------------------- |
-| `suddenlyGiovannis-MacBook-Personal` | Personal MacBook Air   | `nix/darwin/hosts/personal.nix` |
-| `Work-MacBook`          | Work laptop (template) | `nix/darwin/hosts/work.nix`     |
+| Hostname                           | Machine              | Location                        |
+| ---------------------------------- | -------------------- | ------------------------------- |
+| `suddenlyGiovannis-MacBook-Personal` | Personal MacBook     | `nix/darwin/hosts/personal.nix` |
+| `suddenlyGiovannis-MacBook-Work`   | Work laptop          | `nix/darwin/hosts/work.nix`     |
 
 ### Adding a New Machine
 
@@ -174,10 +180,10 @@ just switch
 }
 ```
 
-2. Import it in `nix/darwin/flake.nix`:
+2. Import it in `flake.nix`:
 
 ```nix
-myMachine = import ./hosts/my-machine.nix;
+myMachine = import ./nix/darwin/hosts/my-machine.nix;
 ```
 
 3. Add to `darwinConfigurations`:
@@ -192,7 +198,7 @@ darwinConfigurations = {
 4. Apply on the new machine:
 
 ```shell
-sudo darwin-rebuild switch --flake ~/Developer/dotfiles/nix/darwin#My-Machine
+sudo darwin-rebuild switch --flake ~/Developer/dotfiles#My-Machine
 ```
 
 ## 🧪 Testing
@@ -201,16 +207,16 @@ Before committing changes, run the full validation suite:
 
 ```shell
 # Format check
-nix run nixpkgs#alejandra -- --check nix/
+just fmt-check
 
 # Lint
-nix run nixpkgs#statix -- check nix/
+just lint
 
 # Dead code
-nix run nixpkgs#deadnix -- nix/
+just deadcode
 
 # Build test
-darwin-rebuild build --flake ./nix/darwin
+just build
 ```
 
 Or simply:
@@ -245,5 +251,6 @@ Built with:
 - [nix-darwin](https://github.com/LnL7/nix-darwin) by @LnL7
 - [home-manager](https://github.com/nix-community/home-manager) by @nix-community
 - [nix-homebrew](https://github.com/zhaofengli/nix-homebrew) by @zhaofengli
+- [mac-app-util](https://github.com/hraban/mac-app-util) by @hraban
 
 Inspired by the Nix community's dotfiles repos.

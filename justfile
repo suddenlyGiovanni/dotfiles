@@ -1,8 +1,5 @@
 # Justfile for dotfiles development tasks
 # Run `just` to see available commands
-# Path to darwin flake
-
-darwin_flake := "./nix/darwin"
 
 # Default recipe: show help
 default:
@@ -29,31 +26,31 @@ check: fmt-check lint deadcode
 
 # Build the current host's configuration without applying
 build:
-    darwin-rebuild build --flake {{ darwin_flake }}
+    darwin-rebuild build --flake .
 
 # Build a specific host's configuration
 build-host host:
-    darwin-rebuild build --flake "{{ darwin_flake }}#{{ host }}"
+    darwin-rebuild build --flake ".#{{ host }}"
 
 # Apply the current host's configuration
 switch:
-    sudo darwin-rebuild switch --flake {{ darwin_flake }}
+    sudo darwin-rebuild switch --flake .
 
 # Apply a specific host's configuration
 switch-host host:
-    sudo darwin-rebuild switch --flake "{{ darwin_flake }}#{{ host }}"
+    sudo darwin-rebuild switch --flake ".#{{ host }}"
 
 # Show available darwin configurations
 show:
-    nix flake show {{ darwin_flake }}
+    nix flake show
 
-# Update darwin flake inputs
+# Update flake inputs
 update:
-    nix flake update --flake {{ darwin_flake }}
+    nix flake update
 
-# Update a specific darwin flake input
+# Update a specific flake input
 update-input input:
-    nix flake lock --flake {{ darwin_flake }} --update-input {{ input }}
+    nix flake lock --update-input {{ input }}
 
 # Garbage collect old generations (keeps last 7 days)
 gc:
@@ -71,15 +68,15 @@ generations:
 rollback:
     sudo darwin-rebuild switch --rollback
 
-# Validate darwin flake
+# Validate flake
 validate:
-    nix flake check {{ darwin_flake }}
+    nix flake check
 
 # Show what would change (requires nvd: nix profile install nixpkgs#nvd)
 diff:
-    darwin-rebuild build --flake {{ darwin_flake }}
+    darwin-rebuild build --flake .
     nvd diff /run/current-system result
 
-# Open nix repl with darwin flake loaded
+# Open nix repl with flake loaded
 repl:
-    nix repl --expr 'builtins.getFlake "path:{{ darwin_flake }}"'
+    nix repl --expr 'builtins.getFlake "path:."'
