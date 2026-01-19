@@ -9,6 +9,7 @@
 # - docker.nix: DOCKER_CONFIG
 # - python.nix: PYTHONSTARTUP, PYTHON_HISTORY
 # - claude-code.nix: CLAUDE_CONFIG_DIR
+# - gpg.nix: GNUPGHOME (via programs.gpg.homedir)
 #
 # Reference: https://wiki.archlinux.org/title/XDG_Base_Directory
 {
@@ -42,12 +43,11 @@ in {
     LESSHISTFILE = "${config.xdg.stateHome}/less/history";
 
     # ── 1Password SSH Agent ─────────────────────────────────────────────────
+    # Set globally for tools that need SSH agent access (git, etc.)
+    # Note: SSH client config is in ssh.nix (IdentityAgent)
     SSH_AUTH_SOCK = "${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
 
     # ── XDG compliance for tools without dedicated modules ──────────────────
-
-    # GnuPG (system-wide security tool)
-    GNUPGHOME = "${config.xdg.dataHome}/gnupg";
 
     # Readline (inputrc) - pairs with config in xdg.nix
     INPUTRC = "${config.xdg.configHome}/readline/inputrc";
