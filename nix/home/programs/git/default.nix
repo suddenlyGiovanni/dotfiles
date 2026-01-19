@@ -227,14 +227,9 @@ in {
       # ── Rebase ──────────────────────────────────────────────────────────
       rebase.autoStash = true;
 
-      # Rerere ──────────────────────────────────────────────────────────
+      # ── Rerere ──────────────────────────────────────────────────────────
       # Remember how conflicts were resolved
       rerere.enabled = true;
-
-      # ── GitButler ───────────────────────────────────────────────────────
-      # GitButler virtual branch management tool
-      # https://gitbutler.com/
-      gitbutler.aiModelProvider = "anthropic";
     };
   };
 }
