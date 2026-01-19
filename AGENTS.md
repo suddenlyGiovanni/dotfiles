@@ -41,11 +41,11 @@ The repository uses a single `flake.nix` at the root that exposes:
 dotfiles/
 ├── flake.nix        # Unified entry point (darwin configs + dev environment)
 ├── darwin.nix       # Core darwin system configuration
+├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
 ├── hosts/           # Machine-specific configs (personal.nix, work.nix)
 ├── modules/         # Darwin system modules (homebrew, security, system-defaults/)
 ├── programs/        # Home-manager program configs (flat, auto-discovered)
-├── users/           # User-specific configs (common.nix, personal.nix, work.nix)
-└── config/          # Non-Nix config files (nix.conf)
+└── users/           # User-specific configs (common.nix, personal.nix, work.nix)
 ```
 
 ### Two-Layer Configuration

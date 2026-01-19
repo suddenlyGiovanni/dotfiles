@@ -42,10 +42,9 @@ dotfiles/
 ├── flake.nix        # Unified flake (darwin configs + dev environment)
 ├── flake.lock       # Pinned flake inputs
 ├── darwin.nix       # Core darwin system configuration
+├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
 ├── justfile         # Task runner commands
 ├── .envrc           # direnv integration
-├── config/          # Non-Nix config files
-│   └── nix.conf     # Nix configuration
 ├── hosts/           # Machine-specific configurations
 │   ├── personal.nix # Personal MacBook
 │   └── work.nix     # Work laptop
@@ -88,7 +87,7 @@ dotfiles/
 | Change git email for personal only             | `users/personal.nix` → `programs.git.settings.user`|
 | Change git email for work only                 | `users/work.nix` → `programs.git.settings.user`    |
 | Add a new machine                              | Create `hosts/new-machine.nix` + update `flake.nix`|
-| Add config files (non-Nix)                     | Add to `config/` + symlink in `programs/xdg.nix`   |
+| Add config files (non-Nix)                     | Co-locate in `programs/<name>/` or add to root     |
 
 ## Common Tasks
 
@@ -354,7 +353,7 @@ User-specific git settings are in `users/personal.nix` or `work.nix`:
 
 For applications that don't have home-manager modules (or you prefer hand-crafted configs):
 
-**Option 1: Co-locate with program module (recommended)**
+**Co-locate with program module (recommended)**
 
 ```shell
 # Create program directory
@@ -369,39 +368,8 @@ EOF
 
 # Add the config file
 cp ~/.config/myapp/config.json programs/myapp/
-```
 
-**Option 2: Use `config/` directory**
-
-1. **Add config to `config/` directory:**
-
-```shell
-mkdir -p config/app-name
-cp ~/.config/app-name/settings.json config/app-name/
-```
-
-2. **Symlink via `programs/xdg.nix`:**
-
-```nix
-# programs/xdg.nix
-{userConfig}: {
-  xdg = {
-    enable = true;
-
-    configFile = {
-      # ... existing symlinks ...
-
-      "app-name/settings.json" = {
-        source = ../config/app-name/settings.json;
-      };
-    };
-  };
-}
-```
-
-3. **Rebuild to apply the symlink:**
-
-```shell
+# Rebuild to apply
 just switch
 ```
 

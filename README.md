@@ -52,10 +52,9 @@ dotfiles/
 ├── flake.nix                    # Unified flake (darwin configs + dev environment)
 ├── flake.lock                   # Pinned flake inputs
 ├── darwin.nix                   # Core darwin system configuration
+├── nix.conf                     # Nix configuration (symlinked to ~/.config/nix/)
 ├── justfile                     # Task runner commands (fmt, lint, switch, etc.)
 ├── .envrc                       # direnv integration for auto-loading dev env
-├── config/                      # Non-Nix config files
-│   └── nix.conf                 # Nix configuration
 ├── hosts/                       # Machine-specific configurations
 │   ├── personal.nix             # Personal MacBook
 │   └── work.nix                 # Work laptop
