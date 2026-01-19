@@ -27,21 +27,10 @@ in {
     # Note: xdg.userDirs is Linux-only, macOS has its own ~/Desktop, ~/Documents, etc.
 
     # ── Config File Symlinks ────────────────────────────────────────────────
-    # Symlink non-nix managed configs from dotfiles/config/
+    # Note: Most config symlinks are now co-located with their program modules:
+    # - git/.gitmessage → programs/git/default.nix
+    # - zed/* → programs/zed/default.nix
     configFile = {
-      # Zed editor configuration
-      "zed/settings.json" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/config/zed/settings.json";
-      };
-      "zed/keymap.json" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/config/zed/keymap.json";
-      };
-      "zed/tasks.json" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/config/zed/tasks.json";
-      };
-
-      # Note: git/.gitmessage is now managed by programs/git/default.nix
-
       # ── Readline Configuration ────────────────────────────────────────────
       # Consistent line editing across tools that use readline
       "readline/inputrc".text = ''

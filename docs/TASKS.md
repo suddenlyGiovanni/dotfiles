@@ -88,12 +88,25 @@ nix-darwin and home-manager conventions.
   - Updated all 13 program modules to use multi-line inherit with trailing semicolon
   - Files: bat, eza, fd, fish, fzf, gh, git, nushell, session, starship, xdg, zoxide, zsh
 
-- [x] **M3: Split `system-defaults.nix`** (`current`)
+- [x] **M3: Split `system-defaults.nix`** (`fc01498`)
   - Split monolithic file into focused modules
   - Created `nix/darwin/modules/system-defaults/` directory
   - New files: activity-monitor, dock, finder, login-window, nsglobaldomain,
     software-update, spaces, trackpad, window-manager
   - Updated `configuration.nix` to import directory
+
+### Phase 8: Asset Co-location
+
+- [x] **Audit `config/` directory** (`current`)
+  - Found only Zed editor configs (settings.json, keymap.json, tasks.json)
+  - Decided to co-locate with new `programs/zed/` module
+
+- [x] **Co-locate Zed configuration** (`current`)
+  - Created `nix/home/programs/zed/default.nix` module
+  - Moved `config/zed/*.json` → `nix/home/programs/zed/`
+  - Updated symlinks to use new paths with `mkOutOfStoreSymlink`
+  - Removed Zed entries from `xdg.nix`
+  - Deleted empty `config/` directory
 
 ---
 
@@ -104,17 +117,6 @@ _No tasks currently in progress_
 ---
 
 ## 📋 To Do
-
-### Phase 8: Additional Asset Co-location
-
-- [ ] **Audit remaining assets in `config/`**
-  - Review `config/` directory for other assets that should be co-located
-  - Identify which programs would benefit from directory module pattern
-
-- [ ] **Co-locate other program assets** (if applicable)
-  - Move relevant config files to their program directories
-  - Update modules to manage their own assets
-  - Remove entries from `xdg.nix`
 
 ### Phase 9: Documentation & Cleanup
 
@@ -128,9 +130,7 @@ _No tasks currently in progress_
   - Ensure project README reflects current structure
   - Add examples of both file and directory module patterns
 
-- [ ] **Clean up `config/` directory**
-  - Remove empty directories after asset migration
-  - Document any remaining non-Nix configs and why they stay
+
 
 ### Phase 10: Validation & Merge
 
@@ -200,10 +200,10 @@ These are potential future enhancements, not part of the current refactoring:
 | File                                       | Purpose                             |
 | ------------------------------------------ | ----------------------------------- |
 | `nix/home/programs/default.nix`            | Auto-discovery logic                |
-| `nix/home/programs/git/default.nix`        | Example directory module            |
-| `nix/home/programs/git/.gitmessage`        | Co-located asset                    |
+| `nix/home/programs/git/default.nix`        | Directory module with co-located asset |
+| `nix/home/programs/zed/default.nix`        | Directory module with co-located configs |
 | `nix/home/users/common.nix`                | Simplified imports, deduplicated    |
-| `nix/home/programs/xdg.nix`                | Removed migrated symlinks           |
+| `nix/home/programs/xdg.nix`                | Reduced to readline config only     |
 | `nix/darwin/modules/system-defaults/`      | Split macOS defaults (9 modules)    |
 | `docs/UPSTREAM-ANALYSIS.md`                | Gap analysis and recommendations    |
 
