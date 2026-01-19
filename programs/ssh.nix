@@ -7,6 +7,10 @@ _: {
   programs.ssh = {
     enable = true;
 
+    # Opt out of default config values that will be removed in future home-manager
+    # We explicitly set what we need in matchBlocks."*" below
+    enableDefaultConfig = false;
+
     # ── Host-specific Configuration ─────────────────────────────────────────
     matchBlocks = {
       # ThingOS development server
