@@ -101,12 +101,24 @@ nix-darwin and home-manager conventions.
   - Found only Zed editor configs (settings.json, keymap.json, tasks.json)
   - Decided to co-locate with new `programs/zed/` module
 
-- [x] **Co-locate Zed configuration** (`current`)
+- [x] **Co-locate Zed configuration** (`1c79b57`)
   - Created `nix/home/programs/zed/default.nix` module
   - Moved `config/zed/*.json` → `nix/home/programs/zed/`
   - Updated symlinks to use new paths with `mkOutOfStoreSymlink`
   - Removed Zed entries from `xdg.nix`
   - Deleted empty `config/` directory
+
+- [x] **Co-locate environment variables with program modules** (`current`)
+  - Created new dedicated modules with XDG-compliant env vars:
+    - `nodejs.nix`: NPM_CONFIG_*, NODE_REPL_HISTORY + packages
+    - `rustup.nix`: CARGO_HOME, RUSTUP_HOME + package
+    - `awscli.nix`: AWS_CONFIG_FILE, AWS_SHARED_CREDENTIALS_FILE + package
+    - `docker.nix`: DOCKER_CONFIG + Docker CLI tools
+    - `python.nix`: PYTHONSTARTUP, PYTHON_HISTORY + uv
+    - `claude-code.nix`: CLAUDE_CONFIG_DIR + package
+  - Updated `bun.nix`: Added BUN_INSTALL env var
+  - Simplified `session.nix`: Only global settings (EDITOR, PAGER, SSH_AUTH_SOCK, etc.)
+  - Updated `common.nix`: Removed packages now in dedicated modules
 
 ---
 
@@ -191,9 +203,10 @@ These are potential future enhancements, not part of the current refactoring:
 
 1. **Upstream alignment**: Match official nix-darwin and home-manager patterns
 2. **Reduced friction**: Auto-discovery means no import maintenance
-3. **Better organization**: Co-located assets are easier to understand
+3. **Better organization**: Co-located assets and env vars are easier to understand
 4. **Consistency**: Standard module signatures across all programs
 5. **Portability**: Easier to set up on new machines
+6. **Maintainability**: Removing a program removes all its config (no orphaned env vars)
 
 ### Key Files Changed
 
@@ -202,6 +215,12 @@ These are potential future enhancements, not part of the current refactoring:
 | `nix/home/programs/default.nix`            | Auto-discovery logic                |
 | `nix/home/programs/git/default.nix`        | Directory module with co-located asset |
 | `nix/home/programs/zed/default.nix`        | Directory module with co-located configs |
+| `nix/home/programs/nodejs.nix`             | Node.js + XDG env vars |
+| `nix/home/programs/rustup.nix`             | Rust toolchain + XDG env vars |
+| `nix/home/programs/awscli.nix`             | AWS CLI + XDG env vars |
+| `nix/home/programs/docker.nix`             | Docker tools + XDG env vars |
+| `nix/home/programs/python.nix`             | Python tools + XDG env vars |
+| `nix/home/programs/claude-code.nix`        | Claude Code + XDG env vars |
 | `nix/home/users/common.nix`                | Simplified imports, deduplicated    |
 | `nix/home/programs/xdg.nix`                | Reduced to readline config only     |
 | `nix/darwin/modules/system-defaults/`      | Split macOS defaults (9 modules)    |

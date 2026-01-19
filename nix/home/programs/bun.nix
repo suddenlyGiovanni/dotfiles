@@ -1,6 +1,12 @@
+# Bun - all-in-one JavaScript runtime & toolkit
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/bun.nix
 # https://bun.sh/docs/runtime/bunfig
 {config, ...}: {
+  # ── XDG Compliance ──────────────────────────────────────────────────────────
+  home.sessionVariables = {
+    BUN_INSTALL = "${config.xdg.dataHome}/bun";
+  };
+
   programs.bun = {
     enable = true; # Bun - all-in-one JavaScript runtime & toolkit
 
