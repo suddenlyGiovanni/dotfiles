@@ -49,10 +49,13 @@ dotfiles/
 ├── hosts/           # Machine-specific configurations
 │   ├── personal.nix # Personal MacBook
 │   └── work.nix     # Work laptop
-├── modules/         # Darwin system modules
+├── modules/         # Darwin system modules (auto-discovered)
+│   ├── default.nix  # Auto-discovery module
+│   ├── dock.nix     # Dock preferences
+│   ├── finder.nix   # Finder preferences
 │   ├── homebrew.nix # Homebrew casks, formulae, MAS apps
 │   ├── security.nix # Firewall, Touch ID
-│   └── system-defaults/  # macOS preferences (dock, finder, etc.)
+│   └── ...          # Other system modules (trackpad, etc.)
 ├── programs/        # Home-manager program configs (auto-discovered)
 │   ├── default.nix  # Auto-discovery module
 │   ├── bat.nix      # Simple module: single file
@@ -76,9 +79,9 @@ dotfiles/
 | Add a GUI app (Homebrew cask) for all machines | `modules/homebrew.nix` → `casks`                   |
 | Add a GUI app for personal machine only        | `hosts/personal.nix` → `homebrew.casks`            |
 | Add a GUI app for work machine only            | `hosts/work.nix` → `homebrew.casks`                |
-| Change macOS Dock settings                     | `modules/system-defaults/dock.nix`                 |
-| Change macOS Finder settings                   | `modules/system-defaults/finder.nix`               |
-| Change macOS trackpad settings                 | `modules/system-defaults/trackpad.nix`             |
+| Change macOS Dock settings                     | `modules/dock.nix`                                 |
+| Change macOS Finder settings                   | `modules/finder.nix`                               |
+| Change macOS trackpad settings                 | `modules/trackpad.nix`                             |
 | Change firewall/Touch ID settings              | `modules/security.nix`                             |
 | Configure a program (git, fish, etc.)          | `programs/` (flat structure, auto-discovered)      |
 | Change git identity                            | `programs/git/default.nix` (uses directory-based conditional includes) |
@@ -167,7 +170,7 @@ brew search <app-name>
 
 macOS settings are split into focused modules in `modules/system-defaults/`:
 
-**Dock settings** (`dock.nix`):
+**Dock settings** (`modules/dock.nix`):
 
 ```nix
 _: {
@@ -181,7 +184,7 @@ _: {
 }
 ```
 
-**Finder settings** (`finder.nix`):
+**Finder settings** (`modules/finder.nix`):
 
 ```nix
 _: {
@@ -194,7 +197,7 @@ _: {
 }
 ```
 
-**Global settings** (`nsglobaldomain.nix`):
+**Global settings** (`modules/nsglobaldomain.nix`):
 
 ```nix
 _: {

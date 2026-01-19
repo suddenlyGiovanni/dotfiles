@@ -59,10 +59,13 @@ dotfiles/
 ├── hosts/                       # Machine-specific configurations
 │   ├── personal.nix             # Personal MacBook
 │   └── work.nix                 # Work laptop
-├── modules/                     # Darwin system modules
+├── modules/                     # Darwin system modules (auto-discovered)
+│   ├── default.nix              # Auto-discovery module
+│   ├── dock.nix                 # Dock preferences
+│   ├── finder.nix               # Finder preferences
 │   ├── homebrew.nix             # Homebrew casks, formulae, MAS apps
 │   ├── security.nix             # Firewall, Touch ID
-│   └── system-defaults/         # macOS preferences (dock, finder, etc.)
+│   └── ...                      # Other system modules (trackpad, etc.)
 ├── programs/                    # Home-manager program configs (auto-discovered)
 │   ├── default.nix              # Auto-discovery module
 │   ├── bat.nix                  # Simple module: single file

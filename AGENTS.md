@@ -44,7 +44,7 @@ dotfiles/
 ├── home.nix         # Home-manager user configuration (imports programs/)
 ├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
 ├── hosts/           # Machine-specific configs (personal.nix, work.nix)
-├── modules/         # Darwin system modules (homebrew, security, system-defaults/)
+├── modules/         # Darwin system modules (flat, auto-discovered)
 └── programs/        # Home-manager program configs (flat, auto-discovered)
 ```
 
@@ -70,12 +70,12 @@ dotfiles/
 - `hosts/*.nix` - Machine-specific data (hostname, homebrew casks)
 - `programs/session.nix` - Environment variables (EDITOR, XDG paths)
 - `modules/homebrew.nix` - GUI apps via Homebrew
-- `modules/system-defaults/` - macOS preferences (dock, finder, trackpad, etc.)
+- `modules/*.nix` - macOS preferences (dock, finder, trackpad, security, etc.)
 
 ### Module Patterns
 
-- **Flat auto-discovery**: Programs in `programs/` are auto-imported via `default.nix`
-- **Co-located configs**: Complex programs use directories (e.g., `zed/default.nix` + `zed/settings.json`)
+- **Flat auto-discovery**: Both `modules/` and `programs/` use auto-import via `default.nix`
+- **Co-located configs**: Complex modules use directories (e.g., `programs/zed/default.nix` + `programs/zed/settings.json`)
 - **XDG env vars**: Program-specific XDG variables are set in their respective modules (e.g., `nodejs.nix` sets `NPM_CONFIG_CACHE`)
 
 ## Important Constraints
@@ -92,7 +92,9 @@ dotfiles/
 
 **Add a Homebrew cask**: Edit `modules/homebrew.nix` or host-specific file in `hosts/`
 
-**Configure a program**: Add/edit module in `programs/`
+**Configure a program**: Add/edit file in `programs/` (auto-discovered)
+
+**Add macOS system preference**: Add/edit file in `modules/` (auto-discovered)
 
 **Add environment variable**: Edit `home.sessionVariables` in `programs/session.nix`
 

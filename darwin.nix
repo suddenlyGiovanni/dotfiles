@@ -7,11 +7,9 @@
   userConfig,
   ...
 }: {
-  # Import focused configuration modules
+  # Import focused configuration modules (auto-discovered)
   imports = [
-    ./modules/system-defaults # imports default.nix which loads all system-defaults modules
-    ./modules/homebrew.nix
-    ./modules/security.nix
+    ./modules # imports default.nix which auto-discovers all modules
   ];
 
   ids.gids.nixbld = 350;
