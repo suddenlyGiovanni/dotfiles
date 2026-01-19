@@ -1,15 +1,15 @@
 # fzf - A command-line fuzzy finder
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/fzf.nix
+#
+# Shell integrations are automatically enabled based on which shells are active.
+# This module reads config.programs.<shell>.enable to coordinate.
 {
   config,
   lib,
   pkgs,
   ...
 }: let
-  inherit
-    (lib)
-    mkDefault
-    ;
+  inherit (lib) mkDefault;
 in {
   programs.fzf = {
     enable = true;
@@ -36,9 +36,9 @@ in {
     # See: https://github.com/junegunn/fzf/wiki/Color-schemes
     colors = {};
 
-    # Shell integrations
-    enableBashIntegration = mkDefault false;
-    enableZshIntegration = mkDefault true;
-    enableFishIntegration = mkDefault true;
+    # Shell integrations - derived from enabled shells
+    enableBashIntegration = config.programs.bash.enable;
+    enableZshIntegration = config.programs.zsh.enable;
+    enableFishIntegration = config.programs.fish.enable;
   };
 }

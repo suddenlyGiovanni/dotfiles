@@ -1,16 +1,6 @@
 # fish - The friendly interactive shell
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/fish.nix
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
-  inherit
-    (lib)
-    mkDefault
-    ;
-in {
+{pkgs, ...}: {
   programs.fish = {
     enable = true; # fish, the friendly interactive shell
     package = pkgs.fish; # The fish package to install. May be used to change the version.
@@ -36,8 +26,8 @@ in {
       end
     '';
 
-    # Shell script code called during interactive fish shell initialisation, this will be the last thing executed in fish startup.
-    # Note: enable_transience is already called by starship integration (enableTransience = true in starship.nix)
+    # Shell script code called during interactive fish shell initialisation
+    # This will be the last thing executed in fish startup
     shellInitLast = "";
     plugins = []; # The plugins to source in {file}`conf.d/99plugins.fish`.
     functions = {}; # Basic functions to add to fish. For more information see <https://fishshell.com/docs/current/cmds/function.html>.

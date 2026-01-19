@@ -1,6 +1,9 @@
 # Bun - all-in-one JavaScript runtime & toolkit
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/bun.nix
 # https://bun.sh/docs/runtime/bunfig
+#
+# Git integration is automatically enabled based on whether git is active.
+# This module reads config.programs.git.enable to coordinate.
 {config, ...}: {
   # ── XDG Compliance ──────────────────────────────────────────────────────────
   home.sessionVariables = {
@@ -10,8 +13,8 @@
   programs.bun = {
     enable = true; # Bun - all-in-one JavaScript runtime & toolkit
 
-    # Git integration for diffing bun.lockb files
-    enableGitIntegration = true;
+    # Git integration for diffing bun.lockb files - derived from git being enabled
+    enableGitIntegration = config.programs.git.enable;
 
     settings = {
       # ===== Privacy =====

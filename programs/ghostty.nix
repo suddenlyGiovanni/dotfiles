@@ -1,16 +1,24 @@
 # Ghostty terminal emulator configuration
 # https://ghostty.org/docs/config
-{pkgs, ...}: {
+#
+# Shell integrations are automatically enabled based on which shells are active.
+# This module reads config.programs.<shell>.enable to coordinate.
+{
+  config,
+  pkgs,
+  ...
+}: {
   programs.ghostty = {
     enable = true;
     package = pkgs.ghostty-bin;
 
-    # Shell integrations
-    enableZshIntegration = true;
-    enableFishIntegration = true;
+    # Shell integrations - derived from enabled shells
+    enableZshIntegration = config.programs.zsh.enable;
+    enableFishIntegration = config.programs.fish.enable;
+    enableBashIntegration = config.programs.bash.enable;
 
-    # Syntax highlighting for bat
-    installBatSyntax = true;
+    # Syntax highlighting for bat - derived from bat being enabled
+    installBatSyntax = config.programs.bat.enable;
 
     settings = {
       # Font configuration

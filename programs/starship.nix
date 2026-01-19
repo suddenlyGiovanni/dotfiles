@@ -1,28 +1,29 @@
 # starship - A minimal, blazing-fast, and customizable prompt for any shell
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/starship.nix
+#
+# Shell integrations are automatically enabled based on which shells are active.
+# This module reads config.programs.<shell>.enable to coordinate.
 {
   config,
   lib,
   pkgs,
   ...
 }: let
-  inherit
-    (lib)
-    mkDefault
-    ;
+  inherit (lib) mkDefault;
 in {
   programs.starship = {
     enable = true;
     package = mkDefault pkgs.starship;
 
-    # Shell integrations
-    enableBashIntegration = mkDefault true;
-    enableZshIntegration = mkDefault true;
-    enableFishIntegration = mkDefault true;
-    enableNushellIntegration = mkDefault true;
+    # Shell integrations - derived from enabled shells
+    enableBashIntegration = config.programs.bash.enable;
+    enableZshIntegration = config.programs.zsh.enable;
+    enableFishIntegration = config.programs.fish.enable;
+    enableNushellIntegration = config.programs.nushell.enable;
 
     # Enable transience (show minimal prompt for previous commands)
-    enableTransience = mkDefault true;
+    # Only effective for fish shell
+    enableTransience = config.programs.fish.enable;
 
     settings = {
       add_newline = false;
