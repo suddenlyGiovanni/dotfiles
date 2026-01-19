@@ -28,7 +28,6 @@ in {
     # ── Packages ────────────────────────────────────────────────────────────
     # Note: bat, eza, fd, fzf, starship, zoxide, nushell are installed via programs.* modules
     packages = with pkgs; [
-
       _1password-cli # 1Password command-line tool
       alejandra # Uncompromising Nix Code Formatter
       awscli2 # Unified tool to manage your AWS services
@@ -51,27 +50,6 @@ in {
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
       uv # Extremely fast Python package installer and resolver, written in Rust
-      _1password-cli
-      alejandra
-      nixd
-      awscli2
-      container
-      dive
-      docker-buildx
-      docker-slim
-      lazydocker
-      nodejs_24
-      pnpm
-      biome
-      uv
-      rustup
-      cocoapods
-      glow
-      httpie
-      jq
-      just
-      shellcheck
-      shfmt
     ];
 
     # ── Symlinked Configuration Files ───────────────────────────────────────
@@ -93,11 +71,6 @@ in {
     # Enable home-manager itself
     home-manager.enable = true;
 
-    # direnv - Automatic environment switching
-    direnv = {
-      enable = true;
-      enableZshIntegration = mkDefault true;
-      nix-direnv.enable = mkDefault true;
-    };
+    # Note: direnv is configured in programs/direnv.nix (auto-discovered)
   };
 }

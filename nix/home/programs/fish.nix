@@ -15,15 +15,12 @@ in {
     shellAliases = {}; # An attribute set that maps aliases (the top level attribute names in this option) to command strings or directly to build outputs.
     shellAbbrs = {}; # An attribute set that maps aliases (the top level attribute names in this option) to abbreviations. Abbreviations are expanded with the longer phrase after they are entered.
     preferAbbrs = true; # If enabled, abbreviations will be preferred over aliases when other modules define aliases for fish.
+    # Shell script code called during fish shell initialisation
     # Add home-manager vendor completions to fish_complete_path
     # This ensures completions from packages installed via home-manager (like bun) are found
     shellInit = ''
       set -gp fish_complete_path ~/.local/state/nix/profiles/home-manager/home-path/share/fish/vendor_completions.d
     '';
-    loginShellInit = ""; # Shell script code called during fish login shell initialisation.
-
-    # Shell script code called during fish shell initialisation
-    shellInit = "";
 
     # Shell script code called during fish login shell initialisation
     loginShellInit = "";
