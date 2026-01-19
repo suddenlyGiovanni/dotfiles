@@ -8,7 +8,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkDefault;
+  inherit
+    (lib)
+    mkDefault
+    ;
 
   # Directory containing this module and its config files
   gitConfigDir = ./.;

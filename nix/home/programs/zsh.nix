@@ -7,7 +7,10 @@
   userConfig,
   ...
 }: let
-  inherit (lib) mkDefault;
+  inherit
+    (lib)
+    mkDefault
+    ;
 in {
   programs.zsh = {
     enable = true;

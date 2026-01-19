@@ -9,7 +9,10 @@
   userConfig,
   ...
 }: let
-  inherit (lib) mkDefault;
+  inherit
+    (lib)
+    mkDefault
+    ;
 in {
   xdg = {
     enable = true;

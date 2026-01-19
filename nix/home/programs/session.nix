@@ -8,7 +8,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkDefault;
+  inherit
+    (lib)
+    mkDefault
+    ;
 in {
   # Ensure XDG state subdirectories exist for tools that write history files
   # home-manager creates the base directories but not nested subdirs

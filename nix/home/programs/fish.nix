@@ -6,7 +6,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkDefault;
+  inherit
+    (lib)
+    mkDefault
+    ;
 in {
   programs.fish = {
     enable = true; # fish, the friendly interactive shell
