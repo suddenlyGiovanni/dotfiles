@@ -497,21 +497,21 @@ Current approach is fine but should be documented.
 
 ```markdown
 ## Immediate Fixes
-- [ ] Remove duplicate packages in common.nix
-- [ ] Remove direnv config from common.nix (keep in direnv.nix)
+- [x] Remove duplicate packages in common.nix ✓
+- [x] Remove direnv config from common.nix (keep in direnv.nix) ✓
 
 ## Style Improvements
-- [ ] Update let blocks to multi-line inherit format
-- [ ] Add cfg pattern to complex modules (git, zsh)
+- [x] Update let blocks to multi-line inherit format ✓
+- [ ] Add cfg pattern to complex modules (git, zsh) - SKIPPED (not needed for consumer modules)
 
 ## Structural Improvements
-- [ ] Consider splitting system-defaults.nix (optional)
+- [x] Split system-defaults.nix into focused modules ✓
 - [ ] Document userConfig pattern in ADR
 
 ## Validation
-- [ ] Run `just fmt` after changes
-- [ ] Run `just lint` to check for issues
-- [ ] Run `just build` to verify configuration
+- [x] Run `just fmt` after changes ✓
+- [x] Run `just lint` to check for issues ✓
+- [x] Run `just build` to verify configuration ✓
 - [ ] Run `just switch` to apply and test
 ```
 

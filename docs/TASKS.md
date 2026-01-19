@@ -67,9 +67,33 @@ nix-darwin and home-manager conventions.
 - [x] **Create task tracker** (`b7f07f3`)
   - Initial TASKS.md with kanban-style tracking
 
-- [x] **Upstream analysis** (`current`)
+- [x] **Upstream analysis** (`9e5882d`)
   - Analyze nix-darwin and home-manager source patterns
   - Document gaps and recommendations in UPSTREAM-ANALYSIS.md
+
+### Phase 6: High Priority Fixes (Correctness)
+
+- [x] **H1: Remove duplicate packages in `common.nix`** (`db3b8f0`)
+  - Removed 21 duplicate package entries
+  - Fixed pre-existing bug: duplicate `shellInit`/`loginShellInit` in fish.nix
+
+- [x] **H2: Consolidate direnv configuration** (`db3b8f0`)
+  - Removed `programs.direnv` block from `common.nix`
+  - Fixed empty pattern warning in `direnv.nix` (`{...}:` → `_:`)
+  - Configuration now only in `programs/direnv.nix`
+
+### Phase 7: Medium Priority (Consistency)
+
+- [x] **M1: Standardize `let` block formatting** (`85bc240`)
+  - Updated all 13 program modules to use multi-line inherit with trailing semicolon
+  - Files: bat, eza, fd, fish, fzf, gh, git, nushell, session, starship, xdg, zoxide, zsh
+
+- [x] **M3: Split `system-defaults.nix`** (`current`)
+  - Split monolithic file into focused modules
+  - Created `nix/darwin/modules/system-defaults/` directory
+  - New files: activity-monitor, dock, finder, login-window, nsglobaldomain,
+    software-update, spaces, trackpad, window-manager
+  - Updated `configuration.nix` to import directory
 
 ---
 
@@ -80,43 +104,6 @@ _No tasks currently in progress_
 ---
 
 ## 📋 To Do
-
-### Phase 6: High Priority Fixes (Correctness)
-
-- [ ] **H1: Remove duplicate packages in `common.nix`**
-  - Duplicates found: `_1password-cli`, `alejandra`, `nixd`, `awscli2`, `container`,
-    `dive`, `docker-buildx`, `docker-slim`, `lazydocker`, `nodejs_24`, `pnpm`,
-    `biome`, `uv`, `rustup`, `cocoapods`, `glow`, `httpie`, `jq`, `just`,
-    `shellcheck`, `shfmt`
-  - Remove the duplicate entries at the bottom of the list
-
-- [ ] **H2: Consolidate direnv configuration**
-  - Remove `programs.direnv` block from `common.nix`
-  - Keep configuration only in `programs/direnv.nix`
-  - Verify direnv still works after change
-
-### Phase 7: Medium Priority (Consistency)
-
-- [ ] **M1: Standardize `let` block formatting**
-  - Update all modules to use multi-line inherit with trailing semicolon
-  - Example:
-    ```nix
-    let
-      inherit (lib)
-        mkDefault
-        ;
-    in
-    ```
-  - Files to update: All modules in `nix/home/programs/`
-
-- [ ] **M2: Add `cfg` pattern to complex modules**
-  - Add `cfg = config.programs.X;` to modules that reference their own config
-  - Priority modules: `git/default.nix`, `zsh.nix`
-
-- [ ] **M3: Consider splitting `system-defaults.nix`** (optional)
-  - Split into: `dock.nix`, `finder.nix`, `trackpad.nix`, `nsglobaldomain.nix`
-  - Create `system-defaults/default.nix` to import all
-  - Trade-off: More files vs easier navigation
 
 ### Phase 8: Additional Asset Co-location
 
@@ -210,14 +197,15 @@ These are potential future enhancements, not part of the current refactoring:
 
 ### Key Files Changed
 
-| File                                 | Purpose                        |
-| ------------------------------------ | ------------------------------ |
-| `nix/home/programs/default.nix`      | Auto-discovery logic           |
-| `nix/home/programs/git/default.nix`  | Example directory module       |
-| `nix/home/programs/git/.gitmessage`  | Co-located asset               |
-| `nix/home/users/common.nix`          | Simplified imports             |
-| `nix/home/programs/xdg.nix`          | Removed migrated symlinks      |
-| `docs/UPSTREAM-ANALYSIS.md`          | Gap analysis and recommendations |
+| File                                       | Purpose                             |
+| ------------------------------------------ | ----------------------------------- |
+| `nix/home/programs/default.nix`            | Auto-discovery logic                |
+| `nix/home/programs/git/default.nix`        | Example directory module            |
+| `nix/home/programs/git/.gitmessage`        | Co-located asset                    |
+| `nix/home/users/common.nix`                | Simplified imports, deduplicated    |
+| `nix/home/programs/xdg.nix`                | Removed migrated symlinks           |
+| `nix/darwin/modules/system-defaults/`      | Split macOS defaults (9 modules)    |
+| `docs/UPSTREAM-ANALYSIS.md`                | Gap analysis and recommendations    |
 
 ### Upstream References
 

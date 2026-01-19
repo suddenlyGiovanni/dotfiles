@@ -9,7 +9,7 @@
 }: {
   # Import focused configuration modules
   imports = [
-    ./modules/system-defaults.nix
+    ./modules/system-defaults # imports default.nix which loads all system-defaults modules
     ./modules/homebrew.nix
     ./modules/security.nix
   ];
