@@ -159,18 +159,34 @@ nix-darwin and home-manager conventions.
 
 ### Phase 9: Flake Consolidation
 
-- [x] **Unify root and darwin flakes** (in progress)
+- [x] **Unify root and darwin flakes**
   - Merged `nix/darwin/flake.nix` into root `flake.nix`
   - Root flake now exposes: `darwinConfigurations`, `devShells`, `formatter`
-  - Updated all paths in flake to reference `./nix/darwin/...`
   - Deleted `nix/darwin/flake.nix` and `nix/darwin/flake.lock`
   - Updated `justfile` to use `.` instead of `./nix/darwin`
   - Updated lock file with new unified inputs
 
-- [x] **Update documentation for flake consolidation**
-  - Updated `AGENTS.md` with unified flake architecture
-  - Updated `README.md` with new project structure and commands
-  - Updated `docs/CUSTOMIZATION.md` with new paths and examples
+### Phase 10: Flat Directory Structure
+
+- [x] **Remove redundant `nix/` prefix and flatten structure**
+  - Moved `nix/darwin/hosts/` → `hosts/`
+  - Moved `nix/darwin/modules/` → `modules/`
+  - Moved `nix/darwin/configuration.nix` → `darwin.nix`
+  - Moved `nix/home/programs/` → `programs/`
+  - Moved `nix/home/users/` → `users/`
+  - Moved `nix/nix.conf` → `config/nix.conf`
+  - Deleted empty `nix/` directory
+
+- [x] **Update all import paths**
+  - Updated `flake.nix` host imports to `./hosts/`
+  - Updated `flake.nix` darwin config to `./darwin.nix`
+  - Updated `hosts/*.nix` userModule paths to `../users/`
+  - Updated `users/common.nix` nix.conf symlink path
+
+- [x] **Update documentation for flat structure**
+  - Updated `AGENTS.md` with new directory layout
+  - Updated `README.md` with new project structure
+  - Updated `docs/CUSTOMIZATION.md` with new paths
 
 ---
 
@@ -263,23 +279,31 @@ These are potential future enhancements, not part of the current refactoring:
 | File                                       | Purpose                                    |
 | ------------------------------------------ | ------------------------------------------ |
 | `flake.nix`                                | Unified flake (darwin + dev environment)   |
+| `darwin.nix`                               | Core darwin system configuration           |
 | `justfile`                                 | Updated to use root flake                  |
-| `nix/home/programs/default.nix`            | Auto-discovery logic                       |
-| `nix/home/programs/git/default.nix`        | Directory module with co-located asset     |
-| `nix/home/programs/zed/default.nix`        | Directory module with co-located configs   |
-| `nix/home/programs/nodejs.nix`             | Node.js + XDG env vars                     |
-| `nix/home/programs/rustup.nix`             | Rust toolchain + XDG env vars              |
-| `nix/home/programs/awscli.nix`             | AWS CLI + XDG env vars                     |
-| `nix/home/programs/docker.nix`             | Docker tools + XDG env vars                |
-| `nix/home/programs/python.nix`             | Python tools + XDG env vars                |
-| `nix/home/programs/claude-code.nix`        | Claude Code + XDG env vars                 |
-| `nix/home/programs/gitbutler.nix`          | GitButler git config (pkg via Homebrew)    |
-| `nix/home/programs/ssh.nix`                | Declarative SSH client config              |
-| `nix/home/programs/gpg.nix`                | Declarative GPG config + XDG compliance    |
-| `nix/home/users/common.nix`                | Simplified imports, deduplicated           |
-| `nix/home/programs/xdg.nix`                | Reduced to readline config only            |
-| `nix/home/programs/session.nix`            | Global env vars only (EDITOR, PAGER, etc.) |
-| `nix/darwin/modules/system-defaults/`      | Split macOS defaults (9 modules)           |
+| `hosts/personal.nix`                       | Personal machine configuration             |
+| `hosts/work.nix`                           | Work machine configuration                 |
+| `modules/homebrew.nix`                     | Homebrew casks and formulae                |
+| `modules/security.nix`                     | Firewall, Touch ID                         |
+| `modules/system-defaults/`                 | Split macOS defaults (9 modules)           |
+| `programs/default.nix`                     | Auto-discovery logic                       |
+| `programs/git/default.nix`                 | Directory module with co-located asset     |
+| `programs/zed/default.nix`                 | Directory module with co-located configs   |
+| `programs/nodejs.nix`                      | Node.js + XDG env vars                     |
+| `programs/rustup.nix`                      | Rust toolchain + XDG env vars              |
+| `programs/awscli.nix`                      | AWS CLI + XDG env vars                     |
+| `programs/docker.nix`                      | Docker tools + XDG env vars                |
+| `programs/python.nix`                      | Python tools + XDG env vars                |
+| `programs/claude-code.nix`                 | Claude Code + XDG env vars                 |
+| `programs/gitbutler.nix`                   | GitButler git config (pkg via Homebrew)    |
+| `programs/ssh.nix`                         | Declarative SSH client config              |
+| `programs/gpg.nix`                         | Declarative GPG config + XDG compliance    |
+| `programs/xdg.nix`                         | Reduced to readline config only            |
+| `programs/session.nix`                     | Global env vars only (EDITOR, PAGER, etc.) |
+| `users/common.nix`                         | Simplified imports, deduplicated           |
+| `users/personal.nix`                       | Personal git identity                      |
+| `users/work.nix`                           | Work git identity                          |
+| `config/nix.conf`                          | Nix configuration                          |
 | `docs/UPSTREAM-ANALYSIS.md`                | Gap analysis and recommendations           |
 
 ### Files Removed
@@ -288,6 +312,7 @@ These are potential future enhancements, not part of the current refactoring:
 | ------------------------------------------ | ------------------------------------------ |
 | `nix/darwin/flake.nix`                     | Merged into root `flake.nix`               |
 | `nix/darwin/flake.lock`                    | Replaced by root `flake.lock`              |
+| `nix/` directory                           | Flattened to root level                    |
 
 ### Home Directory Status (Post-Cleanup)
 

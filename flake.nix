@@ -25,8 +25,8 @@
     forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
     # Import host configurations
-    personalHost = import ./nix/darwin/hosts/personal.nix;
-    workHost = import ./nix/darwin/hosts/work.nix;
+    personalHost = import ./hosts/personal.nix;
+    workHost = import ./hosts/work.nix;
 
     # Helper function to create a darwin configuration
     mkDarwinConfig = hostConfig:
@@ -37,7 +37,7 @@
           inherit (hostConfig) userConfig;
         };
         modules = [
-          ./nix/darwin/configuration.nix
+          ./darwin.nix
           mac-app-util.darwinModules.default
           home-manager.darwinModules.home-manager
           {

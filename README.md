@@ -11,7 +11,7 @@ Supports multiple machines with shared and host-specific settings.
 - 🏠 **Home Manager integration** - User environment and dotfiles management
 - 🍺 **Homebrew integration** - GUI apps via nix-homebrew
 - 🖥️ **Multi-machine support** - Shared config with per-host overrides
-- 📦 **Modular structure** - Organized by concern (system, programs, security)
+- 📦 **Flat modular structure** - Organized by purpose, not by tool
 - 🎨 **Dev tooling included** - Formatters, linters, LSP via unified flake
 
 ## 🚀 Quick Start
@@ -51,35 +51,32 @@ just switch
 dotfiles/
 ├── flake.nix                    # Unified flake (darwin configs + dev environment)
 ├── flake.lock                   # Pinned flake inputs
+├── darwin.nix                   # Core darwin system configuration
 ├── justfile                     # Task runner commands (fmt, lint, switch, etc.)
 ├── .envrc                       # direnv integration for auto-loading dev env
-├── config/                      # Non-Nix configs symlinked via home-manager
-│   └── git/                     # Git templates
-├── nix/
-│   ├── darwin/                  # nix-darwin system configuration
-│   │   ├── configuration.nix    # Core system settings
-│   │   ├── modules/             # System-level modules
-│   │   │   ├── homebrew.nix     # Homebrew casks, formulae, MAS apps
-│   │   │   ├── security.nix     # Firewall, Touch ID
-│   │   │   └── system-defaults/ # macOS preferences (dock, finder, etc.)
-│   │   └── hosts/               # Machine-specific configs
-│   │       ├── personal.nix     # Personal MacBook
-│   │       └── work.nix         # Work laptop
-│   └── home/                    # home-manager user environment
-│       ├── programs/            # Program configurations (auto-discovered)
-│       │   ├── default.nix      # Auto-discovery module
-│       │   ├── bat.nix          # Simple module: single file
-│       │   ├── git/             # Complex module: directory with default.nix
-│       │   │   └── default.nix
-│       │   ├── zed/             # Co-located config: nix + json files
-│       │   │   ├── default.nix
-│       │   │   ├── settings.json
-│       │   │   └── keymap.json
-│       │   └── ...              # Other program modules (auto-discovered)
-│       └── users/               # User-specific configs
-│           ├── common.nix       # Shared packages and programs
-│           ├── personal.nix     # Personal git identity
-│           └── work.nix         # Work git identity
+├── config/                      # Non-Nix config files
+│   └── nix.conf                 # Nix configuration
+├── hosts/                       # Machine-specific configurations
+│   ├── personal.nix             # Personal MacBook
+│   └── work.nix                 # Work laptop
+├── modules/                     # Darwin system modules
+│   ├── homebrew.nix             # Homebrew casks, formulae, MAS apps
+│   ├── security.nix             # Firewall, Touch ID
+│   └── system-defaults/         # macOS preferences (dock, finder, etc.)
+├── programs/                    # Home-manager program configs (auto-discovered)
+│   ├── default.nix              # Auto-discovery module
+│   ├── bat.nix                  # Simple module: single file
+│   ├── git/                     # Complex module: directory with default.nix
+│   │   └── default.nix
+│   ├── zed/                     # Co-located config: nix + json files
+│   │   ├── default.nix
+│   │   ├── settings.json
+│   │   └── keymap.json
+│   └── ...                      # Other program modules (auto-discovered)
+├── users/                       # User-specific configs
+│   ├── common.nix               # Shared packages and programs
+│   ├── personal.nix             # Personal git identity
+│   └── work.nix                 # Work git identity
 └── docs/
     ├── adr/                     # Architecture Decision Records
     └── CUSTOMIZATION.md         # How to customize this config
@@ -121,14 +118,14 @@ just gc          # Garbage collect (keeps last 7 days)
 
 ### Making Changes
 
-1. **Adding packages**: Edit `nix/home/users/common.nix` → `home.packages`
-2. **Adding a simple program**: Create `nix/home/programs/foo.nix` — auto-discovered!
-3. **Adding a complex program**: Create `nix/home/programs/foo/default.nix` — also auto-discovered!
+1. **Adding packages**: Edit `users/common.nix` → `home.packages`
+2. **Adding a simple program**: Create `programs/foo.nix` — auto-discovered!
+3. **Adding a complex program**: Create `programs/foo/default.nix` — also auto-discovered!
 4. **Co-locating config files**: Put JSON/YAML alongside `default.nix` in the program directory
 5. **Drafting a module**: Prefix with `_` (e.g., `_tmux.nix` or `_neovim/`) to exclude from auto-discovery
-6. **System preferences**: Edit modules in `nix/darwin/modules/system-defaults/`
-7. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
-8. **Per-machine settings**: Edit files in `nix/darwin/hosts/`
+6. **System preferences**: Edit modules in `modules/system-defaults/`
+7. **Homebrew apps**: Edit `modules/homebrew.nix`
+8. **Per-machine settings**: Edit files in `hosts/`
 
 See [CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) for detailed examples.
 
@@ -152,17 +149,17 @@ just switch
 
 ### Available Configurations
 
-| Hostname                           | Machine              | Location                        |
-| ---------------------------------- | -------------------- | ------------------------------- |
-| `suddenlyGiovannis-MacBook-Personal` | Personal MacBook     | `nix/darwin/hosts/personal.nix` |
-| `suddenlyGiovannis-MacBook-Work`   | Work laptop          | `nix/darwin/hosts/work.nix`     |
+| Hostname                             | Machine          | Location              |
+| ------------------------------------ | ---------------- | --------------------- |
+| `suddenlyGiovannis-MacBook-Personal` | Personal MacBook | `hosts/personal.nix`  |
+| `suddenlyGiovannis-MacBook-Work`     | Work laptop      | `hosts/work.nix`      |
 
 ### Adding a New Machine
 
-1. Create a new host config in `nix/darwin/hosts/`:
+1. Create a new host config in `hosts/`:
 
 ```nix
-# nix/darwin/hosts/my-machine.nix
+# hosts/my-machine.nix
 {
   userConfig = {
     username = "myuser";
@@ -170,7 +167,7 @@ just switch
     homeDirectory = "/Users/myuser";
     dotfilesPath = "/Users/myuser/Developer/dotfiles";
   };
-  userModule = ../../home/users/personal.nix;  # or work.nix
+  userModule = ../users/personal.nix;  # or work.nix
   system = "aarch64-darwin";
   hostname = "My-Machine";
   homebrew = {
@@ -183,7 +180,7 @@ just switch
 2. Import it in `flake.nix`:
 
 ```nix
-myMachine = import ./nix/darwin/hosts/my-machine.nix;
+myMachine = import ./hosts/my-machine.nix;
 ```
 
 3. Add to `darwinConfigurations`:

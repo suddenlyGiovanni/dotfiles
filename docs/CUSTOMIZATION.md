@@ -39,68 +39,65 @@ just gc          # Garbage collect (keeps last 7 days)
 
 ```
 dotfiles/
-├── flake.nix                    # Unified flake (darwin configs + dev environment)
-├── flake.lock                   # Pinned flake inputs
-├── justfile                     # Task runner commands
-├── .envrc                       # direnv integration
-├── config/                      # Non-Nix configs symlinked via home-manager
-│   └── git/                     # Git templates (.gitmessage)
-├── nix/
-│   ├── darwin/                  # nix-darwin system configuration
-│   │   ├── configuration.nix    # Core system settings
-│   │   ├── modules/             # System-level modules
-│   │   │   ├── homebrew.nix     # Homebrew casks, formulae, MAS apps
-│   │   │   ├── security.nix     # Firewall, Touch ID
-│   │   │   └── system-defaults/ # macOS preferences (dock, finder, etc.)
-│   │   └── hosts/               # Machine-specific configs
-│   │       ├── personal.nix     # Personal MacBook
-│   │       └── work.nix         # Work laptop
-│   └── home/                    # home-manager user environment
-│       ├── programs/            # Program configurations (flat, auto-discovered)
-│       │   ├── default.nix      # Auto-discovery module
-│       │   ├── bat.nix          # Simple module: single file
-│       │   ├── git/             # Complex module: directory with default.nix
-│       │   │   └── default.nix
-│       │   ├── zed/             # Co-located config: nix + json files
-│       │   │   ├── default.nix
-│       │   │   ├── settings.json
-│       │   │   └── keymap.json
-│       │   └── ...              # Other program modules (auto-discovered)
-│       └── users/               # User-specific configs
-│           ├── common.nix       # Shared packages and programs
-│           ├── personal.nix     # Personal git identity
-│           └── work.nix         # Work git identity
+├── flake.nix        # Unified flake (darwin configs + dev environment)
+├── flake.lock       # Pinned flake inputs
+├── darwin.nix       # Core darwin system configuration
+├── justfile         # Task runner commands
+├── .envrc           # direnv integration
+├── config/          # Non-Nix config files
+│   └── nix.conf     # Nix configuration
+├── hosts/           # Machine-specific configurations
+│   ├── personal.nix # Personal MacBook
+│   └── work.nix     # Work laptop
+├── modules/         # Darwin system modules
+│   ├── homebrew.nix # Homebrew casks, formulae, MAS apps
+│   ├── security.nix # Firewall, Touch ID
+│   └── system-defaults/  # macOS preferences (dock, finder, etc.)
+├── programs/        # Home-manager program configs (auto-discovered)
+│   ├── default.nix  # Auto-discovery module
+│   ├── bat.nix      # Simple module: single file
+│   ├── git/         # Complex module: directory with default.nix
+│   │   └── default.nix
+│   ├── zed/         # Co-located config: nix + json files
+│   │   ├── default.nix
+│   │   ├── settings.json
+│   │   └── keymap.json
+│   └── ...          # Other program modules (auto-discovered)
+├── users/           # User-specific configs
+│   ├── common.nix   # Shared packages and programs
+│   ├── personal.nix # Personal git identity
+│   └── work.nix     # Work git identity
 └── docs/
-    ├── adr/                     # Architecture Decision Records
-    └── CUSTOMIZATION.md         # This file
+    ├── adr/         # Architecture Decision Records
+    └── CUSTOMIZATION.md  # This file
 ```
 
 ### Which file do I edit?
 
-| I want to...                                   | Edit this file                                               |
-| ---------------------------------------------- | ------------------------------------------------------------ |
-| Add a CLI tool (nix package)                   | `nix/home/users/common.nix` → `home.packages`                |
-| Add a GUI app (Homebrew cask) for all machines | `nix/darwin/modules/homebrew.nix` → `casks`                  |
-| Add a GUI app for personal machine only        | `nix/darwin/hosts/personal.nix` → `homebrew.casks`           |
-| Add a GUI app for work machine only            | `nix/darwin/hosts/work.nix` → `homebrew.casks`               |
-| Change macOS Dock settings                     | `nix/darwin/modules/system-defaults/dock.nix`                |
-| Change macOS Finder settings                   | `nix/darwin/modules/system-defaults/finder.nix`              |
-| Change macOS trackpad settings                 | `nix/darwin/modules/system-defaults/trackpad.nix`            |
-| Change firewall/Touch ID settings              | `nix/darwin/modules/security.nix`                            |
-| Configure a program (git, fish, etc.)          | `nix/home/programs/` (flat structure, auto-discovered)       |
-| Change git email for personal only             | `nix/home/users/personal.nix` → `programs.git.settings.user` |
-| Change git email for work only                 | `nix/home/users/work.nix` → `programs.git.settings.user`     |
-| Add a new machine                              | Create `nix/darwin/hosts/new-machine.nix` + update `flake.nix` |
-| Add config files (non-Nix)                     | Add to `config/` + symlink in `nix/home/programs/xdg.nix`    |
+| I want to...                                   | Edit this file                                     |
+| ---------------------------------------------- | -------------------------------------------------- |
+| Add a CLI tool (nix package)                   | `users/common.nix` → `home.packages`               |
+| Add a GUI app (Homebrew cask) for all machines | `modules/homebrew.nix` → `casks`                   |
+| Add a GUI app for personal machine only        | `hosts/personal.nix` → `homebrew.casks`            |
+| Add a GUI app for work machine only            | `hosts/work.nix` → `homebrew.casks`                |
+| Change macOS Dock settings                     | `modules/system-defaults/dock.nix`                 |
+| Change macOS Finder settings                   | `modules/system-defaults/finder.nix`               |
+| Change macOS trackpad settings                 | `modules/system-defaults/trackpad.nix`             |
+| Change firewall/Touch ID settings              | `modules/security.nix`                             |
+| Configure a program (git, fish, etc.)          | `programs/` (flat structure, auto-discovered)      |
+| Change git email for personal only             | `users/personal.nix` → `programs.git.settings.user`|
+| Change git email for work only                 | `users/work.nix` → `programs.git.settings.user`    |
+| Add a new machine                              | Create `hosts/new-machine.nix` + update `flake.nix`|
+| Add config files (non-Nix)                     | Add to `config/` + symlink in `programs/xdg.nix`   |
 
 ## Common Tasks
 
 ### Adding a New Package
 
-Packages installed via Nix go in `nix/home/users/common.nix`:
+Packages installed via Nix go in `users/common.nix`:
 
 ```nix
-# nix/home/users/common.nix
+# users/common.nix
 {userConfig}: {
   home.packages = with pkgs; [
     # ... existing packages ...
@@ -129,10 +126,10 @@ nix search nixpkgs ripgrep
 
 GUI applications are installed via Homebrew casks.
 
-**For all machines** - edit `nix/darwin/modules/homebrew.nix`:
+**For all machines** - edit `modules/homebrew.nix`:
 
 ```nix
-# nix/darwin/modules/homebrew.nix
+# modules/homebrew.nix
 {hostConfig, ...}: {
   homebrew = {
     # ... existing config ...
@@ -147,10 +144,10 @@ GUI applications are installed via Homebrew casks.
 }
 ```
 
-**For a specific machine only** - edit the host file (e.g., `nix/darwin/hosts/personal.nix`):
+**For a specific machine only** - edit the host file (e.g., `hosts/personal.nix`):
 
 ```nix
-# nix/darwin/hosts/personal.nix
+# hosts/personal.nix
 {
   # ... other config ...
 
@@ -173,7 +170,7 @@ brew search <app-name>
 
 ### Changing macOS System Preferences
 
-macOS settings are split into focused modules in `nix/darwin/modules/system-defaults/`:
+macOS settings are split into focused modules in `modules/system-defaults/`:
 
 **Dock settings** (`dock.nix`):
 
@@ -221,12 +218,12 @@ settings.
 
 ### Adding a New Program Configuration
 
-Programs in `nix/home/programs/` are **auto-discovered** - just create the file and it's included!
+Programs in `programs/` are **auto-discovered** - just create the file and it's included!
 
 **Simple module (single file):**
 
 ```nix
-# nix/home/programs/tmux.nix
+# programs/tmux.nix
 {pkgs, ...}: {
   programs.tmux = {
     enable = true;
@@ -245,7 +242,7 @@ Programs in `nix/home/programs/` are **auto-discovered** - just create the file 
 **Complex module (directory with co-located config):**
 
 ```nix
-# nix/home/programs/myapp/default.nix
+# programs/myapp/default.nix
 {pkgs, ...}: {
   programs.myapp = {
     enable = true;
@@ -256,7 +253,7 @@ Programs in `nix/home/programs/` are **auto-discovered** - just create the file 
 ```
 
 ```json
-// nix/home/programs/myapp/settings.json
+// programs/myapp/settings.json
 {
   "theme": "dark",
   "fontSize": 14
@@ -278,7 +275,7 @@ _neovim/
 1. **Create a host configuration:**
 
 ```nix
-# nix/darwin/hosts/new-laptop.nix
+# hosts/new-laptop.nix
 {
   userConfig = {
     username = "myuser";
@@ -288,7 +285,7 @@ _neovim/
   };
 
   # Point to the appropriate user module
-  userModule = ../../home/users/personal.nix;  # or work.nix
+  userModule = ../users/personal.nix;  # or work.nix
 
   system = "aarch64-darwin";  # or "x86_64-darwin" for Intel
 
@@ -307,9 +304,9 @@ _neovim/
 # flake.nix
 outputs = { self, nixpkgs, nix-darwin, home-manager, nix-homebrew, mac-app-util, ... }: let
   # Import host configurations
-  personalHost = import ./nix/darwin/hosts/personal.nix;
-  workHost = import ./nix/darwin/hosts/work.nix;
-  newLaptopHost = import ./nix/darwin/hosts/new-laptop.nix;  # Add this
+  personalHost = import ./hosts/personal.nix;
+  workHost = import ./hosts/work.nix;
+  newLaptopHost = import ./hosts/new-laptop.nix;  # Add this
 
   # ... mkDarwinConfig function ...
 in {
@@ -330,10 +327,10 @@ sudo darwin-rebuild switch --flake ~/Developer/dotfiles#New-Laptop
 
 ### Customizing Git for a Specific Machine
 
-User-specific git settings are in `nix/home/users/personal.nix` or `work.nix`:
+User-specific git settings are in `users/personal.nix` or `work.nix`:
 
 ```nix
-# nix/home/users/work.nix
+# users/work.nix
 {userConfig}: {
   imports = [
     ./common.nix
@@ -361,17 +358,17 @@ For applications that don't have home-manager modules (or you prefer hand-crafte
 
 ```shell
 # Create program directory
-mkdir -p nix/home/programs/myapp
+mkdir -p programs/myapp
 
 # Add default.nix that references the config
-cat > nix/home/programs/myapp/default.nix << 'EOF'
+cat > programs/myapp/default.nix << 'EOF'
 _: {
   xdg.configFile."myapp/config.json".source = ./config.json;
 }
 EOF
 
 # Add the config file
-cp ~/.config/myapp/config.json nix/home/programs/myapp/
+cp ~/.config/myapp/config.json programs/myapp/
 ```
 
 **Option 2: Use `config/` directory**
@@ -383,10 +380,10 @@ mkdir -p config/app-name
 cp ~/.config/app-name/settings.json config/app-name/
 ```
 
-2. **Symlink via `nix/home/programs/xdg.nix`:**
+2. **Symlink via `programs/xdg.nix`:**
 
 ```nix
-# nix/home/programs/xdg.nix
+# programs/xdg.nix
 {userConfig}: {
   xdg = {
     enable = true;
@@ -395,7 +392,7 @@ cp ~/.config/app-name/settings.json config/app-name/
       # ... existing symlinks ...
 
       "app-name/settings.json" = {
-        source = ../../../config/app-name/settings.json;
+        source = ../config/app-name/settings.json;
       };
     };
   };
@@ -414,24 +411,24 @@ Configuration is applied in layers, with later layers overriding earlier ones:
 
 ```
 ┌─────────────────────────────────────────────────┐
-│  Host Config (nix/darwin/hosts/personal.nix)    │  Machine-specific
+│  Host Config (hosts/personal.nix)               │  Machine-specific
 │  - hostname, username, dotfilesPath, casks      │
 ├─────────────────────────────────────────────────┤
-│  User Config (nix/home/users/personal.nix)      │  User-specific
+│  User Config (users/personal.nix)               │  User-specific
 │  - git email, signing keys, user overrides      │
 ├─────────────────────────────────────────────────┤
-│  Common User (nix/home/users/common.nix)        │  Shared user settings
+│  Common User (users/common.nix)                 │  Shared user settings
 │  - packages, program imports                    │
 ├─────────────────────────────────────────────────┤
-│  Program Configs (nix/home/programs/*.nix)      │  Program settings
+│  Program Configs (programs/*.nix)               │  Program settings
 │  - flat structure, auto-discovered              │
 ├─────────────────────────────────────────────────┤
-│  Darwin Modules (nix/darwin/modules/*.nix)      │  Shared system settings
+│  Darwin Modules (modules/*.nix)                 │  Shared system settings
 │  - system-defaults/: macOS prefs                │
 │  - homebrew.nix: shared casks/brews             │
 │  - security.nix: firewall, Touch ID             │
 ├─────────────────────────────────────────────────┤
-│  Darwin Config (nix/darwin/configuration.nix)   │  Core system setup
+│  Darwin Config (darwin.nix)                     │  Core system setup
 │  - imports modules, user setup, nix settings    │
 └─────────────────────────────────────────────────┘
 ```

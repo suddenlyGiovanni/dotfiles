@@ -52,10 +52,7 @@ in {
     # ── Symlinked Configuration Files ───────────────────────────────────────
     file = {
       ".config/nix/nix.conf" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/nix/nix.conf";
-      };
-      ".config/nix-darwin" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/nix/darwin";
+        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/config/nix.conf";
       };
     };
 

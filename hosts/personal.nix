@@ -10,7 +10,7 @@
   };
 
   # Path to user-specific home-manager module (relative to hosts directory)
-  userModule = ../../home/users/personal.nix;
+  userModule = ../users/personal.nix;
 
   # System architecture
   system = "aarch64-darwin";

@@ -11,7 +11,7 @@
 
   # Path to user-specific home-manager module (relative to hosts directory)
   # This is where work-specific git identity and configs live
-  userModule = ../../home/users/work.nix;
+  userModule = ../users/work.nix;
 
   # System architecture (Apple Silicon)
   system = "aarch64-darwin";

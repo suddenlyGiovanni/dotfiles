@@ -35,34 +35,44 @@ The repository uses a single `flake.nix` at the root that exposes:
 - `devShells` - Development environment (linters, formatters, LSP)
 - `formatter` - Nix formatter (alejandra)
 
-### Three-Layer Configuration
+### Flat Directory Structure
 
-1. **Darwin System Layer** (`nix/darwin/`)
-   - Core system: `nix/darwin/configuration.nix`
-   - Modules: `nix/darwin/modules/` (homebrew, security, system-defaults/)
-   - Hosts: `nix/darwin/hosts/` (per-machine overrides)
+```
+dotfiles/
+├── flake.nix        # Unified entry point (darwin configs + dev environment)
+├── darwin.nix       # Core darwin system configuration
+├── hosts/           # Machine-specific configs (personal.nix, work.nix)
+├── modules/         # Darwin system modules (homebrew, security, system-defaults/)
+├── programs/        # Home-manager program configs (flat, auto-discovered)
+├── users/           # User-specific configs (common.nix, personal.nix, work.nix)
+└── config/          # Non-Nix config files (nix.conf)
+```
 
-2. **Home-Manager User Layer** (`nix/home/`)
-   - Programs: `nix/home/programs/` (flat structure with auto-discovery)
-   - Users: `nix/home/users/` (common.nix for shared packages, personal.nix/work.nix for identity)
-   - Co-located configs: Some programs have their own directories (e.g., `zed/`, `git/`) for complex configs
+### Two-Layer Configuration
 
-3. **Non-Nix Configs** (`config/`)
-   - Symlinked via home-manager's `xdg.configFile` in `nix/home/programs/xdg.nix`
-   - Used for configs that benefit from manual editing (git templates)
+1. **Darwin System Layer**
+   - Entry point: `darwin.nix`
+   - Modules: `modules/` (homebrew.nix, security.nix, system-defaults/)
+   - Hosts: `hosts/` (per-machine overrides)
+
+2. **Home-Manager User Layer**
+   - Programs: `programs/` (flat structure with auto-discovery)
+   - Users: `users/` (common.nix for shared packages, personal.nix/work.nix for identity)
+   - Co-located configs: Some programs have their own directories (e.g., `zed/`, `git/`)
 
 ### Key Files
 
 - `flake.nix` - Unified entry point for darwin configurations and dev environment
-- `nix/home/users/common.nix` - Main package list and program imports
-- `nix/home/programs/session.nix` - Environment variables (EDITOR, XDG paths)
-- `nix/home/programs/xdg.nix` - XDG directories and config symlinks
-- `nix/darwin/modules/homebrew.nix` - GUI apps via Homebrew
-- `nix/darwin/modules/system-defaults/` - macOS preferences (dock, finder, trackpad, etc.)
+- `darwin.nix` - Core darwin system configuration (imports modules/)
+- `users/common.nix` - Main package list and program imports
+- `programs/session.nix` - Environment variables (EDITOR, XDG paths)
+- `programs/xdg.nix` - XDG directories and config symlinks
+- `modules/homebrew.nix` - GUI apps via Homebrew
+- `modules/system-defaults/` - macOS preferences (dock, finder, trackpad, etc.)
 
 ### Module Patterns
 
-- **Flat auto-discovery**: Programs in `nix/home/programs/` are auto-imported via `default.nix`
+- **Flat auto-discovery**: Programs in `programs/` are auto-imported via `default.nix`
 - **Co-located configs**: Complex programs use directories (e.g., `zed/default.nix` + `zed/settings.json`)
 - **XDG env vars**: Program-specific XDG variables are set in their respective modules (e.g., `nodejs.nix` sets `NPM_CONFIG_CACHE`)
 
@@ -76,17 +86,17 @@ The repository uses a single `flake.nix` at the root that exposes:
 
 ## Common Tasks
 
-**Add a package**: Edit `home.packages` in `nix/home/users/common.nix`
+**Add a package**: Edit `home.packages` in `users/common.nix`
 
-**Add a Homebrew cask**: Edit `nix/darwin/modules/homebrew.nix` or host-specific file in `nix/darwin/hosts/`
+**Add a Homebrew cask**: Edit `modules/homebrew.nix` or host-specific file in `hosts/`
 
-**Configure a program**: Add/edit module in `nix/home/programs/`
+**Configure a program**: Add/edit module in `programs/`
 
-**Add environment variable**: Edit `home.sessionVariables` in `nix/home/programs/session.nix`
+**Add environment variable**: Edit `home.sessionVariables` in `programs/session.nix`
 
-**Symlink a config file**: Add entry to `xdg.configFile` in `nix/home/programs/xdg.nix`
+**Symlink a config file**: Add entry to `xdg.configFile` in `programs/xdg.nix`
 
-**Co-locate program config**: Create a directory `nix/home/programs/<program>/` with `default.nix` and config files
+**Co-locate program config**: Create a directory `programs/<program>/` with `default.nix` and config files
 
 ## Documentation
 
