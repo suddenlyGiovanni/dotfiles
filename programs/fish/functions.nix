@@ -38,6 +38,10 @@
     description = "Create directory and cd into it";
     argumentNames = ["dir"];
     body = ''
+      if test -z "$dir"
+          echo "Usage: mkcd <directory>"
+          return 1
+      end
       mkdir -p $dir && cd $dir
     '';
   };
