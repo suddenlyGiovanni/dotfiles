@@ -9,8 +9,8 @@
     dotfilesPath = "/Users/suddenlygiovanni/Developer/dotfiles";
   };
 
-  # Path to home-manager module (relative to repository root, where flake.nix resolves it)
-  userModule = ./home.nix;
+  # Path to home-manager module (relative to this file's location)
+  userModule = ../home.nix;
 
   # System architecture
   system = "aarch64-darwin";
