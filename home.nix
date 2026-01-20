@@ -48,12 +48,11 @@ in {
       shfmt # A shell parser and formatter
     ];
 
-    # ── Symlinked Configuration Files ───────────────────────────────────────
-    file = {
-      ".config/nix/nix.conf" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${userConfig.dotfilesPath}/nix.conf";
-      };
-    };
+    # ── Nix Configuration ───────────────────────────────────────────────────
+    # Declaratively managed nix.conf (no separate file needed)
+    file.".config/nix/nix.conf".text = ''
+      experimental-features = nix-command flakes
+    '';
 
     stateVersion = mkDefault "24.05";
   };
