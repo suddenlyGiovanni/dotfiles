@@ -1,7 +1,6 @@
 # Home-manager user configuration
 # This module contains packages and programs for the user environment
 {
-  config,
   lib,
   pkgs,
   userConfig,

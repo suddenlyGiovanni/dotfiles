@@ -142,11 +142,6 @@ in {
       merge-conflict-end-symbol = "▲";
       merge-conflict-ours-diff-header-style = "bold yellow";
       merge-conflict-theirs-diff-header-style = "bold yellow";
-
-      # ── Interactive mode ────────────────────────────────────────────────
-
-      # Colorize output from `git add -p` and `git stash show -p`
-      interactive-diff-filter = true;
     };
   };
 }

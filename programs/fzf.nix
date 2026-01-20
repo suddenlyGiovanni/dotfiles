@@ -81,7 +81,6 @@
 #   FZF_ALT_C_OPTS         Options for ⌥C
 #
 {
-  config,
   lib,
   pkgs,
   ...

@@ -329,8 +329,6 @@ in {
       -- Git status in linemode
       require("git"):setup()
 
-
-
       -- Show symlink target in status bar
       Status:children_add(function(self)
         local h = self._current.hovered
@@ -375,8 +373,11 @@ in {
   # ────────────────────────────────────────────────────────────────────────────
   # These packages enable additional preview and extraction features.
   # Note: fd, ripgrep, fzf, zoxide, bat, jq are already configured separately.
+  #
+  # Prerequisite: nixpkgs.config.allowUnfree = true (set in darwin.nix)
   home.packages = with pkgs; [
-    # Archive extraction (with RAR support)
+    # Archive extraction (with RAR support via unfree unrar)
+    # Requires allowUnfree = true in nixpkgs config
     (p7zip.override {enableUnfree = true;})
     # Image format support (HEIC, JPEG XL, fonts)
     imagemagick

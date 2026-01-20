@@ -10,7 +10,7 @@
   zq = "zoxide query -ls"; # List all entries with scores
 
   # Darwin rebuild
-  switch = "darwin-rebuild switch --flake ${userConfig.dotfilesPath}";
+  switch = "darwin-rebuild switch --flake \"${userConfig.dotfilesPath}\"";
 
   # Colorize --help and -h output with bat
   # These expand inline, so `git --help` becomes `git --help 2>&1 | bat -plhelp`

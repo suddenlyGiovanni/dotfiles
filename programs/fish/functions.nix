@@ -93,7 +93,7 @@
     body = ''
       set -l file (fd --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always --style=numbers --line-range=:500 {}')
       if test -n "$file"
-          $EDITOR $file
+          $EDITOR -- "$file"
       end
     '';
   };
