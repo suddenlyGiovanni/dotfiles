@@ -118,9 +118,9 @@
           echo "Usage: rg-fzf <pattern>"
           return 1
       end
-      rg --color=always --line-number --no-heading "$pattern" | \
+      rg --color=always --line-number --no-heading -- "$pattern" | \
         fzf --ansi --delimiter : \
-            --preview 'bat --color=always --style=numbers --highlight-line {2} {1}' \
+            --preview 'bat --color=always --style=numbers --highlight-line {2} -- {1}' \
             --preview-window 'up,60%,+{2}-10'
     '';
   };
