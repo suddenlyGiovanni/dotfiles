@@ -25,6 +25,10 @@
     description = "Show command help with syntax highlighting";
     argumentNames = ["cmd"];
     body = ''
+      if test -z "$cmd"
+          echo "Usage: help <command>"
+          return 1
+      end
       $cmd --help 2>&1 | bat --plain --language=help
     '';
   };
