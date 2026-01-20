@@ -1,6 +1,13 @@
 # git - Distributed version control system
 # This module co-locates git program configuration with its config files
 #
+# SSH signing is configured to use 1Password. The signing key is shared across
+# all git identities (personal/work) - it proves authorship regardless of
+# which email address is used.
+#
+# Related: 1password.nix (sshPublicKeys.git-signing)
+# ADR: docs/adr/006-1password-ssh-agent-integration.md
+#
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/git.nix
 {
   config,
@@ -15,6 +22,11 @@
 
   # Directory containing this module and its config files
   gitConfigDir = ./.;
+
+  # Git commit signing key - shared across all identities
+  # This key is stored in 1Password and used via op-ssh-sign
+  # The same key signs commits regardless of user.email
+  gitSigningKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQG9kbarRd3l6tx2X1AIS4H4Au2JhqI+j1q55W9yBM3";
 in {
   # ── Config Files ────────────────────────────────────────────────────────
   # Co-located config files are symlinked to their expected locations
@@ -38,7 +50,9 @@ in {
     ];
 
     # Directory-based identity configuration using conditional includes
-    # This allows different git identities based on repository location
+    # This allows different git identities (name/email) based on repository location
+    # Note: signingkey is the SAME for all identities - it proves YOU made the commit,
+    # regardless of which email address is used
     includes = [
       {
         condition = "gitdir:~/Developer/personal/";
@@ -46,7 +60,7 @@ in {
           user = {
             name = "suddenlyGiovanni";
             email = "15946771+suddenlyGiovanni@users.noreply.github.com";
-            signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
+            signingkey = gitSigningKey;
           };
         };
       }
@@ -56,7 +70,7 @@ in {
           user = {
             name = "suddenlyGiovanni";
             email = "giovanni.ravalico@haefele.com";
-            signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIBn88uA0HDdb7kKZm99kWyhKOYwwVi84pP3TaNoY53W";
+            signingkey = gitSigningKey;
           };
         };
       }
@@ -69,7 +83,7 @@ in {
       user = {
         name = lib.mkDefault "suddenlyGiovanni";
         email = lib.mkDefault "15946771+suddenlyGiovanni@users.noreply.github.com";
-        signingkey = lib.mkDefault "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINZiMIZsW1eMfzW1CPHb1WsgTft17grizS0rRw5hH8Hw";
+        signingkey = lib.mkDefault gitSigningKey;
       };
 
       # ── Aliases ─────────────────────────────────────────────────────────

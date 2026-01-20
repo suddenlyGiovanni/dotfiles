@@ -22,6 +22,7 @@ and consequences. They help future-you (and others) understand:
 | [003](./003-nix-lsp-maintainability-tradeoff.md) | Nix LSP Maintainability Trade-off    | Accepted | 2025-01 |
 | [004](./004-developer-directory-structure.md)    | Developer Directory Structure        | Accepted | 2025-01 |
 | [005](./005-home-manager-module-structure.md)    | Home-Manager Module Structure        | Accepted | 2026-01 |
+| [006](./006-1password-ssh-agent-integration.md)  | 1Password SSH Agent Integration      | Accepted | 2026-01 |
 
 ## Creating a New ADR
 
