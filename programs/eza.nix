@@ -116,6 +116,9 @@ in {
       "--group-directories-first" # Directories before files
       "--header" # Show column headers in long view
       "--group" # Show group in long view
+      "--hyperlink" # Make file names clickable (works in Ghostty, iTerm2)
+      "--git-repos" # Show git repo status when listing directories
+      "--color-scale" # Highlight file sizes with distinct colors
     ];
 
     # ────────────────────────────────────────────────────────────────────────
