@@ -12,17 +12,17 @@
 # you can quickly type in patterns with omitted characters and still get results.
 #
 # ══════════════════════════════════════════════════════════════════════════════
-# KEYBINDINGS (Shell Integration)
+# KEYBINDINGS (Shell Integration) - macOS
 # ══════════════════════════════════════════════════════════════════════════════
 #
-#   CTRL-T    Paste selected files/directories onto command line
-#             e.g., `vim <CTRL-T>` → select file → `vim selected_file.txt`
+#   ⌃T (Ctrl-T)    Paste selected files/directories onto command line
+#                  e.g., `vim <⌃T>` → select file → `vim selected_file.txt`
 #
-#   CTRL-R    Search command history and paste selected command
-#             Press CTRL-R again to toggle sort by relevance/chronological
+#   ⌃R (Ctrl-R)    Search command history and paste selected command
+#                  Press ⌃R again to toggle sort by relevance/chronological
 #
-#   ALT-C     cd into selected directory
-#             Uses fd to respect .gitignore and skip common junk directories
+#   ⌥C (Option-C)  cd into selected directory
+#                  Uses fd to respect .gitignore and skip common junk directories
 #
 # ══════════════════════════════════════════════════════════════════════════════
 # FUZZY COMPLETION (bash/zsh/fish)
@@ -58,15 +58,15 @@
 #   ^core go$ | rb$ | py$    →  starts with 'core' AND ends with go/rb/py
 #
 # ══════════════════════════════════════════════════════════════════════════════
-# NAVIGATION
+# NAVIGATION - macOS
 # ══════════════════════════════════════════════════════════════════════════════
 #
-#   CTRL-J / CTRL-N     Move cursor down
-#   CTRL-K / CTRL-P     Move cursor up
-#   Enter               Select item
-#   TAB                 Mark item (multi-select mode)
-#   Shift-TAB           Unmark item
-#   CTRL-C / ESC        Cancel
+#   ⌃J / ⌃N        Move cursor down
+#   ⌃K / ⌃P        Move cursor up
+#   Enter (↩)      Select item
+#   Tab (⇥)        Mark item (multi-select mode)
+#   ⇧⇥ (Shift-Tab) Unmark item
+#   ⌃C / Esc       Cancel
 #
 # ══════════════════════════════════════════════════════════════════════════════
 # ENVIRONMENT VARIABLES
@@ -74,11 +74,11 @@
 #
 #   FZF_DEFAULT_COMMAND    Default command when input is tty (no pipe)
 #   FZF_DEFAULT_OPTS       Default options applied to all fzf invocations
-#   FZF_CTRL_T_COMMAND     Command for CTRL-T file widget
-#   FZF_CTRL_T_OPTS        Options for CTRL-T
-#   FZF_CTRL_R_OPTS        Options for CTRL-R history widget
-#   FZF_ALT_C_COMMAND      Command for ALT-C directory widget
-#   FZF_ALT_C_OPTS         Options for ALT-C
+#   FZF_CTRL_T_COMMAND     Command for ⌃T file widget
+#   FZF_CTRL_T_OPTS        Options for ⌃T
+#   FZF_CTRL_R_OPTS        Options for ⌃R history widget
+#   FZF_ALT_C_COMMAND      Command for ⌥C directory widget
+#   FZF_ALT_C_OPTS         Options for ⌥C
 #
 {
   config,
@@ -117,7 +117,7 @@ in {
       # Info display
       "--info=inline-right"
 
-      # Keybindings for preview window
+      # Keybindings for preview window (⌃/ toggle, ⌃D/⌃U scroll)
       "--bind=ctrl-/:toggle-preview"
       "--bind=ctrl-d:preview-half-page-down"
       "--bind=ctrl-u:preview-half-page-up"
@@ -130,7 +130,7 @@ in {
     ];
 
     # ────────────────────────────────────────────────────────────────────────
-    # CTRL-T: File Widget
+    # ⌃T (Ctrl-T): File Widget
     # ────────────────────────────────────────────────────────────────────────
     # Paste selected files onto the command line.
     # Uses fd to respect .gitignore and skip common junk directories.
@@ -143,7 +143,7 @@ in {
     ];
 
     # ────────────────────────────────────────────────────────────────────────
-    # ALT-C: Change Directory Widget
+    # ⌥C (Option-C): Change Directory Widget
     # ────────────────────────────────────────────────────────────────────────
     # cd into selected directory.
     # Uses fd to find directories, respecting .gitignore.
@@ -156,7 +156,7 @@ in {
     ];
 
     # ────────────────────────────────────────────────────────────────────────
-    # CTRL-R: History Widget
+    # ⌃R (Ctrl-R): History Widget
     # ────────────────────────────────────────────────────────────────────────
     # Search and paste commands from history.
     historyWidgetOptions = [
@@ -165,7 +165,7 @@ in {
       "--bind=ctrl-/:toggle-preview"
       # Use history scheme for chronological ordering
       "--scheme=history"
-      # Sort by relevance initially (press CTRL-R to toggle)
+      # Sort by relevance initially (press ⌃R to toggle)
       "--bind=ctrl-r:toggle-sort"
     ];
 
