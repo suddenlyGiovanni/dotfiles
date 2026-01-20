@@ -49,12 +49,26 @@
   };
 
   # Interactive git add with fzf (integrates fzf + git)
+  # Uses string replace instead of awk to handle filenames with spaces and renames
   gadd = {
     description = "Interactive git add with fzf";
     body = ''
-      set -l files (git status --short | fzf --multi --preview 'git diff --color=always {2}' | awk '{print $2}')
-      if test -n "$files"
-          git add $files
+      set -l selection (git status --short | fzf --multi --preview 'git diff --color=always -- (string sub -s 4 {})')
+      if test (count $selection) -eq 0
+          return
+      end
+      # Strip status prefix (first 3 chars) and handle renames (take path after ' -> ')
+      set -l files
+      for line in $selection
+          set -l file (string sub -s 4 $line)
+          # If it's a rename, take the new filename (after ' -> ')
+          if string match -q '* -> *' $file
+              set file (string replace -r '.* -> ' "" $file)
+          end
+          set -a files $file
+      end
+      if test (count $files) -gt 0
+          git add -- $files
           git status --short
       end
     '';
