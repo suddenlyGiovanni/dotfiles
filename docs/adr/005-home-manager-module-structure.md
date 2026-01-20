@@ -6,7 +6,7 @@ Accepted
 
 ## Date
 
-2026-01
+2026-01-20
 
 ## Context
 

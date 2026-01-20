@@ -41,7 +41,7 @@ _: {
     NSDisableAutomaticTermination = null; # Whether to disable the automatic termination of inactive apps.
     NSUseAnimatedFocusRing = true; # Whether to enable the focus ring animation. The default is true.
     NSScrollAnimationEnabled = true; # Whether to enable smooth scrolling. The default is true.
-    NSWindowResizeTime = null; # Sets the speed speed of window resizing.
+    NSWindowResizeTime = null; # Sets the speed of window resizing.
     NSWindowShouldDragOnGesture = false; # Whether to enable moving window by holding anywhere on it like on Linux. The default is false.
 
     # Documents and Save Dialogs
