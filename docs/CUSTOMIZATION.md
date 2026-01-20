@@ -429,7 +429,7 @@ just switch
 
 Configuration is applied in layers, with later layers overriding earlier ones:
 
-```
+```text
 ┌─────────────────────────────────────────────────┐
 │  Host Config (hosts/personal.nix)               │  Machine-specific data
 │  - hostname, username, dotfilesPath, casks      │
