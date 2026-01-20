@@ -5,6 +5,7 @@
 # - 1Password CLI with XDG-compliant config directory
 # - Shell plugins for biometric auth with supported CLIs (gh, aws, etc.)
 # - SSH agent integration with public key management
+# - SSH agent configuration (agent.toml)
 #
 # ┌─────────────────────────────────────────────────────────────────────────────┐
 # │                    1Password SSH Agent Architecture                         │
@@ -36,6 +37,9 @@
 # - No plaintext credentials in config files
 # - Seamless credential injection
 #
+# Co-located files:
+# - agent.toml: SSH agent configuration (which keys to expose)
+#
 # Related: ssh.nix (SSH client configuration)
 # ADR: docs/adr/006-1password-ssh-agent-integration.md
 #
@@ -49,6 +53,9 @@
   ...
 }: let
   inherit (lib) mkDefault;
+
+  # Directory containing this module and its config files
+  moduleDir = ./.;
 
   # ── 1Password SSH Agent Socket ──────────────────────────────────────────────
   # macOS socket path for 1Password SSH agent
@@ -66,21 +73,24 @@
   # 1. Create SSH key in 1Password (Ed25519 recommended)
   # 2. Copy the public key from 1Password
   # 3. Add it here with a descriptive name
-  # 4. Add corresponding host config in ssh.nix
-  # 5. Run `just switch`
-  # 6. Add the public key to the remote service (GitHub, etc.)
+  # 4. Add the key name to agent.toml (co-located in this directory)
+  # 5. Add corresponding host config in ssh.nix
+  # 6. Run `just switch`
+  # 7. Add the public key to the remote service (GitHub, etc.)
   #
   # Format: name = "ssh-ed25519 AAAA... comment";
+  # Key names must match exactly with 1Password item titles
+  # Verify with: op item list --categories "SSH Key" --format=json
   sshPublicKeys = {
-    # GitHub - personal account (suddenlyGiovanni)
+    # GitHub Authentication SSH Key (vault: Private)
     # Used for: github.com repositories
-    github = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJWr93ib9vcKuQwzGW8NqPh1P2mws9qGKGp3opK99SIf GitHub SSH Key";
+    github = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJWr93ib9vcKuQwzGW8NqPh1P2mws9qGKGp3opK99SIf GitHub Authentication SSH Key";
 
-    # ThingOS - work development server
+    # Thingos SSH Key (vault: Work - Haefele)
     # Used for: dev.thingos.io
     thingos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIBn88uA0HDdb7kKZm99kWyhKOYwwVi84pP3TaNoY53W Thingos SSH Key";
 
-    # Git Commit Signing Key - shared across all identities
+    # Git Commit Signing Key (vault: Private)
     # Used for: signing commits on GitHub, GitLab, etc.
     # This key proves authorship, not authentication (separate from SSH auth keys)
     # Must be added to each Git platform as a "Signing Key" (not "Authentication Key")
@@ -111,23 +121,34 @@ in {
     ];
   };
 
-  # ── SSH Public Key Files ────────────────────────────────────────────────────
-  # Create ~/.ssh/*.pub files from the sshPublicKeys defined above
-  #
-  # These public key files serve two purposes:
-  # 1. SSH client reads them to know which key to request from the agent
-  # 2. Documentation - you can see which keys are configured
-  #
-  # The corresponding IdentityFile references are in ssh.nix
-  home.file = builtins.listToAttrs (
-    lib.mapAttrsToList (name: key: {
-      name = ".ssh/${name}.pub";
-      value = {
-        text = key;
-      };
-    })
-    sshPublicKeys
-  );
+  # ── Home Files ───────────────────────────────────────────────────────────────
+  home.file =
+    # SSH Public Key Files
+    # Create ~/.ssh/*.pub files from the sshPublicKeys defined above
+    #
+    # These public key files serve two purposes:
+    # 1. SSH client reads them to know which key to request from the agent
+    # 2. Documentation - you can see which keys are configured
+    #
+    # The corresponding IdentityFile references are in ssh.nix
+    builtins.listToAttrs (
+      lib.mapAttrsToList (name: key: {
+        name = ".ssh/${name}.pub";
+        value = {
+          text = key;
+        };
+      })
+      sshPublicKeys
+    )
+    // {
+      # SSH Agent Configuration
+      # Co-located agent.toml controls which keys the 1Password agent exposes
+      # and in what order. This prevents "Too many authentication failures" by
+      # explicitly listing keys rather than exposing all keys from a vault.
+      #
+      # Note: 1Password uses ~/.config/1Password (capital P), not XDG_CONFIG_HOME
+      ".config/1Password/ssh/agent.toml".source = "${moduleDir}/agent.toml";
+    };
 
   # ── XDG Compliance ──────────────────────────────────────────────────────────
   # Configure 1Password CLI to use XDG-compliant config directory

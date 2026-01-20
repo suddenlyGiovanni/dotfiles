@@ -1,0 +1,27 @@
+# 1Password SSH Agent Configuration
+# Managed by home-manager - do not edit manually
+#
+# This file controls which SSH keys the agent exposes and in what order.
+# Keys are offered to servers in the order listed below.
+#
+# This works together with ~/.ssh/config IdentityFile settings:
+# - agent.toml: controls what keys the agent CAN offer
+# - ssh config: controls which key to USE for a specific host
+#
+# Test with: ssh-add -L
+# Docs: https://developer.1password.com/docs/ssh/agent/config
+
+# GitHub Authentication SSH Key - authentication to github.com
+[[ssh-keys]]
+item = "GitHub Authentication SSH Key"
+vault = "Private"
+
+# ThingOS SSH Key - authentication to dev.thingos.io
+[[ssh-keys]]
+item = "Thingos SSH Key"
+vault = "Work - Haefele"
+
+# Git Commit Signing Key - for signing git commits
+[[ssh-keys]]
+item = "Git Commit Signing Key"
+vault = "Private"
