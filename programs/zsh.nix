@@ -17,7 +17,8 @@ in {
     package = mkDefault pkgs.zsh;
 
     # Use XDG-compliant location for zsh config files
-    dotDir = "${config.xdg.configHome}/zsh";
+    # Note: dotDir expects a path relative to $HOME, not an absolute path
+    dotDir = ".config/zsh";
 
     # Enable zsh completion
     enableCompletion = mkDefault true;
@@ -48,7 +49,7 @@ in {
       bathelp = "bat --plain --language=help";
 
       # Darwin rebuild shortcut
-      switch = "darwin-rebuild switch --flake ${userConfig.dotfilesPath}/nix/darwin";
+      switch = "darwin-rebuild switch --flake ${userConfig.dotfilesPath}";
     };
 
     # ── Autosuggestion ──────────────────────────────────────────────────────
