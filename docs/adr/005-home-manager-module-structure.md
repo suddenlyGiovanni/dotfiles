@@ -82,7 +82,6 @@ programs/                # NEW STRUCTURE (after refactor)
 ├── nushell.nix
 ├── session.nix
 ├── ssh.nix              # Declarative SSH config
-├── gpg.nix              # Declarative GPG config
 ├── starship.nix
 ├── xdg.nix
 ├── zed/                 # Co-located config files
