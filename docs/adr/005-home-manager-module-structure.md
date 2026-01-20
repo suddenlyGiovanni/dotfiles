@@ -10,11 +10,11 @@ Accepted
 
 ## Context
 
-The home-manager configuration in `nix/home/programs/` had evolved organically with a categorized
-directory structure:
+The home-manager configuration had evolved organically with a categorized directory structure
+under `nix/home/programs/`:
 
 ```text
-nix/home/programs/
+nix/home/programs/        # OLD STRUCTURE (before refactor)
 ├── dev/
 │   ├── bun.nix
 │   ├── direnv.nix
@@ -56,27 +56,40 @@ We refactored the home-manager programs structure with four key changes:
 
 ### 1. Flatten the Directory Structure
 
-All program modules now live directly under `programs/` without subcategories:
+All program modules now live directly under `programs/` at the repository root, without
+subcategories or `nix/` prefix:
 
 ```text
-nix/home/programs/
-├── default.nix      # Auto-discovery module
+programs/                # NEW STRUCTURE (after refactor)
+├── default.nix          # Auto-discovery module
+├── 1password.nix        # 1Password CLI + shell plugins
 ├── bat.nix
 ├── bun.nix
 ├── direnv.nix
 ├── eza.nix
 ├── fd.nix
-├── fish.nix
+├── fish/                # Directory for modular config
+│   ├── default.nix
+│   ├── abbreviations.nix
+│   ├── aliases.nix
+│   └── functions.nix
 ├── fzf.nix
 ├── gh.nix
-├── git/             # Directory for complex modules
+├── git/                 # Directory for complex modules
 │   ├── default.nix
 │   └── .gitmessage
 ├── ghostty.nix
 ├── nushell.nix
 ├── session.nix
+├── ssh.nix              # Declarative SSH config
+├── gpg.nix              # Declarative GPG config
 ├── starship.nix
 ├── xdg.nix
+├── zed/                 # Co-located config files
+│   ├── default.nix
+│   ├── settings.json
+│   ├── keymap.json
+│   └── tasks.json
 ├── zoxide.nix
 └── zsh.nix
 ```
@@ -163,7 +176,7 @@ Key conventions:
 Configuration assets live alongside their modules:
 
 ```text
-nix/home/programs/git/
+programs/git/
 ├── default.nix      # Git configuration module
 └── .gitmessage      # Commit message template
 ```
@@ -191,7 +204,7 @@ xdg.configFile."git/gitmessage".source = ./.gitmessage;
 
 - **Less categorization**: Can't browse programs by category (dev/shell/terminal)
 - **Flat namespace**: Many files in one directory (mitigated by alphabetical ordering)
-- **Migration effort**: One-time cost to move existing modules
+- **Migration effort**: One-time cost to move existing modules (completed)
 - **Learning curve**: Team members need to learn the new conventions
 
 ### Neutral
@@ -239,64 +252,35 @@ does, and complicates module portability.
 
 ## Migration Steps
 
-1. **Move files to flat structure**:
+These migration steps have been completed. For reference:
+
+1. **Flattened directory structure**: Removed `nix/` prefix entirely
+   - `nix/home/programs/` → `programs/`
+   - `nix/darwin/modules/` → `modules/`
+   - `nix/darwin/configuration.nix` → `darwin.nix`
+   - `nix/home/users/common.nix` → `home.nix`
+
+2. **Auto-discovery**: Both `programs/default.nix` and `modules/default.nix` use
+   shared `lib/auto-discovery.nix`
+
+3. **Directory modules created**:
+   - `programs/git/` - with `.gitmessage`
+   - `programs/fish/` - with abbreviations, aliases, functions
+   - `programs/zed/` - with settings.json, keymap.json, tasks.json
+
+4. **Test the configuration**:
 
    ```bash
-   mv nix/home/programs/dev/*.nix nix/home/programs/
-   mv nix/home/programs/shell/*.nix nix/home/programs/
-   mv nix/home/programs/terminal/*.nix nix/home/programs/
-   rmdir nix/home/programs/{dev,shell,terminal}
-   ```
-
-2. **Create auto-discovery module**:
-
-   Create `nix/home/programs/default.nix` with the discovery logic.
-
-3. **Update common.nix imports**:
-
-   ```nix
-   # Before
-   imports = [
-     ../programs/dev/git.nix
-     ../programs/dev/gh.nix
-     # ... many more
-   ];
-
-   # After
-   imports = [
-     ../programs
-   ];
-   ```
-
-4. **Convert complex modules to directories**:
-
-   ```bash
-   mkdir nix/home/programs/git
-   mv nix/home/programs/git.nix nix/home/programs/git/default.nix
-   mv config/git/.gitmessage nix/home/programs/git/.gitmessage
-   ```
-
-5. **Update module signatures**:
-
-   Ensure all modules use `{ config, lib, pkgs, ... }:` signature.
-
-6. **Update xdg.nix**:
-
-   Remove asset symlinks that are now managed by individual modules.
-
-7. **Test the configuration**:
-
-   ```bash
-   just build
-   just switch
+   just check   # Format, lint, deadcode
+   just build   # Build without applying
+   just switch  # Apply configuration
    ```
 
 ## Future Considerations
 
 - **More co-located assets**: As other programs need templates or scripts, move them into module
-  directories
-- **Shared utilities**: If modules share common patterns, could create a `_lib.nix` (excluded from
-  auto-discovery) for shared functions
+  directories (fish/, zed/, git/ patterns are now established)
+- **Shared utilities**: Created `lib/auto-discovery.nix` for shared functions
 - **Documentation generation**: Auto-discovery enables potential tooling to generate documentation
   from module structure
 - **Testing patterns**: Could add `_test.nix` files alongside modules for testing configurations
@@ -304,6 +288,7 @@ does, and complicates module portability.
 ## References
 
 - [home-manager modules/programs/](https://github.com/nix-community/home-manager/tree/master/modules/programs)
+- [nix-darwin modules/](https://github.com/nix-darwin/nix-darwin/tree/master/modules)
 - [NixOS module system documentation](https://nixos.org/manual/nixos/stable/#sec-writing-modules)
 - [ADR-003: Nix LSP Maintainability Trade-off](./003-nix-lsp-maintainability-tradeoff.md)
 - [ADR-001: Multi-Machine Nix Configuration](./001-multi-machine-nix-configuration.md)

@@ -1,8 +1,9 @@
 # XDG Compliance Audit
 
 **Date**: 2026-01-04  
+**Last Updated**: 2026-01-20  
 **Tool**: xdg-ninja v0.2.0.2  
-**Status**: Partial compliance achieved
+**Status**: Mostly compliant
 
 ## Summary
 
@@ -11,7 +12,7 @@ issues have been addressed and which remain.
 
 ## Legend
 
-- ✅ **Fixed**: Environment variable set in `nix/home/programs/session.nix`
+- ✅ **Fixed**: Environment variable set in dedicated program module
 - ⚠️ **Partial**: Configured but files may still exist in old location
 - ❌ **Not Fixed**: No configuration or unsupported by the tool
 - 🔄 **In Progress**: Being worked on
@@ -21,39 +22,40 @@ issues have been addressed and which remain.
 
 ### ✅ Fixed Issues
 
-| Tool   | Old Location | Solution                                      | Status                |
-| ------ | ------------ | --------------------------------------------- | --------------------- |
-| Cargo  | `~/.cargo`   | `CARGO_HOME="$XDG_DATA_HOME"/cargo`           | ✅ Set in session.nix |
-| Rustup | `~/.rustup`  | `RUSTUP_HOME="$XDG_DATA_HOME"/rustup`         | ✅ Set in session.nix |
-| Docker | `~/.docker`  | `DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker`     | ✅ Set in session.nix |
-| GnuPG  | `~/.gnupg`   | `GNUPGHOME="$XDG_DATA_HOME"/gnupg`            | ✅ Set in session.nix |
-| Less   | `~/.lesshst` | `LESSHISTFILE="$XDG_STATE_HOME"/less/history` | ✅ Set in session.nix |
+| Tool    | Old Location | Solution                                      | Status                            |
+| ------- | ------------ | --------------------------------------------- | --------------------------------- |
+| Cargo   | `~/.cargo`   | `CARGO_HOME="$XDG_DATA_HOME"/cargo`           | ✅ Set in `programs/rustup.nix`   |
+| Rustup  | `~/.rustup`  | `RUSTUP_HOME="$XDG_DATA_HOME"/rustup`         | ✅ Set in `programs/rustup.nix`   |
+| Docker  | `~/.docker`  | `DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker`     | ✅ Set in `programs/docker.nix`   |
+| GnuPG   | `~/.gnupg`   | `GNUPGHOME="$XDG_DATA_HOME"/gnupg`            | ✅ Managed by `programs/gpg.nix`  |
+| Less    | `~/.lesshst` | `LESSHISTFILE="$XDG_STATE_HOME"/less/history` | ✅ Set in `programs/session.nix`  |
+| Node.js | `~/.npm`     | `NPM_CONFIG_*` vars                           | ✅ Set in `programs/nodejs.nix`   |
+| Python  | `~/.python*` | `PYTHONSTARTUP`, `PYTHON_HISTORY`             | ✅ Set in `programs/python.nix`   |
+| AWS CLI | `~/.aws`     | `AWS_CONFIG_FILE`, `AWS_SHARED_CREDENTIALS_*` | ✅ Set in `programs/awscli.nix`   |
+| Bun     | `~/.bun`     | `BUN_INSTALL="$XDG_DATA_HOME"/bun`            | ✅ Set in `programs/bun.nix`      |
+| Claude  | `~/.claude`  | `CLAUDE_CONFIG_DIR`                           | ✅ Set in `programs/claude-code.nix` |
+| 1Pass   | `~/.op`      | `OP_CONFIG_DIR`                               | ✅ Set in `programs/1password.nix` |
+| zsh     | `~/.zcompdump` | `compinit -d` in cache dir                  | ✅ Set in `programs/zsh.nix`      |
 
 ### ⚠️ Partially Fixed
 
 | Tool    | Old Location | Issue                          | Action Needed                           |
 | ------- | ------------ | ------------------------------ | --------------------------------------- |
-| npm     | `~/.npm`     | Cache set, but not all options | Add `prefix` and `init-module` to npmrc |
 | Android | `~/.android` | Need to test with adb alias    | Add adb alias if using Android tools    |
-| Vim     | `~/.viminfo` | VIMINIT set but file may exist | Manually remove old file if present     |
 
 ### ❌ Not Fixed (Tool Limitations)
 
 | Tool    | Old Location | Reason                   | Notes                                                 |
 | ------- | ------------ | ------------------------ | ----------------------------------------------------- |
-| Bun     | `~/.bun`     | Not supported by Bun     | See <https://github.com/oven-sh/bun/issues/696>       |
 | VS Code | `~/.vscode`  | Not supported by VS Code | See <https://github.com/microsoft/vscode/issues/3884> |
-| SSH     | `~/.ssh`     | Required by OpenSSH      | Standard location, cannot change                      |
+| SSH     | `~/.ssh`     | Required by OpenSSH      | Standard location, managed by `programs/ssh.nix`      |
 
-### 🔄 Needs Action
+### 🔄 Needs Action (Low Priority)
 
 | Tool            | Old Location     | Solution                                                     | Priority                   |
 | --------------- | ---------------- | ------------------------------------------------------------ | -------------------------- |
 | Fly.io          | `~/.fly`         | `FLY_CONFIG_DIR="$XDG_STATE_HOME"/fly`                       | Low (only if using Fly.io) |
-| Leiningen/Maven | `~/.m2`          | Already set via `MAVEN_OPTS`                                 | Verify if using Leiningen  |
-| Nix             | `~/.nix-defexpr` | Add `use-xdg-base-directories = true` to `/etc/nix/nix.conf` | Medium                     |
-| zsh             | `~/.zcompdump`   | Set `compinit -d` in zshrc                                   | High                       |
-| zsh             | `~/.zshenv`      | Move to `~/.config/zsh/.zshenv`                              | Medium                     |
+| Nix             | `~/.nix-defexpr` | Add `use-xdg-base-directories = true` to `/etc/nix/nix.conf` | Low (Nix managed)          |
 
 ### 📝 System-Level Issues
 
@@ -63,59 +65,43 @@ issues have been addressed and which remain.
 
 ## Recommended Actions
 
-### High Priority
+### Completed ✅
 
-1. **Fix zsh completion dump location**
+1. **zsh completion dump location** - Fixed in `programs/zsh.nix`
+2. **npm configuration** - Fixed in `programs/nodejs.nix`
+3. **GnuPG** - Managed by `programs/gpg.nix` with XDG-compliant homedir
+4. **SSH** - Managed by `programs/ssh.nix` (standard location, but declarative)
 
-   ```nix
-   # Add to nix/home/programs/shell/zsh.nix
-   programs.zsh.initExtra = ''
-     # XDG compliance for completion dump
-     compinit -d "$XDG_CACHE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
-   '';
-   ```
-
-2. **Move zshenv to XDG location** (if not managed by home-manager)
-   - Current location: `~/.zshenv`
-   - Target: `~/.config/zsh/.zshenv`
-   - Set `ZDOTDIR` in system-wide `/etc/zshenv`
-
-### Medium Priority
-
-1. **Configure Nix to use XDG directories**
-   - Add to `/etc/nix/nix.conf`: `use-xdg-base-directories = true`
-   - Manually move: `mv ~/.nix-defexpr $XDG_STATE_HOME/nix/defexpr`
-
-2. **Improve npm configuration**
-   - Create `~/.config/npm/npmrc` with full XDG settings
-   - Or manage via home-manager if available
-
-### Low Priority
+### Low Priority (Optional)
 
 1. **Add Fly.io config** (only if using Fly.io)
 
    ```nix
+   # In programs/session.nix or dedicated fly.nix
    FLY_CONFIG_DIR = "${config.xdg.stateHome}/fly";
    ```
 
 2. **Add Android/adb alias** (only if doing Android development)
 
    ```nix
+   # In programs/session.nix or dedicated android.nix
    alias adb='HOME="$XDG_DATA_HOME"/android adb'
    ```
 
-## Manual Cleanup
+## Manual Cleanup (Completed)
 
-After implementing the fixes, manually remove old directories:
+These directories have been cleaned up:
 
 ```bash
-# Backup first if needed
-rm -rf ~/.cargo     # After verifying new location works
-rm -rf ~/.rustup    # After verifying new location works
-rm -rf ~/.docker    # After verifying new location works
-rm -rf ~/.gnupg     # After verifying new location works (be careful!)
-rm -f ~/.lesshst    # After verifying new location works
-rm -f ~/.viminfo    # After verifying new location works
+# Already removed:
+# ~/.cargo     → ~/.local/share/cargo
+# ~/.rustup    → ~/.local/share/rustup
+# ~/.docker    → ~/.config/docker
+# ~/.gnupg     → ~/.local/share/gnupg
+# ~/.lesshst   → ~/.local/state/less/history
+# ~/.zcompdump → ~/.cache/zsh/
+# ~/.bun       → ~/.local/share/bun
+# ~/.npm       → ~/.local/share/npm (cache)
 ```
 
 ## Verification
@@ -137,14 +123,35 @@ ls -la ~/.config/docker
 ls -la ~/.local/share/gnupg
 ```
 
+## Current Home Directory Status
+
+**XDG Compliant Directories:**
+- `~/.cache/` - XDG_CACHE_HOME
+- `~/.config/` - XDG_CONFIG_HOME
+- `~/.local/share/` - XDG_DATA_HOME
+- `~/.local/state/` - XDG_STATE_HOME
+
+**Home-Manager Managed:**
+- `~/.ssh/config` - via `programs/ssh.nix`
+- `~/.local/share/gnupg/*` - via `programs/gpg.nix`
+- `~/.config/git/`, `~/.config/fish/`, etc. - via respective modules
+
+**Remaining (acceptable):**
+- `~/.1password/` - 1Password managed
+- `~/.android/` - Android SDK
+- `~/.vscode/` - VS Code (unsupported by Microsoft)
+- `~/.nix-defexpr/`, `~/.nix-profile` - Nix system
+
 ## Notes
 
 - **macOS Considerations**: `$XDG_RUNTIME_DIR` is a Linux concept; macOS doesn't have
-  `/run/user/$UID`. Can safely ignore or use an alternative like `/tmp/runtime-$USER`.
-- **SSH Exception**: `~/.ssh` is the standard and expected location. Changing it breaks many tools
-  and is not recommended.
+  `/run/user/$UID`. Can safely ignore.
+- **SSH Exception**: `~/.ssh` is the standard location. Config is managed declaratively via
+  `programs/ssh.nix` but keys remain in `~/.ssh/`.
 - **VS Code**: Microsoft has declined to support XDG spec. The `~/.vscode` directory is unavoidable.
-- **Bun**: Waiting for upstream support.
+- **Co-located env vars**: XDG environment variables are now set in their respective program modules
+  (e.g., `CARGO_HOME` in `rustup.nix`, `NPM_CONFIG_*` in `nodejs.nix`) rather than centrally in
+  `session.nix`. This makes modules self-contained.
 
 ## References
 

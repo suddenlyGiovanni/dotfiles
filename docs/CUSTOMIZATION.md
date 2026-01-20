@@ -15,6 +15,7 @@ This guide explains how to customize and extend the nix-darwin configuration for
   - [Adding a New Program Configuration](#adding-a-new-program-configuration)
   - [Adding a New Machine](#adding-a-new-machine)
   - [Customizing Git for a Specific Machine](#customizing-git-for-a-specific-machine)
+  - [Customizing Fish Shell](#customizing-fish-shell)
 - [Configuration Layers](#configuration-layers)
 - [Testing Changes](#testing-changes)
 - [Troubleshooting](#troubleshooting)
@@ -31,7 +32,6 @@ just check       # Run all checks (format, lint, deadcode)
 just build       # Build without applying
 just switch      # Apply configuration
 just update      # Update flake inputs
-just validate    # Validate flake
 just gc          # Garbage collect (keeps last 7 days)
 ```
 
@@ -45,22 +45,35 @@ dotfiles/
 ├── home.nix         # Home-manager user configuration (imports programs/)
 ├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
 ├── justfile         # Task runner commands
+├── statix.toml      # Statix linter configuration
 ├── .envrc           # direnv integration
 ├── hosts/           # Machine-specific configurations
 │   ├── personal.nix # Personal MacBook
 │   └── work.nix     # Work laptop
+├── lib/             # Shared helper functions
+│   ├── default.nix  # Library entry point
+│   └── auto-discovery.nix  # Module auto-discovery function
 ├── modules/         # Darwin system modules (auto-discovered)
 │   ├── default.nix  # Auto-discovery module
 │   ├── dock.nix     # Dock preferences
 │   ├── finder.nix   # Finder preferences
 │   ├── homebrew.nix # Homebrew casks, formulae, MAS apps
 │   ├── security.nix # Firewall, Touch ID
-│   └── ...          # Other system modules (trackpad, etc.)
+│   ├── menuextra-clock.nix  # Menu bar clock
+│   ├── custom-preferences.nix  # Additional macOS settings
+│   └── ...          # Other system modules (trackpad, screencapture, etc.)
 ├── programs/        # Home-manager program configs (auto-discovered)
 │   ├── default.nix  # Auto-discovery module
 │   ├── bat.nix      # Simple module: single file
+│   ├── 1password.nix # 1Password CLI + shell plugins
+│   ├── fish/        # Fish shell (default shell)
+│   │   ├── default.nix
+│   │   ├── abbreviations.nix
+│   │   ├── aliases.nix
+│   │   └── functions.nix
 │   ├── git/         # Complex module: directory with default.nix
-│   │   └── default.nix
+│   │   ├── default.nix
+│   │   └── .gitmessage
 │   ├── zed/         # Co-located config: nix + json files
 │   │   ├── default.nix
 │   │   ├── settings.json
@@ -68,7 +81,8 @@ dotfiles/
 │   └── ...          # Other program modules (auto-discovered)
 └── docs/
     ├── adr/         # Architecture Decision Records
-    └── CUSTOMIZATION.md  # This file
+    ├── CUSTOMIZATION.md  # This file
+    └── TASKS.md     # Task tracker
 ```
 
 ### Which file do I edit?
@@ -82,11 +96,15 @@ dotfiles/
 | Change macOS Dock settings                     | `modules/dock.nix`                                 |
 | Change macOS Finder settings                   | `modules/finder.nix`                               |
 | Change macOS trackpad settings                 | `modules/trackpad.nix`                             |
+| Change menu bar clock settings                 | `modules/menuextra-clock.nix`                      |
 | Change firewall/Touch ID settings              | `modules/security.nix`                             |
-| Configure a program (git, fish, etc.)          | `programs/` (flat structure, auto-discovered)      |
-| Change git identity                            | `programs/git/default.nix` (uses directory-based conditional includes) |
+| Configure a program (git, bat, etc.)           | `programs/` (flat structure, auto-discovered)      |
+| Change git identity                            | `programs/git/default.nix` (directory-based conditional includes) |
 | Add a new machine                              | Create `hosts/new-machine.nix` + update `flake.nix`|
 | Add config files (non-Nix)                     | Co-locate in `programs/<name>/` or add to root     |
+| Add a fish abbreviation                        | `programs/fish/abbreviations.nix`                  |
+| Add a fish alias                               | `programs/fish/aliases.nix`                        |
+| Add a fish function                            | `programs/fish/functions.nix`                      |
 
 ## Common Tasks
 
@@ -96,7 +114,7 @@ Packages installed via Nix go in `home.nix`:
 
 ```nix
 # home.nix
-{userConfig, pkgs, ...}: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     # ... existing packages ...
 
@@ -168,7 +186,7 @@ brew search <app-name>
 
 ### Changing macOS System Preferences
 
-macOS settings are split into focused modules in `modules/system-defaults/`:
+macOS settings are split into focused modules in `modules/`:
 
 **Dock settings** (`modules/dock.nix`):
 
@@ -193,6 +211,7 @@ _: {
     ShowPathbar = true;
     FXPreferredViewStyle = "clmv";  # Column view
     QuitMenuItem = true;   # Allow quitting Finder
+    NewWindowTarget = "Home";  # New windows open to home folder
   };
 }
 ```
@@ -206,6 +225,36 @@ _: {
     AppleShowAllExtensions = true;   # Show file extensions
     NSAutomaticCapitalizationEnabled = false;
     NSAutomaticSpellingCorrectionEnabled = false;
+    "com.apple.keyboard.fnState" = true;  # Use F1-F12 as function keys
+  };
+}
+```
+
+**Menu bar clock** (`modules/menuextra-clock.nix`):
+
+```nix
+_: {
+  system.defaults.menuExtraClock = {
+    Show24Hour = true;
+    ShowDayOfWeek = true;
+    ShowDate = 0;  # 0 = When space allows
+  };
+}
+```
+
+**Additional settings via CustomUserPreferences** (`modules/custom-preferences.nix`):
+
+For settings not exposed via typed nix-darwin options:
+
+```nix
+_: {
+  system.defaults.CustomUserPreferences = {
+    NSGlobalDomain = {
+      AppleFirstWeekday = { gregorian = 2; };  # Week starts Monday
+    };
+    "com.apple.AppleMultitouchTrackpad" = {
+      TrackpadThreeFingerHorizSwipeGesture = 2;
+    };
   };
 }
 ```
@@ -300,7 +349,7 @@ _neovim/
 
 ```nix
 # flake.nix
-outputs = { self, nixpkgs, nix-darwin, home-manager, nix-homebrew, mac-app-util, ... }: let
+outputs = { self, nixpkgs, nix-darwin, home-manager, ... }: let
   # Import host configurations
   personalHost = import ./hosts/personal.nix;
   workHost = import ./hosts/work.nix;
@@ -321,6 +370,7 @@ in {
 
 ```shell
 sudo darwin-rebuild switch --flake ~/Developer/dotfiles#New-Laptop
+chsh -s /run/current-system/sw/bin/fish  # Set fish as default shell
 ```
 
 ### Customizing Git Identity
@@ -351,6 +401,54 @@ programs.git = {
 ```
 
 This approach uses a single config with directory-based identity switching.
+
+### Customizing Fish Shell
+
+Fish is the default shell, configured in `programs/fish/`:
+
+**Add an abbreviation** (expanded inline as you type):
+
+```nix
+# programs/fish/abbreviations.nix
+{userConfig}: {
+  # Navigation
+  ".." = "cd ..";
+  "..." = "cd ../..";
+
+  # Your custom abbreviations
+  k = "kubectl";
+  tf = "terraform";
+}
+```
+
+**Add an alias** (not expanded, for complex commands):
+
+```nix
+# programs/fish/aliases.nix
+{
+  ll = "eza --all --long --icons --header";
+  cat = "bat --paging=never";
+
+  # Your custom aliases
+  serve = "python -m http.server";
+}
+```
+
+**Add a function** (for complex logic):
+
+```nix
+# programs/fish/functions.nix
+{config, ...}: {
+  # Your custom function
+  myfunction = {
+    description = "Does something useful";
+    argumentNames = ["arg1" "arg2"];
+    body = ''
+      echo "Got: $arg1 and $arg2"
+    '';
+  };
+}
+```
 
 ### Adding Non-Nix Config Files
 
@@ -392,12 +490,12 @@ Configuration is applied in layers, with later layers overriding earlier ones:
 │  - flat structure, auto-discovered              │
 ├─────────────────────────────────────────────────┤
 │  Darwin Modules (modules/*.nix)                 │  System settings
-│  - system-defaults/: macOS prefs                │
+│  - dock, finder, trackpad, security, etc.       │
 │  - homebrew.nix: shared casks/brews             │
-│  - security.nix: firewall, Touch ID             │
 ├─────────────────────────────────────────────────┤
 │  Darwin Config (darwin.nix)                     │  System setup
 │  - imports modules/                             │
+│  - sets fish as default shell                   │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -411,16 +509,6 @@ just build
 
 # Or directly:
 darwin-rebuild build --flake .
-```
-
-### Check flake for errors
-
-```shell
-# From ~/Developer/dotfiles
-just validate
-
-# Or directly:
-nix flake check
 ```
 
 ### Run all checks (format, lint, deadcode)
@@ -462,6 +550,16 @@ Usually means a typo in an attribute name or missing import. Check:
 - Spelling of attribute names
 - All required arguments are passed to functions
 - Imports point to correct paths (relative to the importing file)
+
+### Fish shell not active after switch
+
+After applying the configuration, set fish as your login shell:
+
+```shell
+chsh -s /run/current-system/sw/bin/fish
+```
+
+Then log out and log back in, or open a new terminal.
 
 ### Rolling back a broken change
 
@@ -522,3 +620,13 @@ This usually means a syntax error in your Nix code. Run with `--show-trace` for 
 ```shell
 darwin-rebuild build --flake . --show-trace
 ```
+
+### 1Password shell plugins not working
+
+Ensure 1Password CLI is installed and you're signed in:
+
+```shell
+op signin
+```
+
+The shell plugins (`gh`, `awscli2`) will prompt for biometric auth on first use.

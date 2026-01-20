@@ -12,6 +12,8 @@ Supports multiple machines with shared and host-specific settings.
 - 🍺 **Homebrew integration** - GUI apps via nix-homebrew
 - 🖥️ **Multi-machine support** - Shared config with per-host overrides
 - 📦 **Flat modular structure** - Organized by purpose, not by tool
+- 🐟 **Fish shell** - Default shell with fzf/fd/bat/eza integrations
+- 🔐 **1Password integration** - SSH agent and CLI shell plugins for biometric auth
 - 🎨 **Dev tooling included** - Formatters, linters, LSP via unified flake
 
 ## 🚀 Quick Start
@@ -28,6 +30,9 @@ cd ~/Developer/dotfiles
 
 # 3. Apply the configuration (for personal machine)
 sudo darwin-rebuild switch --flake .
+
+# 4. Set fish as your default shell
+chsh -s /run/current-system/sw/bin/fish
 ```
 
 ### Updating the System
@@ -55,6 +60,7 @@ dotfiles/
 ├── home.nix                     # Home-manager user configuration (imports programs/)
 ├── nix.conf                     # Nix configuration (symlinked to ~/.config/nix/)
 ├── justfile                     # Task runner commands (fmt, lint, switch, etc.)
+├── statix.toml                  # Statix linter configuration
 ├── .envrc                       # direnv integration for auto-loading dev env
 ├── hosts/                       # Machine-specific configurations
 │   ├── personal.nix             # Personal MacBook
@@ -68,12 +74,21 @@ dotfiles/
 │   ├── finder.nix               # Finder preferences
 │   ├── homebrew.nix             # Homebrew casks, formulae, MAS apps
 │   ├── security.nix             # Firewall, Touch ID
-│   └── ...                      # Other system modules (trackpad, etc.)
+│   ├── menuextra-clock.nix      # Menu bar clock settings
+│   ├── custom-preferences.nix   # Additional macOS settings via CustomUserPreferences
+│   └── ...                      # Other system modules (trackpad, screencapture, etc.)
 ├── programs/                    # Home-manager program configs (auto-discovered)
 │   ├── default.nix              # Auto-discovery module
 │   ├── bat.nix                  # Simple module: single file
+│   ├── 1password.nix            # 1Password CLI + shell plugins
+│   ├── fish/                    # Fish shell (default) with integrations
+│   │   ├── default.nix          # Main fish config
+│   │   ├── abbreviations.nix    # Shell abbreviations
+│   │   ├── aliases.nix          # Shell aliases
+│   │   └── functions.nix        # Custom functions (fzf integrations, etc.)
 │   ├── git/                     # Complex module: directory with default.nix
-│   │   └── default.nix
+│   │   ├── default.nix
+│   │   └── .gitmessage
 │   ├── zed/                     # Co-located config: nix + json files
 │   │   ├── default.nix
 │   │   ├── settings.json
@@ -81,8 +96,35 @@ dotfiles/
 │   └── ...                      # Other program modules (auto-discovered)
 └── docs/
     ├── adr/                     # Architecture Decision Records
-    └── CUSTOMIZATION.md         # How to customize this config
+    ├── CUSTOMIZATION.md         # How to customize this config
+    └── TASKS.md                 # Task tracker for ongoing work
 ```
+
+## 🐟 Fish Shell
+
+Fish is the default login shell, configured with useful integrations:
+
+### Key Features
+- **fzf integrations**: `fe` (find+edit), `fcd` (find+cd), `preview` (fzf+bat)
+- **Git helpers**: `gadd` (interactive add), `gco` (interactive checkout)
+- **Search**: `rg-fzf` (ripgrep with fzf+bat preview)
+- **Utilities**: `help` (bat-highlighted --help), `mkcd`, `path`
+
+### Shell Aliases
+- `ll` - Long listing with eza (icons, git status)
+- `tree` - Tree view with eza
+- `cat` - bat with no paging
+- `switch` - darwin-rebuild switch
+
+## 🔐 1Password Integration
+
+This config integrates with 1Password for:
+
+- **SSH Agent**: All SSH operations use 1Password's SSH agent
+- **Git Signing**: Commits signed via 1Password SSH keys
+- **Shell Plugins**: Biometric auth for CLI tools (`gh`, `awscli2`) via `op plugin run`
+
+The shell plugins wrap CLI tools so you authenticate with Touch ID instead of storing tokens in plaintext.
 
 ## 🛠️ Development
 
@@ -125,7 +167,7 @@ just gc          # Garbage collect (keeps last 7 days)
 3. **Adding a complex program**: Create `programs/foo/default.nix` — also auto-discovered!
 4. **Co-locating config files**: Put JSON/YAML alongside `default.nix` in the program directory
 5. **Drafting a module**: Prefix with `_` (e.g., `_tmux.nix` or `_neovim/`) to exclude from auto-discovery
-6. **System preferences**: Edit modules in `modules/system-defaults/`
+6. **System preferences**: Edit or create modules in `modules/`
 7. **Homebrew apps**: Edit `modules/homebrew.nix`
 8. **Per-machine settings**: Edit files in `hosts/`
 
@@ -169,7 +211,7 @@ just switch
     homeDirectory = "/Users/myuser";
     dotfilesPath = "/Users/myuser/Developer/dotfiles";
   };
-  userModule = ../users/personal.nix;  # or work.nix
+  userModule = ../home.nix;
   system = "aarch64-darwin";
   hostname = "My-Machine";
   homebrew = {
@@ -251,5 +293,6 @@ Built with:
 - [home-manager](https://github.com/nix-community/home-manager) by @nix-community
 - [nix-homebrew](https://github.com/zhaofengli/nix-homebrew) by @zhaofengli
 - [mac-app-util](https://github.com/hraban/mac-app-util) by @hraban
+- [1Password shell-plugins](https://github.com/1Password/shell-plugins) by @1Password
 
 Inspired by the Nix community's dotfiles repos.
