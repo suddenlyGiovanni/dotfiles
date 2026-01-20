@@ -163,8 +163,8 @@ in {
         whitespace = "space-before-tab, trailing-space, tabwidth=4";
         # Make `git rebase` safer on macOS
         trustctime = false;
-        # Prevent showing files whose names contain non-ASCII symbols as unversioned
-        precomposeunicode = false;
+        # Ensure proper Unicode filename handling on macOS (NFD → NFC normalization)
+        precomposeunicode = true;
         # Speed up commands involving untracked files
         untrackedCache = true;
       };
