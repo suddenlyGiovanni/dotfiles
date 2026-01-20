@@ -11,7 +11,8 @@
   };
 
   # Show PATH entries, one per line
-  path = {
+  # Named 'show-path' to avoid shadowing fish's builtin 'path' command
+  show-path = {
     description = "Show PATH entries one per line";
     body = ''
       for p in $PATH
