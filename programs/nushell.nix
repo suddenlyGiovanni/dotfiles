@@ -8,7 +8,7 @@
   inherit (lib) mkDefault;
 in {
   programs.nushell = {
-    enable = true;
+    enable = mkDefault true;
     package = mkDefault pkgs.nushell;
 
     # Configuration files
