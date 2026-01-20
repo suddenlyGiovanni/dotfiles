@@ -33,7 +33,13 @@
       wget # Tool for retrieving files using HTTP, HTTPS, and FTP
     ];
 
-    pathsToLink = ["/share/zsh"]; # List of directories to be symlinked in /run/current-system/sw.
+    pathsToLink = [
+      "/share/zsh" # zsh completions
+      "/share/fish" # fish completions
+    ];
+
+    # Add fish to allowed login shells
+    shells = [pkgs.fish];
   };
 
   fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
@@ -50,7 +56,18 @@
     description = userConfig.fullName; # A short description of the user account, typically the user's full name.
     home = userConfig.homeDirectory; # The user's home directory. This defaults to `null`.
     isHidden = false; # Whether to make the user account hidden.
-    shell = null; # The user's shell. This defaults to `null`.
+    shell = pkgs.fish; # Use fish as the default shell
+  };
+
+  # Enable fish at the system level (required for it to be a valid login shell)
+  programs.fish = {
+    enable = true;
+    # Add vendor completions and functions paths
+    vendor = {
+      completions.enable = true;
+      config.enable = true;
+      functions.enable = true;
+    };
   };
 
   home-manager = {
