@@ -44,7 +44,7 @@
           echo "Usage: mkcd <directory>"
           return 1
       end
-      mkdir -p $dir && cd $dir
+      mkdir -p -- "$dir" && cd -- "$dir"
     '';
   };
 
