@@ -177,7 +177,7 @@ in {
 
       # ── Branch ──────────────────────────────────────────────────────────
       branch = {
-        autoSetupMerge = "true";
+        autoSetupMerge = true;
         autoSetupRebase = "always";
       };
 
