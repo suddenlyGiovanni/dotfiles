@@ -7,7 +7,7 @@
 # - rustup.nix: CARGO_HOME, RUSTUP_HOME
 # - awscli.nix: AWS_CONFIG_FILE, AWS_SHARED_CREDENTIALS_FILE
 # - docker.nix: DOCKER_CONFIG
-# - python.nix: PYTHON_HISTORY
+# - python.nix: PYTHONSTARTUP, PYTHON_HISTORY
 # - claude-code.nix: CLAUDE_CONFIG_DIR
 #
 # Reference: https://wiki.archlinux.org/title/XDG_Base_Directory

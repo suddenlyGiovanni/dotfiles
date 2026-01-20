@@ -8,8 +8,12 @@
 }: {
   home = {
     # ── XDG Compliance ────────────────────────────────────────────────────────
-    # Move Python REPL history to XDG state directory
+    # Move Python files to XDG directories
     sessionVariables = {
+      # Python startup file (for interactive shell customization)
+      PYTHONSTARTUP = "${config.xdg.configHome}/python/pythonrc";
+
+      # Python REPL history
       PYTHON_HISTORY = "${config.xdg.stateHome}/python/history";
     };
 
@@ -17,10 +21,19 @@
     activation.createPythonStateDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
       mkdir -p "${config.xdg.stateHome}/python"
     '';
-
-    # ── Packages ──────────────────────────────────────────────────────────────
-    packages = with pkgs; [
-      uv # Extremely fast Python package installer and resolver, written in Rust
-    ];
   };
+
+  # ── Python Startup Configuration ────────────────────────────────────────────
+  xdg.configFile."python/pythonrc".text = ''
+    # Minimal pythonrc for XDG compliance
+    # Enable tab completion
+    import readline
+    import rlcompleter
+    readline.parse_and_bind("tab: complete")
+  '';
+
+  # ── Packages ──────────────────────────────────────────────────────────────
+  home.packages = with pkgs; [
+    uv # Extremely fast Python package installer and resolver, written in Rust
+  ];
 }
