@@ -73,11 +73,11 @@
   inherit (lib) mkDefault;
 in {
   programs.delta = {
-    enable = true;
+    enable = mkDefault true;
     package = mkDefault pkgs.delta;
 
     # Enable git integration (sets core.pager and interactive.diffFilter)
-    enableGitIntegration = true;
+    enableGitIntegration = mkDefault true;
 
     # ────────────────────────────────────────────────────────────────────────
     # Options
