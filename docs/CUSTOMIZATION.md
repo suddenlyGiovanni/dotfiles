@@ -405,7 +405,7 @@ Fish is the default shell, configured in `programs/fish/`:
 
 For applications that don't have home-manager modules (or you prefer hand-crafted configs):
 
-**Co-locate with program module (recommended)**
+#### Co-locate with program module (recommended)
 
 ```shell
 # Create program directory
