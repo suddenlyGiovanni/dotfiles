@@ -62,8 +62,10 @@
   gco = {
     description = "Interactive git checkout with fzf";
     body = ''
-      set -l branch (git branch --all | grep -v HEAD | fzf --preview 'git log --oneline --graph --color=always {1}' | sed 's/^..//' | sed 's/remotes\/origin\///')
+      set -l branch (git branch --all --format='%(refname:short)' | grep -v HEAD | fzf --preview 'git log --oneline --graph --color=always {}')
       if test -n "$branch"
+          # Strip origin/ prefix for remote branches
+          set branch (string replace 'origin/' '''' $branch)
           git checkout $branch
       end
     '';
