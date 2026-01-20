@@ -1,6 +1,6 @@
 # macOS Dock Preferences
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.dock
-_: {
+{hostConfig, ...}: {
   system.defaults.dock = {
     appswitcher-all-displays = false; # Whether to display the appswitcher on all displays or only the main one. The default is false.
     autohide = true; # Whether to automatically hide and show the dock. The default is false.
@@ -16,7 +16,7 @@ _: {
     mouse-over-hilite-stack = true; # Enable highlight hover effect for the grid view of a stack in the Dock.
     mru-spaces = false; # Whether to automatically rearrange spaces based on most recent use.  The default is true.
     orientation = "left"; # Position of the dock on screen.  The default is "bottom".
-    persistent-apps = ["/Applications/Safari.app"]; # Persistent applications in the dock.
+    persistent-apps = hostConfig.dock.persistent-apps or ["/Applications/Safari.app"]; # Persistent applications in the dock (configurable per-host).
     persistent-others = null; # Persistent folders in the dock.
     show-process-indicators = true; # Show indicator lights for open applications in the Dock. The default is true.
     showhidden = true; # Whether to make icons of hidden applications translucent.  The default is false.

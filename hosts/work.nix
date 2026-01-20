@@ -19,6 +19,13 @@
   # To get the correct value for your machine, run: scutil --get LocalHostName
   hostname = "suddenlyGiovannis-MacBook-Work";
 
+  # Dock settings specific to this host
+  dock = {
+    persistent-apps = [
+      "/Applications/Safari.app"
+    ];
+  };
+
   # Homebrew settings specific to this host
   homebrew = {
     # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
