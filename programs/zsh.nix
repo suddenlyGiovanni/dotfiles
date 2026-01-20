@@ -17,8 +17,8 @@ in {
     package = mkDefault pkgs.zsh;
 
     # Use XDG-compliant location for zsh config files
-    # Note: dotDir expects a path relative to $HOME, not an absolute path
-    dotDir = ".config/zsh";
+    # Using absolute path as relative paths are deprecated
+    dotDir = "${config.xdg.configHome}/zsh";
 
     # Enable zsh completion
     enableCompletion = mkDefault true;
