@@ -22,12 +22,13 @@
   };
 
   # Help with bat highlighting
-  help = {
+  # Named 'halp' to avoid shadowing fish's builtin 'help' command
+  halp = {
     description = "Show command help with syntax highlighting";
     argumentNames = ["cmd"];
     body = ''
       if test -z "$cmd"
-          echo "Usage: help <command>"
+          echo "Usage: halp <command>"
           return 1
       end
       $cmd --help 2>&1 | bat --plain --language=help
