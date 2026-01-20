@@ -119,14 +119,6 @@
 
   # Helper to safely check if a shell program is enabled (defaults to false if not defined)
   shellEnabled = path: attrByPath path false config;
-
-  # Official yazi plugins repository (pinned to specific commit for stability)
-  yazi-plugins = pkgs.fetchFromGitHub {
-    owner = "yazi-rs";
-    repo = "plugins";
-    rev = "de339760ada77d11039a3fa4aa7b3f38ca19a9d3";
-    hash = "sha256-60xxQZlXsKs7F/TJdRkhgZpTXas6rUvJUb0rvwZIozo=";
-  };
 in {
   programs.yazi = {
     enable = mkDefault true;
@@ -163,8 +155,7 @@ in {
         # Default sort by name
         sort_by = "natural";
         # Line mode: "none", "size", "permissions", "mtime", etc.
-        # Using "none" since git.yazi plugin shows status in linemode
-        linemode = "none";
+        linemode = "size";
       };
 
       preview = {
@@ -218,23 +209,6 @@ in {
           }
         ];
       };
-
-      # Plugin configuration
-      plugin = {
-        # Git status fetcher
-        prepend_fetchers = [
-          {
-            id = "git";
-            name = "*";
-            run = "git";
-          }
-          {
-            id = "git";
-            name = "*/";
-            run = "git";
-          }
-        ];
-      };
     };
 
     # ────────────────────────────────────────────────────────────────────────
@@ -243,38 +217,6 @@ in {
     # See: https://yazi-rs.github.io/docs/configuration/keymap
     keymap = {
       mgr.prepend_keymap = [
-        # ── Smart navigation ──────────────────────────────────────────────
-        # Enter directories or open files with same key
-        {
-          on = ["l"];
-          run = "plugin smart-enter";
-          desc = "Enter directory or open file";
-        }
-        {
-          on = ["<Right>"];
-          run = "plugin smart-enter";
-          desc = "Enter directory or open file";
-        }
-
-        # ── Pane management ───────────────────────────────────────────────
-        {
-          on = ["T"];
-          run = "plugin toggle-pane max-preview";
-          desc = "Maximize or restore preview pane";
-        }
-        {
-          on = ["<C-t>"];
-          run = "plugin toggle-pane min-preview";
-          desc = "Show or hide preview pane";
-        }
-
-        # ── File operations ───────────────────────────────────────────────
-        {
-          on = ["c" "m"];
-          run = "plugin chmod";
-          desc = "Chmod on selected files";
-        }
-
         # ── Quick Look (macOS) ────────────────────────────────────────────
         {
           on = ["<C-p>"];
@@ -324,15 +266,9 @@ in {
     # ────────────────────────────────────────────────────────────────────────
     # Init Lua (init.lua)
     # ────────────────────────────────────────────────────────────────────────
-    # Custom Lua initialization - setup plugins
+    # Custom Lua initialization
     # See: https://yazi-rs.github.io/docs/configuration/yazi#init-lua
     initLua = ''
-      -- Full border around yazi for a cleaner look
-      require("full-border"):setup()
-
-      -- Git status in linemode
-      require("git"):setup()
-
       -- Show symlink target in status bar
       Status:children_add(function(self)
         local h = self._current.hovered
@@ -348,21 +284,25 @@ in {
     # Plugins
     # ────────────────────────────────────────────────────────────────────────
     # See: https://yazi-rs.github.io/docs/plugins/overview
-    # Plugins are linked to ~/.config/yazi/plugins/<name>.yazi
-    plugins = {
-      # UI enhancements
-      full-border = "${yazi-plugins}/full-border.yazi";
-      toggle-pane = "${yazi-plugins}/toggle-pane.yazi";
-
-      # Navigation
-      smart-enter = "${yazi-plugins}/smart-enter.yazi";
-
-      # Git integration
-      git = "${yazi-plugins}/git.yazi";
-
-      # File operations
-      chmod = "${yazi-plugins}/chmod.yazi";
-    };
+    #
+    # Plugins are currently disabled to avoid build failures from external
+    # GitHub dependencies. The official yazi-rs/plugins repository sometimes
+    # has pinned commits that become unavailable, causing 404 errors during
+    # nix builds.
+    #
+    # To re-enable plugins:
+    # 1. Add a fetchFromGitHub block for yazi-rs/plugins with a stable commit
+    # 2. Reference plugins in the plugins attribute below
+    # 3. Add plugin-specific keybindings to keymap.mgr.prepend_keymap
+    # 4. Initialize plugins in initLua with require("plugin-name"):setup()
+    #
+    # Previously used plugins:
+    # - full-border: UI enhancement for cleaner borders
+    # - toggle-pane: Maximize/minimize preview pane
+    # - smart-enter: Combined enter directory/open file action
+    # - git: Git status integration in file listing
+    # - chmod: Interactive file permission changer
+    plugins = {};
 
     # ────────────────────────────────────────────────────────────────────────
     # Flavors (themes)
