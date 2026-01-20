@@ -24,8 +24,8 @@ in {
   # Ensure XDG state subdirectories exist for tools that write history files
   # (Tools without dedicated modules)
   home.activation.createXdgStateDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    mkdir -p "${config.xdg.stateHome}/less"
-    mkdir -p "${config.xdg.stateHome}/sqlite"
+    $DRY_RUN_CMD mkdir -p "${config.xdg.stateHome}/less"
+    $DRY_RUN_CMD mkdir -p "${config.xdg.stateHome}/sqlite"
   '';
 
   home.sessionVariables = {

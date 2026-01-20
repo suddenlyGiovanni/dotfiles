@@ -68,6 +68,6 @@ in {
   # ── Directory Creation ──────────────────────────────────────────────────────
   # Ensure the 1Password config directory exists
   home.activation.create1PasswordConfigDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    mkdir -p "${config.xdg.configHome}/op"
+    $DRY_RUN_CMD mkdir -p "${config.xdg.configHome}/op"
   '';
 }

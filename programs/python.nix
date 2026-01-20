@@ -19,7 +19,7 @@
 
     # Ensure state directory exists for Python history
     activation.createPythonStateDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      mkdir -p "${config.xdg.stateHome}/python"
+      $DRY_RUN_CMD mkdir -p "${config.xdg.stateHome}/python"
     '';
   };
 

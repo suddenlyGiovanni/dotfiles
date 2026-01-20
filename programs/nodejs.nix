@@ -20,7 +20,7 @@
 
     # Ensure state directory exists for REPL history
     activation.createNodeStateDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      mkdir -p "${config.xdg.stateHome}/node"
+      $DRY_RUN_CMD mkdir -p "${config.xdg.stateHome}/node"
     '';
 
     # ── Packages ──────────────────────────────────────────────────────────────
