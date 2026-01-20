@@ -111,14 +111,7 @@
         shellHook = ''
           echo "dotfiles development shell"
           echo ""
-          echo "Available commands:"
-          echo "  just --list      - Show all available tasks"
-          echo "  just fmt         - Format all Nix files"
-          echo "  just lint        - Lint Nix files"
-          echo "  just check       - Run all checks"
-          echo "  just build       - Build configuration"
-          echo "  just switch      - Apply configuration"
-          echo ""
+          just --list
         '';
       };
     });
