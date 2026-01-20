@@ -55,7 +55,7 @@
 #   - fzf ⌃T preview: file content with syntax highlighting
 #   - fzf ⌃R preview: command history
 #   - help function: --help output with highlighting (--language=help)
-#   - man pages: via batman wrapper (bat-extras)
+#   - man pages: MANPAGER set to use bat for colorized man pages
 #   - git diffs: via batdiff wrapper (bat-extras)
 #
 # ══════════════════════════════════════════════════════════════════════════════
@@ -84,10 +84,20 @@ in {
     # ────────────────────────────────────────────────────────────────────────
     # Written to ~/.config/bat/config
     config = {
-      # Theme that works well with most terminal color schemes
+      # Theme configuration with automatic dark/light mode detection
+      # On macOS, bat detects system appearance and switches themes automatically
       # Use `bat --list-themes` to see available themes
-      # Popular choices: "ansi", "TwoDark", "Dracula", "Catppuccin-mocha"
-      theme = mkDefault "ansi";
+      # Use `bat --list-themes | fzf --preview="bat --theme={} --color=always /path/to/file"`
+      # to preview themes interactively
+      theme = mkDefault "auto:system";
+
+      # Theme used when system is in dark mode
+      # "ansi" adapts to terminal colors; alternatives: "TwoDark", "Dracula", "OneHalfDark"
+      theme-dark = mkDefault "ansi";
+
+      # Theme used when system is in light mode
+      # "ansi" adapts to terminal colors; alternatives: "GitHub", "OneHalfLight"
+      theme-light = mkDefault "ansi";
 
       # Default style: show line numbers and git changes
       # Use 'full' for all decorations, 'plain' for none
@@ -134,6 +144,7 @@ in {
       batdiff # Diff with syntax highlighting
       batgrep # Ripgrep + bat (search with pretty output)
       batwatch # Watch files with syntax highlighting
+      prettybat # Format and highlight code (formatter + bat)
     ];
 
     # ────────────────────────────────────────────────────────────────────────
@@ -162,5 +173,21 @@ in {
     # Additional syntax definitions installed to ~/.config/bat/syntaxes/
     # Useful for languages not included in bat's default set
     syntaxes = {};
+  };
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # MANPAGER Configuration
+  # ──────────────────────────────────────────────────────────────────────────
+  # Use bat for colorized man pages via the MANPAGER environment variable.
+  # This provides syntax highlighting for man pages system-wide.
+  # Alternative: use `batman <command>` explicitly
+  home.sessionVariables = {
+    # Use bat as the man pager for colorized man pages
+    # -p: plain mode (no line numbers)
+    # -l man: use man page syntax highlighting
+    MANPAGER = "bat -plman";
+
+    # Colorize man page references (e.g., SEE ALSO section)
+    MANROFFOPT = "-c";
   };
 }
