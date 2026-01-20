@@ -7,8 +7,14 @@ _: {
     AutoHide = false; # Auto hide stage strip showing recent apps. Default is false.
     AppWindowGroupingBehavior = true; # Grouping strategy when showing windows from an application. false means "One at a time" true means "All at once"
     StandardHideDesktopIcons = false; # Hide items on desktop.
-    HideDesktop = null; # Hide items in Stage Manager.
-    StandardHideWidgets = null; # Hide widgets on desktop.
-    StageManagerHideWidgets = null; # Hide widgets in Stage Manager.
+    HideDesktop = true; # Hide items in Stage Manager.
+    StandardHideWidgets = false; # Hide widgets on desktop.
+    StageManagerHideWidgets = false; # Hide widgets in Stage Manager.
+  };
+
+  # Additional WindowManager settings via CustomUserPreferences (not exposed in nix-darwin typed options)
+  system.defaults.CustomUserPreferences."com.apple.WindowManager" = {
+    EnableTiledWindowMargins = true; # Enable margins between tiled windows.
+    EnableTilingOptionAccelerator = false; # Disable Option key accelerator for tiling.
   };
 }

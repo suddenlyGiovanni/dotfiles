@@ -1,0 +1,13 @@
+# Menu Bar Clock preferences
+# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.menuExtraClock
+_: {
+  system.defaults.menuExtraClock = {
+    Show24Hour = true; # Show 24-hour time. The default is based on region settings.
+    ShowAMPM = true; # Show AM/PM indicator (only relevant for 12-hour time). Current system value: true.
+    ShowDate = 0; # Show date in menu bar clock. 0 = "When Space Allows", 1 = "Always", 2 = "Never". Current system value: 0.
+    ShowDayOfWeek = true; # Show the day of the week in menu bar clock. Current system value: true.
+    ShowSeconds = false; # Show seconds in menu bar clock. The default is false.
+    FlashDateSeparators = false; # Flash the date separators. The default is false.
+    IsAnalog = false; # Show an analog clock instead of digital. The default is false.
+  };
+}
