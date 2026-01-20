@@ -81,7 +81,7 @@
       set -l branch (git branch --all --format='%(refname:short)' | grep -v HEAD | fzf --preview 'git log --oneline --graph --color=always {}')
       if test -n "$branch"
           # Strip origin/ prefix for remote branches
-          set branch (string replace 'origin/' '''' $branch)
+          set branch (string replace 'origin/' "" $branch)
           git checkout $branch
       end
     '';
