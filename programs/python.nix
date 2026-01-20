@@ -5,12 +5,7 @@
   lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
-    mkDefault
-    ;
-in {
+}: {
   home = {
     # ── XDG Compliance ────────────────────────────────────────────────────────
     # Move Python files to XDG directories

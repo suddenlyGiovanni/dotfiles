@@ -15,7 +15,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }: let
   inherit

@@ -5,12 +5,7 @@
   lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
-    mkDefault
-    ;
-in {
+}: {
   home = {
     # ── XDG Compliance ────────────────────────────────────────────────────────
     # Move npm/node files to XDG directories

@@ -1,15 +1,11 @@
 # nushell - A new type of shell
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/nushell.nix
 {
-  config,
   lib,
   pkgs,
   ...
 }: let
-  inherit
-    (lib)
-    mkDefault
-    ;
+  inherit (lib) mkDefault;
 in {
   programs.nushell = {
     enable = true;

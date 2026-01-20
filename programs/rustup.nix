@@ -2,15 +2,9 @@
 # This module installs rustup and configures XDG-compliant paths for Cargo and Rustup
 {
   config,
-  lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
-    mkDefault
-    ;
-in {
+}: {
   # ── XDG Compliance ──────────────────────────────────────────────────────────
   # Move Cargo and Rustup data to XDG directories
   home.sessionVariables = {

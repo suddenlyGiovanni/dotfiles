@@ -2,15 +2,9 @@
 # This module installs Claude Code and configures XDG-compliant paths
 {
   config,
-  lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
-    mkDefault
-    ;
-in {
+}: {
   # ── XDG Compliance ──────────────────────────────────────────────────────────
   # Force Claude Code to use XDG-compliant config directory
   # Note: home-manager's programs.claude-code module uses hardcoded .claude/ paths

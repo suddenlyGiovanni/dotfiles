@@ -1,15 +1,11 @@
 # bat - A cat clone with syntax highlighting and Git integration
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/bat.nix
 {
-  config,
   lib,
   pkgs,
   ...
 }: let
-  inherit
-    (lib)
-    mkDefault
-    ;
+  inherit (lib) mkDefault;
 in {
   programs.bat = {
     enable = true;

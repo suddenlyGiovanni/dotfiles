@@ -1,17 +1,11 @@
 # Docker - Container tools and XDG compliance
-# Note: Docker Desktop is installed via Homebrew (see darwin/modules/homebrew.nix)
+# Note: Docker Desktop is installed via Homebrew (see modules/homebrew.nix)
 # This module installs additional Docker tools and configures XDG-compliant paths
 {
   config,
-  lib,
   pkgs,
   ...
-}: let
-  inherit
-    (lib)
-    mkDefault
-    ;
-in {
+}: {
   # ── XDG Compliance ──────────────────────────────────────────────────────────
   # Move Docker config to XDG directory
   home.sessionVariables = {
