@@ -189,6 +189,24 @@ nix-darwin and home-manager conventions.
   - `just build` succeeds
   - `just switch` activates on personal machine
 
+### Phase 14: Documentation Restructuring
+
+- [x] **Apply progressive disclosure principle**
+  - Slimmed `README.md` to essentials (~47 lines vs ~280)
+  - Focused `AGENTS.md` on machine-critical info (~48 lines vs ~130)
+  - Removed 4x duplicated directory structure diagrams
+  - Each doc now has a single responsibility
+
+- [x] **Establish documentation hierarchy**
+  - Level 0: `README.md` — What & Quick Start (entry point)
+  - Level 1: `CUSTOMIZATION.md` — How to do X (detailed guide)
+  - Level 1: `AGENTS.md` — AI context (constraints + commands)
+  - Level 2: `docs/adr/` — Why decisions were made
+
+- [x] **Remove duplication, add cross-references**
+  - Docs now link to authoritative sources instead of re-explaining
+  - Single source of truth for each piece of information
+
 ---
 
 ## 🚧 In Progress
@@ -242,56 +260,6 @@ These are potential future enhancements, not part of the current refactoring:
 
 ## Notes
 
-### Final Directory Structure
-
-```
-dotfiles/
-├── flake.nix                # Unified flake (darwin + dev environment)
-├── flake.lock               # Pinned inputs
-├── darwin.nix               # Darwin system configuration
-├── home.nix                 # Home-manager user configuration
-├── nix.conf                 # Nix configuration
-├── justfile                 # Task runner
-├── statix.toml              # Linter config
-├── hosts/                   # Machine-specific configs
-│   ├── personal.nix
-│   └── work.nix
-├── lib/                     # Shared helpers
-│   ├── default.nix
-│   └── auto-discovery.nix
-├── modules/                 # Darwin system modules (auto-discovered)
-│   ├── default.nix
-│   ├── dock.nix
-│   ├── finder.nix
-│   ├── homebrew.nix
-│   ├── security.nix
-│   ├── menuextra-clock.nix
-│   ├── custom-preferences.nix
-│   └── ...
-├── programs/                # Home-manager programs (auto-discovered)
-│   ├── default.nix
-│   ├── 1password.nix
-│   ├── bat.nix
-│   ├── fish/
-│   │   ├── default.nix
-│   │   ├── abbreviations.nix
-│   │   ├── aliases.nix
-│   │   └── functions.nix
-│   ├── git/
-│   │   ├── default.nix
-│   │   └── .gitmessage
-│   ├── zed/
-│   │   ├── default.nix
-│   │   ├── settings.json
-│   │   ├── keymap.json
-│   │   └── tasks.json
-│   └── ...
-└── docs/
-    ├── adr/
-    ├── CUSTOMIZATION.md
-    └── TASKS.md
-```
-
 ### Key Achievements
 
 1. **Flat structure**: No more `nix/` prefix or nested categorization
@@ -303,19 +271,4 @@ dotfiles/
 7. **macOS settings**: Comprehensive darwin defaults from system audit
 8. **Documentation**: All docs updated to match current state
 
-### Commands Reference
 
-```bash
-# Format, lint, check
-just check
-
-# Build and apply
-just build
-just switch
-
-# After switch, set fish as login shell
-chsh -s /run/current-system/sw/bin/fish
-
-# Show flake outputs
-nix flake show
-```

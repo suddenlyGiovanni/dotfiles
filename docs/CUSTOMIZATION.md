@@ -7,15 +7,16 @@ This guide explains how to customize and extend the nix-darwin configuration for
 ## Table of Contents
 
 - [Quick Commands](#quick-commands)
-- [Understanding the Structure](#understanding-the-structure)
+- [Which File Do I Edit?](#which-file-do-i-edit)
 - [Common Tasks](#common-tasks)
   - [Adding a New Package](#adding-a-new-package)
   - [Adding a New Homebrew Cask](#adding-a-new-homebrew-cask)
   - [Changing macOS System Preferences](#changing-macos-system-preferences)
   - [Adding a New Program Configuration](#adding-a-new-program-configuration)
   - [Adding a New Machine](#adding-a-new-machine)
-  - [Customizing Git for a Specific Machine](#customizing-git-for-a-specific-machine)
+  - [Customizing Git Identity](#customizing-git-identity)
   - [Customizing Fish Shell](#customizing-fish-shell)
+  - [Adding Non-Nix Config Files](#adding-non-nix-config-files)
 - [Configuration Layers](#configuration-layers)
 - [Testing Changes](#testing-changes)
 - [Troubleshooting](#troubleshooting)
@@ -35,57 +36,7 @@ just update      # Update flake inputs
 just gc          # Garbage collect (keeps last 7 days)
 ```
 
-## Understanding the Structure
-
-```
-dotfiles/
-├── flake.nix        # Unified flake (darwin configs + dev environment)
-├── flake.lock       # Pinned flake inputs
-├── darwin.nix       # Darwin system configuration (imports modules/)
-├── home.nix         # Home-manager user configuration (imports programs/)
-├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
-├── justfile         # Task runner commands
-├── statix.toml      # Statix linter configuration
-├── .envrc           # direnv integration
-├── hosts/           # Machine-specific configurations
-│   ├── personal.nix # Personal MacBook
-│   └── work.nix     # Work laptop
-├── lib/             # Shared helper functions
-│   ├── default.nix  # Library entry point
-│   └── auto-discovery.nix  # Module auto-discovery function
-├── modules/         # Darwin system modules (auto-discovered)
-│   ├── default.nix  # Auto-discovery module
-│   ├── dock.nix     # Dock preferences
-│   ├── finder.nix   # Finder preferences
-│   ├── homebrew.nix # Homebrew casks, formulae, MAS apps
-│   ├── security.nix # Firewall, Touch ID
-│   ├── menuextra-clock.nix  # Menu bar clock
-│   ├── custom-preferences.nix  # Additional macOS settings
-│   └── ...          # Other system modules (trackpad, screencapture, etc.)
-├── programs/        # Home-manager program configs (auto-discovered)
-│   ├── default.nix  # Auto-discovery module
-│   ├── bat.nix      # Simple module: single file
-│   ├── 1password.nix # 1Password CLI + shell plugins
-│   ├── fish/        # Fish shell (default shell)
-│   │   ├── default.nix
-│   │   ├── abbreviations.nix
-│   │   ├── aliases.nix
-│   │   └── functions.nix
-│   ├── git/         # Complex module: directory with default.nix
-│   │   ├── default.nix
-│   │   └── .gitmessage
-│   ├── zed/         # Co-located config: nix + json files
-│   │   ├── default.nix
-│   │   ├── settings.json
-│   │   └── keymap.json
-│   └── ...          # Other program modules (auto-discovered)
-└── docs/
-    ├── adr/         # Architecture Decision Records
-    ├── CUSTOMIZATION.md  # This file
-    └── TASKS.md     # Task tracker
-```
-
-### Which file do I edit?
+## Which File Do I Edit?
 
 | I want to...                                   | Edit this file                                     |
 | ---------------------------------------------- | -------------------------------------------------- |
