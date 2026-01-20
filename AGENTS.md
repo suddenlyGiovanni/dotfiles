@@ -44,6 +44,7 @@ dotfiles/
 ├── home.nix         # Home-manager user configuration (imports programs/)
 ├── nix.conf         # Nix configuration (symlinked to ~/.config/nix/)
 ├── hosts/           # Machine-specific configs (personal.nix, work.nix)
+├── lib/             # Shared helper functions (auto-discovery, etc.)
 ├── modules/         # Darwin system modules (flat, auto-discovered)
 └── programs/        # Home-manager program configs (flat, auto-discovered)
 ```
@@ -68,13 +69,15 @@ dotfiles/
 - `darwin.nix` - Darwin system configuration (imports modules/)
 - `home.nix` - Home-manager user configuration (imports programs/)
 - `hosts/*.nix` - Machine-specific data (hostname, homebrew casks)
+- `lib/auto-discovery.nix` - Shared module auto-discovery function
 - `programs/session.nix` - Environment variables (EDITOR, XDG paths)
 - `modules/homebrew.nix` - GUI apps via Homebrew
 - `modules/*.nix` - macOS preferences (dock, finder, trackpad, security, etc.)
 
 ### Module Patterns
 
-- **Flat auto-discovery**: Both `modules/` and `programs/` use auto-import via `default.nix`
+- **Flat auto-discovery**: Both `modules/` and `programs/` use shared `lib/auto-discovery.nix`
+- **Explicit coordination**: Modules read `config.programs.<name>.enable` for shell/tool integrations
 - **Co-located configs**: Complex modules use directories (e.g., `programs/zed/default.nix` + `programs/zed/settings.json`)
 - **XDG env vars**: Program-specific XDG variables are set in their respective modules (e.g., `nodejs.nix` sets `NPM_CONFIG_CACHE`)
 

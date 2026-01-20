@@ -59,6 +59,9 @@ dotfiles/
 ├── hosts/                       # Machine-specific configurations
 │   ├── personal.nix             # Personal MacBook
 │   └── work.nix                 # Work laptop
+├── lib/                         # Shared helper functions
+│   ├── default.nix              # Library entry point
+│   └── auto-discovery.nix       # Module auto-discovery function
 ├── modules/                     # Darwin system modules (auto-discovered)
 │   ├── default.nix              # Auto-discovery module
 │   ├── dock.nix                 # Dock preferences
