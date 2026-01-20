@@ -1,0 +1,67 @@
+# Session variables - Global editor and pager settings
+# This module sets truly global environment variables that aren't tool-specific
+#
+# Note: Tool-specific XDG variables are co-located with their program modules:
+# - bun.nix: BUN_INSTALL
+# - nodejs.nix: NPM_CONFIG_*, NODE_REPL_HISTORY
+# - rustup.nix: CARGO_HOME, RUSTUP_HOME
+# - awscli.nix: AWS_CONFIG_FILE, AWS_SHARED_CREDENTIALS_FILE
+# - docker.nix: DOCKER_CONFIG
+# - python.nix: PYTHONSTARTUP, PYTHON_HISTORY
+# - claude-code.nix: CLAUDE_CONFIG_DIR
+#
+# Reference: https://wiki.archlinux.org/title/XDG_Base_Directory
+{
+  config,
+  lib,
+  ...
+}: let
+  inherit
+    (lib)
+    mkDefault
+    ;
+in {
+  # Ensure XDG state subdirectories exist for tools that write history files
+  # (Tools without dedicated modules)
+  home.activation.createXdgStateDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    $DRY_RUN_CMD mkdir -p "${config.xdg.stateHome}/less"
+    $DRY_RUN_CMD mkdir -p "${config.xdg.stateHome}/sqlite"
+  '';
+
+  home.sessionVariables = {
+    # ── Editors ─────────────────────────────────────────────────────────────
+    EDITOR = mkDefault "vim";
+    VISUAL = mkDefault "zed --wait";
+
+    # ── Pager ───────────────────────────────────────────────────────────────
+    PAGER = mkDefault "less";
+    MANPAGER = mkDefault "less -R";
+
+    # Move less history to XDG state
+    LESSHISTFILE = "${config.xdg.stateHome}/less/history";
+
+    # ── XDG compliance for tools without dedicated modules ──────────────────
+    # Note: SSH_AUTH_SOCK is configured in 1password.nix
+
+    # Readline (inputrc) - pairs with config in xdg.nix
+    INPUTRC = "${config.xdg.configHome}/readline/inputrc";
+
+    # SQLite history
+    SQLITE_HISTORY = "${config.xdg.stateHome}/sqlite/history";
+
+    # Wget config location (wget gracefully falls back to defaults if file doesn't exist)
+    WGETRC = "${config.xdg.configHome}/wget/wgetrc";
+
+    # ── Tools not currently installed (kept for future use) ─────────────────
+    # Uncomment when/if these tools are added
+
+    # Fly.io
+    # FLY_CONFIG_DIR = "${config.xdg.stateHome}/fly";
+
+    # Kubernetes
+    # KUBECONFIG = "${config.xdg.configHome}/kube/config";
+
+    # Maven
+    # MAVEN_OPTS = "-Dmaven.repo.local=${config.xdg.dataHome}/m2/repository";
+  };
+}

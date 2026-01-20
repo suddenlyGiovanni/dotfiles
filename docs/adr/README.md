@@ -21,6 +21,7 @@ and consequences. They help future-you (and others) understand:
 | [002](./002-xdg-compliance-session-variables.md) | XDG Compliance and Session Variables | Accepted | 2025-01 |
 | [003](./003-nix-lsp-maintainability-tradeoff.md) | Nix LSP Maintainability Trade-off    | Accepted | 2025-01 |
 | [004](./004-developer-directory-structure.md)    | Developer Directory Structure        | Accepted | 2025-01 |
+| [005](./005-home-manager-module-structure.md)    | Home-Manager Module Structure        | Accepted | 2026-01 |
 
 ## Creating a New ADR
 

@@ -1,0 +1,183 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "use_system_window_tabs": true,
+  "outline_panel": {
+    "dock": "right"
+  },
+  "audio": {
+    "experimental.legacy_audio_compatible": false,
+    "experimental.auto_microphone_volume": true,
+    "experimental.rodio_audio": true
+  },
+  "calls": {
+    "mute_on_join": true
+  },
+  "tab_size": 2,
+  "terminal": {
+    "font_family": "JetBrainsMono Nerd Font",
+  },
+  "vim_mode": false,
+  "colorize_brackets": true,
+  "context_servers": {
+    "mcp-server-context7": {
+      "enabled": true,
+      "settings": {
+        "context7_api_key": "",
+      },
+    },
+    "mcp-server-github": {
+      "enabled": true,
+      "settings": {
+        // TODO: Set via environment variable or replace with actual token
+        "github_personal_access_token": "${GITHUB_PERSONAL_ACCESS_TOKEN}",
+      },
+    },
+  },
+  "edit_predictions": {
+    "mode": "subtle",
+  },
+  "git_panel": {
+    "status_style": "icon",
+    "tree_view": true,
+    "sort_by_path": true,
+  },
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true,
+    },
+  },
+  "project_panel": {
+    "dock": "left",
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+  },
+  "title_bar": {
+    "show_menus": false,
+  },
+  "languages": {
+    "TypeScript": {
+      "formatter": { "language_server": { "name": "biome" } },
+      "code_actions_on_format": {
+        "source.fixAll.biome": true,
+        "source.organizeImports.biome": true,
+      },
+    },
+    "Nix": {
+      "language_servers": ["nixd", "!nil"],
+      "formatter": {
+        "external": {
+          "command": "alejandra", // or "nixfmt"
+          "arguments": ["--quiet", "--"],
+        },
+      },
+    },
+  },
+  "icon_theme": {
+    "mode": "system",
+    "light": "Zed (Default)",
+    "dark": "Colored Zed Icons Theme Light",
+  },
+  "diagnostics": {
+    "inline": {
+      "enabled": true,
+    },
+  },
+  "features": {
+    "edit_prediction_provider": "copilot",
+  },
+  "base_keymap": "JetBrains",
+  "agent_servers": {
+    "claude": {
+      "env": {
+        "CLAUDE_CODE_EXECUTABLE": "/etc/profiles/per-user/suddenlygiovanni/bin/claude",
+      },
+    },
+  },
+  "agent": {
+    "play_sound_when_agent_done": true,
+    "use_modifier_to_send": true,
+    "favorite_models": [
+      {
+        "provider": "copilot_chat",
+        "model": "claude-sonnet-4.5",
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "claude-opus-4.5",
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "gpt-5.2",
+      },
+      {
+        "provider": "copilot_chat",
+        "model": "gemini-3-pro-preview",
+      },
+    ],
+    "always_allow_tool_actions": true,
+    "default_profile": "write",
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "claude-opus-4.5",
+    },
+    "model_parameters": [],
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5.2",
+    },
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 16,
+  "theme": {
+    "mode": "system",
+    "light": "Ayu Light",
+    "dark": "Ayu Dark",
+  },
+  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+  "auto_signature_help": true,
+  "inlay_hints": {
+    "enabled": true,
+  },
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        }
+      },
+      "enable_lsp_tasks": true
+    },
+    "biome": {
+      "settings": {
+        "require_config_file": true,
+      },
+    },
+    "nixd": {
+      "settings": {
+        "diagnostic": {
+          "suppress": ["sema-extra-with"],
+        },
+      },
+    },
+  },
+  "code_actions_on_format": {
+    "source.action.useSortedProperties.biome": true,
+    "source.fixAll.biome": true,
+  },
+}

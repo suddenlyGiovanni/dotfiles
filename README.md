@@ -1,246 +1,47 @@
 # Dotfiles
 
-Personal Nix configuration for macOS using [nix-darwin](https://github.com/LnL7/nix-darwin) and
-[home-manager](https://github.com/nix-community/home-manager).
+Declarative macOS configuration using [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager).
 
-Supports multiple machines with shared and host-specific settings.
-
-## ✨ Features
-
-- 🔧 **Declarative system configuration** - Everything in version control
-- 🏠 **Home Manager integration** - User environment and dotfiles management
-- 🍺 **Homebrew integration** - GUI apps via nix-homebrew
-- 🖥️ **Multi-machine support** - Shared config with per-host overrides
-- 📦 **Modular structure** - Organized by concern (system, programs, security)
-- 🎨 **Dev tooling included** - Formatters, linters, LSP via development flake
-
-## 🚀 Quick Start
-
-### First-time Setup
+## Quick Start
 
 ```shell
-# 1. Install Nix (via Determinate Systems installer)
+# 1. Install Nix
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 
-# 2. Clone this repo
+# 2. Clone and apply
 git clone https://github.com/suddenlyGiovanni/dotfiles.git ~/Developer/dotfiles
 cd ~/Developer/dotfiles
+sudo darwin-rebuild switch --flake .
 
-# 3. Apply the configuration (for personal machine)
-sudo darwin-rebuild switch --flake ./nix/darwin
+# 3. Set fish as your login shell
+chsh -s /run/current-system/sw/bin/fish
 ```
 
-### Updating the System
+## Daily Commands
 
-After modifying any configuration files:
+| Command       | Description                          |
+| ------------- | ------------------------------------ |
+| `just switch` | Apply configuration changes          |
+| `just check`  | Run all checks (format, lint, build) |
+| `just update` | Update all flake inputs              |
+| `just gc`     | Garbage collect old generations      |
 
-```shell
-cd ~/Developer/dotfiles
-sudo darwin-rebuild switch --flake ./nix/darwin
-```
+> Run `just --list` for all available commands.
 
-Or use the `just` task runner (see Development section):
+## Documentation
 
-```shell
-just switch
-```
+| Document                                   | Purpose                              |
+| ------------------------------------------ | ------------------------------------ |
+| [Customization Guide](./docs/CUSTOMIZATION.md) | How to add packages, programs, and configure settings |
+| [Architecture Decisions](./docs/adr/)      | Why things are designed the way they are |
+| [Task Tracker](./docs/TASKS.md)            | Ongoing improvements and roadmap     |
 
-## 📁 Project Structure
+## External References
 
-```text
-dotfiles/
-├── flake.nix                    # Development environment (linters, formatters, LSP)
-├── justfile                     # Task runner commands (fmt, lint, switch, etc.)
-├── .envrc                       # direnv integration for auto-loading dev env
-├── config/                      # Non-Nix configs symlinked via home-manager
-│   ├── zed/                     # Zed editor settings
-│   └── git/                     # Git templates
-├── nix/
-│   ├── darwin/                  # nix-darwin system configuration
-│   │   ├── flake.nix            # Entry point - defines darwin systems
-│   │   ├── configuration.nix    # Core system settings
-│   │   ├── modules/             # System-level modules
-│   │   │   ├── homebrew.nix     # Homebrew casks, formulae, MAS apps
-│   │   │   ├── security.nix     # Firewall, Touch ID
-│   │   │   └── system-defaults.nix  # macOS preferences (dock, finder, etc.)
-│   │   └── hosts/               # Machine-specific configs
-│   │       ├── personal.nix     # Personal MacBook Air
-│   │       └── work.nix         # Work laptop (template)
-│   └── home/                    # home-manager user environment
-│       ├── programs/            # Program configurations
-│       │   ├── shell/           # zsh, fish, nushell
-│       │   ├── terminal/        # starship, bat, eza, fd, fzf, zoxide
-│       │   ├── dev/             # git, gh (GitHub CLI)
-│       │   └── xdg.nix          # XDG base directories & config symlinks
-│       └── users/               # User-specific configs
-│           ├── common.nix       # Shared packages and programs
-│           ├── personal.nix     # Personal git identity
-│           └── work.nix         # Work git identity
-└── docs/
-    ├── adr/                     # Architecture Decision Records
-    └── CUSTOMIZATION.md         # How to customize this config
-```
+- [nix-darwin Manual](https://daiderd.com/nix-darwin/manual/index.html)
+- [home-manager Manual](https://nix-community.github.io/home-manager/)
+- [Nix Package Search](https://search.nixos.org/packages)
 
-## 🛠️ Development
-
-This repo includes a development flake with all the tools you need.
-
-### Setup Development Environment
-
-With [direnv](https://direnv.net/) installed:
-
-```shell
-cd ~/Developer/dotfiles
-direnv allow
-```
-
-This automatically provides:
-
-- `alejandra` - Nix code formatter
-- `statix` - Nix linter
-- `deadnix` - Dead code finder
-- `nixd` / `nil` - Nix LSP servers
-- `just` - Task runner
-
-### Available Tasks
-
-```shell
-just --list      # Show all available tasks
-just fmt         # Format all Nix files with alejandra
-just lint        # Lint Nix files with statix
-just check       # Run all checks (format, lint, dead code)
-just switch      # Apply darwin configuration (requires sudo)
-just build       # Build configuration without applying
-```
-
-### Making Changes
-
-1. **Adding packages**: Edit `nix/home/users/common.nix` → `home.packages`
-2. **Configuring programs**: Add/edit modules in `nix/home/programs/`
-3. **System preferences**: Edit `nix/darwin/modules/system-defaults.nix`
-4. **Homebrew apps**: Edit `nix/darwin/modules/homebrew.nix`
-5. **Per-machine settings**: Edit files in `nix/darwin/hosts/`
-
-See [CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) for detailed examples.
-
-### Validation Workflow
-
-```shell
-# Format code
-just fmt
-
-# Run all checks
-just check
-
-# Test build (doesn't apply changes)
-just build
-
-# Apply changes
-just switch
-```
-
-## 🖥️ Multi-Machine Support
-
-### Available Configurations
-
-| Hostname                | Machine                | Location                        |
-| ----------------------- | ---------------------- | ------------------------------- |
-| `suddenlyGiovannis-MacBook-Personal` | Personal MacBook Air   | `nix/darwin/hosts/personal.nix` |
-| `Work-MacBook`          | Work laptop (template) | `nix/darwin/hosts/work.nix`     |
-
-### Adding a New Machine
-
-1. Create a new host config in `nix/darwin/hosts/`:
-
-```nix
-# nix/darwin/hosts/my-machine.nix
-{
-  userConfig = {
-    username = "myuser";
-    fullName = "My Name";
-    homeDirectory = "/Users/myuser";
-    dotfilesPath = "/Users/myuser/Developer/dotfiles";
-  };
-  userModule = ../../home/users/personal.nix;  # or work.nix
-  system = "aarch64-darwin";
-  hostname = "My-Machine";
-  homebrew = {
-    enableRosetta = false;
-    casks = []; # Machine-specific apps
-  };
-}
-```
-
-2. Import it in `nix/darwin/flake.nix`:
-
-```nix
-myMachine = import ./hosts/my-machine.nix;
-```
-
-3. Add to `darwinConfigurations`:
-
-```nix
-darwinConfigurations = {
-  # ... existing configs
-  ${myMachine.hostname} = mkDarwinConfig myMachine;
-};
-```
-
-4. Apply on the new machine:
-
-```shell
-sudo darwin-rebuild switch --flake ~/Developer/dotfiles/nix/darwin#My-Machine
-```
-
-## 🧪 Testing
-
-Before committing changes, run the full validation suite:
-
-```shell
-# Format check
-nix run nixpkgs#alejandra -- --check nix/
-
-# Lint
-nix run nixpkgs#statix -- check nix/
-
-# Dead code
-nix run nixpkgs#deadnix -- nix/
-
-# Build test
-darwin-rebuild build --flake ./nix/darwin
-```
-
-Or simply:
-
-```shell
-just check
-just build
-```
-
-## 📚 Documentation
-
-- [Customization Guide](./docs/CUSTOMIZATION.md) - Common tasks and examples
-- [Architecture Decision Records](./docs/adr/) - Design decisions and rationale
-- [nix-darwin Manual](https://daiderd.com/nix-darwin/manual/index.html) - Official docs
-- [home-manager Manual](https://nix-community.github.io/home-manager/) - Official docs
-
-## 🤝 Contributing
-
-This is a personal dotfiles repo, but if you find bugs or have suggestions:
-
-1. Open an issue
-2. Fork and submit a PR
-
-## 📝 License
+## License
 
 [MIT](./LICENSE)
-
-## 🙏 Acknowledgments
-
-Built with:
-
-- [nix-darwin](https://github.com/LnL7/nix-darwin) by @LnL7
-- [home-manager](https://github.com/nix-community/home-manager) by @nix-community
-- [nix-homebrew](https://github.com/zhaofengli/nix-homebrew) by @zhaofengli
-
-Inspired by the Nix community's dotfiles repos.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted (Updated 2026-01-20)
 
 ## Date
 
@@ -13,7 +13,7 @@ Accepted
 Many command-line tools and applications create configuration files, cache directories, and data
 files in the user's home directory by default. This leads to "dotfile pollution" where `~` becomes
 cluttered with numerous hidden files and directories like `.cargo/`, `.rustup/`, `.npm/`,
-`.docker/`, `.gnupg/`, `.python_history`, `.lesshst`, etc.
+`.docker/`, `.python_history`, `.lesshst`, etc.
 
 The
 [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)
@@ -27,14 +27,14 @@ defines standard locations for these files:
 While many modern tools respect these variables, others require explicit environment variables to
 redirect their files to XDG-compliant locations.
 
-Additionally, we needed a centralized place to set common environment variables like `EDITOR`,
-`VISUAL`, and `PAGER` that should be consistent across all shells.
-
 ## Decision
 
-We implemented XDG compliance through two home-manager modules:
+We implemented XDG compliance through a **co-located module architecture** where each program module
+manages its own XDG environment variables alongside its configuration.
 
-### 1. `nix/home/programs/xdg.nix`
+### Architecture
+
+#### 1. `programs/xdg.nix` - XDG Base Directories
 
 This module explicitly configures XDG directories and manages config file symlinks:
 
@@ -50,16 +50,15 @@ This module explicitly configures XDG directories and manages config file symlin
 
   # Symlink version-controlled configs into ~/.config
   xdg.configFile = {
-    "zed/settings.json".source = ...;
-    "git/template".source = ...;
+    "readline/inputrc".text = ...;
     # etc.
   };
 }
 ```
 
-### 2. `nix/home/programs/session.nix`
+#### 2. `programs/session.nix` - Global Session Variables
 
-This module sets environment variables to make various tools respect XDG locations:
+This module sets only **truly global** environment variables not tied to specific tools:
 
 ```nix
 home.sessionVariables = {
@@ -67,39 +66,35 @@ home.sessionVariables = {
   EDITOR = "vim";
   VISUAL = "zed --wait";
   PAGER = "less";
+  MANPAGER = "less -R";
 
-  # Rust toolchain
-  CARGO_HOME = "${xdg.dataHome}/cargo";
-  RUSTUP_HOME = "${xdg.dataHome}/rustup";
-
-  # Node.js
-  NPM_CONFIG_CACHE = "${xdg.cacheHome}/npm";
-  NODE_REPL_HISTORY = "${xdg.stateHome}/node_repl_history";
-
-  # Docker
-  DOCKER_CONFIG = "${xdg.configHome}/docker";
-
-  # AWS CLI
-  AWS_CONFIG_FILE = "${xdg.configHome}/aws/config";
-  AWS_SHARED_CREDENTIALS_FILE = "${xdg.configHome}/aws/credentials";
-
-  # GnuPG
-  GNUPGHOME = "${xdg.dataHome}/gnupg";
-
-  # Python
-  PYTHONSTARTUP = "${xdg.configHome}/python/pythonrc";
-  PYTHON_HISTORY = "${xdg.stateHome}/python_history";
-
-  # Less pager
-  LESSHISTFILE = "${xdg.stateHome}/lesshst";
-
-  # Colored man pages
-  MANPAGER = "less -R --use-color -Dd+r -Du+b";
-  MANROFFOPT = "-c";
-
-  # ... additional tools
+  # XDG for tools without dedicated modules
+  LESSHISTFILE = "${config.xdg.stateHome}/less/history";
+  INPUTRC = "${config.xdg.configHome}/readline/inputrc";
+  SQLITE_HISTORY = "${config.xdg.stateHome}/sqlite/history";
+  WGETRC = "${config.xdg.configHome}/wget/wgetrc";
 };
 ```
+
+#### 3. Co-located Program Modules
+
+Tool-specific XDG variables are defined in their respective program modules:
+
+| Module                   | Environment Variables                            |
+| ------------------------ | ------------------------------------------------ |
+| `programs/rustup.nix`    | `CARGO_HOME`, `RUSTUP_HOME`                      |
+| `programs/nodejs.nix`    | `NPM_CONFIG_CACHE`, `NPM_CONFIG_INIT_MODULE`, `NODE_REPL_HISTORY` |
+| `programs/docker.nix`    | `DOCKER_CONFIG`                                  |
+| `programs/awscli.nix`    | `AWS_CONFIG_FILE`, `AWS_SHARED_CREDENTIALS_FILE` |
+| `programs/python.nix`    | `PYTHONSTARTUP`, `PYTHON_HISTORY`                |
+| `programs/bun.nix`       | `BUN_INSTALL`                                    |
+| `programs/claude-code.nix` | `CLAUDE_CONFIG_DIR`                            |
+| `programs/1password.nix` | `OP_CONFIG_DIR`                                  |
+
+This co-location pattern means:
+- **Self-contained modules**: All config for a tool lives in one file
+- **Easy removal**: Deleting a module removes all related configuration
+- **Clear ownership**: No ambiguity about where a variable is set
 
 ### How Session Variables Work
 
@@ -118,92 +113,79 @@ starting a new session.
 We intentionally did **not** use `xdg.userDirs` (for directories like Desktop, Documents, Downloads)
 because this feature is Linux-only and causes assertion failures on macOS.
 
+## XDG Compliance Audit Results
+
+Audited using [xdg-ninja](https://github.com/b3nj5m1n/xdg-ninja) v0.2.0.2.
+
+### ✅ Compliant Tools
+
+| Tool       | Old Location   | XDG Location                    | Module                   |
+| ---------- | -------------- | ------------------------------- | ------------------------ |
+| Cargo      | `~/.cargo`     | `~/.local/share/cargo`          | `programs/rustup.nix`    |
+| Rustup     | `~/.rustup`    | `~/.local/share/rustup`         | `programs/rustup.nix`    |
+| Docker     | `~/.docker`    | `~/.config/docker`              | `programs/docker.nix`    |
+| Less       | `~/.lesshst`   | `~/.local/state/less/history`   | `programs/session.nix`   |
+| Node.js    | `~/.npm`       | `~/.cache/npm`, `~/.local/share/npm` | `programs/nodejs.nix` |
+| Python     | `~/.python_history` | `~/.local/state/python/history` | `programs/python.nix` |
+| AWS CLI    | `~/.aws`       | `~/.config/aws/`                | `programs/awscli.nix`    |
+| Bun        | `~/.bun`       | `~/.local/share/bun`            | `programs/bun.nix`       |
+| Claude     | `~/.claude`    | `~/.config/claude`              | `programs/claude-code.nix` |
+| 1Password  | `~/.op`        | `~/.config/op`                  | `programs/1password.nix` |
+| zsh        | `~/.zcompdump` | `~/.cache/zsh/`                 | `programs/zsh.nix`       |
+
+### ❌ Non-Compliant (Tool Limitations)
+
+| Tool    | Location     | Reason                                                        |
+| ------- | ------------ | ------------------------------------------------------------- |
+| VS Code | `~/.vscode`  | Microsoft declined XDG support ([issue #3884](https://github.com/microsoft/vscode/issues/3884)) |
+| SSH     | `~/.ssh`     | Required by OpenSSH standard; keys must remain here           |
+
+### 📝 Acceptable Exceptions
+
+| Directory          | Reason                                      |
+| ------------------ | ------------------------------------------- |
+| `~/.ssh/`          | OpenSSH standard location; config managed by `programs/ssh.nix` |
+| `~/.1password/`    | 1Password app managed                       |
+| `~/.nix-defexpr/`  | Nix system managed                          |
+| `~/.nix-profile`   | Nix system managed                          |
+
 ## Consequences
 
 ### Positive
 
-- **Cleaner home directory**: Most tool-specific files move to `~/.config`, `~/.local/share`,
-  `~/.cache`, or `~/.local/state`
-- **Centralized environment configuration**: All session variables in one place rather than
-  scattered across shell configs
+- **Cleaner home directory**: Tool-specific files organized under `~/.config`, `~/.local/share`,
+  `~/.cache`, and `~/.local/state`
+- **Co-located configuration**: Each program module is self-contained
 - **Consistent editor/pager settings**: Same `EDITOR`, `VISUAL`, `PAGER` across all contexts
-- **Version-controlled application configs**: Configs in `config/` are tracked in git and symlinked
-  via home-manager
 - **Portable configuration**: XDG paths work consistently across macOS and Linux
 - **Easier cleanup**: Cache and state directories can be safely deleted without losing configuration
 
 ### Negative
 
-- **Some tools still don't respect XDG**: Not all applications honor these environment variables
-- **Existing files not migrated**: Tools that already created files in `~` before this change still
-  have those files; manual cleanup may be needed
+- **Some tools still don't respect XDG**: VS Code, SSH keys, etc.
+- **Existing files not migrated**: Manual cleanup needed after initial setup
 - **Session variables require new shell**: Changes don't take effect in existing terminal sessions
-- **Fish shell caveat**: Fish may need additional configuration to properly source session variables
-  depending on login shell setup
-
-### Neutral
-
-- Session variables are written to a generated file, not directly visible in the Nix configuration
-  output
-- Some tools may need periodic updates as they add native XDG support
 
 ## Alternatives Considered
 
-### 1. Shell-specific environment files
+### 1. Centralized session.nix for all XDG variables
+
+Set all XDG variables in a single `session.nix` module.
+
+**Rejected because**: Violates co-location principle. When removing a program module, you'd also
+need to remember to remove its variables from session.nix.
+
+### 2. Shell-specific environment files
 
 Set variables in `.zshrc`, `.bashrc`, `config.fish`, etc.
 
-**Rejected because**: Leads to duplication across shells, easy to get out of sync, and mixes
-environment setup with shell configuration.
+**Rejected because**: Leads to duplication across shells, easy to get out of sync.
 
-### 2. Per-program configuration in home-manager modules
-
-Configure each program's XDG paths within its respective home-manager module.
-
-**Rejected because**: More scattered, harder to see the full picture of XDG compliance, and not all
-programs have home-manager modules with these options.
-
-### 3. Use a tool like `xdg-ninja`
-
-Use a tool that audits and fixes XDG compliance.
-
-**Not rejected, but complementary**: `xdg-ninja` is useful for auditing, but we still need to set
-the environment variables for the fixes to work. The session module implements the fixes that
-`xdg-ninja` would recommend.
-
-### 4. Ignore XDG and accept dotfile pollution
+### 3. Ignore XDG and accept dotfile pollution
 
 Keep defaults and let tools scatter files across `~`.
 
-**Rejected because**: Makes the home directory cluttered and harder to manage, especially when
-version-controlling dotfiles.
-
-## Tools Covered
-
-The following tools are configured to use XDG-compliant locations:
-
-| Tool         | Environment Variable(s)                          | Target Location                        |
-| ------------ | ------------------------------------------------ | -------------------------------------- |
-| Cargo        | `CARGO_HOME`                                     | `~/.local/share/cargo`                 |
-| Rustup       | `RUSTUP_HOME`                                    | `~/.local/share/rustup`                |
-| npm          | `NPM_CONFIG_CACHE`                               | `~/.cache/npm`                         |
-| Node.js REPL | `NODE_REPL_HISTORY`                              | `~/.local/state/node_repl_history`     |
-| Docker       | `DOCKER_CONFIG`                                  | `~/.config/docker`                     |
-| AWS CLI      | `AWS_CONFIG_FILE`, `AWS_SHARED_CREDENTIALS_FILE` | `~/.config/aws/`                       |
-| GnuPG        | `GNUPGHOME`                                      | `~/.local/share/gnupg`                 |
-| Python       | `PYTHONSTARTUP`, `PYTHON_HISTORY`                | `~/.config/python/`, `~/.local/state/` |
-| Less         | `LESSHISTFILE`                                   | `~/.local/state/lesshst`               |
-
-## Migration Notes
-
-After enabling these modules:
-
-1. **Restart your terminal** or log out/log in to pick up new session variables
-2. **Verify variables are set**: Run `echo $CARGO_HOME` etc. in a new shell
-3. **Optionally clean up old directories**: Remove `~/.cargo`, `~/.rustup`, etc. after confirming
-   the new locations work
-4. **Check Fish shell**: Ensure fish properly sources `hm-session-vars.sh` if using fish as default
-   shell
+**Rejected because**: Makes the home directory cluttered and harder to manage.
 
 ## References
 
