@@ -8,12 +8,8 @@
 }: {
   home = {
     # ── XDG Compliance ────────────────────────────────────────────────────────
-    # Move Python files to XDG directories
+    # Move Python REPL history to XDG state directory
     sessionVariables = {
-      # Python startup file (for interactive shell customization)
-      PYTHONSTARTUP = "${config.xdg.configHome}/python/pythonrc";
-
-      # Python REPL history
       PYTHON_HISTORY = "${config.xdg.stateHome}/python/history";
     };
 

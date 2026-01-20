@@ -50,7 +50,7 @@ in {
     # SQLite history
     SQLITE_HISTORY = "${config.xdg.stateHome}/sqlite/history";
 
-    # Wget (basic tool, rarely configured)
+    # Wget config location (wget gracefully falls back to defaults if file doesn't exist)
     WGETRC = "${config.xdg.configHome}/wget/wgetrc";
 
     # ── Tools not currently installed (kept for future use) ─────────────────
