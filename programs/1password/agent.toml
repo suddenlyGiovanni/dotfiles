@@ -16,9 +16,9 @@
 item = "GitHub Authentication SSH Key"
 vault = "Private"
 
-# ThingOS SSH Key - authentication to dev.thingos.io
+# Thingos Authentication SSH Key - authentication to dev.thingos.io
 [[ssh-keys]]
-item = "Thingos SSH Key"
+item = "Thingos Authentication SSH Key"
 vault = "Work - Haefele"
 
 # Git Commit Signing Key - for signing git commits

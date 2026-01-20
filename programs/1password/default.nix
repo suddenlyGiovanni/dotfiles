@@ -86,9 +86,9 @@
     # Used for: github.com repositories
     github = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJWr93ib9vcKuQwzGW8NqPh1P2mws9qGKGp3opK99SIf GitHub Authentication SSH Key";
 
-    # Thingos SSH Key (vault: Work - Haefele)
+    # Thingos Authentication SSH Key (vault: Work - Haefele)
     # Used for: dev.thingos.io
-    thingos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIBn88uA0HDdb7kKZm99kWyhKOYwwVi84pP3TaNoY53W Thingos SSH Key";
+    thingos = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIBn88uA0HDdb7kKZm99kWyhKOYwwVi84pP3TaNoY53W Thingos Authentication SSH Key";
 
     # Git Commit Signing Key (vault: Private)
     # Used for: signing commits on GitHub, GitLab, etc.
