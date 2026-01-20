@@ -102,9 +102,9 @@
   fcd = {
     description = "Find directory and cd into it";
     body = ''
-      set -l dir (fd --type d --hidden --follow --exclude .git | fzf --preview 'eza --tree --level=1 --color=always {}')
+      set -l dir (fd --type d --hidden --follow --exclude .git | fzf --preview 'eza --tree --level=1 --color=always -- {}')
       if test -n "$dir"
-          cd $dir
+          cd -- "$dir"
       end
     '';
   };
