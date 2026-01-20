@@ -70,7 +70,11 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkDefault;
+  inherit (lib) attrByPath mkDefault;
+
+  # Safe lookup for shell enable flags with fallback to false
+  # This prevents evaluation failures if a shell module isn't imported
+  shellEnabled = path: attrByPath path false config;
 in {
   programs.starship = {
     enable = true;
@@ -81,17 +85,18 @@ in {
     # ────────────────────────────────────────────────────────────────────────
     # Automatically enabled based on which shells are configured.
     # This ensures starship is initialized in each shell you use.
-    enableBashIntegration = config.programs.bash.enable;
-    enableZshIntegration = config.programs.zsh.enable;
-    enableFishIntegration = config.programs.fish.enable;
-    enableNushellIntegration = config.programs.nushell.enable;
+    # Uses safe lookup with fallback to false if shell module isn't present.
+    enableBashIntegration = mkDefault (shellEnabled ["programs" "bash" "enable"]);
+    enableZshIntegration = mkDefault (shellEnabled ["programs" "zsh" "enable"]);
+    enableFishIntegration = mkDefault (shellEnabled ["programs" "fish" "enable"]);
+    enableNushellIntegration = mkDefault (shellEnabled ["programs" "nushell" "enable"]);
 
     # ────────────────────────────────────────────────────────────────────────
     # Transient Prompt (Fish only)
     # ────────────────────────────────────────────────────────────────────────
     # Replaces previous prompts with a minimal version after command execution.
     # This keeps your terminal history clean and easy to read.
-    enableTransience = config.programs.fish.enable;
+    enableTransience = mkDefault (shellEnabled ["programs" "fish" "enable"]);
 
     # ────────────────────────────────────────────────────────────────────────
     # Starship Configuration

@@ -115,7 +115,10 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkDefault;
+  inherit (lib) mkDefault attrByPath;
+
+  # Helper to safely check if a shell program is enabled (defaults to false if not defined)
+  shellEnabled = path: attrByPath path false config;
 
   # Official yazi plugins repository (pinned to specific commit for stability)
   yazi-plugins = pkgs.fetchFromGitHub {
@@ -141,10 +144,11 @@ in {
     # ────────────────────────────────────────────────────────────────────────
     # Enable shell wrapper in configured shells.
     # The wrapper allows yazi to change the shell's working directory on exit.
-    enableBashIntegration = config.programs.bash.enable;
-    enableZshIntegration = config.programs.zsh.enable;
-    enableFishIntegration = config.programs.fish.enable;
-    enableNushellIntegration = config.programs.nushell.enable;
+    # Uses attrByPath for safe lookup with fallback to false if module not present.
+    enableBashIntegration = mkDefault (shellEnabled ["programs" "bash" "enable"]);
+    enableZshIntegration = mkDefault (shellEnabled ["programs" "zsh" "enable"]);
+    enableFishIntegration = mkDefault (shellEnabled ["programs" "fish" "enable"]);
+    enableNushellIntegration = mkDefault (shellEnabled ["programs" "nushell" "enable"]);
 
     # ────────────────────────────────────────────────────────────────────────
     # Settings (yazi.toml)

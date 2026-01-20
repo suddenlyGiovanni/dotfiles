@@ -5,20 +5,27 @@
 # This module reads config.programs.<shell>.enable to coordinate.
 {
   config,
+  lib,
   pkgs,
   ...
-}: {
+}: let
+  inherit (lib) attrByPath;
+
+  # Safe lookup for optional module enable flags with fallback to false
+  programEnabled = path: attrByPath (["programs"] ++ path ++ ["enable"]) false config;
+in {
   programs.ghostty = {
     enable = true;
     package = pkgs.ghostty-bin;
 
     # Shell integrations - derived from enabled shells
-    enableZshIntegration = config.programs.zsh.enable;
-    enableFishIntegration = config.programs.fish.enable;
-    enableBashIntegration = config.programs.bash.enable;
+    # Uses safe lookup with fallback for modules that may not be imported
+    enableZshIntegration = programEnabled ["zsh"];
+    enableFishIntegration = programEnabled ["fish"];
+    enableBashIntegration = programEnabled ["bash"];
 
     # Syntax highlighting for bat - derived from bat being enabled
-    installBatSyntax = config.programs.bat.enable;
+    installBatSyntax = programEnabled ["bat"];
 
     settings = {
       # Font configuration
