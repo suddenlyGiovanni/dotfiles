@@ -42,16 +42,15 @@
         "ungoogled-chromium" # Google Chromium, sans integration with Google
 
         # Development
-        "gitbutler" # Git client for simultaneous branches on top of your existing workflow
         "visual-studio-code" # Open-source code editor
         "warp" # Rust-based terminal
         "zed@preview" # Multiplayer code editor
         "docker-desktop"
         "microsoft-teams"
+        "discord" # Voice and text chat software
 
         # Utilities
         "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
-        "figma@beta" # Collaborative team software
       ]
       ++ (hostConfig.homebrew.casks or []); # Merge host-specific casks
     /*

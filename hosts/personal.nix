@@ -33,7 +33,6 @@
 
     # Personal-only casks (not needed on work machine)
     casks = [
-      "discord" # Voice and text chat software
       "transmission" # Open-source BitTorrent client
     ];
   };
