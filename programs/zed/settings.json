@@ -7,17 +7,21 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+  },
   "use_system_window_tabs": true,
   "outline_panel": {
-    "dock": "right"
+    "dock": "right",
   },
   "audio": {
     "experimental.legacy_audio_compatible": false,
     "experimental.auto_microphone_volume": true,
-    "experimental.rodio_audio": true
+    "experimental.rodio_audio": true,
   },
   "calls": {
-    "mute_on_join": true
+    "mute_on_join": true,
   },
   "tab_size": 2,
   "terminal": {
@@ -84,7 +88,7 @@
   "icon_theme": {
     "mode": "system",
     "light": "Zed (Default)",
-    "dark": "Colored Zed Icons Theme Light",
+    "dark": "Zed (Default)",
   },
   "diagnostics": {
     "inline": {
@@ -103,6 +107,9 @@
     },
   },
   "agent": {
+    "notify_when_agent_waiting": "all_screens",
+    "enable_feedback": false,
+    "single_file_review": false,
     "play_sound_when_agent_done": true,
     "use_modifier_to_send": true,
     "favorite_models": [
@@ -152,16 +159,16 @@
       "settings": {
         "typescript": {
           "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
+            "enabled": "always",
+          },
         },
         "javascript": {
           "updateImportsOnFileMove": {
-            "enabled": "always"
-          }
-        }
+            "enabled": "always",
+          },
+        },
       },
-      "enable_lsp_tasks": true
+      "enable_lsp_tasks": true,
     },
     "biome": {
       "settings": {
