@@ -45,6 +45,7 @@ in {
       nixd # nix lsp daemon
       shellcheck # Shell script analysis tool
       shfmt # A shell parser and formatter
+      openssl_oqs
     ];
 
     # ── Nix Configuration ───────────────────────────────────────────────────
