@@ -36,7 +36,6 @@
     casks = [
       # Add work-specific applications here
       "claude" # Anthropic's official Claude AI desktop app
-      "discord" # Voice and text chat software
       "figma@beta" # Collaborative team software
       "gitbutler" # Git client for simultaneous branches on top of your existing workflow
       "microsoft-teams" # Microsoft Teams

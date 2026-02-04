@@ -61,7 +61,6 @@
     */
     masApps = {
       "1Password for Safari" = 1569813296;
-      "Microsoft Outlook" = 985367838;
       "WhatsApp Messenger" = 310633997;
       "Wipr 2" = 1662217862;
       Xcode = 497799835;

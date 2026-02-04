@@ -7,6 +7,34 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "tab_bar": {
+    "show_pinned_tabs_in_separate_row": false,
+    "show": true
+  },
+  "close_on_file_delete": true,
+  "search": {
+    "center_on_match": true,
+  },
+  "middle_click_paste": false,
+  "use_on_type_format": false,
+  "preferred_line_length": 100,
+  "soft_wrap": "editor_width",
+  "toolbar": {
+    "code_actions": true,
+  },
+  "minimap": {
+    "show": "auto",
+  },
+  "show_signature_help_after_edits": true,
+  "which_key": {
+    "enabled": true,
+  },
+  "buffer_line_height": "comfortable",
+  "redact_private_values": true,
+  "indent_guides": {
+    "background_coloring": "indent_aware",
+    "coloring": "indent_aware",
+  },
   "telemetry": {
     "diagnostics": false,
     "metrics": false,
@@ -25,6 +53,9 @@
   },
   "tab_size": 2,
   "terminal": {
+    "toolbar": {
+      "breadcrumbs": false
+    },
     "font_family": "JetBrainsMono Nerd Font",
   },
   "vim_mode": false,
@@ -48,6 +79,7 @@
     "mode": "subtle",
   },
   "git_panel": {
+    "collapse_untracked_diff": true,
     "status_style": "icon",
     "tree_view": true,
     "sort_by_path": true,
@@ -58,6 +90,8 @@
     },
   },
   "project_panel": {
+    "hide_gitignore": false,
+    "button": true,
     "dock": "left",
   },
   "tabs": {
@@ -65,6 +99,7 @@
     "git_status": true,
   },
   "title_bar": {
+    "show_branch_icon": true,
     "show_menus": false,
   },
   "languages": {
@@ -88,7 +123,7 @@
   "icon_theme": {
     "mode": "system",
     "light": "Zed (Default)",
-    "dark": "Zed (Default)",
+    "dark": "JetBrains New UI Icons (Light)",
   },
   "diagnostics": {
     "inline": {
@@ -96,7 +131,7 @@
     },
   },
   "features": {
-    "edit_prediction_provider": "copilot",
+    "edit_prediction_provider": "none",
   },
   "base_keymap": "JetBrains",
   "agent_servers": {
@@ -107,6 +142,7 @@
     },
   },
   "agent": {
+    "show_turn_stats": true,
     "notify_when_agent_waiting": "all_screens",
     "enable_feedback": false,
     "single_file_review": false,
@@ -129,12 +165,16 @@
         "provider": "copilot_chat",
         "model": "gemini-3-pro-preview",
       },
+      {
+        "provider": "anthropic",
+        "model": "claude-opus-4-5-latest",
+      },
     ],
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-opus-4.5",
+      "provider": "anthropic",
+      "model": "claude-opus-4-5-latest",
     },
     "model_parameters": [],
     "inline_assistant_model": {
@@ -146,12 +186,13 @@
   "buffer_font_size": 16,
   "theme": {
     "mode": "system",
-    "light": "Ayu Light",
-    "dark": "Ayu Dark",
+    "light": "JetBrains Light",
+    "dark": "JetBrains Dark",
   },
   "buffer_font_family": "JetBrainsMono Nerd Font Mono",
   "auto_signature_help": true,
   "inlay_hints": {
+    "show_background": true,
     "enabled": true,
   },
   "lsp": {
