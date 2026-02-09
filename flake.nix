@@ -51,7 +51,7 @@
                 onepassword-shell-plugins.hmModules.default
               ];
               extraSpecialArgs = {
-                inherit (hostConfig) userConfig;
+                inherit (hostConfig) userConfig hostname;
               };
               users.${hostConfig.userConfig.username} = import hostConfig.userModule;
             };

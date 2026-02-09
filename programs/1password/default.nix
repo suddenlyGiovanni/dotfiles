@@ -50,8 +50,11 @@
   config,
   lib,
   pkgs,
+  hostname,
   ...
 }: let
+  # Host-specific feature flags
+  isWorkHost = hostname == "suddenlyGiovannis-MacBook-Work";
   inherit (lib) mkDefault;
 
   # Directory containing this module and its config files
@@ -115,10 +118,14 @@ in {
     # List of packages to enable shell plugins for
     # Each package must have a corresponding 1Password shell plugin
     # See: https://developer.1password.com/docs/cli/shell-plugins/
-    plugins = with pkgs; [
-      gh # GitHub CLI - PR, issues, repos management
-      awscli2 # AWS CLI - cloud infrastructure management
-    ];
+    plugins = with pkgs;
+      [
+        gh # GitHub CLI - PR, issues, repos management
+        awscli2 # AWS CLI - cloud infrastructure management
+      ]
+      ++ lib.optionals isWorkHost [
+        glab # GitLab CLI - work only (self-hosted GitLab)
+      ];
   };
 
   # ── Home Files ───────────────────────────────────────────────────────────────
