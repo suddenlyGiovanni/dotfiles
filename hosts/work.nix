@@ -40,6 +40,7 @@
       "gitbutler" # Git client for simultaneous branches on top of your existing workflow
       "microsoft-teams" # Microsoft Teams
       "rustdesk"
+      "superwhisper" # Voice-to-text using AI
     ];
   };
 }
