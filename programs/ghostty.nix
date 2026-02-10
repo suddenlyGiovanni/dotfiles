@@ -31,7 +31,7 @@ in {
       # Font configuration
       font-family = "JetBrainsMono Nerd Font Mono";
       font-size = 14;
-      theme = "dark:Catppuccin Frappe,light:Catppuccin Latte";
+      theme = "dark:GitHub Dark High Contrast,light:GitHub Light High Contrast";
 
       # Window appearance
       window-decoration = "auto";

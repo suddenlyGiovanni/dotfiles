@@ -173,8 +173,8 @@
     "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_model": {
-      "provider": "anthropic",
-      "model": "claude-opus-4-5-latest",
+      "provider": "copilot_chat",
+      "model": "claude-opus-4.5",
     },
     "model_parameters": [],
     "inline_assistant_model": {
