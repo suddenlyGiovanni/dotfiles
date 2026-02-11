@@ -1,10 +1,7 @@
 # Claude Code - AI-powered coding assistant
-# This module installs Claude Code and configures XDG-compliant paths
-{
-  config,
-  pkgs,
-  ...
-}: {
+# Uses native installation (curl installer) for automatic updates
+# Home-manager only manages configuration and PATH
+{config, ...}: {
   # ── XDG Compliance ──────────────────────────────────────────────────────────
   # Force Claude Code to use XDG-compliant config directory
   # Note: home-manager's programs.claude-code module uses hardcoded .claude/ paths
@@ -13,8 +10,10 @@
     CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude-code";
   };
 
-  # ── Packages ────────────────────────────────────────────────────────────────
-  home.packages = with pkgs; [
-    claude-code # Claude AI-powered code editor
+  # ── PATH for Native Install ─────────────────────────────────────────────────
+  # The native installer places the binary at ~/.local/bin/claude
+  # Install with: curl -fsSL https://claude.ai/install.sh | bash
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.local/bin"
   ];
 }
