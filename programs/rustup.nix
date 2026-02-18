@@ -15,6 +15,12 @@
     RUSTUP_HOME = "${config.xdg.dataHome}/rustup";
   };
 
+  # ── PATH ────────────────────────────────────────────────────────────────────
+  # Ensure cargo-installed binaries are discoverable
+  home.sessionPath = [
+    "${config.xdg.dataHome}/cargo/bin"
+  ];
+
   # ── Packages ────────────────────────────────────────────────────────────────
   home.packages = with pkgs; [
     rustup # Rust toolchain installer
