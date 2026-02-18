@@ -76,6 +76,7 @@
     },
   },
   "edit_predictions": {
+    "provider": "none",
     "mode": "subtle",
   },
   "git_panel": {
@@ -130,18 +131,12 @@
       "enabled": true,
     },
   },
-  "features": {
-    "edit_prediction_provider": "none",
-  },
   "base_keymap": "JetBrains",
-  "agent_servers": {
-    "claude": {
-      "env": {
-        "CLAUDE_CODE_EXECUTABLE": "/etc/profiles/per-user/suddenlygiovanni/bin/claude",
-      },
-    },
-  },
+  "agent_servers": {},
   "agent": {
+    "tool_permissions": {
+      "default": "allow"
+    },
     "show_turn_stats": true,
     "notify_when_agent_waiting": "all_screens",
     "enable_feedback": false,
@@ -170,7 +165,6 @@
         "model": "claude-opus-4-5-latest",
       },
     ],
-    "always_allow_tool_actions": true,
     "default_profile": "write",
     "default_model": {
       "provider": "copilot_chat",
