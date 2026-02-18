@@ -109,6 +109,17 @@
     '';
   };
 
+  # TOS firmware flash tool with 1Password credential injection
+  ff = {
+    description = "Run ff with deploy credentials from 1Password";
+    wraps = "ff";
+    body = ''
+      DEPLOY_READ_USER=(op read "op://Work - Haefele/TOS Deploy Server/username") \
+      DEPLOY_READ_PASSWORD=(op read "op://Work - Haefele/TOS Deploy Server/password") \
+      command ff $argv
+    '';
+  };
+
   # Ripgrep + fzf integration for searching content
   rg-fzf = {
     description = "Search with ripgrep and preview with fzf+bat";

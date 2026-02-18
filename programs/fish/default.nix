@@ -9,6 +9,7 @@
   # Import modular components
   abbreviations = import ./abbreviations.nix {inherit userConfig;};
   aliases = import ./aliases.nix;
+  completions = import ./completions.nix;
   functions = import ./functions.nix {inherit config;};
 in {
   programs.fish = {
@@ -73,4 +74,8 @@ in {
 
     inherit functions;
   };
+
+  # ── Custom Completions ──────────────────────────────────────────────────
+  # Completions for non-nix binaries that can generate their own shell completions
+  xdg.configFile = completions;
 }
