@@ -176,18 +176,8 @@ in {
   };
 
   # ──────────────────────────────────────────────────────────────────────────
-  # MANPAGER Configuration
+  # Man Pages
   # ──────────────────────────────────────────────────────────────────────────
-  # Use bat for colorized man pages via the MANPAGER environment variable.
-  # This provides syntax highlighting for man pages system-wide.
-  # Alternative: use `batman <command>` explicitly
-  home.sessionVariables = {
-    # Use bat as the man pager for colorized man pages
-    # -p: plain mode (no line numbers)
-    # -l man: use man page syntax highlighting
-    MANPAGER = "bat -plman";
-
-    # Colorize man page references (e.g., SEE ALSO section)
-    MANROFFOPT = "-c";
-  };
+  # MANPAGER falls back to the default (less -R) from session.nix.
+  # For syntax-highlighted man pages, use `batman <command>` directly.
 }

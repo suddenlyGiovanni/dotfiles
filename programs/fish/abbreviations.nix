@@ -20,11 +20,11 @@
   "--help" = {
     position = "anywhere";
     regex = "^--help$";
-    expansion = "--help 2>&1 | bat -plhelp";
+    expansion = "--help 2>&1 | bat --style=plain --language=help";
   };
   "-h" = {
     position = "anywhere";
     regex = "^-h$";
-    expansion = "-h 2>&1 | bat -plhelp";
+    expansion = "-h 2>&1 | bat --style=plain --language=help";
   };
 }
