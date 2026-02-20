@@ -10,6 +10,14 @@
     BUN_INSTALL = "${config.xdg.dataHome}/bun";
   };
 
+  # ── PATH for Global Binaries ───────────────────────────────────────────────
+  # Workaround: linker = "isolated" prevents bun from symlinking global binaries
+  # into globalBinDir (~/.local/bin). The binaries end up only in node_modules/.bin/
+  # within the global install directory.
+  home.sessionPath = [
+    "${config.xdg.dataHome}/bun/install/global/node_modules/.bin"
+  ];
+
   programs.bun = {
     enable = true; # Bun - all-in-one JavaScript runtime & toolkit
 

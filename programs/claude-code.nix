@@ -10,10 +10,6 @@
     CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude-code";
   };
 
-  # ── PATH for Native Install ─────────────────────────────────────────────────
-  # The native installer places the binary at ~/.local/bin/claude
-  # Install with: curl -fsSL https://claude.ai/install.sh | bash
-  home.sessionPath = [
-    "${config.home.homeDirectory}/.local/bin"
-  ];
+  # Note: The native installer places the binary at ~/.local/bin/claude
+  # PATH for ~/.local/bin is managed globally in home.nix
 }

@@ -1,6 +1,7 @@
 # Home-manager user configuration
 # This module contains packages and programs for the user environment
 {
+  config,
   lib,
   pkgs,
   userConfig,
@@ -22,6 +23,7 @@ in {
     # Extra directories to add to PATH
     sessionPath = [
       "/usr/local/bin"
+      "${config.home.homeDirectory}/.local/bin"
     ];
 
     # ── Packages ────────────────────────────────────────────────────────────
