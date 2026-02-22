@@ -10,6 +10,11 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     mac-app-util.url = "github:hraban/mac-app-util";
     onepassword-shell-plugins.url = "github:1Password/shell-plugins";
+
+    # Dendritic infrastructure (ADR-007)
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+    import-tree.url = "github:vic/import-tree";
   };
 
   outputs = {
