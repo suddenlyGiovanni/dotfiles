@@ -14,6 +14,7 @@ in {
         functions.enable = true;
       };
     };
+    environment.pathsToLink = ["/share/fish"];
   };
 
   # ── Home Manager: user-level fish configuration ──────────────────────────

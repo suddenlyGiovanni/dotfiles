@@ -15,21 +15,13 @@ in {
       config.allowUnfree = true;
     };
 
-    environment = {
-      # List packages installed in system profile. To search by name, run:
-      # $ nix-env -qaP | grep wget
-      systemPackages = with pkgs; [
-        vim
-        coreutils # The GNU Core Utilities
-        git # Distributed version control system
-        less # A more advanced file pager than 'more'
-        wget # Tool for retrieving files using HTTP, HTTPS, and FTP
-      ];
-
-      pathsToLink = [
-        "/share/fish" # fish completions
-      ];
-    };
+    environment.systemPackages = with pkgs; [
+      vim
+      coreutils # The GNU Core Utilities
+      git # Distributed version control system
+      less # A more advanced file pager than 'more'
+      wget # Tool for retrieving files using HTTP, HTTPS, and FTP
+    ];
 
     fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
 
@@ -46,9 +38,6 @@ in {
       home = user.homeDirectory; # The user's home directory. This defaults to `null`.
       isHidden = false; # Whether to make the user account hidden.
     };
-
-    # Note: fish system-level config (programs.fish.enable, vendor) lives in
-    # modules/features/fish/ as a cross-cutting module
 
     home-manager = {
       backupFileExtension = "backup"; # On activation move existing files by appending the given file extension rather than exiting with an error.
