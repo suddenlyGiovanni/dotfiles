@@ -1,5 +1,11 @@
 # Fish shell aliases
-# Aliases are not expanded inline (use for complex commands or pipes)
+# https://fishshell.com/docs/current/cmds/alias.html
+#
+# Aliases are not expanded inline (unlike abbreviations). Used here for
+# command replacements (eza, bat, fzf) where expansion would be confusing.
+# Consumed by fish/default.nix via import.
+#
+# Related: bat.nix (bat config), fzf.nix (fzf config), eza.nix (eza config)
 {
   # Use eza as ls replacement (eza integration provides basic aliases, these are extras)
   ll = "eza --all --long --icons --header --classify --group --group-directories-first --sort=type --time-style=default --hyperlink --git --git-repos";

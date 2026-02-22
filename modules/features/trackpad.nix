@@ -1,5 +1,10 @@
-# macOS Trackpad Preferences
+# Trackpad - macOS trackpad gesture and behavior preferences
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.trackpad
+#
+# Configures tap-to-click, drag behavior, right-click, force touch thresholds,
+# and multi-finger gestures (pinch, swipe, zoom, rotate). Applies shared
+# gesture settings to both built-in and Bluetooth trackpads via
+# CustomUserPreferences for settings not exposed as typed nix-darwin options.
 _: {
   flake.modules.darwin.trackpad = _: let
     # Shared gesture settings for both built-in and Bluetooth trackpads

@@ -1,5 +1,8 @@
-# Menu Bar Clock preferences
+# Menu Bar Clock - macOS menu bar time/date display preferences
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.menuExtraClock
+#
+# Configures the menu bar clock format: 24-hour vs 12-hour, date and
+# day-of-week visibility, seconds display, and analog vs digital style.
 _: {
   flake.modules.darwin.menuextra-clock = _: {
     system.defaults.menuExtraClock = {

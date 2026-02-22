@@ -1,6 +1,9 @@
 # Claude Code - AI-powered coding assistant
-# Uses native installation (curl installer) for automatic updates
-# Home-manager only manages configuration and PATH
+# https://docs.anthropic.com/en/docs/claude-code
+#
+# Uses native installation (curl installer) for automatic updates.
+# Home-manager only manages XDG-compliant config directory placement
+# via CLAUDE_CONFIG_DIR environment variable.
 _: {
   flake.modules.homeManager.claude-code = {config, ...}: {
     # ── XDG Compliance ──────────────────────────────────────────────────────────

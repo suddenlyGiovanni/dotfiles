@@ -1,5 +1,9 @@
-# Login Window preferences
+# Login Window - macOS login screen preferences
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.loginwindow
+#
+# Configures the login screen display style (name/password vs user list),
+# guest access, auto-login behavior, and visibility of power controls
+# (shut down, sleep, restart) on the login screen and while logged in.
 _: {
   flake.modules.darwin.login-window = _: {
     system.defaults.loginwindow = {

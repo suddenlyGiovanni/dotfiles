@@ -1,5 +1,10 @@
 # NSGlobalDomain - Global macOS system preferences
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.NSGlobalDomain
+#
+# System-wide defaults that apply across all applications. Covers appearance
+# (dark mode, font smoothing, scroll bars), keyboard behavior (key repeat,
+# function keys), text input (autocorrect, smart quotes/dashes), trackpad
+# and mouse settings, window animations, save dialogs, and locale/region.
 _: {
   flake.modules.darwin.nsglobaldomain = _: {
     system.defaults.NSGlobalDomain = {

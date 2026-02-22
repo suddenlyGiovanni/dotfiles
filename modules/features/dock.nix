@@ -1,8 +1,10 @@
-# macOS Dock Preferences
+# Dock - macOS application launcher and window management bar
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.dock
 #
-# Per-host persistent-apps are set via inline modules in the host assembly.
-# The module system merges lists, so host-specific apps append to defaults.
+# Configures dock position, size, autohide behavior, animation speeds,
+# Mission Control/Expose settings, and hot corners. Sets shared default
+# persistent-apps; per-host overrides are applied via mkForce in inline
+# modules from host-assembly.nix (see modules/hosts.nix for host lists).
 _: {
   flake.modules.darwin.dock = _: {
     system.defaults.dock = {

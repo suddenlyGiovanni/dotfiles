@@ -1,5 +1,9 @@
 # Fish shell abbreviations
-# Abbreviations are expanded inline after typing (preferred in fish)
+# https://fishshell.com/docs/current/cmds/abbr.html
+#
+# Abbreviations expand inline after typing (preferred over aliases in fish).
+# Includes navigation shortcuts, darwin-rebuild, and bat-powered --help
+# colorization. Consumed by fish/default.nix via import.
 {dotfilesPath}: {
   # Navigation
   ".." = "cd ..";

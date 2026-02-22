@@ -1,5 +1,10 @@
-# Security Configuration
-# This module manages security settings (firewall, Touch ID, etc.)
+# Security - macOS security and firewall configuration
+# https://daiderd.com/nix-darwin/manual/index.html#opt-security.pam
+# https://daiderd.com/nix-darwin/manual/index.html#opt-networking.applicationFirewall
+#
+# Enables Touch ID for sudo authentication via PAM and configures the
+# application firewall (incoming connections, signed app exceptions,
+# stealth mode for dropping ICMP probes).
 _: {
   flake.modules.darwin.security = _: {
     # Enable sudo authentication with Touch ID

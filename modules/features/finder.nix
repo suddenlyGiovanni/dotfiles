@@ -1,5 +1,8 @@
-# Finder preferences
+# Finder - macOS file manager preferences
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.finder
+#
+# Configures file visibility (hidden files, extensions), default view style,
+# search scope, path/status bar display, and new window target location.
 _: {
   flake.modules.darwin.finder = _: {
     system.defaults.finder = {

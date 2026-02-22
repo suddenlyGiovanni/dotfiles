@@ -1,5 +1,10 @@
-# Window Manager (Stage Manager) preferences
+# Window Manager - macOS Stage Manager and window tiling preferences
 # https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.WindowManager
+#
+# Configures Stage Manager (enable/disable, auto-hide, app grouping),
+# click-to-show-desktop behavior, desktop icon/widget visibility, and
+# window tiling options (margins, Option-key accelerator) via
+# CustomUserPreferences for settings not exposed as typed nix-darwin options.
 _: {
   flake.modules.darwin.window-manager = _: {
     system.defaults.WindowManager = {
