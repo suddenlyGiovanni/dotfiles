@@ -49,7 +49,6 @@ _: {
         "visual-studio-code" # Open-source code editor
         "warp" # Rust-based terminal
         "zed@preview" # Multiplayer code editor
-        "docker-desktop"
         "microsoft-teams"
         "discord" # Voice and text chat software
 

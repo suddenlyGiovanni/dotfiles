@@ -1,7 +1,12 @@
 # Docker - Container tools and XDG compliance
-# Note: Docker Desktop is installed via Homebrew (see modules/homebrew.nix)
-# This module installs additional Docker tools and configures XDG-compliant paths
+# Cross-cutting feature: darwin cask installation + home-manager CLI tools and XDG
 _: {
+  # ── Darwin: install Docker Desktop via Homebrew ────────────────────────────
+  flake.modules.darwin.docker = _: {
+    homebrew.casks = ["docker-desktop"];
+  };
+
+  # ── Home Manager: CLI tools and XDG compliance ────────────────────────────
   flake.modules.homeManager.docker = {
     config,
     pkgs,
