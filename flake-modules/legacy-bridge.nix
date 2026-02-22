@@ -1,21 +1,36 @@
 # Temporary bridge: wraps the existing darwin configuration logic
 # inside a flake-parts module. This will be decomposed in later phases.
 #
+# Reads from config.dotfiles.* (typed options) but reconstructs the old
+# hostConfig/userConfig shapes for backward compatibility with existing
+# darwin.nix, home.nix, and sub-modules.
+#
 # See ADR-007 for the migration plan.
-{inputs, ...}: let
-  nix-darwin = inputs.nix-darwin;
-  home-manager = inputs.home-manager;
-  nix-homebrew = inputs.nix-homebrew;
-  mac-app-util = inputs.mac-app-util;
-  onepassword-shell-plugins = inputs.onepassword-shell-plugins;
+{
+  inputs,
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.dotfiles;
 
-  # Import host configurations
-  personalHost = import ../hosts/personal.nix;
-  workHost = import ../hosts/work.nix;
+  # Reconstruct the legacy hostConfig shape from typed options
+  mkHostConfig = _hostKey: hostCfg: {
+    inherit (hostCfg) system hostname;
+    userConfig = {
+      inherit (cfg.user) username fullName homeDirectory dotfilesPath;
+    };
+    userModule = ../home.nix;
+    dock = {
+      inherit (hostCfg.dock) persistent-apps;
+    };
+    homebrew = {
+      inherit (hostCfg.homebrew) enableRosetta casks;
+    };
+  };
 
-  # Helper function to create a darwin configuration
   mkDarwinConfig = hostConfig:
-    nix-darwin.lib.darwinSystem {
+    inputs.nix-darwin.lib.darwinSystem {
       inherit (hostConfig) system;
       specialArgs = {
         self = inputs.self;
@@ -25,15 +40,15 @@
       };
       modules = [
         ../darwin.nix
-        mac-app-util.darwinModules.default
-        home-manager.darwinModules.home-manager
+        inputs.mac-app-util.darwinModules.default
+        inputs.home-manager.darwinModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
             sharedModules = [
-              mac-app-util.homeManagerModules.default
-              onepassword-shell-plugins.hmModules.default
+              inputs.mac-app-util.homeManagerModules.default
+              inputs.onepassword-shell-plugins.hmModules.default
             ];
             extraSpecialArgs = {
               inherit (hostConfig) userConfig hostname;
@@ -41,7 +56,7 @@
             users.${hostConfig.userConfig.username} = import hostConfig.userModule;
           };
         }
-        nix-homebrew.darwinModules.nix-homebrew
+        inputs.nix-homebrew.darwinModules.nix-homebrew
         {
           nix-homebrew = {
             enable = true;
@@ -53,13 +68,14 @@
       ];
     };
 in {
-  flake = {
-    darwinConfigurations = {
-      ${personalHost.hostname} = mkDarwinConfig personalHost;
-      ${workHost.hostname} = mkDarwinConfig workHost;
-    };
+  flake.darwinConfigurations =
+    lib.mapAttrs'
+    (name: hostCfg: let
+      hostConfig = mkHostConfig name hostCfg;
+    in
+      lib.nameValuePair hostCfg.hostname (mkDarwinConfig hostConfig))
+    cfg.hosts;
 
-    darwinPackages =
-      inputs.self.darwinConfigurations.${personalHost.hostname}.pkgs;
-  };
+  flake.darwinPackages =
+    inputs.self.darwinConfigurations.${cfg.hosts.personal.hostname}.pkgs;
 }
