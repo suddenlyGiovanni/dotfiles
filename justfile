@@ -1,7 +1,21 @@
 # Justfile for dotfiles development tasks
 # Run `just` to see available commands
 
-# Default recipe: show help
+set shell := ["bash", "-euo", "pipefail", "-c"]
+set dotenv-load := false
+
+# ── Variables ─────────────────────────────────────────────────────────────────
+
+# Known hostnames (from flake-modules/hosts.nix)
+personal_host := "suddenlyGiovannis-MacBook-Personal"
+work_host     := "suddenlyGiovannis-MacBook-Work"
+
+# Auto-detect current hostname
+hostname := `scutil --get LocalHostName`
+
+# ── Development ───────────────────────────────────────────────────────────────
+
+# List available recipes
 default:
     @just --list
 
@@ -21,12 +35,15 @@ lint:
 deadcode:
     deadnix .
 
-# Run all checks (format check, lint, deadcode)
-check: fmt-check lint deadcode
+# Run all checks (format, lint, deadcode, flake validation)
+check: fmt-check lint deadcode validate
 
-# Build the current host's configuration without applying
+# ── Build & Deploy ────────────────────────────────────────────────────────────
+
+# Build the current host's configuration
 build:
-    darwin-rebuild build --flake .
+    @echo "Building configuration for {{ hostname }}..."
+    darwin-rebuild build --flake ".#{{ hostname }}"
 
 # Build a specific host's configuration
 build-host host:
@@ -34,23 +51,36 @@ build-host host:
 
 # Apply the current host's configuration
 switch:
-    sudo darwin-rebuild switch --flake .
+    @echo "Switching configuration for {{ hostname }}..."
+    sudo darwin-rebuild switch --flake ".#{{ hostname }}"
 
 # Apply a specific host's configuration
 switch-host host:
     sudo darwin-rebuild switch --flake ".#{{ host }}"
 
-# Show available darwin configurations
+# ── Flake Management ─────────────────────────────────────────────────────────
+
+# Show available flake outputs
 show:
     nix flake show
 
-# Update flake inputs
+# Validate flake structure
+validate:
+    nix flake check
+
+# Update all flake inputs
 update:
     nix flake update
 
 # Update a specific flake input
 update-input input:
-    nix flake lock --update-input {{ input }}
+    nix flake update {{ input }}
+
+# Open nix repl with flake loaded
+repl:
+    nix repl --expr 'builtins.getFlake "path:."'
+
+# ── Maintenance ───────────────────────────────────────────────────────────────
 
 # Garbage collect old generations (keeps last 7 days)
 gc:
@@ -67,16 +97,3 @@ generations:
 # Rollback to previous generation
 rollback:
     sudo darwin-rebuild switch --rollback
-
-# Validate flake
-validate:
-    nix flake check
-
-# Show what would change (requires nvd: nix profile install nixpkgs#nvd)
-diff:
-    darwin-rebuild build --flake .
-    nvd diff /run/current-system result
-
-# Open nix repl with flake loaded
-repl:
-    nix repl --expr 'builtins.getFlake "path:."'
