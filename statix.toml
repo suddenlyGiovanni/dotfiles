@@ -1,9 +1,0 @@
-# Statix configuration
-# https://github.com/nerdypepper/statix
-
-# Disabled lints
-disabled = [
-  # W04: "Assignment instead of inherit from" produces false positives
-  # on fish function definitions which use `body = ''...''` syntax
-  "manual_inherit_from",
-]
