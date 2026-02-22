@@ -77,76 +77,78 @@
 #   - fcd fish function: directory preview
 #   - Custom shell aliases for enhanced ls experience
 #
-{
-  lib,
-  pkgs,
-  ...
-}: let
-  inherit (lib) mkDefault;
-in {
-  programs.eza = {
-    enable = true;
-    package = mkDefault pkgs.eza;
+_: {
+  flake.modules.homeManager.eza = {
+    lib,
+    pkgs,
+    ...
+  }: let
+    inherit (lib) mkDefault;
+  in {
+    programs.eza = {
+      enable = true;
+      package = mkDefault pkgs.eza;
 
-    # ────────────────────────────────────────────────────────────────────────
-    # Icons
-    # ────────────────────────────────────────────────────────────────────────
-    # Display icons next to file names. Requires a Nerd Font.
-    # Options: "auto" (detect TTY), "always", "never", or null (disabled)
-    icons = mkDefault "auto";
+      # ────────────────────────────────────────────────────────────────────────
+      # Icons
+      # ────────────────────────────────────────────────────────────────────────
+      # Display icons next to file names. Requires a Nerd Font.
+      # Options: "auto" (detect TTY), "always", "never", or null (disabled)
+      icons = mkDefault "auto";
 
-    # ────────────────────────────────────────────────────────────────────────
-    # Git Integration
-    # ────────────────────────────────────────────────────────────────────────
-    # Show Git status for tracked/ignored files in long view.
-    # Adds a column showing staged/unstaged status.
-    git = mkDefault true;
+      # ────────────────────────────────────────────────────────────────────────
+      # Git Integration
+      # ────────────────────────────────────────────────────────────────────────
+      # Show Git status for tracked/ignored files in long view.
+      # Adds a column showing staged/unstaged status.
+      git = mkDefault true;
 
-    # ────────────────────────────────────────────────────────────────────────
-    # Colors
-    # ────────────────────────────────────────────────────────────────────────
-    # When to use terminal colors. Options: "auto", "always", "never"
-    colors = mkDefault "auto";
+      # ────────────────────────────────────────────────────────────────────────
+      # Colors
+      # ────────────────────────────────────────────────────────────────────────
+      # When to use terminal colors. Options: "auto", "always", "never"
+      colors = mkDefault "auto";
 
-    # ────────────────────────────────────────────────────────────────────────
-    # Extra Options
-    # ────────────────────────────────────────────────────────────────────────
-    # Additional flags passed to eza by default (via shell alias)
-    extraOptions = [
-      "--group-directories-first" # Directories before files
-      "--header" # Show column headers in long view
-      "--group" # Show group in long view
-      "--hyperlink" # Make file names clickable (works in Ghostty, iTerm2)
-      "--git-repos" # Show git repo status when listing directories
-      "--color-scale" # Highlight file sizes with distinct colors
-    ];
+      # ────────────────────────────────────────────────────────────────────────
+      # Extra Options
+      # ────────────────────────────────────────────────────────────────────────
+      # Additional flags passed to eza by default (via shell alias)
+      extraOptions = [
+        "--group-directories-first" # Directories before files
+        "--header" # Show column headers in long view
+        "--group" # Show group in long view
+        "--hyperlink" # Make file names clickable (works in Ghostty, iTerm2)
+        "--git-repos" # Show git repo status when listing directories
+        "--color-scale" # Highlight file sizes with distinct colors
+      ];
 
-    # ────────────────────────────────────────────────────────────────────────
-    # Shell Integrations
-    # ────────────────────────────────────────────────────────────────────────
-    # Automatically enabled by home-manager based on which shells are active.
-    # Creates aliases: ls, ll, la, lt, lla
-    # See: lib.hm.shell.mk*IntegrationOption in home-manager source
+      # ────────────────────────────────────────────────────────────────────────
+      # Shell Integrations
+      # ────────────────────────────────────────────────────────────────────────
+      # Automatically enabled by home-manager based on which shells are active.
+      # Creates aliases: ls, ll, la, lt, lla
+      # See: lib.hm.shell.mk*IntegrationOption in home-manager source
 
-    # ────────────────────────────────────────────────────────────────────────
-    # Custom Theme
-    # ────────────────────────────────────────────────────────────────────────
-    # Written to ~/.config/eza/theme.yml
-    # See: https://github.com/eza-community/eza/blob/main/man/eza_colors-explanation.5.md
-    #
-    # Uncomment to customize colors:
-    # theme = {
-    #   # File types
-    #   filenames = {
-    #     "Makefile" = { foreground = "green"; };
-    #     "Cargo.toml" = { foreground = "red"; };
-    #   };
-    #   # Extensions
-    #   extensions = {
-    #     "rs" = { foreground = "red"; };
-    #     "nix" = { foreground = "blue"; };
-    #   };
-    # };
-    theme = {};
+      # ────────────────────────────────────────────────────────────────────────
+      # Custom Theme
+      # ────────────────────────────────────────────────────────────────────────
+      # Written to ~/.config/eza/theme.yml
+      # See: https://github.com/eza-community/eza/blob/main/man/eza_colors-explanation.5.md
+      #
+      # Uncomment to customize colors:
+      # theme = {
+      #   # File types
+      #   filenames = {
+      #     "Makefile" = { foreground = "green"; };
+      #     "Cargo.toml" = { foreground = "red"; };
+      #   };
+      #   # Extensions
+      #   extensions = {
+      #     "rs" = { foreground = "red"; };
+      #     "nix" = { foreground = "blue"; };
+      #   };
+      # };
+      theme = {};
+    };
   };
 }

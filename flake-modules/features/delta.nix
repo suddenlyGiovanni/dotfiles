@@ -65,83 +65,85 @@
 # Note: delta replaces batdiff for git diffs. batdiff is still useful for
 # comparing arbitrary files outside of git.
 #
-{
-  lib,
-  pkgs,
-  ...
-}: let
-  inherit (lib) mkDefault;
-in {
-  programs.delta = {
-    enable = mkDefault true;
-    package = mkDefault pkgs.delta;
+_: {
+  flake.modules.homeManager.delta = {
+    lib,
+    pkgs,
+    ...
+  }: let
+    inherit (lib) mkDefault;
+  in {
+    programs.delta = {
+      enable = mkDefault true;
+      package = mkDefault pkgs.delta;
 
-    # Enable git integration (sets core.pager and interactive.diffFilter)
-    enableGitIntegration = mkDefault true;
+      # Enable git integration (sets core.pager and interactive.diffFilter)
+      enableGitIntegration = mkDefault true;
 
-    # ────────────────────────────────────────────────────────────────────────
-    # Options
-    # ────────────────────────────────────────────────────────────────────────
-    # See: https://dandavison.github.io/delta/configuration.html
-    # Run `delta --help` for all available options
-    options = {
-      # ── Appearance ──────────────────────────────────────────────────────
+      # ────────────────────────────────────────────────────────────────────────
+      # Options
+      # ────────────────────────────────────────────────────────────────────────
+      # See: https://dandavison.github.io/delta/configuration.html
+      # Run `delta --help` for all available options
+      options = {
+        # ── Appearance ──────────────────────────────────────────────────────
 
-      # Enable 24-bit truecolor (supported by Ghostty, iTerm2, etc.)
-      # See: https://github.com/termstandard/colors
-      true-color = "always";
+        # Enable 24-bit truecolor (supported by Ghostty, iTerm2, etc.)
+        # See: https://github.com/termstandard/colors
+        true-color = "always";
 
-      # Use terminal colors (adapts to dark/light mode like bat)
-      # Alternatives: "Dracula", "OneHalfDark", "GitHub", etc.
-      # Run `delta --list-syntax-themes` to see available themes
-      dark = true;
-      syntax-theme = mkDefault "ansi";
+        # Use terminal colors (adapts to dark/light mode like bat)
+        # Alternatives: "Dracula", "OneHalfDark", "GitHub", etc.
+        # Run `delta --list-syntax-themes` to see available themes
+        dark = true;
+        syntax-theme = mkDefault "ansi";
 
-      # Show line numbers in the left margin
-      line-numbers = true;
+        # Show line numbers in the left margin
+        line-numbers = true;
 
-      # Enable side-by-side diff view by default
-      # Toggle off with: DELTA_FEATURES=+ git diff
-      # Or use: git diff --no-side-by-side (if supported)
-      side-by-side = true;
+        # Enable side-by-side diff view by default
+        # Toggle off with: DELTA_FEATURES=+ git diff
+        # Or use: git diff --no-side-by-side (if supported)
+        side-by-side = true;
 
-      # ── Navigation ──────────────────────────────────────────────────────
+        # ── Navigation ──────────────────────────────────────────────────────
 
-      # Enable navigation mode: use n/N to jump between diff sections
-      navigate = true;
+        # Enable navigation mode: use n/N to jump between diff sections
+        navigate = true;
 
-      # ── Hyperlinks ──────────────────────────────────────────────────────
+        # ── Hyperlinks ──────────────────────────────────────────────────────
 
-      # Make file paths clickable (opens in editor)
-      # Works in iTerm2, Ghostty, and other terminals with hyperlink support
-      hyperlinks = true;
+        # Make file paths clickable (opens in editor)
+        # Works in iTerm2, Ghostty, and other terminals with hyperlink support
+        hyperlinks = true;
 
-      # ── Diff appearance ─────────────────────────────────────────────────
+        # ── Diff appearance ─────────────────────────────────────────────────
 
-      # Show a marker for unchanged lines in the diff
-      keep-plus-minus-markers = true;
+        # Show a marker for unchanged lines in the diff
+        keep-plus-minus-markers = true;
 
-      # Style for the file header
-      file-style = "bold yellow ul";
-      file-decoration-style = "none";
+        # Style for the file header
+        file-style = "bold yellow ul";
+        file-decoration-style = "none";
 
-      # Style for the hunk header (e.g., @@ -1,3 +1,4 @@)
-      hunk-header-style = "file line-number syntax";
-      hunk-header-decoration-style = "blue box";
+        # Style for the hunk header (e.g., @@ -1,3 +1,4 @@)
+        hunk-header-style = "file line-number syntax";
+        hunk-header-decoration-style = "blue box";
 
-      # Line number styles
-      line-numbers-left-style = "cyan";
-      line-numbers-right-style = "cyan";
-      line-numbers-minus-style = "red";
-      line-numbers-plus-style = "green";
+        # Line number styles
+        line-numbers-left-style = "cyan";
+        line-numbers-right-style = "cyan";
+        line-numbers-minus-style = "red";
+        line-numbers-plus-style = "green";
 
-      # ── Merge conflicts ─────────────────────────────────────────────────
+        # ── Merge conflicts ─────────────────────────────────────────────────
 
-      # Style merge conflict markers
-      merge-conflict-begin-symbol = "▼";
-      merge-conflict-end-symbol = "▲";
-      merge-conflict-ours-diff-header-style = "bold yellow";
-      merge-conflict-theirs-diff-header-style = "bold yellow";
+        # Style merge conflict markers
+        merge-conflict-begin-symbol = "▼";
+        merge-conflict-end-symbol = "▲";
+        merge-conflict-ours-diff-header-style = "bold yellow";
+        merge-conflict-theirs-diff-header-style = "bold yellow";
+      };
     };
   };
 }

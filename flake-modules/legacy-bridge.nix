@@ -29,8 +29,9 @@
     };
   };
 
-  # Collect all migrated darwin deferredModules
+  # Collect all migrated deferredModules
   darwinFeatureModules = builtins.attrValues config.flake.modules.darwin;
+  hmFeatureModules = builtins.attrValues config.flake.modules.homeManager;
 
   mkDarwinConfig = hostConfig:
     inputs.nix-darwin.lib.darwinSystem {
@@ -51,10 +52,12 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            sharedModules = [
-              inputs.mac-app-util.homeManagerModules.default
-              inputs.onepassword-shell-plugins.hmModules.default
-            ];
+            sharedModules =
+              hmFeatureModules
+              ++ [
+                inputs.mac-app-util.homeManagerModules.default
+                inputs.onepassword-shell-plugins.hmModules.default
+              ];
             extraSpecialArgs = {
               inherit (hostConfig) userConfig hostname;
             };
