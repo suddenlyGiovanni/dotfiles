@@ -28,11 +28,7 @@ in {
 
       pathsToLink = [
         "/share/fish" # fish completions
-        "/share/nushell" # nushell completions
       ];
-
-      # Add shells to allowed login shells
-      shells = [pkgs.fish pkgs.nushell];
     };
 
     fonts.packages = [pkgs.nerd-fonts.jetbrains-mono];
@@ -49,7 +45,6 @@ in {
       description = user.fullName; # A short description of the user account, typically the user's full name.
       home = user.homeDirectory; # The user's home directory. This defaults to `null`.
       isHidden = false; # Whether to make the user account hidden.
-      shell = pkgs.nushell; # Use nushell as the default shell
     };
 
     # Note: fish system-level config (programs.fish.enable, vendor) lives in
