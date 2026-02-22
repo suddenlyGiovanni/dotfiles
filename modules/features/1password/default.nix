@@ -60,8 +60,8 @@ _: {
     ...
   }: let
     # Host-specific feature flags
-    # The hostname is set per-host via an inline HM module in the host assembly
-    isWorkHost = config.dotfiles.hostname == "suddenlyGiovannis-MacBook-Work";
+    # Derived from hostRole in host assembly (see options.nix, host-assembly.nix)
+    inherit (config.dotfiles) isWorkHost;
     inherit (lib) mkDefault;
 
     # Directory containing this module and its config files

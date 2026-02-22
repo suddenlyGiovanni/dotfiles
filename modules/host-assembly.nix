@@ -44,8 +44,11 @@
                 ++ [
                   inputs.mac-app-util.homeManagerModules.default
                   inputs.onepassword-shell-plugins.hmModules.default
-                  # Per-host: set dotfiles.hostname for 1password and others
-                  {dotfiles.hostname = hostCfg.hostname;}
+                  # Per-host: set dotfiles.hostname and isWorkHost for 1password and others
+                  {
+                    dotfiles.hostname = hostCfg.hostname;
+                    dotfiles.isWorkHost = hostCfg.hostRole == "work";
+                  }
                 ];
               users.${cfg.user.username} = {};
             };

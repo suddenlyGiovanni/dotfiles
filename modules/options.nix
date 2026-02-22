@@ -34,6 +34,10 @@
             type = lib.types.str;
             description = "LocalHostName of the Mac (scutil --get LocalHostName)";
           };
+          hostRole = lib.mkOption {
+            type = lib.types.enum ["personal" "work"];
+            description = "Role of this host — drives feature flags like isWorkHost";
+          };
           dock.persistent-apps = lib.mkOption {
             type = lib.types.listOf lib.types.str;
             default = ["/Applications/Safari.app"];

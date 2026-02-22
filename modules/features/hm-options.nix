@@ -11,6 +11,12 @@ _: {
         description = "Hostname of the machine (set per-host in host assembly)";
       };
 
+      isWorkHost = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Whether this is a work host (derived from hostRole in host assembly)";
+      };
+
       sshKeys = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
         default = {};

@@ -12,6 +12,7 @@ _: {
     hosts = {
       personal = {
         hostname = "suddenlyGiovannis-MacBook-Personal";
+        hostRole = "personal";
         dock.persistent-apps = [
           "/Applications/Safari.app"
         ];
@@ -22,6 +23,7 @@ _: {
 
       work = {
         hostname = "suddenlyGiovannis-MacBook-Work";
+        hostRole = "work";
         homebrew.casks = [
           "claude" # Anthropic's official Claude AI desktop app
           "figma@beta" # Collaborative team software
