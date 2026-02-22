@@ -29,6 +29,9 @@
     };
   };
 
+  # Collect all migrated darwin deferredModules
+  darwinFeatureModules = builtins.attrValues config.flake.modules.darwin;
+
   mkDarwinConfig = hostConfig:
     inputs.nix-darwin.lib.darwinSystem {
       inherit (hostConfig) system;
@@ -38,8 +41,10 @@
         inherit hostConfig;
         inherit (hostConfig) userConfig;
       };
-      modules = [
-        ../darwin.nix
+      modules =
+        darwinFeatureModules
+        ++ [
+          ../darwin.nix
         inputs.mac-app-util.darwinModules.default
         inputs.home-manager.darwinModules.home-manager
         {
