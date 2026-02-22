@@ -24,11 +24,11 @@
       imports =
         [
           inputs.flake-parts.flakeModules.modules
-          ./flake-modules/options.nix
-          ./flake-modules/hosts.nix
-          ./flake-modules/host-assembly.nix
+          ./modules/options.nix
+          ./modules/hosts.nix
+          ./modules/host-assembly.nix
         ]
-        ++ (inputs.import-tree ./flake-modules/features).imports;
+        ++ (inputs.import-tree ./modules/features).imports;
 
       # Per-system outputs (formatter, devShells)
       perSystem = {pkgs, ...}: {

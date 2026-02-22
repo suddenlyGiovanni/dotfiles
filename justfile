@@ -6,7 +6,7 @@ set ignore-comments
 
 # ── Variables ─────────────────────────────────────────────────────────────────
 
-# Known hostnames (from flake-modules/hosts.nix)
+# Known hostnames (from modules/hosts.nix)
 personal_host := "suddenlyGiovannis-MacBook-Personal"
 work_host     := "suddenlyGiovannis-MacBook-Work"
 

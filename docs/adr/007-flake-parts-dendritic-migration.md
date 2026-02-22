@@ -153,7 +153,7 @@ The phases are:
 
 ```
 flake.nix                            # ~20 lines: inputs + mkFlake + import-tree
-flake-modules/
+modules/
   options.nix                        # dotfiles.user.* and dotfiles.hosts.* declarations
   hosts.nix                          # concrete values for personal + work
   features/
@@ -181,7 +181,7 @@ flake-modules/
 
 ### Positive
 
-- **Uniform file types**: Every `.nix` file under `flake-modules/` is a flake-parts module. No
+- **Uniform file types**: Every `.nix` file under `modules/` is a flake-parts module. No
   ambiguity about what type a file contains.
 - **No `specialArgs`/`extraSpecialArgs`**: Shared values are top-level options, readable by any
   module without explicit threading. Adding a new shared value is a one-line option declaration.
@@ -210,7 +210,7 @@ flake-modules/
 - Same module count, reorganized
 - `flake-parts` is already a transitive dependency (via `mac-app-util`)
 - Supersedes ADR-005 (Home-Manager Module Structure) since the flat `programs/` directory is
-  replaced by `flake-modules/features/`
+  replaced by `modules/features/`
 
 ## Alternatives Considered
 

@@ -54,7 +54,7 @@ in {
     };
 
     # Note: fish system-level config (programs.fish.enable, vendor) lives in
-    # flake-modules/features/fish/ as a cross-cutting module
+    # modules/features/fish/ as a cross-cutting module
 
     home-manager = {
       backupFileExtension = "backup"; # On activation move existing files by appending the given file extension rather than exiting with an error.
