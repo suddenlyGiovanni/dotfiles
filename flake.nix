@@ -26,7 +26,7 @@
           inputs.flake-parts.flakeModules.modules
           ./flake-modules/options.nix
           ./flake-modules/hosts.nix
-          ./flake-modules/legacy-bridge.nix
+          ./flake-modules/host-assembly.nix
         ]
         ++ (inputs.import-tree ./flake-modules/features).imports;
 

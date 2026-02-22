@@ -1,8 +1,22 @@
 # fish - The friendly interactive shell
+# Cross-cutting feature: darwin system config + home-manager user config
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/fish.nix
 {config, ...}: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
+  # ── Darwin: enable fish as a valid login shell ───────────────────────────
+  flake.modules.darwin.fish = _: {
+    programs.fish = {
+      enable = true;
+      vendor = {
+        completions.enable = true;
+        config.enable = true;
+        functions.enable = true;
+      };
+    };
+  };
+
+  # ── Home Manager: user-level fish configuration ──────────────────────────
   flake.modules.homeManager.fish = {
     config,
     pkgs,

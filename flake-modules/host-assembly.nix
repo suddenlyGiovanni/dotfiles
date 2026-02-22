@@ -1,16 +1,12 @@
-# Temporary bridge: wraps the existing darwin configuration logic
-# inside a flake-parts module. This will be replaced by host-assembly.nix
-# in Phase 10.
+# Host Assembly
+# Builds darwinConfigurations from dotfiles.hosts options and collected
+# feature modules. Each host gets all darwin and HM deferredModules plus
+# per-host inline modules for dock, homebrew, and hostname overrides.
 #
-# Reads from config.dotfiles.* (typed options) and builds
-# darwinConfigurations using migrated feature modules + per-host
-# inline modules.
+# No specialArgs or extraSpecialArgs — all values flow through the
+# module system (flake-parts options or inline modules).
 #
-# All specialArgs and extraSpecialArgs have been eliminated.
-# Per-host values (dock persistent-apps, homebrew casks, hostname)
-# are injected as inline modules.
-#
-# See ADR-007 for the migration plan.
+# See ADR-007 for the architecture overview.
 {
   inputs,
   config,
@@ -19,11 +15,11 @@
 }: let
   cfg = config.dotfiles;
 
-  # Collect all migrated deferredModules
+  # Collect all feature deferredModules
   darwinFeatureModules = builtins.attrValues config.flake.modules.darwin;
   hmFeatureModules = builtins.attrValues config.flake.modules.homeManager;
 
-  mkDarwinConfig = hostName: hostCfg:
+  mkDarwinConfig = _hostName: hostCfg:
     inputs.nix-darwin.lib.darwinSystem {
       inherit (hostCfg) system;
       specialArgs = {
@@ -53,9 +49,7 @@
                   inputs.mac-app-util.homeManagerModules.default
                   inputs.onepassword-shell-plugins.hmModules.default
                   # Per-host: set dotfiles.hostname for 1password and others
-                  {
-                    dotfiles.hostname = hostCfg.hostname;
-                  }
+                  {dotfiles.hostname = hostCfg.hostname;}
                 ];
               users.${cfg.user.username} = {};
             };

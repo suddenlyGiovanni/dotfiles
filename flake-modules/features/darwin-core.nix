@@ -53,16 +53,8 @@ in {
       shell = pkgs.nushell; # Use nushell as the default shell
     };
 
-    # Enable fish at the system level (required for it to be a valid login shell)
-    programs.fish = {
-      enable = true;
-      # Add vendor completions and functions paths
-      vendor = {
-        completions.enable = true;
-        config.enable = true;
-        functions.enable = true;
-      };
-    };
+    # Note: fish system-level config (programs.fish.enable, vendor) lives in
+    # flake-modules/features/fish/ as a cross-cutting module
 
     home-manager = {
       backupFileExtension = "backup"; # On activation move existing files by appending the given file extension rather than exiting with an error.
