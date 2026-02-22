@@ -70,6 +70,10 @@ modules/
 | Add fish function/abbr | `modules/features/fish/_functions.nix` or `_abbreviations.nix` |
 | Add SSH key | `modules/features/1password/default.nix` → `sshPublicKeys` + `agent.toml` |
 
+## Known Issues
+
+- **zsh `initExtra` deprecation warning**: Build output shows `programs.zsh.initExtra is deprecated, use programs.zsh.initContent`. This comes from the `onepassword-shell-plugins` input (upstream `nix/shell-plugins.nix` sets `programs.zsh.initExtra`). Open upstream PRs: [#550](https://github.com/1Password/shell-plugins/pull/550), [#564](https://github.com/1Password/shell-plugins/pull/564). Run `nix flake update onepassword-shell-plugins` periodically to pick up the fix once merged.
+
 ## Documentation
 
 For detailed guidance, see:
