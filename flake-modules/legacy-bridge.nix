@@ -1,12 +1,13 @@
 # Temporary bridge: wraps the existing darwin configuration logic
-# inside a flake-parts module. This will be decomposed in later phases.
+# inside a flake-parts module. This will be replaced by host-assembly.nix
+# in Phase 10.
 #
-# Reads from config.dotfiles.* (typed options) and reconstructs the old
-# hostConfig shape for backward compatibility with remaining modules
-# (dock, homebrew, 1password).
+# Reads from config.dotfiles.* (typed options) and builds
+# darwinConfigurations using migrated feature modules + per-host
+# inline modules for dock persistent-apps and homebrew casks.
 #
-# userConfig has been eliminated -- darwin-core and home-core read
-# directly from config.dotfiles.user via the closure technique.
+# hostConfig has been eliminated — dock and homebrew are now feature
+# modules, with per-host overrides injected as inline darwin modules.
 #
 # See ADR-007 for the migration plan.
 {
@@ -17,34 +18,28 @@
 }: let
   cfg = config.dotfiles;
 
-  # Reconstruct the legacy hostConfig shape from typed options
-  # (still needed for dock, homebrew, and 1password hostname)
-  mkHostConfig = _hostKey: hostCfg: {
-    inherit (hostCfg) system hostname;
-    dock = {
-      inherit (hostCfg.dock) persistent-apps;
-    };
-    homebrew = {
-      inherit (hostCfg.homebrew) enableRosetta casks;
-    };
-  };
-
   # Collect all migrated deferredModules
   darwinFeatureModules = builtins.attrValues config.flake.modules.darwin;
   hmFeatureModules = builtins.attrValues config.flake.modules.homeManager;
 
-  mkDarwinConfig = hostConfig:
+  mkDarwinConfig = hostName: hostCfg:
     inputs.nix-darwin.lib.darwinSystem {
-      inherit (hostConfig) system;
+      inherit (hostCfg) system;
       specialArgs = {
         self = inputs.self;
         nixpkgs = inputs.nixpkgs;
-        inherit hostConfig;
       };
       modules =
         darwinFeatureModules
         ++ [
-          ../modules # imports dock.nix, homebrew.nix (still use hostConfig)
+          # Per-host dock persistent-apps override
+          {
+            system.defaults.dock.persistent-apps = lib.mkForce hostCfg.dock.persistent-apps;
+          }
+          # Per-host homebrew casks (list merge — appends to shared casks)
+          {
+            homebrew.casks = hostCfg.homebrew.casks;
+          }
           inputs.mac-app-util.darwinModules.default
           inputs.home-manager.darwinModules.home-manager
           {
@@ -58,7 +53,7 @@
                   inputs.onepassword-shell-plugins.hmModules.default
                 ];
               extraSpecialArgs = {
-                inherit (hostConfig) hostname;
+                inherit (hostCfg) hostname;
               };
               users.${cfg.user.username} = {
                 imports = [
@@ -71,7 +66,7 @@
           {
             nix-homebrew = {
               enable = true;
-              inherit (hostConfig.homebrew) enableRosetta;
+              inherit (hostCfg.homebrew) enableRosetta;
               user = cfg.user.username;
               autoMigrate = true;
             };
@@ -81,10 +76,8 @@
 in {
   flake.darwinConfigurations =
     lib.mapAttrs'
-    (name: hostCfg: let
-      hostConfig = mkHostConfig name hostCfg;
-    in
-      lib.nameValuePair hostCfg.hostname (mkDarwinConfig hostConfig))
+    (name: hostCfg:
+      lib.nameValuePair hostCfg.hostname (mkDarwinConfig name hostCfg))
     cfg.hosts;
 
   flake.darwinPackages =
