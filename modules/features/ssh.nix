@@ -22,10 +22,9 @@
 # Related: 1password.nix (public key files, SSH_AUTH_SOCK)
 # ADR: docs/adr/006-1password-ssh-agent-integration.md
 _: {
-  flake.modules.homeManager.ssh = _: let
-    # 1Password SSH agent socket path (macOS)
-    # Must match the path in 1password.nix
-    onePasswordAgentSock = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+  flake.modules.homeManager.ssh = {config, ...}: let
+    # Read from shared options (set by 1password module in hm-options.nix)
+    onePasswordAgentSock = config.dotfiles.onePasswordAgentSock;
   in {
     programs.ssh = {
       enable = true;
