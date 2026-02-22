@@ -1,0 +1,9 @@
+# statix configuration
+# Disabled lints are stylistic suggestions that conflict with
+# the codebase's established patterns.
+disabled = [
+  "manual_inherit_from",  # W04: `x = cfg.x` style is fine for clarity
+  "repeated_keys",        # W20: repeated attrset keys are intentional for readability
+]
+nix_version = '2.4'
+ignore = ['.direnv']

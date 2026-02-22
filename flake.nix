@@ -30,10 +30,29 @@
         ]
         ++ (inputs.import-tree ./modules/features).imports;
 
-      # Per-system outputs (formatter, devShells)
+      # Per-system outputs (formatter, devShells, checks)
       perSystem = {pkgs, ...}: {
         # Formatter for `nix fmt`
         formatter = pkgs.alejandra;
+
+        # CI-ready checks — `nix flake check` runs all of these
+        checks = {
+          formatting = pkgs.runCommand "check-formatting" {} ''
+            cd ${./.}
+            ${pkgs.alejandra}/bin/alejandra --check . 2>&1
+            touch $out
+          '';
+          lint = pkgs.runCommand "check-lint" {} ''
+            cd ${./.}
+            ${pkgs.statix}/bin/statix check .
+            touch $out
+          '';
+          deadcode = pkgs.runCommand "check-deadcode" {} ''
+            cd ${./.}
+            ${pkgs.deadnix}/bin/deadnix --fail .
+            touch $out
+          '';
+        };
 
         # Development shell for working on these dotfiles
         # Activated automatically via direnv (use flake)
