@@ -44,7 +44,6 @@ _: {
         # Development
         "visual-studio-code" # Open-source code editor
         "warp" # Rust-based terminal
-        "microsoft-teams"
         "discord" # Voice and text chat software
 
         # Utilities
