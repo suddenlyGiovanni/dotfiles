@@ -27,7 +27,6 @@ in {
       ];
 
       pathsToLink = [
-        "/share/zsh" # zsh completions
         "/share/fish" # fish completions
         "/share/nushell" # nushell completions
       ];

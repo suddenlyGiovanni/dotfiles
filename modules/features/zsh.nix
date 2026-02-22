@@ -1,8 +1,16 @@
 # zsh - The Z shell
+# Cross-cutting feature: darwin shell registration + home-manager user config
 # https://github.com/nix-community/home-manager/blob/master/modules/programs/zsh.nix
 {config, ...}: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
+  # ── Darwin: register zsh as a valid shell ──────────────────────────────────
+  flake.modules.darwin.zsh = {pkgs, ...}: {
+    environment.shells = [pkgs.zsh];
+    environment.pathsToLink = ["/share/zsh"];
+  };
+
+  # ── Home Manager: user-level zsh configuration ────────────────────────────
   flake.modules.homeManager.zsh = {
     config,
     lib,
