@@ -4,10 +4,11 @@
 #
 # Reads from config.dotfiles.* (typed options) and builds
 # darwinConfigurations using migrated feature modules + per-host
-# inline modules for dock persistent-apps and homebrew casks.
+# inline modules.
 #
-# hostConfig has been eliminated — dock and homebrew are now feature
-# modules, with per-host overrides injected as inline darwin modules.
+# All specialArgs and extraSpecialArgs have been eliminated.
+# Per-host values (dock persistent-apps, homebrew casks, hostname)
+# are injected as inline modules.
 #
 # See ADR-007 for the migration plan.
 {
@@ -51,15 +52,12 @@
                 ++ [
                   inputs.mac-app-util.homeManagerModules.default
                   inputs.onepassword-shell-plugins.hmModules.default
+                  # Per-host: set dotfiles.hostname for 1password and others
+                  {
+                    dotfiles.hostname = hostCfg.hostname;
+                  }
                 ];
-              extraSpecialArgs = {
-                inherit (hostCfg) hostname;
-              };
-              users.${cfg.user.username} = {
-                imports = [
-                  ../programs # imports 1password (still uses hostname via extraSpecialArgs)
-                ];
-              };
+              users.${cfg.user.username} = {};
             };
           }
           inputs.nix-homebrew.darwinModules.nix-homebrew
