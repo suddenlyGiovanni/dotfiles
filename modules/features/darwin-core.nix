@@ -1,13 +1,13 @@
 # Core Darwin system configuration
 # This module sets up core system settings, packages, fonts, nix config, and user accounts
-{config, ...}: let
+{
+  config,
+  inputs,
+  ...
+}: let
   user = config.dotfiles.user;
 in {
-  flake.modules.darwin.darwin-core = {
-    self,
-    pkgs,
-    ...
-  }: {
+  flake.modules.darwin.darwin-core = {pkgs, ...}: {
     ids.gids.nixbld = 350;
 
     nixpkgs = {
@@ -57,7 +57,7 @@ in {
       primaryUser = user.username;
 
       # Set Git commit hash for darwin-version.
-      configurationRevision = self.rev or self.dirtyRev or null;
+      configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
 
       # Used for backwards compatibility, please read the changelog before changing.
       # $ darwin-rebuild changelog

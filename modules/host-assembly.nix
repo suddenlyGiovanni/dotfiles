@@ -22,10 +22,6 @@
   mkDarwinConfig = _hostName: hostCfg:
     inputs.nix-darwin.lib.darwinSystem {
       inherit (hostCfg) system;
-      specialArgs = {
-        self = inputs.self;
-        nixpkgs = inputs.nixpkgs;
-      };
       modules =
         darwinFeatureModules
         ++ [
