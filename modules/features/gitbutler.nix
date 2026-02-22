@@ -2,7 +2,7 @@
 # https://gitbutler.com/
 # https://github.com/gitbutlerapp/gitbutler
 #
-# Note: GitButler is installed via Homebrew (see darwin/modules/homebrew.nix)
+# Note: GitButler is installed via Homebrew as a work-only cask (see modules/hosts.nix)
 # This module only manages its git configuration settings
 _: {
   flake.modules.homeManager.gitbutler = {lib, ...}: let
