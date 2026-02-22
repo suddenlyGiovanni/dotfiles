@@ -21,11 +21,14 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["aarch64-darwin"];
 
-      imports = [
-        ./flake-modules/options.nix
-        ./flake-modules/hosts.nix
-        ./flake-modules/legacy-bridge.nix
-      ];
+      imports =
+        [
+          inputs.flake-parts.flakeModules.modules
+          ./flake-modules/options.nix
+          ./flake-modules/hosts.nix
+          ./flake-modules/legacy-bridge.nix
+        ]
+        ++ (inputs.import-tree ./flake-modules/features).imports;
 
       # Per-system outputs (formatter, devShells)
       perSystem = {pkgs, ...}: {
