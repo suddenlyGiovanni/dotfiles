@@ -17,108 +17,41 @@
     import-tree.url = "github:vic/import-tree";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    nix-darwin,
-    home-manager,
-    nix-homebrew,
-    mac-app-util,
-    onepassword-shell-plugins,
-    ...
-  }: let
-    # Supported systems
-    supportedSystems = ["aarch64-darwin"];
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["aarch64-darwin"];
 
-    # Import host configurations
-    personalHost = import ./hosts/personal.nix;
-    workHost = import ./hosts/work.nix;
+      imports = [
+        ./flake-modules/legacy-bridge.nix
+      ];
 
-    # Helper function to create a darwin configuration
-    mkDarwinConfig = hostConfig:
-      nix-darwin.lib.darwinSystem {
-        inherit (hostConfig) system;
-        specialArgs = {
-          inherit self nixpkgs hostConfig;
-          inherit (hostConfig) userConfig;
+      # Per-system outputs (formatter, devShells)
+      perSystem = {pkgs, ...}: {
+        # Formatter for `nix fmt`
+        formatter = pkgs.alejandra;
+
+        # Development shell for working on these dotfiles
+        # Activated automatically via direnv (use flake)
+        devShells.default = pkgs.mkShell {
+          name = "dotfiles-dev";
+          packages = with pkgs; [
+            # Nix tools
+            nixd # Nix language server
+            nil # Alternative Nix LSP
+            alejandra # Nix formatter
+            statix # Nix linter
+            deadnix # Find dead code in Nix
+
+            # Utilities
+            just # Task runner
+          ];
+
+          shellHook = ''
+            echo "dotfiles development shell"
+            echo ""
+            just --list
+          '';
         };
-        modules = [
-          ./darwin.nix
-          mac-app-util.darwinModules.default
-          home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              sharedModules = [
-                mac-app-util.homeManagerModules.default
-                onepassword-shell-plugins.hmModules.default
-              ];
-              extraSpecialArgs = {
-                inherit (hostConfig) userConfig hostname;
-              };
-              users.${hostConfig.userConfig.username} = import hostConfig.userModule;
-            };
-          }
-          nix-homebrew.darwinModules.nix-homebrew
-          {
-            nix-homebrew = {
-              # Install Homebrew under the default prefix
-              enable = true;
-
-              # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-              inherit (hostConfig.homebrew) enableRosetta;
-
-              # User owning the Homebrew prefix
-              user = hostConfig.userConfig.username;
-
-              # Automatically migrate existing Homebrew installations
-              autoMigrate = true;
-            };
-          }
-        ];
       };
-  in {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#suddenlyGiovannis-MacBook-Personal
-    # $ darwin-rebuild build --flake .#suddenlyGiovannis-MacBook-Work
-    darwinConfigurations = {
-      ${personalHost.hostname} = mkDarwinConfig personalHost;
-      ${workHost.hostname} = mkDarwinConfig workHost;
     };
-
-    # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations.${personalHost.hostname}.pkgs;
-
-    # Formatter for `nix fmt`
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    # Development shell for working on these dotfiles
-    # Activated automatically via direnv (use flake)
-    devShells = forAllSystems (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      default = pkgs.mkShell {
-        name = "dotfiles-dev";
-        packages = with pkgs; [
-          # Nix tools
-          nixd # Nix language server
-          nil # Alternative Nix LSP
-          alejandra # Nix formatter
-          statix # Nix linter
-          deadnix # Find dead code in Nix
-
-          # Utilities
-          just # Task runner
-        ];
-
-        shellHook = ''
-          echo "dotfiles development shell"
-          echo ""
-          just --list
-        '';
-      };
-    });
-  };
 }
