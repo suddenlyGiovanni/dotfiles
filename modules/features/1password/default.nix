@@ -47,6 +47,12 @@
 # Config directories: https://developer.1password.com/docs/cli/config-directories
 # SSH agent docs: https://developer.1password.com/docs/ssh/agent
 _: {
+  # ── Darwin: install 1Password via Homebrew ─────────────────────────────────
+  flake.modules.darwin."1password" = _: {
+    homebrew.casks = ["1password@beta"];
+  };
+
+  # ── Home Manager: CLI, shell plugins, SSH agent, XDG ──────────────────────
   flake.modules.homeManager."1password" = {
     config,
     lib,

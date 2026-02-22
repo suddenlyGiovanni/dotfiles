@@ -35,10 +35,6 @@ _: {
       # Shared casks installed on all machines
       # Per-host casks are added via inline modules in host assembly
       casks = [
-        # Password management
-        # Note: 1password-cli is installed via Nix packages (see common.nix)
-        "1password@beta" # Password manager
-
         # Productivity
         "chatgpt" # OpenAI's official ChatGPT desktop app
 
