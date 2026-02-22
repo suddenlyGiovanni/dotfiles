@@ -24,10 +24,10 @@ _: {
     # Directory containing this module and its config files
     gitConfigDir = ./.;
 
-    # Git commit signing key - shared across all identities
+    # Git commit signing key from shared options (set by 1password module)
     # This key is stored in 1Password and used via op-ssh-sign
     # The same key signs commits regardless of user.email
-    gitSigningKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOQG9kbarRd3l6tx2X1AIS4H4Au2JhqI+j1q55W9yBM3";
+    gitSigningKey = config.dotfiles.sshKeys.git-signing;
   in {
     # ── Config Files ────────────────────────────────────────────────────────
     # Co-located config files are symlinked to their expected locations
