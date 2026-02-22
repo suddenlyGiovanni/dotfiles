@@ -15,7 +15,8 @@ Guidance for AI coding agents working with this repository.
 just fmt          # Format Nix files
 just lint         # Lint with statix
 just check        # Run all checks (format, lint, deadcode, flake validation)
-just build        # Build without applying
+just build        # Build current host without applying
+just build-all    # Build all host configurations
 just switch       # Apply configuration (requires sudo)
 just update       # Update flake inputs
 just gc           # Garbage collect

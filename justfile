@@ -75,6 +75,14 @@ build-host host=hostname:
     darwin-rebuild build --flake ".#{{ host }}"
 
 [group('build')]
+[doc('Build all host configurations')]
+[no-exit-message]
+build-all:
+    @echo "Building all host configurations..."
+    darwin-rebuild build --flake ".#{{ personal_host }}"
+    darwin-rebuild build --flake ".#{{ work_host }}"
+
+[group('build')]
 [doc('Apply the current host configuration')]
 [no-exit-message]
 switch:
