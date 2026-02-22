@@ -68,6 +68,7 @@
 
             # Utilities
             just # Task runner
+            nvd # Nix package version diff tool
           ];
 
           shellHook = ''

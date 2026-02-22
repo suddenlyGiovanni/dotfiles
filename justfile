@@ -83,6 +83,14 @@ build-all:
     darwin-rebuild build --flake ".#{{ work_host }}"
 
 [group('build')]
+[doc('Diff pending changes against current system (build first)')]
+[no-exit-message]
+diff:
+    @echo "Building and diffing configuration for {{ hostname }}..."
+    darwin-rebuild build --flake ".#{{ hostname }}"
+    nvd diff /run/current-system result
+
+[group('build')]
 [doc('Apply the current host configuration')]
 [no-exit-message]
 switch:
