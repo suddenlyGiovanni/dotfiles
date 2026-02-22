@@ -105,14 +105,13 @@ _: {
       # work-github = "ssh-ed25519 AAAA... Work GitHub";
     };
   in {
-    # ── Custom Option ────────────────────────────────────────────────────────────
-    # Declare dotfiles.hostname so it can be set per-host in the host assembly
-    options.dotfiles.hostname = lib.mkOption {
-      type = lib.types.str;
-      description = "Hostname of the machine (set per-host in host assembly)";
-    };
-
     config = {
+      # ── Shared Options ─────────────────────────────────────────────────────────
+      # Expose SSH keys and agent socket for other modules (ssh.nix, git.nix)
+      # Options are declared in hm-options.nix
+      dotfiles.sshKeys = sshPublicKeys;
+      dotfiles.onePasswordAgentSock = onePasswordAgentSock;
+
       # ── Shell Plugins ───────────────────────────────────────────────────────────
       # Enable 1Password shell plugins for supported CLIs
       # This creates shell wrapper functions that use `op plugin run`
