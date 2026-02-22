@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR-007](./007-flake-parts-dendritic-migration.md)
 
 ## Date
 
