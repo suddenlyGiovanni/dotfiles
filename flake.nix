@@ -22,6 +22,8 @@
       systems = ["aarch64-darwin"];
 
       imports = [
+        ./flake-modules/options.nix
+        ./flake-modules/hosts.nix
         ./flake-modules/legacy-bridge.nix
       ];
 
