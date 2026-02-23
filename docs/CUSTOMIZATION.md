@@ -4,7 +4,7 @@ This guide explains how to customize and extend the nix-darwin configuration for
 
 > **Architecture**: This repository uses the **dendritic pattern** with flake-parts.
 > Each feature is a flake-parts module that can write to both the darwin (system) and
-> home-manager (user) sides. See [ADR-007](./adr/007-dendritic-flake-parts-architecture.md).
+> home-manager (user) sides. See [ADR-007](./adr/007-flake-parts-dendritic-migration.md).
 
 > **Tip:** Run `just --list` from the repository root to see all available commands.
 

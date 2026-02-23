@@ -1,5 +1,5 @@
 # Software Update - macOS automatic update preferences
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.SoftwareUpdate
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.SoftwareUpdate
 #
 # Configures automatic installation of macOS software updates.
 # When enabled, updates are downloaded and installed without manual intervention.

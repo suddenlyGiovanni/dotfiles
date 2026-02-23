@@ -1,5 +1,5 @@
 # Trackpad - macOS trackpad gesture and behavior preferences
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.trackpad
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.trackpad
 #
 # Configures tap-to-click, drag behavior, right-click, force touch thresholds,
 # and multi-finger gestures (pinch, swipe, zoom, rotate). Applies shared

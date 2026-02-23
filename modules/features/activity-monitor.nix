@@ -1,5 +1,5 @@
 # Activity Monitor - macOS system monitoring utility preferences
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.ActivityMonitor
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.ActivityMonitor
 #
 # Configures the Activity Monitor dock icon style, default view,
 # sort column, and whether the main window opens on launch.

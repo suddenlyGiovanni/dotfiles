@@ -44,12 +44,7 @@ in {
     };
 
     nix = {
-      enable = false; # Add this line to prevent nix-darwin from managing Nix
-      # Necessary for using flakes on this system.
-      settings.experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
+      enable = false; # Prevent nix-darwin from managing Nix (managed externally by Determinate Nix)
     };
 
     system = {

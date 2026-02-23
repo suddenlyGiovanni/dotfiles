@@ -1,5 +1,5 @@
 # Finder - macOS file manager preferences
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.finder
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.finder
 #
 # Configures file visibility (hidden files, extensions), default view style,
 # search scope, path/status bar display, and new window target location.

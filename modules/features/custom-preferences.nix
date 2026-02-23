@@ -1,6 +1,6 @@
 # CustomUserPreferences - Additional macOS settings not exposed via typed nix-darwin options
 # These settings are applied via the CustomUserPreferences mechanism
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.CustomUserPreferences
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.CustomUserPreferences
 #
 # Note: Trackpad gesture settings are in trackpad.nix
 _: {

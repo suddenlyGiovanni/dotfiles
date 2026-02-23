@@ -1,5 +1,5 @@
 # NSGlobalDomain - Global macOS system preferences
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.NSGlobalDomain
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.NSGlobalDomain
 #
 # System-wide defaults that apply across all applications. Covers appearance
 # (dark mode, font smoothing, scroll bars), keyboard behavior (key repeat,

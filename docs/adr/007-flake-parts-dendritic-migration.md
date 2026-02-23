@@ -151,7 +151,7 @@ The phases are:
 
 ### Target directory structure
 
-```
+```text
 flake.nix                            # ~20 lines: inputs + mkFlake + import-tree
 modules/
   options.nix                        # dotfiles.user.* and dotfiles.hosts.* declarations

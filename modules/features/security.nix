@@ -1,6 +1,6 @@
 # Security - macOS security and firewall configuration
-# https://daiderd.com/nix-darwin/manual/index.html#opt-security.pam
-# https://daiderd.com/nix-darwin/manual/index.html#opt-networking.applicationFirewall
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-security.pam
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-networking.applicationFirewall
 #
 # Enables Touch ID for sudo authentication via PAM and configures the
 # application firewall (incoming connections, signed app exceptions,

@@ -1,5 +1,5 @@
 # Window Manager - macOS Stage Manager and window tiling preferences
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.WindowManager
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.WindowManager
 #
 # Configures Stage Manager (enable/disable, auto-hide, app grouping),
 # click-to-show-desktop behavior, desktop icon/widget visibility, and

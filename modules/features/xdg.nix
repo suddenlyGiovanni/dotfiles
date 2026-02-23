@@ -24,8 +24,8 @@ _: {
 
       # ── Config File Symlinks ────────────────────────────────────────────────
       # Note: Most config symlinks are now co-located with their program modules:
-      # - git/.gitmessage → programs/git/default.nix
-      # - zed/* → programs/zed/default.nix
+      # - git/.gitmessage → modules/features/git/default.nix
+      # - zed/* → modules/features/zed/default.nix
       configFile = {
         # ── Readline Configuration ────────────────────────────────────────────
         # Consistent line editing across tools that use readline

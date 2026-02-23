@@ -14,7 +14,7 @@ The dotfiles repository uses a **dendritic architecture** with flake-parts:
 - **No specialArgs**: All values flow through the module system
 - **1Password integration**: SSH agent + shell plugins + shared keys via options
 
-See [ADR-007](./adr/007-dendritic-flake-parts-architecture.md) for architecture decisions.
+See [ADR-007](./adr/007-flake-parts-dendritic-migration.md) for architecture decisions.
 
 ---
 

@@ -1,5 +1,5 @@
 # Dock - macOS application launcher and window management bar
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.dock
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.dock
 #
 # Configures dock position, size, autohide behavior, animation speeds,
 # Mission Control/Expose settings, and hot corners. Sets shared default
@@ -22,7 +22,7 @@ _: {
       mouse-over-hilite-stack = true; # Enable highlight hover effect for the grid view of a stack in the Dock.
       mru-spaces = false; # Whether to automatically rearrange spaces based on most recent use.  The default is true.
       orientation = "left"; # Position of the dock on screen.  The default is "bottom".
-      persistent-apps = ["/Applications/Safari.app"]; # Default; per-host apps override via inline module
+      persistent-apps = ["/System/Applications/Safari.app"]; # Default; per-host apps override via inline module
       persistent-others = null; # Persistent folders in the dock.
       show-process-indicators = true; # Show indicator lights for open applications in the Dock. The default is true.
       showhidden = true; # Whether to make icons of hidden applications translucent.  The default is false.

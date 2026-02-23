@@ -198,7 +198,7 @@ _: {
 
         # ── Commit ──────────────────────────────────────────────────────────
         commit = {
-          status = "true";
+          status = true;
           template = "${config.xdg.configHome}/git/.gitmessage";
           gpgsign = mkDefault true;
         };

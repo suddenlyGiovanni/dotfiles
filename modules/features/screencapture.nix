@@ -1,5 +1,5 @@
 # Screencapture - macOS screenshot preferences
-# https://daiderd.com/nix-darwin/manual/index.html#opt-system.defaults.screencapture
+# https://nix-darwin.github.io/nix-darwin/manual/index.html#opt-system.defaults.screencapture
 #
 # Configures screenshot file format (png, jpg, pdf, etc.), save location,
 # drop shadow on window captures, and the post-capture thumbnail preview.
