@@ -253,6 +253,6 @@ Use the Nixpkgs module system directly via `lib.evalModules` for the top-level c
 - [Doc-Steve: Dendritic design with flake-parts](https://github.com/Doc-Steve/dendritic-design-with-flake-parts)
 - [vic/import-tree](https://github.com/vic/import-tree)
 - [vic/dendrix: On the benefits of the dendritic pattern](https://github.com/vic/dendrix)
-- [`deferredModule` type in Nixpkgs](https://nixos.org/manual/nixpkgs/stable/#sec-option-types-submodule)
+- [`deferredModule` type in NixOS manual](https://nixos.org/manual/nixos/stable/#sec-option-types)
 - [ADR-001: Multi-Machine Nix Configuration](./001-multi-machine-nix-configuration.md)
 - [ADR-005: Home-Manager Module Structure](./005-home-manager-module-structure.md)
