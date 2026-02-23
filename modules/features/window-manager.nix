@@ -3,8 +3,7 @@
 #
 # Configures Stage Manager (enable/disable, auto-hide, app grouping),
 # click-to-show-desktop behavior, desktop icon/widget visibility, and
-# window tiling options (margins, Option-key accelerator) via
-# CustomUserPreferences for settings not exposed as typed nix-darwin options.
+# window tiling options (margins, Option-key accelerator).
 _: {
   flake.modules.darwin.window-manager = _: {
     system.defaults.WindowManager = {
@@ -16,12 +15,8 @@ _: {
       HideDesktop = true; # Hide items in Stage Manager.
       StandardHideWidgets = false; # Hide widgets on desktop.
       StageManagerHideWidgets = false; # Hide widgets in Stage Manager.
-    };
-
-    # Additional WindowManager settings via CustomUserPreferences (not exposed in nix-darwin typed options)
-    system.defaults.CustomUserPreferences."com.apple.WindowManager" = {
-      EnableTiledWindowMargins = true; # Enable margins between tiled windows.
-      EnableTilingOptionAccelerator = false; # Disable Option key accelerator for tiling.
+      EnableTiledWindowMargins = true; # Enable margins between tiled windows. Default is null.
+      EnableTilingOptionAccelerator = false; # Disable Option key accelerator for tiling. Default is null.
     };
   };
 }
