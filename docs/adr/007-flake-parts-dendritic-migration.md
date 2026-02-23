@@ -235,7 +235,7 @@ incremental approach via the legacy bridge is safer and allows validation at eac
 Use `flake-file` to auto-generate `flake.nix` entirely, further minimizing the entry point.
 
 **Rejected because**: Adds another dependency and obscures the entry point. For a personal dotfiles
-repo with 2 hosts, an explicit ~20 line `flake.nix` is clearer. Can be adopted later if desired.
+repo with 2 hosts, an explicit ~20-line `flake.nix` is clearer. It can be adopted later if desired.
 
 ### 4. Custom `lib.evalModules` without flake-parts
 
