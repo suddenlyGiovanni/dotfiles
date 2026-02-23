@@ -26,11 +26,11 @@
 #
 # Optional dependencies for enhanced features:
 #   - ffmpeg (video thumbnails) - not included
-#   - 7zip (archive extraction/preview) - added below
-#   - jq (JSON preview) - already in home.nix
+#   - p7zip (archive extraction/preview) - added below
+#   - jq (JSON preview) - already in home-core.nix
 #   - poppler (PDF preview) - not included
 #   - fd (file searching) - already in fd.nix
-#   - rg/ripgrep (content searching) - already in home.nix
+#   - rg/ripgrep (content searching) - already in ripgrep.nix
 #   - fzf (quick navigation) - already in fzf.nix
 #   - zoxide (history navigation) - already in zoxide.nix
 #   - resvg (SVG preview)
