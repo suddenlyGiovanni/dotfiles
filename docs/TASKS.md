@@ -1,36 +1,29 @@
 # Task Tracker
 
-> **Last Updated**: 2026-01-20
+> **Last Updated**: 2026-02-22
 
 ## Current Status
 
-The dotfiles repository has been refactored to align with upstream nix-darwin and home-manager
-conventions. Key achievements:
+The dotfiles repository uses a **dendritic architecture** with flake-parts:
 
-- **Flat structure**: All modules at root level (`modules/`, `programs/`, `hosts/`)
-- **Auto-discovery**: New modules automatically imported via `lib/auto-discovery.nix`
-- **Co-located assets**: Config files live with their modules (e.g., `programs/git/.gitmessage`)
-- **Fish as default shell**: Full configuration with fzf integrations
-- **1Password integration**: SSH agent + shell plugins for biometric auth
-- **XDG compliance**: Tool-specific env vars co-located with program modules
+- **Flake-parts modules**: Every `.nix` file is a flake-parts module
+- **Cross-cutting features**: Modules co-locate darwin + HM concerns (fish, zsh, nushell, 1password, docker, zed)
+- **import-tree auto-discovery**: New modules in `modules/features/` are automatically discovered
+- **Typed host options**: `dotfiles.hosts.*` in `modules/options.nix`
+- **Shared HM options**: `dotfiles.{hostname,sshKeys,onePasswordAgentSock}` bridge data between modules
+- **No specialArgs**: All values flow through the module system
+- **1Password integration**: SSH agent + shell plugins + shared keys via options
 
-See [ADR-005](./adr/005-home-manager-module-structure.md) for architecture decisions.
-
----
-
-## 📋 To Do
-
-- [ ] Merge PR #8 to main
+See [ADR-007](./adr/007-flake-parts-dendritic-migration.md) for architecture decisions.
 
 ---
 
-## 🧊 Icebox (Future Improvements)
+## Icebox (Future Improvements)
 
 Potential enhancements, not currently prioritized:
 
 - [ ] **Add more fish plugins** — fzf.fish, z, autopair.fish
-- [ ] **Add Neovim/Helix configuration** — `programs/neovim/` or `programs/helix/`
-- [ ] **Add tmux configuration** — `programs/tmux.nix`
+- [ ] **Add Neovim/Helix configuration** — `modules/features/neovim/` or `modules/features/helix/`
+- [ ] **Add tmux configuration** — `modules/features/tmux.nix`
 - [ ] **Module testing patterns** — `_test.nix` convention
 - [ ] **Documentation generation** — Auto-generate docs from module structure
-- [ ] **Template for new modules** — `_template.nix` as starting point

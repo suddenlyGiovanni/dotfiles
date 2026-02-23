@@ -10,110 +10,73 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     mac-app-util.url = "github:hraban/mac-app-util";
     onepassword-shell-plugins.url = "github:1Password/shell-plugins";
+
+    # Dendritic infrastructure (ADR-007)
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+    import-tree.url = "github:vic/import-tree";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    nix-darwin,
-    home-manager,
-    nix-homebrew,
-    mac-app-util,
-    onepassword-shell-plugins,
-    ...
-  }: let
-    # Supported systems
-    supportedSystems = ["aarch64-darwin"];
-    forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["aarch64-darwin"];
 
-    # Import host configurations
-    personalHost = import ./hosts/personal.nix;
-    workHost = import ./hosts/work.nix;
+      imports =
+        [
+          inputs.flake-parts.flakeModules.modules
+          ./modules/options.nix
+          ./modules/hosts.nix
+          ./modules/host-assembly.nix
+        ]
+        ++ (inputs.import-tree ./modules/features).imports;
 
-    # Helper function to create a darwin configuration
-    mkDarwinConfig = hostConfig:
-      nix-darwin.lib.darwinSystem {
-        inherit (hostConfig) system;
-        specialArgs = {
-          inherit self nixpkgs hostConfig;
-          inherit (hostConfig) userConfig;
+      # Per-system outputs (formatter, devShells, checks)
+      perSystem = {pkgs, ...}: {
+        # Formatter for `nix fmt`
+        formatter = pkgs.alejandra;
+
+        # CI-ready checks — `nix flake check` runs all of these
+        checks = {
+          formatting = pkgs.runCommand "check-formatting" {} ''
+            cd ${./.}
+            ${pkgs.alejandra}/bin/alejandra --check . 2>&1
+            touch $out
+          '';
+          lint = pkgs.runCommand "check-lint" {} ''
+            cd ${./.}
+            ${pkgs.statix}/bin/statix check .
+            touch $out
+          '';
+          deadcode = pkgs.runCommand "check-deadcode" {} ''
+            cd ${./.}
+            ${pkgs.deadnix}/bin/deadnix --fail .
+            touch $out
+          '';
         };
-        modules = [
-          ./darwin.nix
-          mac-app-util.darwinModules.default
-          home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              sharedModules = [
-                mac-app-util.homeManagerModules.default
-                onepassword-shell-plugins.hmModules.default
-              ];
-              extraSpecialArgs = {
-                inherit (hostConfig) userConfig hostname;
-              };
-              users.${hostConfig.userConfig.username} = import hostConfig.userModule;
-            };
-          }
-          nix-homebrew.darwinModules.nix-homebrew
-          {
-            nix-homebrew = {
-              # Install Homebrew under the default prefix
-              enable = true;
 
-              # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
-              inherit (hostConfig.homebrew) enableRosetta;
+        # Development shell for working on these dotfiles
+        # Activated automatically via direnv (use flake)
+        devShells.default = pkgs.mkShell {
+          name = "dotfiles-dev";
+          packages = with pkgs; [
+            # Nix tools
+            nixd # Nix language server
+            nil # Alternative Nix LSP
+            alejandra # Nix formatter
+            statix # Nix linter
+            deadnix # Find dead code in Nix
 
-              # User owning the Homebrew prefix
-              user = hostConfig.userConfig.username;
+            # Utilities
+            just # Task runner
+            nvd # Nix package version diff tool
+          ];
 
-              # Automatically migrate existing Homebrew installations
-              autoMigrate = true;
-            };
-          }
-        ];
+          shellHook = ''
+            echo "dotfiles development shell"
+            echo ""
+            just --list
+          '';
+        };
       };
-  in {
-    # Build darwin flake using:
-    # $ darwin-rebuild build --flake .#suddenlyGiovannis-MacBook-Personal
-    # $ darwin-rebuild build --flake .#suddenlyGiovannis-MacBook-Work
-    darwinConfigurations = {
-      ${personalHost.hostname} = mkDarwinConfig personalHost;
-      ${workHost.hostname} = mkDarwinConfig workHost;
     };
-
-    # Expose the package set, including overlays, for convenience.
-    darwinPackages = self.darwinConfigurations.${personalHost.hostname}.pkgs;
-
-    # Formatter for `nix fmt`
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-
-    # Development shell for working on these dotfiles
-    # Activated automatically via direnv (use flake)
-    devShells = forAllSystems (system: let
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      default = pkgs.mkShell {
-        name = "dotfiles-dev";
-        packages = with pkgs; [
-          # Nix tools
-          nixd # Nix language server
-          nil # Alternative Nix LSP
-          alejandra # Nix formatter
-          statix # Nix linter
-          deadnix # Find dead code in Nix
-
-          # Utilities
-          just # Task runner
-        ];
-
-        shellHook = ''
-          echo "dotfiles development shell"
-          echo ""
-          just --list
-        '';
-      };
-    });
-  };
 }

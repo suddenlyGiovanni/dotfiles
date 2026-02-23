@@ -1,9 +1,9 @@
-# Statix configuration
-# https://github.com/nerdypepper/statix
-
-# Disabled lints
+# statix configuration
+# Disabled lints are stylistic suggestions that conflict with
+# the codebase's established patterns.
 disabled = [
-  # W04: "Assignment instead of inherit from" produces false positives
-  # on fish function definitions which use `body = ''...''` syntax
-  "manual_inherit_from",
+  "manual_inherit_from",  # W04: `x = cfg.x` style is fine for clarity
+  "repeated_keys",        # W20: repeated attrset keys are intentional for readability
 ]
+nix_version = '2.4'
+ignore = ['.direnv']
