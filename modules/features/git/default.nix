@@ -90,7 +90,8 @@ _: {
         # ── Aliases ─────────────────────────────────────────────────────────
         alias = {
           # Clone with blobless filter for faster clones
-          clone = "clone --filter=blob:none";
+          # Note: git aliases cannot shadow builtins, so we use a distinct name
+          cl = "clone --filter=blob:none";
 
           # Add
           a = "add -p";
