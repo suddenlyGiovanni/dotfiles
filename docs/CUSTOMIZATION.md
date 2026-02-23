@@ -154,7 +154,7 @@ _: {
 ```
 
 **Reference:** See
-[nix-darwin options](https://daiderd.com/nix-darwin/manual/index.html#sec-options) for all available
+[nix-darwin options](https://nix-darwin.github.io/nix-darwin/manual/index.html#sec-options) for all available
 settings.
 
 ### Adding a New Program Configuration
@@ -353,7 +353,7 @@ man darwin-configuration.nix
 man home-configuration.nix
 
 # Or online:
-# https://daiderd.com/nix-darwin/manual/index.html
+# https://nix-darwin.github.io/nix-darwin/manual/index.html
 # https://nix-community.github.io/home-manager/options.xhtml
 ```
 
