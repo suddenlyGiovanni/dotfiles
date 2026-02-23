@@ -15,7 +15,7 @@ _: {
       CreateDesktop = true; # Whether to show icons on the desktop or not. The default is true.
       QuitMenuItem = true; # Whether to allow quitting of the Finder.  The default is false.
       _FXShowPosixPathInTitle = true; # Whether to show the full POSIX filepath in the window title. The default is false.
-      FXEnableExtensionChangeWarning = true; # Whether to show warnings when change the file extension of files.  The default is true.
+      FXEnableExtensionChangeWarning = false; # Disable confirmation dialog when changing file extensions. The default is true.
       NewWindowTarget = "Home"; # Change the default location for new Finder windows. Options: "Computer", "OS volume", "Home", "Desktop", "Documents", "Recents", "iCloud Drive", "Other".
     };
   };
