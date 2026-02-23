@@ -124,7 +124,7 @@ _: {
 
 ```nix
 # modules/hosts.nix
-hosts.personal.homebrew.casks = [
+dotfiles.hosts.personal.homebrew.casks = [
   "transmission"  # Personal only
 ];
 ```
