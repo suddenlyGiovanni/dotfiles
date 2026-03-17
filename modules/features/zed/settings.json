@@ -61,20 +61,7 @@
   "vim_mode": false,
   "colorize_brackets": true,
   "context_servers": {
-    "mcp-server-context7": {
-      "enabled": true,
-      "settings": {
-        "context7_api_key": "",
-      },
     },
-    "mcp-server-github": {
-      "enabled": true,
-      "settings": {
-        // TODO: Set via environment variable or replace with actual token
-        "github_personal_access_token": "${GITHUB_PERSONAL_ACCESS_TOKEN}",
-      },
-    },
-  },
   "edit_predictions": {
     "provider": "none",
     "mode": "subtle",
@@ -132,7 +119,11 @@
     },
   },
   "base_keymap": "JetBrains",
-  "agent_servers": {},
+  "agent_servers": {
+    "claude-acp": {
+      "type": "registry"
+    }
+  },
   "agent": {
     "tool_permissions": {
       "default": "allow"
