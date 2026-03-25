@@ -13,6 +13,18 @@ in {
     nixpkgs = {
       # Allow unfree packages
       config.allowUnfree = true;
+
+      overlays = [
+        # Fix direnv build: Go 1.26 no longer enables cgo by default,
+        # but direnv's Makefile passes -linkmode=external which requires it
+        (final: prev: {
+          direnv = prev.direnv.overrideAttrs (old: {
+            env = (old.env or {}) // {
+              CGO_ENABLED = 1;
+            };
+          });
+        })
+      ];
     };
 
     environment.systemPackages = with pkgs; [
