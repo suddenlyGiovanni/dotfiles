@@ -32,6 +32,7 @@ _: {
           "rustdesk"
           "segger-jlink" # J-Link USB drivers for embedded dev (ESP32 serial)
           "superwhisper" # Voice-to-text using AI
+          {name = "google-chrome"; args = {require_sha = false;};} # Web browser (no checksum published)
         ];
       };
     };

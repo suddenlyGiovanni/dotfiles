@@ -50,9 +50,9 @@
               description = "Also install Homebrew under the Intel prefix for Rosetta 2";
             };
             casks = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
+              type = lib.types.listOf (lib.types.either lib.types.str lib.types.attrs);
               default = [];
-              description = "Host-specific Homebrew casks";
+              description = "Host-specific Homebrew casks (strings or attrsets with name, args, greedy, postinstall)";
             };
           };
         };
