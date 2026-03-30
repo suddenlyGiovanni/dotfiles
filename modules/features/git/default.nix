@@ -45,6 +45,15 @@ _: {
       # Enable Git Large File Storage
       lfs.enable = true;
 
+      # ── Signing ────────────────────────────────────────────────────────
+      # SSH signing via 1Password (replaces legacy gpg.format / commit.gpgsign settings)
+      signing = {
+        format = "ssh";
+        key = mkDefault gitSigningKey;
+        signByDefault = mkDefault true;
+        signer = mkDefault "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      };
+
       # Global ignores
       ignores = [
         ".DS_Store"
@@ -84,7 +93,6 @@ _: {
         user = {
           name = lib.mkDefault "suddenlyGiovanni";
           email = lib.mkDefault "15946771+suddenlyGiovanni@users.noreply.github.com";
-          signingkey = lib.mkDefault gitSigningKey;
         };
 
         # ── Aliases ─────────────────────────────────────────────────────────
@@ -162,17 +170,6 @@ _: {
           t = "tag -n";
         };
 
-        # ── GPG / SSH Signing ───────────────────────────────────────────────
-        gpg.format = "ssh";
-
-        # 1Password SSH signing path
-        # Override in user/host config if using different location
-        # Common paths:
-        #   macOS App Store: /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-        #   Homebrew: /opt/homebrew/bin/op-ssh-sign
-        #   Linux: /opt/1Password/op-ssh-sign
-        "gpg \"ssh\"".program = mkDefault "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-
         # ── Core ────────────────────────────────────────────────────────────
         core = {
           # Whitespace handling
@@ -201,7 +198,6 @@ _: {
         commit = {
           status = true;
           template = "${config.xdg.configHome}/git/.gitmessage";
-          gpgsign = mkDefault true;
         };
 
         # ── Credential ──────────────────────────────────────────────────────
