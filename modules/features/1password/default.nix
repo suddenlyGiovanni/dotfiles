@@ -135,7 +135,9 @@ _: {
         plugins = with pkgs;
           [
             gh # GitHub CLI - PR, issues, repos management
-            awscli2 # AWS CLI - cloud infrastructure management
+          ]
+          ++ lib.optionals (!isWorkHost) [
+            awscli2 # AWS CLI - only on personal (work uses SSO, see awscli.nix)
           ]
           ++ lib.optionals isWorkHost [
             glab # GitLab CLI - work only (self-hosted GitLab)
