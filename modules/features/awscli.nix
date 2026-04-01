@@ -36,7 +36,23 @@ _: {
         sso_region = eu-central-1
         sso_account_id = 832394005187
         sso_role_name = internal-tools-admin
-        region = eu-north-1
+        region = eu-central-1
+        output = json
+
+        [profile admin]
+        sso_start_url = https://d-9967527825.awsapps.com/start
+        sso_region = eu-central-1
+        sso_account_id = 832394005187
+        sso_role_name = SystemAdministrator
+        region = eu-central-1
+        output = json
+
+        [profile deploy]
+        sso_start_url = https://d-9967527825.awsapps.com/start
+        sso_region = eu-central-1
+        sso_account_id = 832394005187
+        sso_role_name = AdministratorAccess
+        region = eu-central-1
         output = json
       '';
     };
