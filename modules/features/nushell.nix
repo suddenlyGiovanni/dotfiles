@@ -6,6 +6,17 @@
 in {
   # ── Darwin: register nushell as a valid shell and set as login shell ────────
   flake.modules.darwin.nushell = {pkgs, ...}: {
+    # Skip nushell's flakey SHLVL assertion test that fails in the Nix
+    # sandbox on Darwin (nushell 0.112.1 in nixpkgs).
+    nixpkgs.overlays = [
+      (_final: prev: {
+        nushell = prev.nushell.overrideAttrs (_old: {
+          doCheck = false;
+          doInstallCheck = false;
+        });
+      })
+    ];
+
     environment.shells = [pkgs.nushell];
     environment.pathsToLink = ["/share/nushell"];
     users.users.${user.username}.shell = pkgs.nushell;
