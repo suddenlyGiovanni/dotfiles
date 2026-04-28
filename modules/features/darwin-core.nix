@@ -16,12 +16,16 @@ in {
 
       overlays = [
         # Fix direnv build: Go 1.26 no longer enables cgo by default,
-        # but direnv's Makefile passes -linkmode=external which requires it
-        (final: prev: {
+        # but direnv's Makefile passes -linkmode=external which requires it.
+        # Also skip the test suite — direnv's zsh integration test hangs
+        # indefinitely in the Darwin nix sandbox.
+        (_final: prev: {
           direnv = prev.direnv.overrideAttrs (old: {
             env = (old.env or {}) // {
               CGO_ENABLED = 1;
             };
+            doCheck = false;
+            doInstallCheck = false;
           });
         })
       ];
