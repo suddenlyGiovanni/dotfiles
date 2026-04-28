@@ -7,9 +7,14 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "cli_default_open_behavior": "new_window",
+  "diff_view_style": "split",
+  "collaboration_panel": {
+    "dock": "right",
+  },
   "tab_bar": {
     "show_pinned_tabs_in_separate_row": false,
-    "show": true
+    "show": true,
   },
   "close_on_file_delete": true,
   "search": {
@@ -18,7 +23,7 @@
   "middle_click_paste": false,
   "use_on_type_format": false,
   "preferred_line_length": 100,
-  "soft_wrap": "editor_width",
+  "soft_wrap": "none",
   "toolbar": {
     "code_actions": true,
   },
@@ -43,30 +48,26 @@
   "outline_panel": {
     "dock": "right",
   },
-  "audio": {
-    "experimental.legacy_audio_compatible": false,
-    "experimental.auto_microphone_volume": true,
-    "experimental.rodio_audio": true,
-  },
+  "audio": { "experimental.auto_microphone_volume": true },
   "calls": {
     "mute_on_join": true,
   },
   "tab_size": 2,
   "terminal": {
     "toolbar": {
-      "breadcrumbs": false
+      "breadcrumbs": false,
     },
     "font_family": "JetBrainsMono Nerd Font",
   },
   "vim_mode": false,
   "colorize_brackets": true,
-  "context_servers": {
-    },
+  "context_servers": {},
   "edit_predictions": {
     "provider": "none",
     "mode": "subtle",
   },
   "git_panel": {
+    "dock": "right",
     "collapse_untracked_diff": true,
     "status_style": "icon",
     "tree_view": true,
@@ -80,14 +81,13 @@
   "project_panel": {
     "hide_gitignore": false,
     "button": true,
-    "dock": "left",
+    "dock": "right",
   },
   "tabs": {
     "file_icons": true,
     "git_status": true,
   },
   "title_bar": {
-    "show_branch_icon": true,
     "show_menus": false,
   },
   "languages": {
@@ -121,18 +121,18 @@
   "base_keymap": "JetBrains",
   "agent_servers": {
     "claude-acp": {
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   "agent": {
+    "dock": "left",
     "tool_permissions": {
-      "default": "allow"
+      "default": "allow",
     },
     "show_turn_stats": true,
     "notify_when_agent_waiting": "all_screens",
     "enable_feedback": false,
     "single_file_review": false,
-    "play_sound_when_agent_done": true,
     "use_modifier_to_send": true,
     "favorite_models": [
       {
