@@ -21,9 +21,11 @@ in {
         # indefinitely in the Darwin nix sandbox.
         (_final: prev: {
           direnv = prev.direnv.overrideAttrs (old: {
-            env = (old.env or {}) // {
-              CGO_ENABLED = 1;
-            };
+            env =
+              (old.env or {})
+              // {
+                CGO_ENABLED = 1;
+              };
             doCheck = false;
             doInstallCheck = false;
           });
