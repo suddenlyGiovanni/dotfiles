@@ -47,6 +47,14 @@ _: {
           # Linker strategy
           linker = "isolated"; # Stricter dependency resolution, prevents phantom deps
 
+          # Global virtual store (bun 1.3.14+, experimental)
+          # Materializes eligible packages once into <cache>/links/ and symlinks
+          # node_modules/.bun/<pkg>@<ver> into it instead of clonefile-copying per project.
+          # Massive speedup for warm installs on macOS APFS (eliminates clonefileat calls
+          # that held a volume-wide kernel lock). Ineligible packages (patched, lifecycle
+          # scripts, non-immutable sources) fall back to the `backend` strategy below.
+          globalStore = true;
+
           # XDG-compliant directories
           globalDir = "${config.xdg.dataHome}/bun/install/global";
           globalBinDir = "${config.home.homeDirectory}/.local/bin";
