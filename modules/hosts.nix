@@ -30,6 +30,7 @@ _: {
           "figma@beta" # Collaborative team software
           "gitbutler" # Git client for simultaneous branches
           "microsoft-teams" # Microsoft Teams
+          "obsidian" # Knowledge base and note-taking app
           "rustdesk"
           "segger-jlink" # J-Link USB drivers for embedded dev (ESP32 serial)
           "superwhisper" # Voice-to-text using AI
