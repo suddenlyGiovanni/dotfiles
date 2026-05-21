@@ -14,6 +14,9 @@ _: {
       # XDG-compliant config dir. When this differs from the upstream default
       # (~/.claude), home-manager auto-exports CLAUDE_CONFIG_DIR for us.
       configDir = "${config.xdg.configHome}/claude";
+      # Global instructions applied to every Claude Code session on this
+      # machine. Written to ${configDir}/CLAUDE.md as a nix-store symlink.
+      context = ./CLAUDE.md;
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude
