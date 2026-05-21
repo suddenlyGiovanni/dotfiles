@@ -2,16 +2,18 @@
 # https://docs.anthropic.com/en/docs/claude-code
 #
 # Uses native installation (curl installer) for automatic updates.
-# Home-manager only manages XDG-compliant config directory placement
-# via CLAUDE_CONFIG_DIR environment variable.
+# The home-manager `programs.claude-code` module is used purely for declarative
+# configuration; package management is opted out via `package = null` so the
+# curl-installed binary at ~/.local/bin/claude keeps owning updates.
 _: {
   flake.modules.homeManager.claude-code = {config, ...}: {
-    # ── XDG Compliance ──────────────────────────────────────────────────────────
-    # Force Claude Code to use XDG-compliant config directory
-    # Note: home-manager's programs.claude-code module uses hardcoded .claude/ paths
-    # This env var overrides the default location to be XDG compliant
-    home.sessionVariables = {
-      CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude";
+    programs.claude-code = {
+      enable = true;
+      # Keep the native (curl-installed) binary; don't add a nixpkgs claude-code.
+      package = null;
+      # XDG-compliant config dir. When this differs from the upstream default
+      # (~/.claude), home-manager auto-exports CLAUDE_CONFIG_DIR for us.
+      configDir = "${config.xdg.configHome}/claude";
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude
