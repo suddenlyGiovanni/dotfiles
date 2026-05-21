@@ -5,7 +5,7 @@
 # The home-manager `programs.claude-code` module is used purely for declarative
 # configuration; package management is opted out via `package = null` so the
 # curl-installed binary at ~/.local/bin/claude keeps owning updates.
-_: {
+{inputs, ...}: {
   flake.modules.homeManager.claude-code = {config, ...}: {
     programs.claude-code = {
       enable = true;
@@ -17,6 +17,14 @@ _: {
       # Global instructions applied to every Claude Code session on this
       # machine. Written to ${configDir}/CLAUDE.md as a nix-store symlink.
       context = ./CLAUDE.md;
+      # Surgical per-skill installs (attrset mode, NOT path mode — path mode
+      # would clobber sibling user-managed skills under ${configDir}/skills/).
+      skills = {
+        # Official ast-grep skill: routes structural code search through `sg`
+        # instead of `rg` when the question is syntactic. Source pinned via
+        # flake input `ast-grep-agent-skill`.
+        ast-grep = "${inputs.ast-grep-agent-skill}/ast-grep/skills/ast-grep";
+      };
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude

@@ -11,6 +11,12 @@
     mac-app-util.url = "github:hraban/mac-app-util";
     onepassword-shell-plugins.url = "github:1Password/shell-plugins";
 
+    # Claude Code skills (non-flake repos pulled in as raw sources)
+    ast-grep-agent-skill = {
+      url = "github:ast-grep/agent-skill";
+      flake = false;
+    };
+
     # Dendritic infrastructure (ADR-007)
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
