@@ -28,7 +28,6 @@ _: {
           "claude" # Anthropic's official Claude AI desktop app
           "cursor" # AI-powered code editor
           "figma@beta" # Collaborative team software
-          "gitbutler" # Git client for simultaneous branches
           "microsoft-teams" # Microsoft Teams
           "obsidian" # Knowledge base and note-taking app
           "rustdesk"
