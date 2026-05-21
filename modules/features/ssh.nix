@@ -29,54 +29,50 @@ _: {
     programs.ssh = {
       enable = true;
 
-      # Opt out of default config values that will be removed in future home-manager
-      # We explicitly set what we need in matchBlocks below
+      # Opt out of default config values that will be removed in future home-manager.
+      # We explicitly set what we need in `settings` below.
       enableDefaultConfig = false;
 
       # ── Host-specific Configuration ─────────────────────────────────────────────
-      # Each host block specifies which SSH key to use via IdentityFile
-      # The IdentityFile points to a PUBLIC key - SSH uses this to tell the
-      # 1Password agent which private key to use for signing
-      matchBlocks = {
+      # Each host block specifies which SSH key to use via IdentityFile.
+      # The IdentityFile points to a PUBLIC key — SSH uses this to tell the
+      # 1Password agent which private key to use for signing.
+      #
+      # Directive names match OpenSSH ssh_config(5) exactly (PascalCase).
+      # Booleans are rendered as yes/no; lists become repeated directives.
+      settings = {
         # ── GitHub ──────────────────────────────────────────────────────────────
         # Personal GitHub account
         # Public key managed in 1password.nix (sshPublicKeys.github)
         "github.com" = {
-          hostname = "github.com";
-          user = "git";
+          HostName = "github.com";
+          User = "git";
           # Point to PUBLIC key - SSH uses this to identify which key to request
           # from the 1Password agent. The private key never leaves 1Password.
-          identityFile = ["~/.ssh/github.pub"];
+          IdentityFile = ["~/.ssh/github.pub"];
           # Only use the specified identity, don't try other keys
           # This prevents "Too many authentication failures" errors
-          identitiesOnly = true;
-          extraOptions = {
-            IdentityAgent = "\"${onePasswordAgentSock}\"";
-          };
+          IdentitiesOnly = true;
+          IdentityAgent = "\"${onePasswordAgentSock}\"";
         };
 
         # ── ThingOS Development Server ──────────────────────────────────────────
         # Work-related development server
         # Public key managed in 1password.nix (sshPublicKeys.thingos)
         "dev.thingos.io" = {
-          hostname = "dev.thingos.io";
-          user = "git";
-          identityFile = ["~/.ssh/thingos.pub"];
-          identitiesOnly = true;
-          extraOptions = {
-            IdentityAgent = "\"${onePasswordAgentSock}\"";
-          };
+          HostName = "dev.thingos.io";
+          User = "git";
+          IdentityFile = ["~/.ssh/thingos.pub"];
+          IdentitiesOnly = true;
+          IdentityAgent = "\"${onePasswordAgentSock}\"";
         };
 
         # ── Default Configuration ───────────────────────────────────────────────
-        # Fallback for any host not explicitly configured above
-        # Uses 1Password SSH agent for key management
+        # Fallback for any host not explicitly configured above.
+        # Uses 1Password SSH agent for key management. Specific hosts above
+        # override this with their own IdentityFile.
         "*" = {
-          extraOptions = {
-            # Use 1Password SSH agent for all connections
-            # Individual hosts above can override with specific IdentityFile
-            IdentityAgent = "\"${onePasswordAgentSock}\"";
-          };
+          IdentityAgent = "\"${onePasswordAgentSock}\"";
         };
       };
     };
