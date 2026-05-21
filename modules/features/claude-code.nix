@@ -11,7 +11,7 @@ _: {
     # Note: home-manager's programs.claude-code module uses hardcoded .claude/ paths
     # This env var overrides the default location to be XDG compliant
     home.sessionVariables = {
-      CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude-code";
+      CLAUDE_CONFIG_DIR = "${config.xdg.configHome}/claude";
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude
