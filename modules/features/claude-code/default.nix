@@ -25,6 +25,11 @@
         # flake input `ast-grep-agent-skill`.
         ast-grep = "${inputs.ast-grep-agent-skill}/ast-grep/skills/ast-grep";
       };
+      # Env vars exported into Claude Code's process via settings.json.
+      settings.env = {
+        # Enables the /workflows command (experimental gate, opt-in).
+        CLAUDE_CODE_WORKFLOWS = "1";
+      };
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude
