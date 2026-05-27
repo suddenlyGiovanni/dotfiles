@@ -26,7 +26,7 @@ _: {
 
       # ── Packages ──────────────────────────────────────────────────────────────
       packages = with pkgs; [
-        nodejs_24 # Node.js JavaScript runtime
+        nodejs-slim_latest # Node.js runtime (slim: no npm, pnpm handles installs)
         pnpm # Fast, disk space efficient package manager
       ];
     };
