@@ -25,6 +25,22 @@ _: {
 
       # Fast, persistent use_nix implementation for direnv
       nix-direnv.enable = true;
+
+      # ~/.config/direnv/direnv.toml
+      #
+      # Auto-trust agent-created git worktrees. Claude Code spawns
+      # worktrees under <repo>/.claude/worktrees/<name> via a codepath
+      # that does NOT fire its WorktreeCreate hook, so each fresh worktree
+      # would otherwise need a manual `direnv allow`. A prefix whitelist
+      # matches on the .envrc's absolute path, implicitly allowing every
+      # nested worktree regardless of content hash.
+      #
+      # SECURITY: any .envrc placed under a whitelisted prefix is executed
+      # by direnv with no prompt. Acceptable for local, agent-owned dirs;
+      # do not extend these prefixes to shared or untrusted locations.
+      config.whitelist.prefix = [
+        "${config.home.homeDirectory}/Developer/work/headless-but/.claude/worktrees"
+      ];
     };
   };
 }
