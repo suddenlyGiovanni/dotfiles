@@ -51,17 +51,35 @@ _: {
       ];
 
       /*
-      Mac App Store apps managed via Brew Bundle
-      Note: You must be signed into the App Store for these installations to succeed.
-      To disable: set masApps = {}; or comment out individual apps if not signed in.
+      Mac App Store apps — DISABLED on macOS 26 (Tahoe).
+
+      `brew bundle` runs `mas` (from nixpkgs) to reconcile these, and `mas`
+      decides "is this app installed?" by querying Spotlight for the App Store
+      AdamID (kMDItemAppStoreAdamID). On macOS 26 that metadata importer is
+      dead system-wide: every app bundle reports a null AdamID, so `mas list`
+      returns nothing and brew re-downloads ALL of these on every switch
+      (e.g. re-pulling the ~10GB Xcode each time). Verified: 0 of 375 indexed
+      app bundles have a non-null AdamID; a forced `mdimport` does not
+      repopulate it. This is an Apple-side regression, not fixable at the mas
+      layer — mas 6.0.1 (current nixpkgs) is just as blind as 2.2.2.
+
+      Related: https://github.com/nix-darwin/nix-darwin/issues/1722 (that issue
+      is the adjacent `mas get` failure fixed by bumping mas; it does NOT fix
+      this detection breakage).
+
+      The apps stay installed and auto-update via the App Store. Because brew
+      also can't detect them, `cleanup = "zap"` won't uninstall them. On a
+      fresh machine, install these four once from the App Store by hand.
+      Re-enable if Apple/mas restore Spotlight AdamID indexing.
+
       Find app IDs with: mas search "App Name"
       */
-      masApps = {
-        "1Password for Safari" = 1569813296;
-        "WhatsApp Messenger" = 310633997;
-        "Wipr 2" = 1662217862;
-        Xcode = 497799835;
-      };
+      # masApps = {
+      #   "1Password for Safari" = 1569813296;
+      #   "WhatsApp Messenger" = 310633997;
+      #   "Wipr 2" = 1662217862;
+      #   Xcode = 497799835;
+      # };
 
       onActivation = {
         autoUpdate = false; # Whether to enable Homebrew to auto-update itself and all formulae during nix-darwin system activation. The default is false so that repeated invocations of darwin-rebuild switch are idempotent.
