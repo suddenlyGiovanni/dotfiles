@@ -53,17 +53,26 @@ in {
     # pointing here.
     #
     # Directories are tracked while empty via a .gitkeep that Claude ignores
-    # (rules/agents/output-styles load *.md, workflows *.js, themes *.json).
+    # (rules/agents/output-styles/commands load *.md, workflows *.js, themes
+    # *.json; hooks/ just stores scripts referenced from settings.json).
+    #
+    # On commands/: plugins (e.g. plannotator) serve their own commands from
+    # the plugin cache, NOT from here — verified by stale ~7-week-old orphan
+    # copies the plugin never refreshed. So owning this dir is safe; it holds
+    # only your personal commands.
+    #
+    # On hooks/: settings.json's `hooks` KEY declares when/what to run; this
+    # dir is where the scripts those commands invoke live (stable path).
     #
     # NOT symlinked, on purpose:
-    #   - commands/  : plugins (e.g. plannotator) write into it; whole-dir
-    #                  symlinking would capture their droppings. Use skills/
-    #                  (already tracked via the agent-skills module) instead.
-    #   - hooks / statusLine : these are keys inside settings.json (tracked).
+    #   - statusLine : a key inside settings.json (already tracked).
     #   - .mcp.json  : project-scoped, not a ~/.claude file. Personal/global MCP
     #                  servers live in ~/.claude.json, which holds OAuth/session
     #                  state and must never be committed.
-    #   - skills/    : owned by the agent-skills module + programs.claude-code.
+    #   - skills/    : a 3-way mix (nix-store ast-grep + cross-agent symlinks to
+    #                  ~/.agents/skills from the agent-skills module + plugin
+    #                  dirs). Whole-dir symlinking would clobber the agent-skills
+    #                  symlinks, so skills stay owned by those mechanisms.
     xdg.configFile = let
       svc = path:
         config.lib.file.mkOutOfStoreSymlink
@@ -74,6 +83,8 @@ in {
       "claude/rules".source = svc "rules";
       "claude/agents".source = svc "agents";
       "claude/output-styles".source = svc "output-styles";
+      "claude/commands".source = svc "commands";
+      "claude/hooks".source = svc "hooks";
       "claude/workflows".source = svc "workflows";
       "claude/themes".source = svc "themes";
     };
