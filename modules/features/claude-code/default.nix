@@ -52,8 +52,8 @@ in {
     # module uses, so CLAUDE_CONFIG_DIR (auto-exported by `configDir`) keeps
     # pointing here.
     #
-    # Directories are tracked while empty via a .gitkeep that Claude ignores
-    # (rules/agents/output-styles/commands load *.md, workflows *.js, themes
+    # Whole-dir symlinks are tracked while empty via a .gitkeep that Claude
+    # ignores (rules/output-styles/commands load *.md, workflows *.js, themes
     # *.json; hooks/ just stores scripts referenced from settings.json).
     #
     # On commands/: plugins (e.g. plannotator) serve their own commands from
@@ -64,17 +64,21 @@ in {
     # On hooks/: settings.json's `hooks` KEY declares when/what to run; this
     # dir is where the scripts those commands invoke live (stable path).
     #
-    # NOT symlinked, on purpose:
+    # NOT whole-dir symlinked, on purpose:
     #   - statusLine : a key inside settings.json (already tracked).
     #   - .mcp.json  : project-scoped, not a ~/.claude file. Personal/global MCP
     #                  servers live in ~/.claude.json, which holds OAuth/session
     #                  state and must never be committed.
-    #   - skills/ (whole dir) : it's a 3-way mix (nix-store ast-grep +
-    #                  cross-agent symlinks to ~/.agents/skills from the
-    #                  agent-skills module + plugin dirs). Whole-dir symlinking
-    #                  would clobber the agent-skills symlinks. INDIVIDUAL skills
-    #                  are still owned here via per-skill symlinks (below) — those
-    #                  manage one sub-path each and coexist with the mix.
+    #   - skills/    : a 3-way mix (nix-store ast-grep + cross-agent symlinks to
+    #                  ~/.agents/skills from the agent-skills module + plugin
+    #                  dirs); whole-dir symlinking would clobber those. Individual
+    #                  skills are surfaced via per-skill symlinks (below).
+    #   - agents/    : surfaced per-AGENT (below), not whole-dir, because the
+    #                  thermos plugin's agents are surfaced into this same
+    #                  namespace and home-manager cannot have claude/agents be a
+    #                  symlink AND manage claude/agents/<file> entries under it.
+    #                  Your own personal agents live in agents/ and each gets a
+    #                  one-line entry here — same pattern as the thermos agents.
     xdg.configFile = let
       svc = path:
         config.lib.file.mkOutOfStoreSymlink
@@ -83,7 +87,6 @@ in {
       "claude/settings.json".source = svc "settings.json";
       "claude/keybindings.json".source = svc "keybindings.json";
       "claude/rules".source = svc "rules";
-      "claude/agents".source = svc "agents";
       "claude/output-styles".source = svc "output-styles";
       "claude/commands".source = svc "commands";
       "claude/hooks".source = svc "hooks";
@@ -100,14 +103,17 @@ in {
       #
       # For PERSONAL/global use we surface the plugin's pieces loosely so they
       # stay editable in place (cheap iteration), instead of loading the plugin
-      # read-only via --plugin-dir:
-      #   - skills: per-skill symlinks straight into the plugin dir (below).
-      #   - agents: in-repo symlinks inside agents/ (which IS whole-dir
-      #     symlinked) point at plugins/thermos/agents/* — keeping the plugin
-      #     self-contained for publishing while still surfacing globally.
+      # read-only/cached (the native binary can only load plugins via the
+      # marketplace cache; the HM --plugin-dir route needs package != null).
+      # Per-item symlinks straight into the plugin dir — single source of truth
+      # (plugins/thermos/), nothing copied or duplicated:
       "claude/skills/thermos".source = svc "plugins/thermos/skills/thermos";
       "claude/skills/thermo-nuclear-review".source = svc "plugins/thermos/skills/thermo-nuclear-review";
       "claude/skills/thermo-nuclear-code-quality-review".source = svc "plugins/thermos/skills/thermo-nuclear-code-quality-review";
+      "claude/agents/thermo-nuclear-review-subagent.md".source =
+        svc "plugins/thermos/agents/thermo-nuclear-review-subagent.md";
+      "claude/agents/thermo-nuclear-code-quality-review-subagent.md".source =
+        svc "plugins/thermos/agents/thermo-nuclear-code-quality-review-subagent.md";
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude

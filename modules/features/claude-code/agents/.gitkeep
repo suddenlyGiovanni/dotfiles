@@ -1,2 +1,5 @@
-# Tracked but empty. Drop agents here and it lands in the dotfiles tree.
-# Claude ignores this file (filters by extension).
+# Personal (non-plugin) subagents live here. Unlike the other owned dirs,
+# agents/ is NOT whole-dir symlinked (the thermos plugin surfaces agents into
+# the same ~/.config/claude/agents namespace, which conflicts with a whole-dir
+# symlink). So each agent needs a one-line per-item entry in ../default.nix —
+# copy the thermos agent lines as a template. Claude ignores this .gitkeep.

@@ -1,1 +1,0 @@
-../plugins/thermos/agents/thermo-nuclear-code-quality-review-subagent.md
