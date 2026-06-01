@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "thermos",
+  "description": "Thermo-nuclear branch review: deep correctness and security audits plus harsh code-quality rubrics, run as parallel review subagents and synthesized. Ported from cursor/plugins (MIT).",
+  "version": "1.0.0",
+  "author": {
+    "name": "Cursor",
+    "url": "https://github.com/cursor/plugins"
+  },
+  "homepage": "https://github.com/cursor/plugins/tree/main/thermos",
+  "license": "MIT",
+  "keywords": [
+    "code-review",
+    "deep-review",
+    "code-quality",
+    "security-review",
+    "subagents"
+  ]
+}

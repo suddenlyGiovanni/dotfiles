@@ -91,12 +91,23 @@ in {
       "claude/themes".source = svc "themes";
 
       # ── Thermos (ported from cursor/plugins) ───────────────────────────────
-      # Two review subagents (in agents/, above) + three skills. Per-skill
-      # symlinks so they live in the SVC tree, editable in place for iteration,
-      # without whole-dir-symlinking the mixed skills/ directory.
-      "claude/skills/thermos".source = svc "skills/thermos";
-      "claude/skills/thermo-nuclear-review".source = svc "skills/thermo-nuclear-review";
-      "claude/skills/thermo-nuclear-code-quality-review".source = svc "skills/thermo-nuclear-code-quality-review";
+      # Canonical content lives as a SELF-CONTAINED Claude plugin under
+      # plugins/thermos/ (with .claude-plugin/plugin.json), catalogued by
+      # plugins/.claude-plugin/marketplace.json. That makes it promotable: a
+      # project's .claude/settings.json can point extraKnownMarketplaces at this
+      # repo and enable `thermos` for the whole team — same artifact, scope
+      # chosen by which settings.json enables it.
+      #
+      # For PERSONAL/global use we surface the plugin's pieces loosely so they
+      # stay editable in place (cheap iteration), instead of loading the plugin
+      # read-only via --plugin-dir:
+      #   - skills: per-skill symlinks straight into the plugin dir (below).
+      #   - agents: in-repo symlinks inside agents/ (which IS whole-dir
+      #     symlinked) point at plugins/thermos/agents/* — keeping the plugin
+      #     self-contained for publishing while still surfacing globally.
+      "claude/skills/thermos".source = svc "plugins/thermos/skills/thermos";
+      "claude/skills/thermo-nuclear-review".source = svc "plugins/thermos/skills/thermo-nuclear-review";
+      "claude/skills/thermo-nuclear-code-quality-review".source = svc "plugins/thermos/skills/thermo-nuclear-code-quality-review";
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "suddenlygiovanni-dotfiles",
+  "description": "Personal plugin catalog tracked in the dotfiles flake. Plugins here are prototyped in the global/personal scope (out-of-store symlinks for cheap iteration) and promoted to a project's .claude/settings.json when they're ready for the team — same artifact, scope chosen by which settings.json enables it.",
+  "owner": {
+    "name": "suddenlyGiovanni"
+  },
+  "plugins": [
+    {
+      "name": "thermos",
+      "source": "./thermos",
+      "description": "Thermo-nuclear branch review: parallel deep-review + code-quality subagents over a diff, synthesized. Ported from cursor/plugins (MIT)."
+    }
+  ]
+}
