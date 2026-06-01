@@ -69,10 +69,12 @@ in {
     #   - .mcp.json  : project-scoped, not a ~/.claude file. Personal/global MCP
     #                  servers live in ~/.claude.json, which holds OAuth/session
     #                  state and must never be committed.
-    #   - skills/    : a 3-way mix (nix-store ast-grep + cross-agent symlinks to
-    #                  ~/.agents/skills from the agent-skills module + plugin
-    #                  dirs). Whole-dir symlinking would clobber the agent-skills
-    #                  symlinks, so skills stay owned by those mechanisms.
+    #   - skills/ (whole dir) : it's a 3-way mix (nix-store ast-grep +
+    #                  cross-agent symlinks to ~/.agents/skills from the
+    #                  agent-skills module + plugin dirs). Whole-dir symlinking
+    #                  would clobber the agent-skills symlinks. INDIVIDUAL skills
+    #                  are still owned here via per-skill symlinks (below) — those
+    #                  manage one sub-path each and coexist with the mix.
     xdg.configFile = let
       svc = path:
         config.lib.file.mkOutOfStoreSymlink
@@ -87,6 +89,14 @@ in {
       "claude/hooks".source = svc "hooks";
       "claude/workflows".source = svc "workflows";
       "claude/themes".source = svc "themes";
+
+      # ── Thermos (ported from cursor/plugins) ───────────────────────────────
+      # Two review subagents (in agents/, above) + three skills. Per-skill
+      # symlinks so they live in the SVC tree, editable in place for iteration,
+      # without whole-dir-symlinking the mixed skills/ directory.
+      "claude/skills/thermos".source = svc "skills/thermos";
+      "claude/skills/thermo-nuclear-review".source = svc "skills/thermo-nuclear-review";
+      "claude/skills/thermo-nuclear-code-quality-review".source = svc "skills/thermo-nuclear-code-quality-review";
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude
