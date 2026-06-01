@@ -5,7 +5,13 @@
 # The home-manager `programs.claude-code` module is used purely for declarative
 # configuration; package management is opted out via `package = null` so the
 # curl-installed binary at ~/.local/bin/claude keeps owning updates.
-{inputs, ...}: {
+{
+  inputs,
+  config,
+  ...
+}: let
+  dotfilesPath = config.dotfiles.user.dotfilesPath;
+in {
   flake.modules.homeManager.claude-code = {config, ...}: {
     programs.claude-code = {
       enable = true;
@@ -25,12 +31,23 @@
         # flake input `ast-grep-agent-skill`.
         ast-grep = "${inputs.ast-grep-agent-skill}/ast-grep/skills/ast-grep";
       };
-      # Env vars exported into Claude Code's process via settings.json.
-      settings.env = {
-        # Enables the /workflows command (experimental gate, opt-in).
-        CLAUDE_CODE_WORKFLOWS = "1";
-      };
+      # NOTE: `settings` is intentionally left unset. The upstream module only
+      # writes ${configDir}/settings.json when `settings` or `marketplaces` is
+      # non-empty, and it writes it as a *read-only* nix-store symlink — which
+      # Claude Code cannot write back to (theme/effort/plugin toggles, etc.),
+      # spawning settings.json.backup churn. We opt out here and own the file
+      # ourselves via an out-of-store symlink below (Zed pattern), so it stays
+      # editable in place and Claude's own writes land in the dotfiles tree.
     };
+
+    # ── settings.json: editable, SVC-tracked (Zed pattern) ────────────────────
+    # mkOutOfStoreSymlink keeps the file writable in place at
+    # ${configDir}/settings.json -> repo, so interactive changes Claude makes
+    # land in the working tree to be committed. configDir resolves to
+    # ${xdg.configHome}/claude, matching the path the upstream module would use,
+    # so CLAUDE_CONFIG_DIR (auto-exported by `configDir`) keeps pointing here.
+    xdg.configFile."claude/settings.json".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/modules/features/claude-code/settings.json";
 
     # Note: The native installer places the binary at ~/.local/bin/claude
     # PATH for ~/.local/bin is managed globally in home.nix
