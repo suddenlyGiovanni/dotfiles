@@ -40,14 +40,43 @@ in {
       # editable in place and Claude's own writes land in the dotfiles tree.
     };
 
-    # ── settings.json: editable, SVC-tracked (Zed pattern) ────────────────────
-    # mkOutOfStoreSymlink keeps the file writable in place at
-    # ${configDir}/settings.json -> repo, so interactive changes Claude makes
-    # land in the working tree to be committed. configDir resolves to
-    # ${xdg.configHome}/claude, matching the path the upstream module would use,
-    # so CLAUDE_CONFIG_DIR (auto-exported by `configDir`) keeps pointing here.
-    xdg.configFile."claude/settings.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/modules/features/claude-code/settings.json";
+    # ── Editable, SVC-tracked config (Zed pattern) ────────────────────────────
+    # mkOutOfStoreSymlink keeps each target writable in place under the repo, so
+    # changes land in the dotfiles working tree to be committed — whether you
+    # make them by hand or Claude does interactively (/config, /keybindings,
+    # /theme, /memory, saving a /workflows run, …). We deliberately bypass the
+    # upstream module's own settings/rules/agents/commands/outputStyles options:
+    # those render read-only nix-store copies, which defeats in-place editing
+    # (and which Claude can't write back to — that was the settings.json.backup
+    # churn). configDir resolves to ${xdg.configHome}/claude, the same path the
+    # module uses, so CLAUDE_CONFIG_DIR (auto-exported by `configDir`) keeps
+    # pointing here.
+    #
+    # Directories are tracked while empty via a .gitkeep that Claude ignores
+    # (rules/agents/output-styles load *.md, workflows *.js, themes *.json).
+    #
+    # NOT symlinked, on purpose:
+    #   - commands/  : plugins (e.g. plannotator) write into it; whole-dir
+    #                  symlinking would capture their droppings. Use skills/
+    #                  (already tracked via the agent-skills module) instead.
+    #   - hooks / statusLine : these are keys inside settings.json (tracked).
+    #   - .mcp.json  : project-scoped, not a ~/.claude file. Personal/global MCP
+    #                  servers live in ~/.claude.json, which holds OAuth/session
+    #                  state and must never be committed.
+    #   - skills/    : owned by the agent-skills module + programs.claude-code.
+    xdg.configFile = let
+      svc = path:
+        config.lib.file.mkOutOfStoreSymlink
+        "${dotfilesPath}/modules/features/claude-code/${path}";
+    in {
+      "claude/settings.json".source = svc "settings.json";
+      "claude/keybindings.json".source = svc "keybindings.json";
+      "claude/rules".source = svc "rules";
+      "claude/agents".source = svc "agents";
+      "claude/output-styles".source = svc "output-styles";
+      "claude/workflows".source = svc "workflows";
+      "claude/themes".source = svc "themes";
+    };
 
     # Note: The native installer places the binary at ~/.local/bin/claude
     # PATH for ~/.local/bin is managed globally in home.nix
