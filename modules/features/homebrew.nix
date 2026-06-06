@@ -48,6 +48,7 @@ _: {
 
         # Utilities
         "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
+        "tuna" # Application launcher (tunaformac.com)
       ];
 
       /*
