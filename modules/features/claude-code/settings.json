@@ -1,7 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "env": {
-    "CLAUDE_CODE_WORKFLOWS": "1"
+    "CLAUDE_CODE_WORKFLOWS": "1",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
   },
   "permissions": {
     "defaultMode": "auto"
@@ -46,6 +47,7 @@
   "effortLevel": "high",
   "tui": "fullscreen",
   "autoDreamEnabled": true,
+  "skipWorkflowUsageWarning": true,
   "theme": "auto",
   "verbose": true,
   "agentPushNotifEnabled": true,
