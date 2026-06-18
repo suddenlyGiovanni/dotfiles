@@ -33,7 +33,12 @@
           {
             homebrew.casks = hostCfg.homebrew.casks;
           }
-          inputs.mac-app-util.darwinModules.default
+          # mac-app-util disabled 2026-06-18: its Lisp binary fails to mmap its
+          # hardcoded heap base (0x300100000) on the macOS 27.0 beta, aborting
+          # activation before /run/current-system flips. Binary is already at the
+          # latest upstream rev (no fix available). Re-enable when macOS/upstream
+          # resolves it. See also the homeManagerModules line below.
+          # inputs.mac-app-util.darwinModules.default
           inputs.home-manager.darwinModules.home-manager
           {
             home-manager = {
@@ -42,7 +47,9 @@
               sharedModules =
                 hmFeatureModules
                 ++ [
-                  inputs.mac-app-util.homeManagerModules.default
+                  # mac-app-util disabled 2026-06-18 — see note on the darwin
+                  # module above (macOS 27.0 beta heap-mmap failure).
+                  # inputs.mac-app-util.homeManagerModules.default
                   inputs.onepassword-shell-plugins.hmModules.default
                   # Per-host: set dotfiles.hostname and isWorkHost for 1password and others
                   {
