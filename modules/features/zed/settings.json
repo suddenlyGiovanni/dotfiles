@@ -91,6 +91,7 @@
     "git_status": true,
   },
   "title_bar": {
+    "show_branch_status_icon": true,
     "show_menus": false,
   },
   "languages": {
@@ -128,7 +129,7 @@
     "claude-acp": {
       "default_config_options": {
         "mode": "auto",
-        "effort": "high"
+        "effort": "max"
       },
       "type": "registry",
     },
