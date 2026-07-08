@@ -14,7 +14,7 @@
     "frontend-design@claude-plugins-official": false,
     "deploy-on-aws@claude-plugins-official": true,
     "warp@claude-code-warp": true,
-    "plannotator@plannotator": true
+    "plannotator@plannotator": false
   },
   "extraKnownMarketplaces": {
     "agent-plugins-for-aws": {
@@ -41,6 +41,13 @@
       "source": {
         "source": "file",
         "path": "/Users/suddenlygiovanni/Developer/work/headless/claude/effect-lsp/.claude-plugin/marketplace.json"
+      },
+      "autoUpdate": true
+    },
+    "vladikk-modularity": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/vladikk/modularity.git"
       }
     }
   },
@@ -50,7 +57,9 @@
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
   "verbose": true,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "model": "sonnet"
 }
