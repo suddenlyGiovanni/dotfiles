@@ -134,32 +134,36 @@ _: {
       # ────────────────────────────────────────────────────────────────────────
       # Paste selected files onto the command line.
       # Uses fd to respect .gitignore and skip common junk directories.
-      fileWidgetCommand = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
-      fileWidgetOptions = [
-        "--preview='bat --color=always --style=numbers --line-range=:500 {}'"
-        "--preview-window=right,50%,border-left"
-        "--walker-skip=${walkerSkip}"
-        "--bind=ctrl-/:toggle-preview"
-      ];
+      fileWidget = {
+        command = "fd --type f --strip-cwd-prefix --hidden --follow --exclude .git";
+        options = [
+          "--preview='bat --color=always --style=numbers --line-range=:500 {}'"
+          "--preview-window=right,50%,border-left"
+          "--walker-skip=${walkerSkip}"
+          "--bind=ctrl-/:toggle-preview"
+        ];
+      };
 
       # ────────────────────────────────────────────────────────────────────────
       # ⌥C (Option-C): Change Directory Widget
       # ────────────────────────────────────────────────────────────────────────
       # cd into selected directory.
       # Uses fd to find directories, respecting .gitignore.
-      changeDirWidgetCommand = "fd --type d --strip-cwd-prefix --hidden --follow --exclude .git";
-      changeDirWidgetOptions = [
-        "--preview='eza --tree --level=2 --color=always --icons {}'"
-        "--preview-window=right,50%,border-left"
-        "--walker-skip=${walkerSkip}"
-        "--bind=ctrl-/:toggle-preview"
-      ];
+      changeDirWidget = {
+        command = "fd --type d --strip-cwd-prefix --hidden --follow --exclude .git";
+        options = [
+          "--preview='eza --tree --level=2 --color=always --icons {}'"
+          "--preview-window=right,50%,border-left"
+          "--walker-skip=${walkerSkip}"
+          "--bind=ctrl-/:toggle-preview"
+        ];
+      };
 
       # ────────────────────────────────────────────────────────────────────────
       # ⌃R (Ctrl-R): History Widget
       # ────────────────────────────────────────────────────────────────────────
       # Search and paste commands from history.
-      historyWidgetOptions = [
+      historyWidget.options = [
         "--preview='echo {}'"
         "--preview-window=down,3,wrap,border-top"
         "--bind=ctrl-/:toggle-preview"
