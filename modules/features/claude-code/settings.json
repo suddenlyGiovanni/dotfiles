@@ -7,14 +7,15 @@
   "permissions": {
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "enabledPlugins": {
     "agent-sdk-dev@claude-plugins-official": true,
     "ralph-loop@claude-plugins-official": false,
     "superpowers@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
     "deploy-on-aws@claude-plugins-official": true,
-    "warp@claude-code-warp": true,
-    "plannotator@plannotator": false
+    "plannotator@plannotator": true,
+    "cloudflare@cloudflare": true
   },
   "extraKnownMarketplaces": {
     "agent-plugins-for-aws": {
@@ -49,6 +50,12 @@
         "source": "git",
         "url": "https://github.com/vladikk/modularity.git"
       }
+    },
+    "cloudflare": {
+      "source": {
+        "source": "github",
+        "repo": "cloudflare/skills"
+      }
     }
   },
   "effortLevel": "high",
@@ -60,6 +67,5 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
-  "model": "sonnet"
+  "voiceEnabled": true
 }
