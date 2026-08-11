@@ -10,7 +10,7 @@
   "semantic_tokens": "combined",
   "code_lens": "on",
   "cli_default_open_behavior": "new_window",
-  "diff_view_style": "split",
+  "diff_view_style": "unified",
   "collaboration_panel": {
     "dock": "right",
   },
@@ -129,6 +129,7 @@
   "agent_servers": {
     "claude-acp": {
       "default_config_options": {
+        "model": "sonnet",
         "mode": "auto",
         "effort": "max"
       },
