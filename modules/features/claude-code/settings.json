@@ -61,6 +61,7 @@
   "effortLevel": "high",
   "tui": "fullscreen",
   "autoDreamEnabled": true,
+  "autoMemoryEnabled": false,
   "skipWorkflowUsageWarning": true,
   "theme": "auto",
   "verbose": true,
