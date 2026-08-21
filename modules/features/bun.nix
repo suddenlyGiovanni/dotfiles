@@ -5,6 +5,41 @@
 # Git integration is automatically enabled based on whether git is active.
 # This module reads config.programs.git.enable to coordinate.
 _: {
+  # ── Overlay: bun 1.4.0 ──────────────────────────────────────────────────────
+  # nixpkgs-unstable is still on 1.3.13 (upstream master too, as of 2026-08-21).
+  # bun is a prebuilt-binary derivation, so bumping version + source hashes is
+  # all that is needed. Drop this overlay once nixpkgs ships >= 1.4.0.
+  flake.modules.darwin.bun = {
+    nixpkgs.overlays = [
+      (_final: prev: {
+        bun = prev.bun.overrideAttrs (finalAttrs: prevAttrs: {
+          version = "1.4.0";
+          # We also replace `src` below, so the version bump is intentional.
+          __intentionallyOverridingVersion = true;
+
+          passthru =
+            prevAttrs.passthru
+            // {
+              sources = {
+                "aarch64-darwin" = prev.fetchurl {
+                  url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
+                  hash = "sha256-xmnpf2Fk4cluBwF0jbmN+ndJKQjL2DlMdVcTSnNd44E=";
+                };
+                "aarch64-linux" = prev.fetchurl {
+                  url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
+                  hash = "sha256-SxozLuhhmD65O8/m93D/+U4+MbLDiL2uo8jtNeWO7Q4=";
+                };
+                "x86_64-linux" = prev.fetchurl {
+                  url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64.zip";
+                  hash = "sha256-LQP7X7g6yLVnrKCigbLOGhoZ1Ij1bClo2Iw/Jekv5FI=";
+                };
+              };
+            };
+        });
+      })
+    ];
+  };
+
   flake.modules.homeManager.bun = {config, ...}: {
     # ── XDG Compliance ──────────────────────────────────────────────────────────
     home.sessionVariables = {
@@ -47,7 +82,8 @@ _: {
           # Linker strategy
           linker = "isolated"; # Stricter dependency resolution, prevents phantom deps
 
-          # Global virtual store (bun 1.3.14+, experimental)
+          # Global virtual store (bun 1.3.14+; a documented, off-by-default option
+          # as of 1.4 — no longer experimental). Inert on 1.3.13, live since the bump.
           # Materializes eligible packages once into <cache>/links/ and symlinks
           # node_modules/.bun/<pkg>@<ver> into it instead of clonefile-copying per project.
           # Massive speedup for warm installs on macOS APFS (eliminates clonefileat calls
