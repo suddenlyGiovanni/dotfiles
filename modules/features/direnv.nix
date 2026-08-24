@@ -28,44 +28,58 @@ _: {
 
       # ~/.config/direnv/direnvrc
       #
-      # Share the nix-direnv flake-profile cache across all worktrees of a
-      # repo. By default direnv keys its layout dir on $PWD, so every Claude
-      # worktree under .claude/worktrees/<name> pays a cold `nix print-dev-env`
-      # on first load and writes its own copy of the env dump — even though
-      # that dump is worktree-independent (only $out/$prefix differ, and those
-      # are unused in a devshell). Point every worktree of a checkout at the
-      # MAIN checkout's .direnv instead, keyed on the git common dir.
+      # Forward-port of nix-direnv PR #790 (fixes issue #786) — remove once a
+      # nix-direnv release past 3.2.0 ships it.
       #
-      # Safe by construction:
-      #   - Outside a git repo: no-op (falls back to the $PWD/.direnv default).
-      #   - Normal single checkout: unchanged (its common dir IS $PWD/.git).
-      #   - Worktree on a branch with a different flake.lock: still gets its own
-      #     flake-profile-<hash>.rc in the shared dir (hash differs) — never stale.
+      # nix-direnv both watches and touches its own cache file: use_flake
+      # registers flake-profile-<hash>.rc with watch_file, while on every
+      # cache-hit load _nix_refresh_gcroots runs
+      #   touch -h .direnv/flake-profile-* ...
+      # whose glob also matches that watched .rc. Touched + watched means each
+      # load invalidates every OTHER shell's watch state, so two or more
+      # terminals (or Claude Code hook invocations) on one repo ping-pong each
+      # other into spurious reloads forever. The touch only existed to shield
+      # gc-root symlinks from nh's age-based cleaning, which modern
+      # `nh clean --keep-one` obsoletes — upstream's fix is to drop the
+      # refresh outright; nh is not installed here anyway. direnv sources
+      # lib/*.sh before this direnvrc, so this no-op shadows nix-direnv's
+      # definition.
+      #
+      # History: this slot previously overrode direnv_layout_dir to point every
+      # git worktree at the main checkout's .direnv (commit d98acd5), keyed on
+      # the git common dir. That sharing was built on a false premise — the
+      # profile hash is sha1 of the flake *expression* (always "."), not of the
+      # flake inputs — so all worktrees collided on one cache file and one
+      # gc-root, amplifying the #786 reload storm across every open session and
+      # exposing divergent worktrees to wrong-env serving and GC of their live
+      # toolchain. Retired 2026-08-24: worktree isolation is the headless
+      # repo's documented contract (docs/git-worktree-guide.md), and on
+      # Determinate Nix with lazy-trees a per-worktree devshell eval costs
+      # <1s + ~116KB — sharing bought nothing the nix store doesn't already
+      # provide.
       stdlib = ''
-        direnv_layout_dir() {
-          local git_dir
-          if git_dir=$(git rev-parse --git-common-dir 2>/dev/null); then
-            echo "$(dirname "$(cd "$git_dir" && pwd)")/.direnv"
-          else
-            echo "$PWD/.direnv"
-          fi
+        _nix_refresh_gcroots() {
+          # no-op: see the module comment (nix-direnv #786 / #790)
+          :
         }
       '';
 
       # ~/.config/direnv/direnv.toml
       #
-      # Auto-trust agent-created git worktrees. Claude Code spawns
-      # worktrees under <repo>/.claude/worktrees/<name> via a codepath
-      # that does NOT fire its WorktreeCreate hook, so each fresh worktree
-      # would otherwise need a manual `direnv allow`. A prefix whitelist
-      # matches on the .envrc's absolute path, implicitly allowing every
-      # nested worktree regardless of content hash.
+      # Auto-trust agent-created git worktrees under the headless monorepo.
+      # Fresh `--worktree` sessions are allowed + bootstrapped by the repo's
+      # WorktreeCreate hook, and its SessionStart hook re-allows the cwd; the
+      # whitelist covers what those cannot: interactively cd-ing into an
+      # agent's worktree without a manual `direnv allow`, and allow entries
+      # dropped by `direnv prune`. A prefix whitelist matches on the .envrc's
+      # absolute path, implicitly allowing every nested worktree regardless
+      # of content hash.
       #
       # SECURITY: any .envrc placed under a whitelisted prefix is executed
       # by direnv with no prompt. Acceptable for local, agent-owned dirs;
       # do not extend these prefixes to shared or untrusted locations.
       config.whitelist.prefix = [
-        "${config.home.homeDirectory}/Developer/work/headless-but/.claude/worktrees"
+        "${config.home.homeDirectory}/Developer/work/headless/.claude/worktrees"
       ];
     };
   };
