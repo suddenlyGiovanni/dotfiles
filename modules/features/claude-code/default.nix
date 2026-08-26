@@ -12,13 +12,26 @@
 }: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
+  # home-manager's CLAUDE_CONFIG_DIR export (see the homeManager block below)
+  # only reaches shell-launched processes. GUI apps — Claude.app, and its
+  # embedded desktop Claude Code — start from launchd, not a shell, and never
+  # source hm-session-vars.sh; without this they silently fall back to the
+  # empty upstream ~/.claude default. `launchd.user.envVariables` mirrors the
+  # var into the user's launchd domain via `launchctl setenv`, which GUI apps
+  # do inherit.
+  flake.modules.darwin.claude-code = {
+    launchd.user.envVariables.CLAUDE_CONFIG_DIR = "${config.dotfiles.user.homeDirectory}/.config/claude";
+  };
+
   flake.modules.homeManager.claude-code = {config, ...}: {
     programs.claude-code = {
       enable = true;
       # Keep the native (curl-installed) binary; don't add a nixpkgs claude-code.
       package = null;
       # XDG-compliant config dir. When this differs from the upstream default
-      # (~/.claude), home-manager auto-exports CLAUDE_CONFIG_DIR for us.
+      # (~/.claude), home-manager auto-exports CLAUDE_CONFIG_DIR into shell
+      # startup files for us. GUI apps don't source those — see the darwin
+      # block above for the launchd-side mirror they need instead.
       configDir = "${config.xdg.configHome}/claude";
       # Global instructions applied to every Claude Code session on this
       # machine. Written to ${configDir}/CLAUDE.md as a nix-store symlink.
