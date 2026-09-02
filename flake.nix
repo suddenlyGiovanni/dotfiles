@@ -27,14 +27,15 @@
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = ["aarch64-darwin"];
 
-      imports =
-        [
-          inputs.flake-parts.flakeModules.modules
-          ./modules/options.nix
-          ./modules/hosts.nix
-          ./modules/host-assembly.nix
-        ]
-        ++ (inputs.import-tree ./modules/features).imports;
+      imports = [
+        inputs.flake-parts.flakeModules.modules
+        ./modules/options.nix
+        ./modules/hosts.nix
+        ./modules/host-assembly.nix
+        # import-tree returns a module function; splice it in directly.
+        # (`.imports` was removed upstream in e9177dd.)
+        (inputs.import-tree ./modules/features)
+      ];
 
       # Per-system outputs (formatter, devShells, checks)
       perSystem = {pkgs, ...}: {
