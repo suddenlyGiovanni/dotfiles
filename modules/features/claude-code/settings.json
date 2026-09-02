@@ -16,7 +16,8 @@
     "deploy-on-aws@claude-plugins-official": false,
     "plannotator@plannotator": true,
     "cloudflare@cloudflare": true,
-    "warp@claude-code-warp": false
+    "warp@claude-code-warp": false,
+    "claude-mermaid@claude-mermaid": false
   },
   "extraKnownMarketplaces": {
     "agent-plugins-for-aws": {
@@ -57,6 +58,12 @@
         "source": "github",
         "repo": "cloudflare/skills"
       }
+    },
+    "claude-mermaid": {
+      "source": {
+        "source": "github",
+        "repo": "veelenga/claude-mermaid"
+      }
     }
   },
   "effortLevel": "high",
@@ -69,5 +76,8 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "sandbox": {
+    "enabled": false
+  }
 }
