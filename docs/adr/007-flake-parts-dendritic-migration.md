@@ -123,7 +123,7 @@ A single file can write to multiple configuration classes:
 
 #### `import-tree` for auto-discovery
 
-[import-tree](https://github.com/vic/import-tree) recursively imports all `.nix` files from a
+[import-tree](https://github.com/denful/import-tree) recursively imports all `.nix` files from a
 directory as flake-parts modules. Paths containing `/_` are excluded. This replaces our custom
 `lib/auto-discovery.nix`.
 

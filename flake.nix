@@ -20,7 +20,7 @@
     # Dendritic infrastructure (ADR-007)
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
-    import-tree.url = "github:vic/import-tree";
+    import-tree.url = "github:denful/import-tree";
   };
 
   outputs = inputs:
