@@ -7,6 +7,61 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  // Zed opens one FSEvent stream per directory, and its default file_scan_exclusions covers only
+  // VCS metadata and editor cruft — not node_modules, not build output. In a large JS monorepo the
+  // initial scan exhausts the process's file descriptors, and the failure does not stay in the
+  // scanner: once EMFILE is hit, Zed can no longer read the project's own .zed/settings.json (so it
+  // silently keeps running whatever loaded last), language servers fail to spawn with errors
+  // blaming the server rather than the cause, and git blame and the terminal panel stop working.
+  // The log signature is thousands of `unable to start FSEvent stream` at
+  // crates/worktree/src/worktree.rs in ~/Library/Logs/Zed/Zed.log.
+  //
+  // This key REPLACES Zed's default rather than extending it, so the eleven defaults are restated
+  // verbatim before the additions. Dropping one silently re-admits that tree.
+  //
+  // Only universally-safe entries belong here. `vendor` is deliberately NOT one of them: it is a
+  // real source directory in Go and PHP projects, so a repo that needs it excluded declares it in
+  // its own .zed/settings.json.
+  "file_scan_exclusions": [
+    // Zed's defaults, restated because this key replaces rather than merges.
+    "**/.git",
+    "**/.svn",
+    "**/.hg",
+    "**/.jj",
+    "**/.sl",
+    "**/.repo",
+    "**/CVS",
+    "**/.DS_Store",
+    "**/Thumbs.db",
+    "**/.classpath",
+    "**/.settings",
+    // Additions: generated or vendored trees no editor needs to watch.
+    "**/node_modules",
+    "**/.direnv",
+    "**/.types",
+    "**/target",
+    "**/dist",
+    "**/build",
+    "**/.turbo",
+    "**/.next",
+    "**/.venv",
+    "**/__pycache__",
+  ],
+
+  // Zed's private_files default is `**/.env*`, which does not match names like `.secrets.env`.
+  // A file it does not match is ordinary content: indexed, searchable, and readable by any AI
+  // feature with project access. Same replaces-not-merges rule, so the defaults are restated.
+  "private_files": [
+    "**/.env*",
+    "**/.secrets.env",
+    "**/secrets.env",
+    "**/*.pem",
+    "**/*.key",
+    "**/*.cert",
+    "**/*.crt",
+    "**/secrets.yml",
+  ],
+
   "semantic_tokens": "combined",
   "code_lens": "on",
   "cli_default_open_behavior": "new_window",
@@ -97,14 +152,12 @@
     "show_menus": false,
   },
   "languages": {
+    // No global formatter or code action is asserted for TypeScript on purpose. A per-project
+    // .zed/settings.json is the only thing that knows which formatter that project actually runs,
+    // and a global default here silently overrides nothing while quietly applying everywhere else.
     "TypeScript": {
       "document_symbols": "on",
       "document_folding_ranges": "on",
-      "formatter": { "language_server": { "name": "biome" } },
-      "code_actions_on_format": {
-        "source.fixAll.biome": true,
-        "source.organizeImports.biome": true,
-      },
     },
     "Nix": {
       "language_servers": ["nixd", "!nil"],
@@ -216,11 +269,6 @@
       },
       "enable_lsp_tasks": true,
     },
-    "biome": {
-      "settings": {
-        "require_config_file": true,
-      },
-    },
     "nixd": {
       "settings": {
         "diagnostic": {
@@ -228,9 +276,5 @@
         },
       },
     },
-  },
-  "code_actions_on_format": {
-    "source.action.useSortedProperties.biome": true,
-    "source.fixAll.biome": true,
   },
 }
