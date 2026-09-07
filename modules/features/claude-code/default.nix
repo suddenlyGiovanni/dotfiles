@@ -20,10 +20,33 @@ in {
   # var into the user's launchd domain via `launchctl setenv`, which GUI apps
   # do inherit.
   flake.modules.darwin.claude-code = {
-    launchd.user.envVariables.CLAUDE_CONFIG_DIR = "${config.dotfiles.user.homeDirectory}/.config/claude";
+    launchd.user.envVariables = {
+      CLAUDE_CONFIG_DIR = "${config.dotfiles.user.homeDirectory}/.config/claude";
+      # Same GUI-inheritance reason as above: the HM sessionVariables copy (see
+      # the homeManager block) only reaches shell-launched `claude`.
+      CLAUDE_CODE_THRIFTY_SONIC = "0";
+    };
   };
 
   flake.modules.homeManager.claude-code = {config, ...}: {
+    # ── Bash-first opt-out ────────────────────────────────────────────────────
+    # With `permissions.defaultMode = "auto"` (settings.json), Claude Code
+    # injects a system-level directive telling the model to read/search/EDIT
+    # files with cat/grep/sed/heredocs instead of the Read/Edit/Write tools.
+    # Script-authored edits are hard to review and bypass the harness's
+    # file-state tracking, so we opt out.
+    #
+    # The clause is gated by the CLAUDE_CODE_THRIFTY_SONIC env var, which wins
+    # over the remote feature gate (`tengu_thrifty_sonic`) and over any
+    # per-model forced assignment. It is parsed as a tri-state bool, so "0"
+    # means "off" (not "unset"). Auto mode itself is untouched — only the
+    # bash-first paragraph and the trimmed Bash tool description are.
+    #
+    # It has to be a real process env var: settings.json's `env` block is
+    # filtered through an allowlist for the CLI's own process, and this key is
+    # not on it (only managed/policy settings bypass that filter).
+    home.sessionVariables.CLAUDE_CODE_THRIFTY_SONIC = "0";
+
     programs.claude-code = {
       enable = true;
       # Keep the native (curl-installed) binary; don't add a nixpkgs claude-code.
