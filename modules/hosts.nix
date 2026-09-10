@@ -33,6 +33,7 @@ _: {
           "rustdesk"
           "segger-jlink" # J-Link USB drivers for embedded dev (ESP32 serial)
           "superwhisper" # Voice-to-text using AI
+          "zoom" # Video conferencing client
           {
             name = "google-chrome";
             args = {require_sha = false;};
