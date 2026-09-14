@@ -53,6 +53,26 @@
         "type": "github"
       }
     },
+    "hey-cli": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789364748,
+        "narHash": "sha256-gCSjsZFHSTgtrHXcoWY0i3ZfzmI4e7aHxFZcvpAilYE=",
+        "owner": "basecamp",
+        "repo": "hey-cli",
+        "rev": "3c40f85f7e67a7dd4f906e054f0e472391c26417",
+        "type": "github"
+      },
+      "original": {
+        "owner": "basecamp",
+        "repo": "hey-cli",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -181,6 +201,7 @@
       "inputs": {
         "ast-grep-agent-skill": "ast-grep-agent-skill",
         "flake-parts": "flake-parts",
+        "hey-cli": "hey-cli",
         "home-manager": "home-manager",
         "import-tree": "import-tree",
         "nix-darwin": "nix-darwin",
