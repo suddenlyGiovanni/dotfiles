@@ -32,7 +32,6 @@ _: {
           "obsidian" # Knowledge base and note-taking app
           "rustdesk"
           "segger-jlink" # J-Link USB drivers for embedded dev (ESP32 serial)
-          "superwhisper" # Voice-to-text using AI
           "zoom" # Video conferencing client
           {
             name = "google-chrome";
