@@ -10,7 +10,7 @@
 # Auth state lives in ~/.config/gws (OAuth client + tokens, AES-256-GCM
 # encrypted with the key in the macOS keychain). It isn't declared here; set up
 # once per host:
-#   gws auth setup    Creates a Cloud project via gcloud, enables APIs, logs in
+#   gws auth setup    Creates a Cloud project via gcloud (gcloud.nix), enables APIs, logs in
 #   gws auth login    Re-login / change scopes (unverified apps cap at ~25 scopes)
 #
 # Claude Code skills come from the package's own source, pinned to the same
