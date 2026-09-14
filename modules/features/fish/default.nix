@@ -29,6 +29,11 @@ in {
     completions = import ./_completions.nix;
     functions = import ./_functions.nix {inherit config;};
   in {
+    # HM's fish module defaults this on for `apropos` completion, but from
+    # stateVersion 26.05 programs.man.package is null on Darwin (nixpkgs man-db's
+    # apropos/whatis are broken there) so no cache can be built — silence the warning.
+    programs.man.generateCaches = false;
+
     programs.fish = {
       enable = true;
       package = pkgs.fish;

@@ -52,7 +52,7 @@ in {
         experimental-features = nix-command flakes
       '';
 
-      stateVersion = mkDefault "24.05";
+      stateVersion = mkDefault "26.11";
     };
 
     # ── Programs ──────────────────────────────────────────────────────────────
