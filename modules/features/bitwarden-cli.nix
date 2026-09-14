@@ -19,7 +19,11 @@
 # in, refresh tokens and the encrypted vault. It can't be symlinked into git
 # like Zed's or herdr's config without committing those, so instead:
 #   - data.json lives under XDG data home via BITWARDENCLI_APPDATA_DIR
-#     (default would be ~/Library/Application Support/Bitwarden CLI)
+#     (default would be ~/Library/Application Support/Bitwarden CLI). It's
+#     baked into a bw wrapper (--set-default) rather than exported as a
+#     session variable: shells opened before a switch, launchd-started apps,
+#     and scripts would otherwise silently fall back to the default dir and
+#     the bitwarden.com server. An explicit env value still wins.
 #   - the server URL is the tracked part: activation runs `bw config server`
 #     when it differs. bw refuses to change servers while logged in, so a
 #     mismatch then only warns — `bw logout` and switch again.
@@ -48,16 +52,22 @@ _: {
   }: let
     serverUrl = "https://pw.thingos.io";
     appDataDir = "${config.xdg.dataHome}/bitwarden-cli";
-    bw = lib.getExe pkgs.bitwarden-cli;
+    bitwarden-cli = pkgs.symlinkJoin {
+      name = "bitwarden-cli-${pkgs.bitwarden-cli.version}";
+      paths = [pkgs.bitwarden-cli];
+      nativeBuildInputs = [pkgs.makeWrapper];
+      postBuild = ''
+        wrapProgram $out/bin/bw --set-default BITWARDENCLI_APPDATA_DIR ${lib.escapeShellArg appDataDir}
+      '';
+      inherit (pkgs.bitwarden-cli) meta;
+    };
+    bw = lib.getExe bitwarden-cli;
   in
     lib.mkIf config.dotfiles.isWorkHost {
       home = {
-        packages = [pkgs.bitwarden-cli];
-
-        sessionVariables.BITWARDENCLI_APPDATA_DIR = appDataDir;
+        packages = [bitwarden-cli];
 
         activation.bitwardenServer = lib.hm.dag.entryAfter ["writeBoundary"] ''
-          export BITWARDENCLI_APPDATA_DIR=${lib.escapeShellArg appDataDir}
           current=$(${bw} config server 2>/dev/null || true)
           if [[ "$current" != ${lib.escapeShellArg serverUrl} ]]; then
             if [[ "$(${bw} status 2>/dev/null)" == *'"status":"unauthenticated"'* ]]; then
