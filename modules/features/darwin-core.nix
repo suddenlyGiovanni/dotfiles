@@ -32,7 +32,6 @@ in {
     };
 
     environment.systemPackages = with pkgs; [
-      vim
       coreutils # The GNU Core Utilities
       git # Distributed version control system
       less # A more advanced file pager than 'more'

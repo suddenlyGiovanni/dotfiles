@@ -31,7 +31,7 @@ _: {
 
     home.sessionVariables = {
       # ── Editors ─────────────────────────────────────────────────────────────
-      EDITOR = mkDefault "vim";
+      EDITOR = mkDefault "nvim";
       VISUAL = mkDefault "zed --wait";
 
       # ── Pager ───────────────────────────────────────────────────────────────
