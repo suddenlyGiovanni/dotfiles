@@ -58,6 +58,29 @@
             ${pkgs.deadnix}/bin/deadnix --fail .
             touch $out
           '';
+          # Fails once nix-darwin or Home Manager ship a newer stateVersion than
+          # the one pinned, so bumps surface on input updates instead of rotting.
+          # Read the changelogs before bumping (`darwin-rebuild changelog`,
+          # home-manager docs/release-notes).
+          stateversions = let
+            inherit (pkgs) lib;
+            hmLatest = (lib.importJSON "${inputs.home-manager}/release.json").release;
+            stale = lib.concatLists (lib.mapAttrsToList (host: {config, ...}:
+              lib.optional (config.system.stateVersion < config.system.maxStateVersion)
+              "${host}: system.stateVersion = ${toString config.system.stateVersion}, nix-darwin supports ${toString config.system.maxStateVersion}"
+              ++ lib.mapAttrsToList (user: hm: "${host}: home-manager.users.${user}.home.stateVersion = ${hm.home.stateVersion}, Home Manager supports ${hmLatest}")
+              (lib.filterAttrs (_: hm: lib.versionOlder hm.home.stateVersion hmLatest) config.home-manager.users))
+            inputs.self.darwinConfigurations);
+          in
+            pkgs.runCommand "check-stateversions" {} (
+              if stale == []
+              then "touch $out"
+              else ''
+                echo "stateVersion is behind the latest supported:" >&2
+                printf '  %s\n' ${lib.escapeShellArgs stale} >&2
+                exit 1
+              ''
+            );
         };
 
         # Development shell for working on these dotfiles
