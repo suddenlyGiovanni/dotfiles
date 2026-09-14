@@ -5,41 +5,9 @@
 # Git integration is automatically enabled based on whether git is active.
 # This module reads config.programs.git.enable to coordinate.
 _: {
-  # ── Overlay: bun 1.4.0 ──────────────────────────────────────────────────────
-  # nixpkgs-unstable is still on 1.3.13 (upstream master too, as of 2026-08-21).
-  # bun is a prebuilt-binary derivation, so bumping version + source hashes is
-  # all that is needed. Drop this overlay once nixpkgs ships >= 1.4.0.
-  flake.modules.darwin.bun = {
-    nixpkgs.overlays = [
-      (_final: prev: {
-        bun = prev.bun.overrideAttrs (finalAttrs: prevAttrs: {
-          version = "1.4.0";
-          # We also replace `src` below, so the version bump is intentional.
-          __intentionallyOverridingVersion = true;
-
-          passthru =
-            prevAttrs.passthru
-            // {
-              sources = {
-                "aarch64-darwin" = prev.fetchurl {
-                  url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
-                  hash = "sha256-xmnpf2Fk4cluBwF0jbmN+ndJKQjL2DlMdVcTSnNd44E=";
-                };
-                "aarch64-linux" = prev.fetchurl {
-                  url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
-                  hash = "sha256-SxozLuhhmD65O8/m93D/+U4+MbLDiL2uo8jtNeWO7Q4=";
-                };
-                "x86_64-linux" = prev.fetchurl {
-                  url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64.zip";
-                  hash = "sha256-LQP7X7g6yLVnrKCigbLOGhoZ1Ij1bClo2Iw/Jekv5FI=";
-                };
-              };
-            };
-        });
-      })
-    ];
-  };
-
+  # bun comes straight from nixpkgs (1.4.2 as of 2026-09-13). If nixpkgs lags a
+  # release you need, reintroduce a version + `passthru.sources` hash overlay under
+  # flake.modules.darwin.bun — see git history for the last one (1.4.0).
   flake.modules.homeManager.bun = {config, ...}: {
     # ── XDG Compliance ──────────────────────────────────────────────────────────
     home.sessionVariables = {
