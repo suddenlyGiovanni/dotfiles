@@ -8,8 +8,6 @@
   user = config.dotfiles.user;
 in {
   flake.modules.darwin.darwin-core = {pkgs, ...}: {
-    ids.gids.nixbld = 350;
-
     nixpkgs = {
       # Allow unfree packages
       config.allowUnfree = true;
@@ -74,7 +72,7 @@ in {
 
       # Used for backwards compatibility, please read the changelog before changing.
       # $ darwin-rebuild changelog
-      stateVersion = 4;
+      stateVersion = 7;
     };
   };
 }
