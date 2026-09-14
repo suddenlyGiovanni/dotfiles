@@ -8,7 +8,6 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    mac-app-util.url = "github:hraban/mac-app-util";
     onepassword-shell-plugins.url = "github:1Password/shell-plugins";
 
     # Claude Code skills (non-flake repos pulled in as raw sources)
