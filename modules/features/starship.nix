@@ -1,69 +1,45 @@
 # starship - A minimal, blazing-fast, and customizable prompt for any shell
 # https://starship.rs/
-# https://github.com/nix-community/home-manager/blob/release-25.11/modules/programs/starship.nix
+# https://github.com/nix-community/home-manager/blob/master/modules/programs/starship.nix
 #
 # ══════════════════════════════════════════════════════════════════════════════
-# OVERVIEW
+# LAYOUT
 # ══════════════════════════════════════════════════════════════════════════════
 #
-# Starship is a cross-shell prompt written in Rust. It's fast, customizable,
-# and shows information you need while you're working, like:
-#   - Current directory (with git repo awareness)
-#   - Git branch and status
-#   - Programming language versions (when in a project)
-#   - Command duration (for long-running commands)
-#   - Exit status of last command
-#   - And much more...
+#   <repo> headless <worktree> alchemy-local-dev-r2-4538d1/apps/docs <branch> worktree-… → origin/main ~2 +1 ?3 (+14 -3 lines)
+#   ❯                                 <error> 1 ERROR <clock> 12s <bun> 1.4.2 <nix> nix
 #
-# Key features:
-#   - Blazingly fast: written in Rust with async module loading
-#   - Highly customizable: configure every aspect of your prompt
-#   - Universal: works with any shell (bash, zsh, fish, nushell, etc.)
-#   - Intelligent: shows relevant info based on context
+# (<name> stands for the glyph of that name in glyphTable below.)
+#
+# Left, line 1 — where you are: [ssh host] [repo + worktree glyph, linked
+#   worktrees only] directory, branch → upstream, git status, line metrics.
+# Left, line 2 — the input line: background jobs, `❯`.
+# Right — what the last command did, then context that only shows up when it
+#   applies: exit status, duration, direnv problems, herdr pane, AWS profile,
+#   gcloud (only with a CLOUDSDK_* var set), docker context, toolchain, nix.
+#
+# Principle: everyday segments are an icon only; rare or alarming ones spell
+# themselves out ("direnv not allowed", "3 conflicted"). `prompt-legend`
+# (fish) prints every glyph with its name, the git status key, and
+# `starship explain` for the current directory.
 #
 # ══════════════════════════════════════════════════════════════════════════════
-# CONFIGURATION
+# WHY GLYPHS ARE CODEPOINTS, NOT LITERALS
 # ══════════════════════════════════════════════════════════════════════════════
 #
-# This configuration includes:
-#   - Full Nerd Font Symbols Preset (https://starship.rs/presets/nerd-font)
-#   - Custom character indicators for command success/failure
-#   - Git integration with metrics (lines added/removed)
-#   - Command duration display
-#   - Directory truncation with repo awareness
-#   - Shell indicator (fish, zsh, bash, etc.)
-#   - Language/tool version display
-#   - Transient prompt for fish (cleaner history)
+# Nerd Font icons live in Unicode Private Use Areas. Literal copies of them
+# were silently stripped from this file by an editor/tool pass in commit
+# f551551 (2026-01-05): 83 symbols became plain spaces and the prompt lost its
+# icons without any error. Glyphs are therefore spelled as hex codepoints and
+# named after their Nerd Font class (https://www.nerdfonts.com/cheat-sheet), and
+# an assertion below fails evaluation if any `*symbol` setting is blank.
 #
 # ══════════════════════════════════════════════════════════════════════════════
 # SHELL INTEGRATION
 # ══════════════════════════════════════════════════════════════════════════════
 #
-# Shell integrations are automatically enabled based on which shells are active
-# in your home-manager configuration. This module reads config.programs.<shell>.enable
-# to coordinate.
-#
-# Transient prompt (fish only):
-#   When enabled, previous prompts are replaced with a minimal prompt,
-#   keeping your terminal history clean and focused.
-#
-# ══════════════════════════════════════════════════════════════════════════════
-# CUSTOMIZATION
-# ══════════════════════════════════════════════════════════════════════════════
-#
-# Format strings use special syntax:
-#   $variable           Insert a variable's value
-#   [text](style)       Apply style to text
-#   (conditional)       Only show if variables inside are non-empty
-#
-# Style strings:
-#   bold, italic, underline, dimmed, inverted
-#   fg:color, bg:color (color names or hex like #ff0000)
-#   ANSI color numbers (0-255)
-#
-# To customize further, modify the `settings` attribute below.
-# See https://starship.rs/config/ for all available options.
-#
+# Shell integrations are enabled from config.programs.<shell>.enable. Transient
+# prompt (fish): on fish >= 4.1 starship uses fish's native transient prompt.
 _: {
   flake.modules.homeManager.starship = {
     config,
@@ -76,391 +52,377 @@ _: {
     # Safe lookup for shell enable flags with fallback to false
     # This prevents evaluation failures if a shell module isn't imported
     shellEnabled = path: attrByPath path false config;
+
+    # A codepoint (hex) as a UTF-8 string. Nix has no \u escape, JSON does —
+    # astral-plane codepoints (md-* icons, U+F0000+) need a UTF-16 surrogate pair.
+    glyph = hex: let
+      cp = (builtins.fromTOML "cp = 0x${hex}").cp;
+      esc = n: "\\u" + lib.fixedWidthString 4 "0" (lib.toHexString n);
+      off = cp - 65536;
+      utf16 =
+        if cp < 65536
+        then esc cp
+        else esc (55296 + off / 1024) + esc (56320 + lib.mod off 1024);
+    in
+      builtins.fromJSON ''"${utf16}"'';
+
+    # name = [ codepoint  nerd-font-class ]
+    glyphTable = {
+      repo = ["f401" "oct-repo"];
+      worktree = ["ec7e" "cod-worktree"];
+      branch = ["f418" "oct-git_branch"];
+      tag = ["f412" "oct-tag"];
+      lock = ["f033e" "md-lock"];
+      error = ["f467" "oct-x"];
+      clock = ["f0150" "md-clock_outline"];
+      ssh = ["eb01" "cod-globe"];
+      direnv = ["f107f" "md-folder_cog"];
+      herdr = ["f018d" "md-console"];
+      aws = ["f0ef" "fa-aws"];
+      gcloud = ["f11f6" "md-google_cloud"];
+      docker = ["f308" "linux-docker"];
+      nix = ["f313" "linux-nixos"];
+      package = ["f03d7" "md-package_variant_closed"];
+      bun = ["e76f" "dev-bun"];
+      nodejs = ["e718" "dev-nodejs_small"];
+      deno = ["e7c0" "dev-denojs"];
+      python = ["e235" "fae-python"];
+      rust = ["f1617" "md-language_rust"];
+      golang = ["e627" "seti-go"];
+      java = ["e738" "dev-java"];
+      kotlin = ["e634" "custom-kotlin"];
+      swift = ["e755" "dev-swift"];
+      ruby = ["e791" "dev-ruby_rough"];
+      lua = ["e620" "seti-lua"];
+    };
+    nf = lib.mapAttrs (_: entry: glyph (builtins.head entry)) glyphTable;
+
+    # Toolchains shown on the right as `<icon> <version>` when detected.
+    languages = ["bun" "nodejs" "deno" "python" "rust" "golang" "java" "kotlin" "swift" "ruby" "lua"];
+
+    # Every `*symbol` setting that renders as nothing — see "WHY GLYPHS ARE
+    # CODEPOINTS" above.
+    blankSymbols = let
+      walk = path: value:
+        if lib.isAttrs value
+        then lib.concatLists (lib.mapAttrsToList (name: walk (path ++ [name])) value)
+        else
+          lib.optional
+          (lib.isString value && lib.hasSuffix "symbol" (lib.last path) && builtins.match "[[:space:]]*" value != null)
+          (lib.concatStringsSep "." path);
+    in
+      walk [] config.programs.starship.settings;
   in {
+    assertions = [
+      {
+        assertion = blankSymbols == [];
+        message = "starship: blank symbol setting(s), likely stripped glyphs: ${lib.concatStringsSep ", " blankSymbols}";
+      }
+    ];
+
+    # Legend for the prompt: glyph names, git status key, and what each
+    # segment in the current directory means.
+    programs.fish.functions.prompt-legend = lib.mkIf (shellEnabled ["programs" "fish" "enable"]) {
+      description = "Explain the starship prompt: glyphs, git status key, current segments";
+      body = ''
+        set_color --bold; echo "Glyphs"; set_color normal
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: entry: "printf '  %s  %-9s U+%-6s nf-%s\\n' ${lib.escapeShellArg nf.${name}} ${name} ${lib.toUpper (builtins.head entry)} ${lib.last entry}") glyphTable)}
+        echo
+        set_color --bold; echo "Git status (files)"; set_color normal
+        echo "  ~N modified   +N staged   ?N untracked   »N renamed   ✘N deleted   N conflicted"
+        echo "  ⇡N ahead of upstream   ⇣N behind upstream   → origin/x  upstream differs from branch name"
+        echo "  (+A -D lines)  lines added/removed vs HEAD"
+        echo "  (stashes are not shown: they are shared by every worktree of a repo)"
+        echo
+        set_color --bold; echo "This directory"; set_color normal
+        starship explain
+      '';
+    };
+
     programs.starship = {
       enable = true;
       package = mkDefault pkgs.starship;
 
-      # ────────────────────────────────────────────────────────────────────────
-      # Shell Integrations
-      # ────────────────────────────────────────────────────────────────────────
-      # Automatically enabled based on which shells are configured.
-      # This ensures starship is initialized in each shell you use.
-      # Uses safe lookup with fallback to false if shell module isn't present.
       enableBashIntegration = mkDefault (shellEnabled ["programs" "bash" "enable"]);
       enableZshIntegration = mkDefault (shellEnabled ["programs" "zsh" "enable"]);
       enableFishIntegration = mkDefault (shellEnabled ["programs" "fish" "enable"]);
       enableNushellIntegration = mkDefault (shellEnabled ["programs" "nushell" "enable"]);
-
-      # ────────────────────────────────────────────────────────────────────────
-      # Transient Prompt (Fish only)
-      # ────────────────────────────────────────────────────────────────────────
-      # Replaces previous prompts with a minimal version after command execution.
-      # This keeps your terminal history clean and easy to read.
       enableTransience = mkDefault (shellEnabled ["programs" "fish" "enable"]);
 
-      # ────────────────────────────────────────────────────────────────────────
-      # Starship Configuration
-      # ────────────────────────────────────────────────────────────────────────
-      # Written to ~/.config/starship.toml
-      settings = {
-        # ══════════════════════════════════════════════════════════════════════
-        # PROMPT-WIDE SETTINGS
-        # ══════════════════════════════════════════════════════════════════════
+      # Written to ~/.config/starship.toml — https://starship.rs/config/
+      settings =
+        {
+          add_newline = false;
+          scan_timeout = 30;
+          command_timeout = 500;
 
-        # Don't add a blank line before the prompt
-        add_newline = false;
+          # Explicit module lists instead of "$all": $all grows with every
+          # release (maven, mise, pixi, netns, … since 1.23) and puts
+          # everything on one side.
+          format = lib.concatStrings [
+            "$username"
+            "$hostname"
+            "$container"
+            "\${custom.worktree}"
+            "$directory"
+            "$git_branch"
+            "$git_commit"
+            "$git_state"
+            "$git_status"
+            "$git_metrics"
+            "$line_break"
+            "$jobs"
+            "$character"
+          ];
+          right_format = lib.concatStrings ([
+              "$status"
+              "$cmd_duration"
+              "$direnv"
+              "\${env_var.HERDR_ENV}"
+              "\${env_var.AWS_PROFILE}"
+              "$gcloud"
+              "$docker_context"
+              "$package"
+            ]
+            ++ map (m: "$" + m) languages
+            ++ ["$nix_shell" "$shell"]);
 
-        # Use the default format (shows all enabled modules)
-        # You can customize this to reorder or exclude modules
-        format = "$all";
+          # `starship statusline claude-code` (statusLine in Claude Code's
+          # settings.json) renders this profile from the session JSON on stdin.
+          profiles.claude-code = lib.concatStrings [
+            "$claude_model"
+            "\${custom.worktree}"
+            "$directory"
+            "$git_branch"
+            "$git_status"
+            "$claude_context"
+            "$claude_cost"
+          ];
 
-        # Timeout for starship to scan files (ms)
-        scan_timeout = 30;
+          # ── Prompt character ──────────────────────────────────────────────────
+          character = {
+            success_symbol = "[❯](bold green)";
+            error_symbol = "[❯](bold red)";
+            vimcmd_symbol = "[❮](bold green)";
+            vimcmd_replace_one_symbol = "[❮](bold purple)";
+            vimcmd_replace_symbol = "[❮](bold purple)";
+            vimcmd_visual_symbol = "[❮](bold yellow)";
+          };
 
-        # Timeout for commands executed by starship (ms)
-        command_timeout = 500;
+          # ── Where am I ────────────────────────────────────────────────────────
 
-        # ══════════════════════════════════════════════════════════════════════
-        # CHARACTER MODULE
-        # ══════════════════════════════════════════════════════════════════════
-        # Shows different symbols based on the success/failure of the last command
+          # Starship has no worktree awareness: inside a linked worktree
+          # `truncate_to_repo` treats the worktree root as the repo, so the real
+          # repo name disappears (starship#6981, #6604). This prints it — only in
+          # linked worktrees, where git-dir and git-common-dir differ. Runs under
+          # sh so it doesn't pay a fish startup per prompt.
+          custom.worktree = {
+            description = "Repository a linked git worktree belongs to";
+            require_repo = true;
+            when = true;
+            shell = ["sh"];
+            command = ''
+              set -f
+              IFS='
+              '
+              set -- $(git rev-parse --path-format=absolute --git-common-dir --git-dir 2>/dev/null)
+              [ "$#" -eq 2 ] && [ "$1" != "$2" ] || exit 0
+              common=''${1%/.git}
+              common=''${common##*/}
+              printf '%s' "''${common%.git}"
+            '';
+            # Conditional group: custom modules render even when $output is empty.
+            format = "([${nf.repo} $output ${nf.worktree}]($style) )";
+            style = "bold blue";
+          };
 
-        character = {
-          success_symbol = "[❯](bold green)";
-          error_symbol = "[❯](bold red)";
-          vimcmd_symbol = "[❮](bold green)";
-          vimcmd_replace_one_symbol = "[❮](bold purple)";
-          vimcmd_replace_symbol = "[❮](bold purple)";
-          vimcmd_visual_symbol = "[❮](bold yellow)";
-        };
+          # Path from the repo (or worktree) root; outside repos, the last three
+          # directories. The worktree module above already names the repo, so the
+          # path leading up to the root is dropped.
+          directory = {
+            truncation_length = 3;
+            truncate_to_repo = true;
+            truncation_symbol = "…/";
+            read_only = " ${nf.lock}";
+            style = "bold cyan";
+            repo_root_style = "bold cyan";
+            format = "[$path]($style)[$read_only]($read_only_style) ";
+            repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) ";
+          };
 
-        # ══════════════════════════════════════════════════════════════════════
-        # DIRECTORY MODULE
-        # ══════════════════════════════════════════════════════════════════════
+          hostname = {
+            ssh_only = true;
+            ssh_symbol = "${nf.ssh} ";
+            format = "[$ssh_symbol$hostname]($style) in ";
+            style = "bold dimmed green";
+          };
 
-        directory = {
-          disabled = false;
-          # Truncate to 3 parent folders
-          truncation_length = 3;
-          # Truncate to git repo root when in a repo
-          truncate_to_repo = true;
-          # Symbol for truncated path
-          truncation_symbol = "…/";
-          # Read-only indicator
-          read_only = " 󰌾";
-          # Format string
-          format = "[$path]($style)[$read_only]($read_only_style) ";
-          # Style for the path
-          style = "bold cyan";
-          # Home directory symbol
-          home_symbol = "~";
-        };
+          username = {
+            show_always = false;
+            format = "[$user]($style) @ ";
+            style_root = "bold red";
+            style_user = "bold yellow";
+          };
 
-        # ══════════════════════════════════════════════════════════════════════
-        # GIT MODULES
-        # ══════════════════════════════════════════════════════════════════════
+          container = {
+            format = "[$symbol \\[$name\\]]($style) ";
+            symbol = "⬢";
+            style = "bold red dimmed";
+          };
 
-        git_branch = {
-          symbol = " ";
-          style = "bold purple";
-          # Truncate long branch names
-          truncation_length = 20;
-          truncation_symbol = "…";
-        };
+          # ── Git ───────────────────────────────────────────────────────────────
 
-        git_commit = {
-          tag_symbol = "  ";
-          # Show commit hash only when detached
-          only_detached = true;
-          # Show tags
-          tag_disabled = false;
-        };
+          # Full branch name (agent branches are `worktree-<name>`, up to ~55
+          # chars). The upstream is shown only when its name differs from the
+          # branch — for agent worktrees that is `origin/main`.
+          git_branch = {
+            symbol = "${nf.branch} ";
+            format = "[$symbol$branch( → $remote_name/$remote_branch)]($style) ";
+            style = "bold purple";
+          };
 
-        git_state = {
-          # Show progress during rebase, merge, etc.
-          format = "\\([$state( $progress_current/$progress_total)]($style)\\) ";
-          style = "bold yellow";
-        };
+          git_commit = {
+            tag_symbol = " ${nf.tag} ";
+            only_detached = true;
+            tag_disabled = false;
+          };
 
-        git_status = {
-          # Show detailed git status
-          format = "([\\[$all_status$ahead_behind\\]]($style) )";
-          style = "bold red";
-          # Status indicators
-          conflicted = "=";
-          ahead = "⇡\${count}";
-          behind = "⇣\${count}";
-          diverged = "⇕⇡\${ahead_count}⇣\${behind_count}";
-          up_to_date = "";
-          untracked = "?\${count}";
-          stashed = "\\$";
-          modified = "!\${count}";
-          staged = "+\${count}";
-          renamed = "»\${count}";
-          deleted = "✘\${count}";
-        };
+          git_state = {
+            format = "\\([$state( $progress_current/$progress_total)]($style)\\) ";
+            style = "bold yellow";
+          };
 
-        # Git metrics: show lines added/removed
-        git_metrics = {
-          disabled = false;
-          added_style = "bold green";
-          deleted_style = "bold red";
-          # Only show when there are changes
-          only_nonzero_diffs = true;
-          format = "([+$added]($added_style) )([-$deleted]($deleted_style) )";
-        };
+          # One colour per kind; each entry carries its own trailing space.
+          # Stashes are hidden: the stash stack is repo-wide, so every worktree
+          # would show it forever.
+          git_status = {
+            format = "([$all_status$ahead_behind]($style))";
+            style = "bold";
+            conflicted = "[\${count} conflicted ](bold red)";
+            ahead = "[⇡\${count} ](bold green)";
+            behind = "[⇣\${count} ](bold yellow)";
+            diverged = "[⇡\${ahead_count}⇣\${behind_count} ](bold red)";
+            up_to_date = "";
+            untracked = "[?\${count} ](bold blue)";
+            stashed = "";
+            modified = "[~\${count} ](bold yellow)";
+            staged = "[+\${count} ](bold green)";
+            renamed = "[»\${count} ](bold cyan)";
+            deleted = "[✘\${count} ](bold red)";
+            typechanged = "";
+          };
 
-        # ══════════════════════════════════════════════════════════════════════
-        # COMMAND DURATION
-        # ══════════════════════════════════════════════════════════════════════
+          # Line counts, parenthesised and labelled so `+14` isn't read as
+          # "14 staged files". Nested groups drop a zero side; the whole
+          # segment disappears when both are zero.
+          # Slowest module (~40 ms in headless); core.fsmonitor didn't help
+          # (git_status + git_metrics ~42 ms with it, measured 2026-09-14).
+          git_metrics = {
+            disabled = false;
+            only_nonzero_diffs = true;
+            format = "(\\((([+$added]($added_style) )([-$deleted]($deleted_style) ))lines\\) )";
+            added_style = "green";
+            deleted_style = "red";
+          };
 
-        cmd_duration = {
-          # Show duration for commands taking longer than 2 seconds
-          min_time = 2000;
-          # Format string
-          format = "took [$duration]($style) ";
-          style = "bold yellow";
-          # Show milliseconds for short durations
-          show_milliseconds = false;
-        };
+          # ── Right side: last command ─────────────────────────────────────────
 
-        # ══════════════════════════════════════════════════════════════════════
-        # SHELL INDICATOR
-        # ══════════════════════════════════════════════════════════════════════
+          status = {
+            disabled = false;
+            format = "[$symbol$status( $common_meaning)( $signal_name)]($style) ";
+            symbol = "${nf.error} ";
+            style = "bold red";
+            recognize_signal_code = true;
+            map_symbol = true;
+            not_executable_symbol = "🚫 ";
+            not_found_symbol = "🔍 ";
+            sigint_symbol = "🧱 ";
+            signal_symbol = "⚡ ";
+          };
 
-        shell = {
-          disabled = false;
-          format = "[$indicator]($style) ";
-          style = "bold white";
-          # Shell-specific indicators
-          fish_indicator = "󰈺";
-          zsh_indicator = "zsh";
-          bash_indicator = "bsh";
-          powershell_indicator = "psh";
-          nu_indicator = "nu";
-          unknown_indicator = "?";
-        };
+          cmd_duration = {
+            min_time = 2000;
+            format = "[${nf.clock} $duration]($style) ";
+            style = "bold yellow";
+            show_milliseconds = false;
+          };
 
-        # ══════════════════════════════════════════════════════════════════════
-        # STATUS MODULE (Exit Codes)
-        # ══════════════════════════════════════════════════════════════════════
+          # ── Right side: context, only when it applies ─────────────────────────
 
-        status = {
-          disabled = false;
-          format = "[$symbol$status]($style) ";
-          symbol = " ";
-          style = "bold red";
-          # Map exit codes to signals
-          recognize_signal_code = true;
-          # Use different symbols for different error types
-          map_symbol = true;
-          not_executable_symbol = "🚫";
-          not_found_symbol = "🔍";
-          sigint_symbol = "🧱";
-          signal_symbol = "⚡";
-        };
+          # Silent while the .envrc is allowed and loaded; spells out the problem
+          # otherwise. The glyph is literal format text rather than $symbol so the
+          # conditional group stays empty when both messages are.
+          direnv = {
+            disabled = false;
+            format = "([${nf.direnv} direnv$allowed$loaded]($style) )";
+            style = "bold yellow";
+            allowed_msg = "";
+            not_allowed_msg = " not allowed";
+            denied_msg = " denied";
+            loaded_msg = "";
+            unloaded_msg = " not loaded";
+          };
 
-        # ══════════════════════════════════════════════════════════════════════
-        # DIRENV MODULE
-        # ══════════════════════════════════════════════════════════════════════
+          # herdr (terminal workspace manager for agents) exports HERDR_ENV=1.
+          env_var.HERDR_ENV = {
+            description = "Running inside a herdr pane";
+            format = "[${nf.herdr} herdr]($style) ";
+            style = "bold green";
+          };
 
-        direnv = {
-          disabled = false;
-          format = "[$symbol$loaded/$allowed]($style) ";
-          symbol = " ";
-          style = "bold orange";
-          # Detection
-          detect_files = [".envrc"];
-          detect_env_vars = ["DIRENV_FILE"];
-          # Status messages
-          allowed_msg = "✓";
-          not_allowed_msg = "✗";
-          denied_msg = "✗";
-          loaded_msg = "✓";
-          unloaded_msg = "✗";
-        };
+          # The aws module shows the default profile's region (and an expiry
+          # marker) in every directory. Only an explicitly selected profile is
+          # worth the space.
+          aws.disabled = true;
+          env_var.AWS_PROFILE = {
+            description = "Selected AWS profile";
+            format = "[${nf.aws} aws $env_value]($style) ";
+            style = "bold yellow";
+          };
 
-        # ══════════════════════════════════════════════════════════════════════
-        # CONTAINER MODULE
-        # ══════════════════════════════════════════════════════════════════════
+          gcloud = {
+            symbol = "${nf.gcloud} gcloud ";
+            format = "[$symbol$account(@$domain)( \\($project\\))]($style) ";
+            detect_env_vars = ["CLOUDSDK_CONFIG" "CLOUDSDK_ACTIVE_CONFIG_NAME" "CLOUDSDK_CORE_PROJECT"];
+          };
 
-        container = {
-          format = "[$symbol \\[$name\\]]($style) ";
-          symbol = "⬢";
-          style = "bold red dimmed";
-        };
+          docker_context = {
+            symbol = "${nf.docker} ";
+            format = "[$symbol$context]($style) ";
+          };
 
-        # ══════════════════════════════════════════════════════════════════════
-        # HOSTNAME & USERNAME (SSH Awareness)
-        # ══════════════════════════════════════════════════════════════════════
+          package = {
+            symbol = "${nf.package} ";
+            format = "[$symbol$version]($style) ";
+          };
 
-        hostname = {
-          # Only show when connected via SSH
-          ssh_only = true;
-          ssh_symbol = " ";
-          format = "[$ssh_symbol$hostname]($style) in ";
-          style = "bold dimmed green";
-        };
+          # `use flake` via direnv always reports "impure (nix-shell-env)", so
+          # the state and name carry no information.
+          nix_shell = {
+            symbol = "${nf.nix} ";
+            format = "[$symbol$state]($style) ";
+            impure_msg = "nix";
+            pure_msg = "nix pure";
+            unknown_msg = "nix";
+          };
 
-        username = {
-          # Only show when not the default user or when connected via SSH
-          show_always = false;
-          format = "[$user]($style) @ ";
-          style_root = "bold red";
-          style_user = "bold yellow";
-        };
-
-        # ══════════════════════════════════════════════════════════════════════
-        # NERD FONT SYMBOLS - Language & Tool Modules
-        # ══════════════════════════════════════════════════════════════════════
-        # From: https://starship.rs/presets/nerd-font
-
-        aws.symbol = "  ";
-        azure.symbol = "󰠅 ";
-        buf.symbol = " ";
-        bun.symbol = " ";
-        c.symbol = " ";
-        cpp.symbol = " ";
-        cmake.symbol = " ";
-        conda.symbol = " ";
-        crystal.symbol = " ";
-        dart.symbol = " ";
-        deno.symbol = " ";
-        docker_context.symbol = " ";
-        elixir.symbol = " ";
-        elm.symbol = " ";
-        fennel.symbol = " ";
-        fortran.symbol = " ";
-        fossil_branch.symbol = " ";
-        gcloud.symbol = " ";
-        gleam.symbol = "⭐ ";
-        golang.symbol = " ";
-        gradle.symbol = " ";
-        guix_shell.symbol = " ";
-        haskell.symbol = " ";
-        haxe.symbol = " ";
-        hg_branch.symbol = " ";
-        java.symbol = " ";
-        julia.symbol = " ";
-        kotlin.symbol = " ";
-        lua.symbol = " ";
-        memory_usage.symbol = "󰍛 ";
-        meson.symbol = "󰔷 ";
-        nim.symbol = "󰆥 ";
-        nix_shell.symbol = " ";
-        nodejs.symbol = " ";
-        ocaml.symbol = " ";
-        package.symbol = "󰏗 ";
-        perl.symbol = " ";
-        php.symbol = " ";
-        pijul_channel.symbol = " ";
-        pixi.symbol = "󰏗 ";
-        python.symbol = " ";
-        rlang.symbol = "󰟔 ";
-        ruby.symbol = " ";
-        rust.symbol = "󱘗 ";
-        scala.symbol = " ";
-        swift.symbol = " ";
-        xmake.symbol = " ";
-        zig.symbol = " ";
-
-        # ══════════════════════════════════════════════════════════════════════
-        # NERD FONT SYMBOLS - OS Symbols
-        # ══════════════════════════════════════════════════════════════════════
-        # From: https://starship.rs/presets/nerd-font
-
-        os.symbols = {
-          Alpaquita = " ";
-          Alpine = " ";
-          AlmaLinux = " ";
-          Amazon = " ";
-          Android = " ";
-          AOSC = " ";
-          Arch = " ";
-          Artix = " ";
-          CachyOS = " ";
-          CentOS = " ";
-          Debian = " ";
-          DragonFly = " ";
-          Elementary = " ";
-          Emscripten = " ";
-          EndeavourOS = " ";
-          Fedora = " ";
-          FreeBSD = " ";
-          Garuda = "󰛓 ";
-          Gentoo = " ";
-          HardenedBSD = "󰞌 ";
-          Illumos = "󰈸 ";
-          Ios = "󰀷 ";
-          Kali = " ";
-          Linux = " ";
-          Mabox = " ";
-          Macos = " ";
-          Manjaro = " ";
-          Mariner = " ";
-          MidnightBSD = " ";
-          Mint = " ";
-          NetBSD = " ";
-          NixOS = " ";
-          Nobara = " ";
-          OpenBSD = "󰈺 ";
-          openSUSE = " ";
-          OracleLinux = "󰌷 ";
-          Pop = " ";
-          Raspbian = " ";
-          Redhat = " ";
-          RedHatEnterprise = " ";
-          RockyLinux = " ";
-          Redox = "󰀘 ";
-          Solus = "󰠳 ";
-          SUSE = " ";
-          Ubuntu = " ";
-          Unknown = " ";
-          Void = " ";
-          Windows = "󰍲 ";
-          Zorin = " ";
-        };
-
-        # ══════════════════════════════════════════════════════════════════════
-        # DISABLED MODULES (Enable if needed)
-        # ══════════════════════════════════════════════════════════════════════
-        # These modules are disabled by default but can be enabled by setting
-        # disabled = false
-
-        # Battery indicator (useful for laptops)
-        # battery = {
-        #   disabled = false;
-        #   full_symbol = "󰁹 ";
-        #   charging_symbol = "󰂄 ";
-        #   discharging_symbol = "󰂃 ";
-        #   unknown_symbol = "󰁽 ";
-        #   empty_symbol = "󰂎 ";
-        # };
-
-        # Time display
-        # time = {
-        #   disabled = false;
-        #   format = "at [$time]($style) ";
-        #   time_format = "%R"; # 24-hour format
-        #   style = "bold yellow";
-        # };
-
-        # Kubernetes context
-        # kubernetes = {
-        #   disabled = false;
-        #   format = "on [⛵ $context( \\($namespace\\))]($style) ";
-        #   style = "cyan bold";
-        # };
-
-        # Memory usage (shows when > 75%)
-        # memory_usage = {
-        #   disabled = false;
-        #   threshold = 75;
-        #   format = "via $symbol [$ram( | $swap)]($style) ";
-        #   style = "bold dimmed white";
-        # };
-      };
+          # Only non-fish shells are worth pointing out.
+          shell = {
+            disabled = false;
+            format = "([$indicator]($style) )";
+            style = "bold white";
+            fish_indicator = "";
+            zsh_indicator = "zsh";
+            bash_indicator = "bash";
+            nu_indicator = "nu";
+            unknown_indicator = "";
+          };
+        }
+        // lib.genAttrs languages (name: {
+          symbol = "${nf.${name}} ";
+          format = "[$symbol($version )]($style)";
+          version_format = "\${raw}";
+        });
     };
   };
 }

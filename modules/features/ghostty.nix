@@ -30,7 +30,14 @@ _: {
 
       settings = {
         # Font configuration
-        font-family = "JetBrainsMono Nerd Font Mono";
+        # font-family is deliberately unset: Ghostty embeds JetBrains Mono plus a
+        # symbols-only Nerd Font and sizes icons by Nerd Fonts' own rules (up to
+        # two cells). The patched "Nerd Font Mono" family squeezes every icon
+        # into one cell. Glyphs the embedded symbols font lacks (e.g. newer
+        # cod-* icons) fall back to the installed nerd-fonts.jetbrains-mono.
+        # Check which face renders a codepoint: `ghostty +show-face --cp=0xf418`
+        # Ligatures (->, !=, =>) are JetBrains Mono's default; to turn them off:
+        # font-feature = "-calt";
         font-size = 14;
         theme = "dark:GitHub Dark High Contrast,light:GitHub Light High Contrast";
 
