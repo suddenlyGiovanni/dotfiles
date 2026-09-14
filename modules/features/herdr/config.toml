@@ -1,0 +1,18 @@
+# herdr configuration — https://herdr.dev/docs/configuration/
+# Symlinked (out-of-store) to ~/.config/herdr/config.toml; herdr writes back here
+# from onboarding and its settings UI. Full reference: `herdr --default-config`.
+# Apply edits to a running server: prefix+shift+r or `herdr server reload-config`.
+
+onboarding = false
+
+[theme]
+# Follow Ghostty's light/dark appearance (its theme is a dark:/light: pair).
+# Picking a theme in herdr's UI rewrites name and sets auto_switch = false.
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+
+[ui.toast]
+# Ghostty is detected via TERM_PROGRAM and shows these as macOS notifications
+# (OSC 9); clicking one activates Ghostty.
+delivery = "terminal"

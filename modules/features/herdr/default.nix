@@ -13,8 +13,16 @@
 # The Claude Code skill comes from the package's own source, pinned to the same
 # version as the binary. `herdr integration install` (agent hooks) is not
 # declared here.
-_: {
+#
+# config.toml uses mkOutOfStoreSymlink (Zed pattern) rather than
+# programs.herdr.settings: herdr writes back to it (onboarding, theme picker,
+# sound/toast toggles, `herdr config reset-keys`) via an in-place write that
+# follows symlinks, which a read-only nix-store file would reject.
+{config, ...}: let
+  dotfilesPath = config.dotfiles.user.dotfilesPath;
+in {
   flake.modules.homeManager.herdr = {
+    config,
     lib,
     pkgs,
     ...
@@ -31,5 +39,8 @@ _: {
     home.packages = [pkgs.herdr herdrCompletions];
 
     programs.claude-code.skills.herdr = "${pkgs.herdr.src}/skills/herdr";
+
+    xdg.configFile."herdr/config.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/modules/features/herdr/config.toml";
   };
 }
