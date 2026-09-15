@@ -19,10 +19,9 @@
 # ══════════════════════════════════════════════════════════════════════════════
 #
 # delta is automatically used as git's pager when enableGitIntegration is true.
-# All git commands that produce diff output will use delta:
+# hunk.nix takes over `git diff` and `git show`; delta keeps the rest:
 #
-#   git diff                   View working tree changes
-#   git show                   View commit details
+#   git add -p                 Interactive staging (interactive.diffFilter)
 #   git log -p                 View commit history with patches
 #   git blame                  View file annotations (with color)
 #   git stash show -p          View stash contents

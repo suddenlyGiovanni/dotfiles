@@ -11,6 +11,8 @@
     onepassword-shell-plugins.url = "github:1Password/shell-plugins";
     hey-cli.url = "github:basecamp/hey-cli";
     hey-cli.inputs.nixpkgs.follows = "nixpkgs";
+    hunk.url = "github:modem-dev/hunk";
+    hunk.inputs.nixpkgs.follows = "nixpkgs";
 
     # Claude Code skills (non-flake repos pulled in as raw sources)
     ast-grep-agent-skill = {
