@@ -61,3 +61,23 @@ if ($env.__HM_SESS_VARS_SOURCED? | is-empty) and ('/etc/login-environment.sh' | 
     # entries that were already present.
     $env.PATH = $env.PATH | split row (char esep) | uniq
 }
+
+# Claude.app resolves its environment by running
+#   $SHELL -l -i -c 'echo "<start>"; env -0 && echo "<end>" || env'
+# with CLAUDE_DESKTOP_RESOLVING_ENVIRONMENT=1. nu rejects the `&&`
+# (nu::parser::shell_andand); after five failed probes the app keeps its launchd
+# environment. The login-environment agent (session.nix) doesn't cover that:
+# Claude.app can open at login before the agent has run, and its sessions then
+# lose CLAUDE_CONFIG_DIR and fall back to ~/.claude. So once the import above
+# has run, hand the probe to /bin/sh, which inherits it. nu doesn't expose its
+# argv; the probe is the last argument. A probe that parses as nu stays in nu.
+if ($env.CLAUDE_DESKTOP_RESOLVING_ENVIRONMENT? == "1") and ($env.__HM_SESS_VARS_SOURCED? | is-not-empty) {
+    let probe = ^/bin/ps -ww -o args= -p $nu.pid
+    | lines
+    | first
+    | parse --regex ' -c (?<script>.+)'
+    | get --optional 0.script
+    if $probe != null and not ($probe | nu-check) {
+        exec /bin/sh -c $probe
+    }
+}

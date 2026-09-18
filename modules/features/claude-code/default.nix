@@ -15,10 +15,12 @@ in {
   # GUI apps — Claude.app, and its embedded desktop Claude Code — start from
   # launchd, not a shell, and never source hm-session-vars.sh; without the
   # session variables below they silently fall back to the empty upstream
-  # ~/.claude default. session.nix's login-environment launchd agent exports
-  # every Home Manager session variable (CLAUDE_CONFIG_DIR and
-  # CLAUDE_CODE_THRIFTY_SONIC included) into the user's launchd domain at each
-  # login, which GUI apps inherit.
+  # ~/.claude default. Claude.app gets them from its login-shell probe
+  # (`$SHELL -l -i -c`), which nushell/env.nu answers. session.nix's
+  # login-environment launchd agent also exports every Home Manager session
+  # variable (CLAUDE_CONFIG_DIR and CLAUDE_CODE_THRIFTY_SONIC included) into the
+  # user's launchd domain at each login, but Claude.app can open at login before
+  # the agent has run, so it can't rely on that.
   flake.modules.homeManager.claude-code = {config, ...}: {
     # ── Bash-first opt-out ────────────────────────────────────────────────────
     # With `permissions.defaultMode = "auto"` (settings.json), Claude Code

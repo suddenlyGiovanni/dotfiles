@@ -25,7 +25,8 @@ in {
   # - nushell, the login shell, imports it in env.nu (nushell/env.nu)
   # - the launchd agent below exports it to GUI apps. They start from launchd,
   #   not a shell, and some (Claude.app) probe `$SHELL -l -i -c` with POSIX
-  #   syntax that nu rejects.
+  #   syntax that nu rejects. The export only reaches apps launched after it,
+  #   so env.nu also answers Claude.app's probe for when the app opens first.
   flake.modules.darwin.session = {
     config,
     pkgs,

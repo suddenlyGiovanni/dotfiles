@@ -55,6 +55,11 @@ macOS `open` stays `/usr/bin/open`. The book stops there. On nix-darwin it leave
   it adds or changes. The `__*` include guards are left out, so shells still run their own setup.
   The agent runs at every login, and a rebuild that changes the environment reloads it. It replaces
   claude-code's `launchd.user.envVariables`.
+- **env.nu answers Claude.app's probe.** The agent races apps that open at login. After the first
+  reboot, Claude.app started before the agent, all five of its probes failed, and its sessions fell
+  back to `~/.claude`. When `CLAUDE_DESKTOP_RESOLVING_ENVIRONMENT=1` is set and the import has run,
+  `env.nu` reads the probe from its own argv (`ps`) and `exec`s it in `/bin/sh`, which prints the
+  imported environment. A probe that parses as nu (`nu-check`) stays in nu.
 - **Config directory.** Home Manager keeps writing `~/.config/nushell` and links
   `~/Library/Application Support/nushell` to it.
 - **Remaining `$SHELL` consumers:**
@@ -69,15 +74,16 @@ macOS `open` stays `/usr/bin/open`. The book stops there. On nix-darwin it leave
 
 - The login shell is declared in the flake and actually applied.
 - nu, fish, zsh and GUI apps see one environment, defined once (ADR-002's `home.sessionVariables`).
-- Claude.app, Zed and other GUI apps no longer depend on which login shell can parse their probe.
-  The launchd export also survives reboots.
+- GUI apps launched after the agent no longer depend on which login shell can parse their probe,
+  and Claude.app's probe succeeds however early it starts. The launchd export also survives reboots.
 
 ### Negative
 
 - GUI apps now start with a nix-first `PATH` and the 1Password `SSH_AUTH_SOCK`. Zed, VS Code and
   Claude.app already got the same values through their shell probes.
 - `launchctl setenv` only reaches apps launched after the agent runs. Apps that auto-start at login
-  may need a relaunch.
+  may need a relaunch. Claude.app doesn't, but its fix depends on the app's probe format: the
+  `CLAUDE_DESKTOP_RESOLVING_ENVIRONMENT` marker, and the script as the argument after `-c`.
 - Anything that runs `$SHELL -c '<POSIX>'` now gets nu, and with no config: for example `ssh <mac>
   cmd`, `scp` and `rsync` into this machine.
 - The environment import costs about 20 ms per top-level nu.

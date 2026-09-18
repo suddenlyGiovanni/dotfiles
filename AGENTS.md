@@ -26,7 +26,7 @@ just gc           # Garbage collect
 
 - **Git tracking required**: Run `git add` on new files before building (flakes only see tracked files)
 - **No `xdg.userDirs`**: Linux-only module; causes assertion failures on macOS
-- **Nushell is the login shell**: `users.users.*.shell` in `nushell/default.nix`, applied because `darwin-core.nix` lists the user in `users.knownUsers` (ADR-008). nu gets its environment from `/etc/login-environment.sh` (`session.nix`) in `nushell/env.nu`; GUI apps get the same variables from the `login-environment` launchd agent. Never put POSIX syntax where `$SHELL -c` will run it
+- **Nushell is the login shell**: `users.users.*.shell` in `nushell/default.nix`, applied because `darwin-core.nix` lists the user in `users.knownUsers` (ADR-008). nu gets its environment from `/etc/login-environment.sh` (`session.nix`) in `nushell/env.nu`; GUI apps get the same variables from the `login-environment` launchd agent, and `env.nu` answers Claude.app's `$SHELL -l -i -c` probe (the app can open at login before the agent runs). Never put POSIX syntax where `$SHELL -c` will run it
 - **1Password SSH**: Git signing uses `/Applications/1Password.app/Contents/MacOS/op-ssh-sign`
 - **No specialArgs**: All values flow through the module system (flake-parts options, closure technique, or shared HM options)
 - **Draft convention**: Prefix files with `_` to exclude from auto-discovery
