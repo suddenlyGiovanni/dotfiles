@@ -23,5 +23,14 @@ _: {
       enableBashIntegration = programEnabled ["bash"];
       enableNushellIntegration = programEnabled ["nushell"];
     };
+
+    # nushell has no completions of its own for external commands: carapace is
+    # its only source. Bridging to zsh and fish covers commands without a
+    # carapace spec (herdr, hey, devenv, bw, gws, hunk, ff, …) through the
+    # completions those shells already have. Scoped to nu so zsh and fish keep
+    # their native completions.
+    programs.nushell.environmentVariables = lib.mkIf (programEnabled ["nushell"]) {
+      CARAPACE_BRIDGES = "zsh,fish";
+    };
   };
 }

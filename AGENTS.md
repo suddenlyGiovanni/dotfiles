@@ -26,7 +26,7 @@ just gc           # Garbage collect
 
 - **Git tracking required**: Run `git add` on new files before building (flakes only see tracked files)
 - **No `xdg.userDirs`**: Linux-only module; causes assertion failures on macOS
-- **Nushell is login shell**: Set by the nushell module via `users.users.*.shell`
+- **Nushell is the login shell**: `users.users.*.shell` in `nushell/default.nix`, applied because `darwin-core.nix` lists the user in `users.knownUsers` (ADR-008). nu gets its environment from `/etc/login-environment.sh` (`session.nix`) in `nushell/env.nu`; GUI apps get the same variables from the `login-environment` launchd agent. Never put POSIX syntax where `$SHELL -c` will run it
 - **1Password SSH**: Git signing uses `/Applications/1Password.app/Contents/MacOS/op-ssh-sign`
 - **No specialArgs**: All values flow through the module system (flake-parts options, closure technique, or shared HM options)
 - **Draft convention**: Prefix files with `_` to exclude from auto-discovery
@@ -43,9 +43,10 @@ modules/
     darwin-core.nix    # System plumbing (nixpkgs, systemPackages, fonts, user, nix)
     home-core.nix      # HM plumbing (username, homeDir, stateVersion, packages)
     # Cross-cutting modules (darwin + HM):
-    fish/default.nix   # Shell: darwin (enable, vendor, pathsToLink) + HM (full config)
+    nushell/           # Login shell: darwin (env.shells, pathsToLink, shell) + HM (env.nu, config.nu)
+    session.nix        # Session vars (HM) + /etc/login-environment.sh and its launchd agent (darwin)
+    fish/default.nix   # Fallback shell: darwin (enable, vendor, env.shells) + HM (full config)
     zsh.nix            # Shell: darwin (env.shells, pathsToLink) + HM (config)
-    nushell.nix        # Shell: darwin (env.shells, pathsToLink, login shell) + HM
     1password/         # Auth: darwin (cask) + HM (plugins, SSH keys, agent, XDG)
     docker.nix         # Tools: darwin (cask) + HM (CLI tools, XDG)
     zed/default.nix    # Editor: darwin (cask) + HM (config symlinks)
@@ -68,7 +69,9 @@ modules/
 | Configure a program | `modules/features/<name>.nix` or `modules/features/<name>/default.nix` |
 | Add macOS preference | `modules/features/<name>.nix` |
 | Add environment variable | Co-locate in the relevant feature module's `home.sessionVariables` |
-| Add fish function/abbr | `modules/features/fish/_functions.nix` or `_abbreviations.nix` |
+| Add nu command | `modules/features/nushell/config.nu` |
+| Add abbreviation / alias (nu + fish) | `modules/features/fish/_abbreviations.nix` or `_aliases.nix` (nushell/default.nix imports both) |
+| Add fish function | `modules/features/fish/_functions.nix` |
 | Add SSH key | `modules/features/1password/default.nix` → `sshPublicKeys` + `agent.toml` |
 
 ## Feedback Loop

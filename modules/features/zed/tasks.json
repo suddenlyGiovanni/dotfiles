@@ -43,7 +43,10 @@
     //           "args": ["--login"]
     //         }
     //     }
-    "shell": "system",
+    // This command is bash syntax, and the system shell is nushell.
+    "shell": {
+      "program": "bash",
+    },
     // Whether to show the task line in the output of the spawned task, defaults to `true`.
     "show_summary": true,
     // Whether to show the command line in the output of the spawned task, defaults to `true`.

@@ -108,6 +108,14 @@ file is sourced by:
 New shell sessions pick up these variables automatically. Existing terminals require reloading or
 starting a new session.
 
+Consumers that can't source a POSIX script get the same variables from `/etc/login-environment.sh`
+(`session.nix`), which sources nix-darwin's `set-environment`, Homebrew's `shellenv` and
+`hm-session-vars.sh`:
+
+- Nushell, the login shell, imports it in `env.nu` ([ADR-008](./008-nushell-login-shell.md))
+- GUI apps get it from a launchd agent that runs `launchctl setenv` at every login
+
+
 ### macOS Consideration
 
 We intentionally did **not** use `xdg.userDirs` (for directories like Desktop, Documents, Downloads)

@@ -18,6 +18,8 @@ require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+    -- LazyVim extras load after LazyVim and before your own plugins
+    { import = "lazyvim.plugins.extras.lang.nushell" }, -- tree-sitter-nu + nushell LSP (nu --lsp)
     -- import/override with your plugins
     { import = "plugins" },
   },

@@ -47,8 +47,17 @@ in {
       doc.enable = true; # Whether to install documentation distributed in packages' /share/doc. Usually plain text and/or HTML. This also includes "doc" outputs.
     };
 
+    # nix-darwin only applies `users.users.*.shell` (set to nushell in
+    # nushell/default.nix) to users it knows, and needs their uid for that.
+    # 501 is the account macOS created at setup. For an existing user with a
+    # matching uid, activation only re-asserts PrimaryGroupID (gid, default 20),
+    # RealName and UserShell; nix-darwin refuses to delete the primary user and
+    # never deletes uids <= 501. See docs/adr/008-nushell-login-shell.md.
+    users.knownUsers = [user.username];
+
     users.users.${user.username} = {
       name = user.username; # The name of the user account. If undefined, the name of the attribute set will be used.
+      uid = 501; # Required for users in knownUsers; must match the existing account (`id -u`).
       description = user.fullName; # A short description of the user account, typically the user's full name.
       home = user.homeDirectory; # The user's home directory. This defaults to `null`.
       isHidden = false; # Whether to make the user account hidden.

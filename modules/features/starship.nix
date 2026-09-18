@@ -20,7 +20,7 @@
 #
 # Principle: everyday segments are an icon only; rare or alarming ones spell
 # themselves out ("direnv not allowed", "3 conflicted"). `prompt-legend`
-# (fish) prints every glyph with its name, the git status key, and
+# (fish, nu) prints every glyph with its name, the git status key, and
 # `starship explain` for the current directory.
 #
 # ══════════════════════════════════════════════════════════════════════════════
@@ -40,6 +40,8 @@
 #
 # Shell integrations are enabled from config.programs.<shell>.enable. Transient
 # prompt (fish): on fish >= 4.1 starship uses fish's native transient prompt.
+# HM's enableTransience is fish-only, so nu gets the equivalent through its own
+# TRANSIENT_PROMPT_* variables (below).
 _: {
   flake.modules.homeManager.starship = {
     config,
@@ -97,6 +99,17 @@ _: {
     };
     nf = lib.mapAttrs (_: entry: glyph (builtins.head entry)) glyphTable;
 
+    # Git status key printed by `prompt-legend` (fish and nu)
+    gitStatusKey = [
+      "  ~N modified   +N staged   ?N untracked   »N renamed   ✘N deleted   N conflicted"
+      "  ⇡N ahead of upstream   ⇣N behind upstream   → origin/x  upstream differs from branch name"
+      "  (+A -D lines)  lines added/removed vs HEAD"
+      "  (stashes are not shown: they are shared by every worktree of a repo)"
+    ];
+
+    starship = lib.getExe config.programs.starship.package;
+    inherit (lib.hm.nushell) toNushell;
+
     # Toolchains shown on the right as `<icon> <version>` when detected.
     languages = ["bun" "nodejs" "deno" "python" "rust" "golang" "java" "kotlin" "swift" "ruby" "lua"];
 
@@ -129,15 +142,40 @@ _: {
         ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: entry: "printf '  %s  %-9s U+%-6s nf-%s\\n' ${lib.escapeShellArg nf.${name}} ${name} ${lib.toUpper (builtins.head entry)} ${lib.last entry}") glyphTable)}
         echo
         set_color --bold; echo "Git status (files)"; set_color normal
-        echo "  ~N modified   +N staged   ?N untracked   »N renamed   ✘N deleted   N conflicted"
-        echo "  ⇡N ahead of upstream   ⇣N behind upstream   → origin/x  upstream differs from branch name"
-        echo "  (+A -D lines)  lines added/removed vs HEAD"
-        echo "  (stashes are not shown: they are shared by every worktree of a repo)"
+        ${lib.concatMapStringsSep "\n" (line: "echo ${lib.escapeShellArg line}") gitStatusKey}
         echo
         set_color --bold; echo "This directory"; set_color normal
         starship explain
       '';
     };
+
+    programs.nushell.extraConfig = lib.mkIf (shellEnabled ["programs" "nushell" "enable"]) (lib.mkAfter ''
+      # Explain the starship prompt: glyphs, git status key, current segments
+      def prompt-legend [] {
+          print $"(ansi attr_bold)Glyphs(ansi reset)"
+          ${toNushell {multiline = false;} (lib.mapAttrsToList (name: entry: {
+          inherit name;
+          code = builtins.head entry;
+          class = lib.last entry;
+        })
+        glyphTable)} | each {|g|
+              print $"  (char --unicode $g.code)  ($g.name | fill --width 9) U+($g.code | str uppercase | fill --width 6) nf-($g.class)"
+          } | ignore
+          print ""
+          print $"(ansi attr_bold)Git status \(files\)(ansi reset)"
+          ${lib.concatMapStringsSep "\n    " (line: "print ${toNushell {} line}") gitStatusKey}
+          print ""
+          print $"(ansi attr_bold)This directory(ansi reset)"
+          ^${starship} explain
+      }
+
+      # Transient prompt, as enableTransience does for fish: once a command runs,
+      # its prompt collapses to the prompt character.
+      $env.TRANSIENT_PROMPT_COMMAND = {|| ^${starship} module character }
+      $env.TRANSIENT_PROMPT_INDICATOR = ""
+      $env.TRANSIENT_PROMPT_INDICATOR_VI_INSERT = ""
+      $env.TRANSIENT_PROMPT_INDICATOR_VI_NORMAL = ""
+    '');
 
     programs.starship = {
       enable = true;
@@ -406,15 +444,15 @@ _: {
             unknown_msg = "nix";
           };
 
-          # Only non-fish shells are worth pointing out.
+          # Only shells other than nu, the login shell, are worth pointing out.
           shell = {
             disabled = false;
             format = "([$indicator]($style) )";
             style = "bold white";
-            fish_indicator = "";
+            fish_indicator = "fish";
             zsh_indicator = "zsh";
             bash_indicator = "bash";
-            nu_indicator = "nu";
+            nu_indicator = "";
             unknown_indicator = "";
           };
         }

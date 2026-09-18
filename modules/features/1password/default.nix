@@ -144,6 +144,22 @@ _: {
           ];
       };
 
+      # The upstream module only wraps bash, zsh and fish. Same wrappers for
+      # nushell, named like upstream does (awscli2 -> aws); `@complete external`
+      # keeps carapace completions for the wrapped command.
+      programs.nushell.extraConfig = lib.mkIf config.programs.nushell.enable (
+        lib.concatMapStrings (pkg: let
+          exe = baseNameOf (lib.getExe pkg);
+        in ''
+          # 1Password shell plugin
+          @complete external
+          def --wrapped ${exe} [...args] {
+              ^op plugin run -- ${exe} ...$args
+          }
+        '')
+        config.programs._1password-shell-plugins.plugins
+      );
+
       # ── Home Files ───────────────────────────────────────────────────────────────
       home.file =
         # SSH Public Key Files

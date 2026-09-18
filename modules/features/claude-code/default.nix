@@ -12,22 +12,13 @@
 }: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
-  # home-manager's CLAUDE_CONFIG_DIR export (see the homeManager block below)
-  # only reaches shell-launched processes. GUI apps — Claude.app, and its
-  # embedded desktop Claude Code — start from launchd, not a shell, and never
-  # source hm-session-vars.sh; without this they silently fall back to the
-  # empty upstream ~/.claude default. `launchd.user.envVariables` mirrors the
-  # var into the user's launchd domain via `launchctl setenv`, which GUI apps
-  # do inherit.
-  flake.modules.darwin.claude-code = {
-    launchd.user.envVariables = {
-      CLAUDE_CONFIG_DIR = "${config.dotfiles.user.homeDirectory}/.config/claude";
-      # Same GUI-inheritance reason as above: the HM sessionVariables copy (see
-      # the homeManager block) only reaches shell-launched `claude`.
-      CLAUDE_CODE_THRIFTY_SONIC = "0";
-    };
-  };
-
+  # GUI apps — Claude.app, and its embedded desktop Claude Code — start from
+  # launchd, not a shell, and never source hm-session-vars.sh; without the
+  # session variables below they silently fall back to the empty upstream
+  # ~/.claude default. session.nix's login-environment launchd agent exports
+  # every Home Manager session variable (CLAUDE_CONFIG_DIR and
+  # CLAUDE_CODE_THRIFTY_SONIC included) into the user's launchd domain at each
+  # login, which GUI apps inherit.
   flake.modules.homeManager.claude-code = {config, ...}: {
     # ── Bash-first opt-out ────────────────────────────────────────────────────
     # With `permissions.defaultMode = "auto"` (settings.json), Claude Code
@@ -53,8 +44,8 @@ in {
       package = null;
       # XDG-compliant config dir. When this differs from the upstream default
       # (~/.claude), home-manager auto-exports CLAUDE_CONFIG_DIR into shell
-      # startup files for us. GUI apps don't source those — see the darwin
-      # block above for the launchd-side mirror they need instead.
+      # startup files for us. GUI apps don't source those — see the note at
+      # the top of this file for how they get it via launchd instead.
       configDir = "${config.xdg.configHome}/claude";
       # Global instructions applied to every Claude Code session on this
       # machine. Written to ${configDir}/CLAUDE.md as a nix-store symlink.

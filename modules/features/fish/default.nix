@@ -5,7 +5,10 @@
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
   # ── Darwin: enable fish as a valid login shell ───────────────────────────
-  flake.modules.darwin.fish = _: {
+  # nushell is the login shell (nushell/default.nix); fish stays a registered
+  # fallback in /etc/shells.
+  flake.modules.darwin.fish = {pkgs, ...}: {
+    environment.shells = [pkgs.fish];
     programs.fish = {
       enable = true;
       vendor = {

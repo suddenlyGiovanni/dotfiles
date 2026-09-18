@@ -62,6 +62,13 @@
     "**/secrets.yml",
   ],
 
+  // Nushell (the login shell): nu = tree-sitter-nu + `nu --lsp`, nu-lint = linter LSP
+  // (`nu-lint --lsp`, installed by nushell/default.nix). Formatting via nufmt, under "languages".
+  "auto_install_extensions": {
+    "nu": true,
+    "nu-lint": true,
+  },
+
   "semantic_tokens": "combined",
   "code_lens": "on",
   "cli_default_open_behavior": "new_window",
@@ -165,6 +172,14 @@
         "external": {
           "command": "alejandra", // or "nixfmt"
           "arguments": ["--quiet", "--"],
+        },
+      },
+    },
+    "Nu": {
+      "formatter": {
+        "external": {
+          "command": "nufmt",
+          "arguments": ["--stdin"],
         },
       },
     },

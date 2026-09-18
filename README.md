@@ -13,8 +13,7 @@ git clone https://github.com/suddenlyGiovanni/dotfiles.git ~/Developer/dotfiles
 cd ~/Developer/dotfiles
 sudo darwin-rebuild switch --flake .
 
-# 3. Set fish as your login shell
-chsh -s /run/current-system/sw/bin/fish
+# 3. Log out and back in: the switch made nushell your login shell (ADR-008)
 ```
 
 ## Daily Commands
