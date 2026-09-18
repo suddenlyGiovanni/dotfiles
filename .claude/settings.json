@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "enabledPlugins": {
+    "dotfiles-lsp@dotfiles": true
+  },
+  "extraKnownMarketplaces": {
+    "dotfiles": {
+      "source": {
+        "source": "file",
+        "path": ".claude-plugin/marketplace.json"
+      }
+    }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nu \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/direnv-prime.nu",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "direnv exec \"$CLAUDE_PROJECT_DIR\" nu --stdin \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-tool-use.nu",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

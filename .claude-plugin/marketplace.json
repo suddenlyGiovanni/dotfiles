@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "dotfiles",
+  "description": "In-repo plugins for the dotfiles repo: agent-facing wiring that mirrors the editor setup, so Claude Code and Zed/Neovim read the same signals.",
+  "owner": {
+    "name": "suddenlyGiovanni"
+  },
+  "plugins": [
+    {
+      "name": "dotfiles-lsp",
+      "description": "Wire Claude Code's LSP tool at the devshell's language servers: nu --lsp for Nushell, nixd for Nix.",
+      "source": "./.claude/plugins/dotfiles-lsp"
+    }
+  ]
+}

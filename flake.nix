@@ -41,20 +41,45 @@
       ];
 
       # Per-system outputs (formatter, devShells, checks)
-      perSystem = {pkgs, ...}: {
-        # Formatter for `nix fmt`
-        formatter = pkgs.alejandra;
+      perSystem = {pkgs, ...}: let
+        # What treefmt.toml routes to. One list for `nix fmt`, the devshell (so
+        # `just fmt`, Zed and the Claude Code hooks see the same binaries) and
+        # the formatting check.
+        formatters = with pkgs; [
+          treefmt
+          alejandra # *.nix
+          nufmt # *.nu
+          stylua # *.lua
+        ];
+
+        linters = with pkgs; [
+          statix # Nix antipatterns
+          deadnix # Unused Nix code
+          nu-lint # *.nu (--config .nu-lint.toml: 1.3 doesn't discover it)
+        ];
+      in {
+        # `nix fmt`: treefmt over the whole tree (config: treefmt.toml)
+        formatter = pkgs.writeShellApplication {
+          name = "treefmt";
+          runtimeInputs = formatters;
+          text = ''exec ${pkgs.treefmt}/bin/treefmt "$@"'';
+        };
 
         # CI-ready checks — `nix flake check` runs all of these
         checks = {
-          formatting = pkgs.runCommand "check-formatting" {} ''
-            cd ${./.}
-            ${pkgs.alejandra}/bin/alejandra --check . 2>&1
+          # treefmt formats in place, so it runs on a writable copy; --ci turns
+          # any change into a failure.
+          formatting = pkgs.runCommand "check-formatting" {nativeBuildInputs = formatters;} ''
+            cp -r ${./.} src
+            chmod -R u+w src
+            cd src
+            treefmt --ci
             touch $out
           '';
-          lint = pkgs.runCommand "check-lint" {} ''
+          lint = pkgs.runCommand "check-lint" {nativeBuildInputs = linters;} ''
             cd ${./.}
-            ${pkgs.statix}/bin/statix check .
+            statix check .
+            nu-lint --config .nu-lint.toml .
             touch $out
           '';
           deadcode = pkgs.runCommand "check-deadcode" {} ''
@@ -91,18 +116,20 @@
         # Activated automatically via direnv (use flake)
         devShells.default = pkgs.mkShell {
           name = "dotfiles-dev";
-          packages = with pkgs; [
-            # Nix tools
-            nixd # Nix language server
-            nil # Alternative Nix LSP
-            alejandra # Nix formatter
-            statix # Nix linter
-            deadnix # Find dead code in Nix
+          packages =
+            formatters
+            ++ linters
+            ++ (with pkgs; [
+              # Language servers (Zed, Neovim, and Claude Code via
+              # .claude/plugins/dotfiles-lsp)
+              nixd # Nix language server
+              nil # Alternative Nix LSP
+              nushell # `nu --lsp`, and the Claude Code hooks (.claude/hooks/*.nu)
 
-            # Utilities
-            just # Task runner
-            nvd # Nix package version diff tool
-          ];
+              # Utilities
+              just # Task runner
+              nvd # Nix package version diff tool
+            ]);
 
           shellHook = ''
             echo "dotfiles development shell"

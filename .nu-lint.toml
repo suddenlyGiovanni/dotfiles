@@ -1,0 +1,23 @@
+# nu-lint configuration — https://codeberg.org/wvhulle/nu-lint
+# nu-lint 1.3's CLI doesn't discover this file on its own, so every CLI caller
+# passes `--config .nu-lint.toml`: `just lint`, the `lint` flake check and the
+# Claude Code PostToolUse hook. (Zed's nu-lint extension starts `nu-lint --lsp`
+# with no way to pass it, so the editor may show the rules below anyway.)
+#
+# The nu files here are shell config: helpers that shadow and drive external
+# tools on purpose. These rules argue against exactly that, so they're off.
+[rules]
+# Wrappers that shadow an external (`def ff`, `def man`, the 1Password `def gh`)
+# must call it as `^ff`, or they recurse; keep `^` explicit everywhere.
+remove_hat_not_builtin = "off"
+# The fzf helpers exist to drive these tools; nu equivalents don't replace them.
+bat_to_open = "off"
+fd_to_glob = "off"
+grep_to_find_or_where = "off"
+# Interactive helpers: a failing command already prints its own error.
+catch_builtin_error_try = "off"
+unhandled_external_error = "off"
+# Wrappers around externals return byte streams; `any` is the honest type.
+missing_output_type = "off"
+# Quoted strings are kept for readability.
+string_may_be_bare = "off"

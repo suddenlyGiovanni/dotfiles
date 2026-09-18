@@ -35,19 +35,20 @@ default:
 # ── Dev ───────────────────────────────────────────────────────────────────────
 
 [group('dev')]
-[doc('Format all Nix files')]
-fmt:
-    alejandra .
+[doc('Format all files with treefmt (Nix, Nu, Lua; see treefmt.toml)')]
+fmt *paths:
+    treefmt {{ paths }}
 
 [group('dev')]
-[doc('Check formatting without modifying files')]
+[doc('Fail if any file needed formatting (treefmt has no dry run: it formats them too)')]
 fmt-check:
-    alejandra --check .
+    treefmt --ci
 
 [group('dev')]
-[doc('Lint Nix files with statix')]
+[doc('Lint Nix files with statix and Nu files with nu-lint')]
 lint:
     statix check .
+    nu-lint --config .nu-lint.toml .
 
 [group('dev')]
 [doc('Find unused code in Nix files')]

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "dotfiles-lsp",
+  "version": "0.1.0",
+  "description": "Wire Claude Code's LSP tool (navigation, hover, symbols, diagnostics after edits) at the devshell's language servers: nu --lsp for *.nu, nixd for *.nix. Both run through `direnv exec` so they're the flake-pinned binaries Zed and Neovim use.",
+  "author": {
+    "name": "suddenlyGiovanni"
+  },
+  "keywords": ["lsp", "nushell", "nix"],
+  "lspServers": "./.lsp.json"
+}

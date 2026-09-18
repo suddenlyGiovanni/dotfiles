@@ -12,8 +12,8 @@ Guidance for AI coding agents working with this repository.
 ## Commands
 
 ```shell
-just fmt          # Format Nix files
-just lint         # Lint with statix
+just fmt          # Format with treefmt (Nix, Nu, Lua; see treefmt.toml)
+just lint         # Lint with statix and nu-lint
 just check        # Run all checks (format, lint, deadcode, flake validation)
 just build        # Build current host without applying
 just build-all    # Build all host configurations
@@ -70,6 +70,26 @@ modules/
 | Add environment variable | Co-locate in the relevant feature module's `home.sessionVariables` |
 | Add fish function/abbr | `modules/features/fish/_functions.nix` or `_abbreviations.nix` |
 | Add SSH key | `modules/features/1password/default.nix` → `sshPublicKeys` + `agent.toml` |
+
+## Feedback Loop
+
+The devshell (`flake.nix` → `devShells.default`, loaded by direnv) carries every formatter, linter
+and language server, and every check uses those same binaries:
+
+- **Format**: `treefmt.toml` is the one table: alejandra (`*.nix`), nufmt (`*.nu`) and stylua
+  (`*.lua`). `nix fmt`, `just fmt`, the `formatting` flake check and Zed (`.zed/settings.json`) all
+  route through it.
+- **Lint**: statix and deadnix (`*.nix`), nu-lint (`*.nu`, always with `--config .nu-lint.toml`).
+- **Claude Code hooks** (`.claude/settings.json`). They are nu scripts; write new ones in nu, not
+  POSIX shell:
+  - SessionStart (`.claude/hooks/direnv-prime.nu`) puts the devshell on the Bash tool's PATH.
+  - After every Write/Edit, `.claude/hooks/post-tool-use.nu` formats the file with treefmt, lints
+    it, and reports back.
+  - "Auto-formatted" means re-read the file before editing it again. Fix the lint findings in code
+    you touched.
+- **LSP**: the in-repo plugin `.claude/plugins/dotfiles-lsp` (marketplace
+  `.claude-plugin/marketplace.json`) wires `nu --lsp` and `nixd` into Claude Code's LSP tool.
+  Claude Code installs it from the committed HEAD, so changes to it take effect once committed.
 
 ## Known Issues
 

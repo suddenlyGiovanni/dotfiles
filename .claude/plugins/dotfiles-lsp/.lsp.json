@@ -1,0 +1,20 @@
+{
+  "nushell": {
+    "command": "direnv",
+    "args": ["exec", "${CLAUDE_PROJECT_DIR}", "nu", "--lsp"],
+    "extensionToLanguage": {
+      ".nu": "nushell"
+    },
+    "transport": "stdio",
+    "workspaceFolder": "${CLAUDE_PROJECT_DIR}"
+  },
+  "nixd": {
+    "command": "direnv",
+    "args": ["exec", "${CLAUDE_PROJECT_DIR}", "nixd"],
+    "extensionToLanguage": {
+      ".nix": "nix"
+    },
+    "transport": "stdio",
+    "workspaceFolder": "${CLAUDE_PROJECT_DIR}"
+  }
+}

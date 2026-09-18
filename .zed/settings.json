@@ -1,0 +1,34 @@
+// Project settings for the dotfiles repo (layered over the global ones in
+// modules/features/zed/settings.json).
+//
+// Format through treefmt (treefmt.toml), the same table `just fmt`, `nix fmt`,
+// the formatting flake check and the Claude Code hook use. treefmt and the
+// formatters come from the flake devshell, which Zed loads via direnv.
+{
+  "languages": {
+    "Nix": {
+      "formatter": {
+        "external": {
+          "command": "treefmt",
+          "arguments": ["--stdin", "{buffer_path}"],
+        },
+      },
+    },
+    "Nu": {
+      "formatter": {
+        "external": {
+          "command": "treefmt",
+          "arguments": ["--stdin", "{buffer_path}"],
+        },
+      },
+    },
+    "Lua": {
+      "formatter": {
+        "external": {
+          "command": "treefmt",
+          "arguments": ["--stdin", "{buffer_path}"],
+        },
+      },
+    },
+  },
+}

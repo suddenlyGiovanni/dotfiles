@@ -1,0 +1,31 @@
+# treefmt — the one formatter table for this repo
+# https://treefmt.com/latest/getting-started/configure/
+#
+# Everything that formats routes through here, so no two paths can disagree:
+# `nix fmt`, `just fmt` / `just fmt-check`, the `formatting` flake check, the
+# Claude Code PostToolUse hook (.claude/hooks/post-tool-use.nu) and Zed's
+# project formatter (.zed/settings.json). The binaries come from the flake's
+# `formatters` list (devshell via direnv, `nix fmt`, checks).
+
+[global]
+excludes = [
+  ".direnv/**",
+  "result/**",
+  # Vendored agent skills: upstream content we don't own; reformatting would
+  # drift from upstream.
+  "modules/features/agent-skills/skills/**",
+]
+
+[formatter.alejandra]
+command = "alejandra"
+options = ["--quiet"]
+includes = ["*.nix"]
+
+[formatter.nufmt]
+command = "nufmt"
+includes = ["*.nu"]
+
+# Reads modules/features/neovim/nvim/stylua.toml (searched upward from each file)
+[formatter.stylua]
+command = "stylua"
+includes = ["*.lua"]
