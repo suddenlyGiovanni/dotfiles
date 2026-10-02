@@ -13,7 +13,7 @@ excludes = [
   "result/**",
   # Vendored agent skills: upstream content we don't own; reformatting would
   # drift from upstream.
-  "modules/features/agent-skills/skills/**",
+  "modules/features/agents/skills/**",
 ]
 
 [formatter.alejandra]
