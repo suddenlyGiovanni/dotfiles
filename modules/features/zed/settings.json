@@ -209,9 +209,13 @@
       },
       "type": "registry",
     },
-    // ACP registry entry: Zed downloads and runs `opencode acp` itself.
+    // Custom ACP agent running the Nix-managed opencode, so Zed and the CLI
+    // share one version and ~/.config/opencode. Absolute path: GUI Zed may not
+    // see the shell PATH. Sign in once from a terminal first (`opencode auth login`).
     "opencode": {
-      "type": "registry",
+      "type": "custom",
+      "command": "/etc/profiles/per-user/suddenlygiovanni/bin/opencode",
+      "args": ["acp"],
     },
   },
   "agent": {
