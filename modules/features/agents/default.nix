@@ -23,6 +23,7 @@
 #
 #   Claude Code  ${configDir}/CLAUDE.md        (Claude Code does not read AGENTS.md)
 #   opencode     ~/.config/opencode/AGENTS.md  (opencode's native global rules file)
+#   Delta        ~/.config/delta/AGENTS.md     (DELTA_CONFIG_DIR in delta-app/)
 #
 # Deliberately not `programs.claude-code.context` / `programs.opencode.context`:
 # both render read-only nix-store copies, which defeats the single editable
@@ -59,6 +60,7 @@ in {
     xdg.configFile = {
       "claude/CLAUDE.md".source = agentsMd;
       "opencode/AGENTS.md".source = agentsMd;
+      "delta/AGENTS.md".source = agentsMd;
     };
   };
 }

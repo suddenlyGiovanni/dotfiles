@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "portable": {
+    "appearance": "system",
+    "app_icon": "default",
+    "light_theme": "Delta One Light",
+    "dark_theme": "Delta One Dark",
+    "ui_font_size": 16,
+    "prose_font_size": 15,
+    "code_font_size_px": 15,
+    "buffer_font_family": "JetBrainsMono Nerd Font Mono",
+    "ligatures": true,
+    "send_message_with_modifier": true,
+    "send_message_with_modifier_was_enabled": true,
+    "cursor_after_send": "agent_response",
+    "model_picker": {
+      "favorites": [
+        {
+          "provider_id": "zed.dev",
+          "model_id": "claude-opus-5"
+        },
+        {
+          "provider_id": "zed.dev",
+          "model_id": "gpt-5.6-sol"
+        },
+        {
+          "provider_id": "zed.dev",
+          "model_id": "gpt-6-astra"
+        },
+        {
+          "provider_id": "zed.dev",
+          "model_id": "claude-fable-5-1"
+        }
+      ],
+      "hidden_models": [
+        {
+          "provider_id": "openai-subscribed",
+          "model_id": "gpt-5.5"
+        },
+        {
+          "provider_id": "openai-subscribed",
+          "model_id": "gpt-6-sol"
+        },
+        {
+          "provider_id": "openai-subscribed",
+          "model_id": "gpt-5.6-luna"
+        },
+        {
+          "provider_id": "openai-subscribed",
+          "model_id": "gpt-5.6-sol"
+        }
+      ]
+    },
+    "model_preferences": {
+      "expanded_providers": [
+        "openai-subscribed"
+      ]
+    },
+    "thread_layout": {
+      "centered": false,
+      "constrain_wide_content": false,
+      "width": "default",
+      "custom_width_hundredths": null
+    },
+    "default_compaction_method": "soft",
+    "collapse_tool_activity": false,
+    "file_pane": {
+      "line_numbers": true,
+      "soft_wrap": false
+    },
+    "default_diff_base": "branch",
+    "subagent_delegation": "automatic",
+    "subagent_concurrency": {
+      "maximum_per_parent": 4,
+      "maximum_total": 8
+    },
+    "subagent_defaults": {
+      "allow_parent_model_override": true
+    },
+    "default_thread_visibility": "private",
+    "diff_color_scheme": "green_red",
+    "diff_signs": false,
+    "pull_request_thread_links": true
+  },
+  "native": {
+    "os_notifications": true,
+    "play_sound_when_agent_done": false,
+    "prevent_system_sleep": true,
+    "automatic_update_restart": true,
+    "idle_shutdown_timeout_seconds": 120,
+    "sync_threads_across_devices": false
+  }
+}
