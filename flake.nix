@@ -13,6 +13,8 @@
     hey-cli.inputs.nixpkgs.follows = "nixpkgs";
     hunk.url = "github:modem-dev/hunk";
     hunk.inputs.nixpkgs.follows = "nixpkgs";
+    opencode.url = "github:anomalyco/opencode";
+    opencode.inputs.nixpkgs.follows = "nixpkgs";
 
     # Claude Code skills (non-flake repos pulled in as raw sources)
     ast-grep-agent-skill = {

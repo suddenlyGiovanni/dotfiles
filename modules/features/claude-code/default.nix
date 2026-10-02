@@ -49,9 +49,8 @@ in {
       # startup files for us. GUI apps don't source those — see the note at
       # the top of this file for how they get it via launchd instead.
       configDir = "${config.xdg.configHome}/claude";
-      # Global instructions applied to every Claude Code session on this
-      # machine. Written to ${configDir}/CLAUDE.md as a nix-store symlink.
-      context = ./CLAUDE.md;
+      # Global instructions (${configDir}/CLAUDE.md) are NOT set via `context`:
+      # they are a symlink to the shared AGENTS.md, see agents/.
       # Surgical per-skill installs (attrset mode, NOT path mode — path mode
       # would clobber sibling user-managed skills under ${configDir}/skills/).
       skills = {
@@ -99,7 +98,7 @@ in {
     #                  servers live in ~/.claude.json, which holds OAuth/session
     #                  state and must never be committed.
     #   - skills/    : a 3-way mix (nix-store ast-grep + cross-agent symlinks to
-    #                  ~/.agents/skills from the agent-skills module + plugin
+    #                  ~/.agents/skills from the agents module + plugin
     #                  dirs); whole-dir symlinking would clobber those. Individual
     #                  skills are surfaced via per-skill symlinks (below).
     #   - agents/    : surfaced per-AGENT (below), not whole-dir, because the
