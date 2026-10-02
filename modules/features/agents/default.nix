@@ -9,7 +9,10 @@
 #   agents/
 #     default.nix   fan-out (this file)
 #     AGENTS.md     global instructions, one file for every agent
-#     skills/       skill library (https://github.com/mattpocock/skills & friends)
+#     skills/       global skills; kept empty on purpose. Claude Code ranks personal
+#                   skills above project ones, so a global copy shadows the
+#                   (newer) project version. Only add skills that are never
+#                   project-scoped.
 #
 # ── INSTRUCTIONS ─────────────────────────────────────────────────────────────
 #
