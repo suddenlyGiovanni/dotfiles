@@ -31,6 +31,12 @@
 }: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
+  # Desktop app: Homebrew cask (auto-updating), like the Zed cask. The CLI
+  # above stays Nix-managed; both read the same ~/.config/opencode.
+  flake.modules.darwin.opencode = _: {
+    homebrew.casks = ["opencode-desktop"];
+  };
+
   flake.modules.homeManager.opencode = {
     config,
     pkgs,
