@@ -78,8 +78,8 @@
       "allow_parent_model_override": true
     },
     "default_thread_visibility": "private",
-    "diff_color_scheme": "green_red",
-    "diff_signs": false,
+    "diff_color_scheme": "blue_orange",
+    "diff_signs": true,
     "pull_request_thread_links": true
   },
   "native": {
