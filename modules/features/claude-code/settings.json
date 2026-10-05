@@ -1,47 +1,42 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_WORKFLOWS": "1",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1",
+    "CLAUDE_CODE_SHELL": "/run/current-system/sw/bin/bash"
+  },
   "attribution": {
     "commit": "",
     "pr": "",
     "sessionUrl": false
   },
-  "env": {
-    "CLAUDE_CODE_WORKFLOWS": "1",
-    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
-  },
   "permissions": {
     "defaultMode": "auto"
   },
+  "model": "opus[1m]",
   "statusLine": {
     "type": "command",
     "command": "starship statusline claude-code"
   },
-  "model": "opus[1m]",
   "enabledPlugins": {
-    "agent-sdk-dev@claude-plugins-official": true,
+    "agent-sdk-dev@claude-plugins-official": false,
     "ralph-loop@claude-plugins-official": false,
     "superpowers@claude-plugins-official": false,
     "frontend-design@claude-plugins-official": false,
     "deploy-on-aws@claude-plugins-official": false,
-    "plannotator@plannotator": true,
-    "cloudflare@cloudflare": true,
-    "warp@claude-code-warp": false,
-    "claude-mermaid@claude-mermaid": false
+    "plannotator@plannotator": false,
+    "cloudflare@cloudflare": true
+  },
+  "skillOverrides": {
+    "herdr": "off",
+    "hey": "off",
+    "hunk-review": "off",
+    "plannotator-annotate": "off",
+    "plannotator-last": "off",
+    "plannotator-review": "off",
+    "plannotator-setup-goal": "off"
   },
   "extraKnownMarketplaces": {
-    "agent-plugins-for-aws": {
-      "source": {
-        "source": "github",
-        "repo": "awslabs/agent-plugins"
-      },
-      "autoUpdate": true
-    },
-    "claude-code-warp": {
-      "source": {
-        "source": "github",
-        "repo": "warpdotdev/claude-code-warp"
-      }
-    },
     "plannotator": {
       "source": {
         "source": "github",
@@ -49,31 +44,17 @@
       },
       "autoUpdate": true
     },
-    "thingos-internal": {
-      "source": {
-        "source": "file",
-        "path": "/Users/suddenlygiovanni/Developer/work/headless/claude/effect-lsp/.claude-plugin/marketplace.json"
-      },
-      "autoUpdate": true
-    },
-    "vladikk-modularity": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/vladikk/modularity.git"
-      }
-    },
     "cloudflare": {
       "source": {
         "source": "github",
         "repo": "cloudflare/skills"
       }
-    },
-    "claude-mermaid": {
-      "source": {
-        "source": "github",
-        "repo": "veelenga/claude-mermaid"
-      }
     }
+  },
+  "outputStyle": "Concise",
+  "sandbox": {
+    "enabled": false,
+    "allowUnsandboxedCommands": true
   },
   "effortLevel": "high",
   "tui": "fullscreen",
@@ -85,8 +66,5 @@
   "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "voiceEnabled": true,
-  "sandbox": {
-    "enabled": false
-  }
+  "voiceEnabled": true
 }
