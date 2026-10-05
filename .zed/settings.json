@@ -5,6 +5,9 @@
 // the formatting flake check and the Claude Code hook use. treefmt and the
 // formatters come from the flake devshell, which Zed loads via direnv.
 {
+	"git": {
+		"worktree_directory": ".worktrees",
+	},
   "languages": {
     "Nix": {
       "formatter": {
