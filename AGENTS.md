@@ -11,16 +11,7 @@ Guidance for AI coding agents working with this repository.
 
 ## Commands
 
-```shell
-just fmt          # Format with treefmt (Nix, Nu, Lua; see treefmt.toml)
-just lint         # Lint with statix and nu-lint
-just check        # Run all checks (format, lint, deadcode, flake validation)
-just build        # Build current host without applying
-just build-all    # Build all host configurations
-just switch       # Apply configuration (requires sudo)
-just update       # Update flake inputs
-just gc           # Garbage collect
-```
+`just --list` is the source of truth.
 
 ## Critical Constraints
 
@@ -30,33 +21,6 @@ just gc           # Garbage collect
 - **1Password SSH**: Git signing uses `/Applications/1Password.app/Contents/MacOS/op-ssh-sign`
 - **No specialArgs**: All values flow through the module system (flake-parts options, closure technique, or shared HM options)
 - **Draft convention**: Prefix files with `_` to exclude from auto-discovery
-
-## Module Structure
-
-```
-modules/
-  options.nix          # Flake-parts level options (dotfiles.user, dotfiles.hosts)
-  hosts.nix            # Concrete host data
-  host-assembly.nix    # Builds darwinConfigurations (no specialArgs)
-  features/
-    hm-options.nix     # Shared HM-level options (hostname, sshKeys, agentSock)
-    darwin-core.nix    # System plumbing (nixpkgs, systemPackages, fonts, user, nix)
-    home-core.nix      # HM plumbing (username, homeDir, stateVersion, packages)
-    # Cross-cutting modules (darwin + HM):
-    nushell/           # Login shell: darwin (env.shells, pathsToLink, shell) + HM (env.nu, config.nu)
-    session.nix        # Session vars (HM) + /etc/login-environment.sh and its launchd agent (darwin)
-    fish/default.nix   # Fallback shell: darwin (enable, vendor, env.shells) + HM (full config)
-    zsh.nix            # Shell: darwin (env.shells, pathsToLink) + HM (config)
-    1password/         # Auth: darwin (cask) + HM (plugins, SSH keys, agent, XDG)
-    docker.nix         # Tools: darwin (cask) + HM (CLI tools, XDG)
-    zed/default.nix    # Editor: darwin (cask) + HM (config symlinks)
-    ssh.nix            # SSH client: reads shared sshKeys + agentSock
-    # Darwin-only modules:
-    homebrew.nix       # Infrastructure + standalone casks
-    dock.nix, finder.nix, trackpad.nix, ...  # macOS preferences
-    # HM-only modules:
-    git/default.nix, bat.nix, fzf.nix, starship.nix, ...
-```
 
 ## File Locations
 
