@@ -3,8 +3,8 @@
 # https://github.com/anomalyco/opencode
 #
 # Binary: the upstream flake (input `opencode`), via the home-manager
-# `programs.opencode` module's `package`. nixpkgs lags upstream releases; update
-# with `nix flake update opencode`. opencode's `autoupdate` is irrelevant for a
+# `programs.opencode` module's `package`. nixpkgs lags upstream releases; the input
+# is pinned to a release tag in flake.nix (edit it, then `nix flake update opencode`). opencode's `autoupdate` is irrelevant for a
 # store-managed binary and is turned off in opencode.json.
 #
 # Config: same split as claude-code/. Everything opencode or its agents edit at
@@ -48,13 +48,10 @@ in {
   in {
     programs.opencode = {
       enable = true;
-      # v1.18.34's build script shells out to `codesign` on darwin, which the
-      # sandbox lacks; nixpkgs' sigtool provides `codesign` and cctools the
-      # `codesign_allocate` it spawns. Drop the override once upstream stops
-      # requiring it.
-      package = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode.overrideAttrs (old: {
-        nativeBuildInputs = old.nativeBuildInputs ++ [pkgs.darwin.sigtool pkgs.cctools];
-      });
+      # Pinned to the 2.x line (input tag in flake.nix); bump the tag to upgrade.
+      # v1.18.x needed a sigtool/cctools override for its darwin codesign step;
+      # 2.0.23 builds without it.
+      package = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
     };
 
     xdg.configFile = {
