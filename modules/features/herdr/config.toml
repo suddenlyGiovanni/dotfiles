@@ -16,3 +16,6 @@ light_name = "catppuccin-latte"
 # Ghostty is detected via TERM_PROGRAM and shows these as macOS notifications
 # (OSC 9); clicking one activates Ghostty.
 delivery = "terminal"
+
+[ui]
+status_indicators = "symbols"
