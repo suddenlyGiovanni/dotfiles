@@ -2,7 +2,7 @@
 # https://opencode.ai/docs/config/
 # https://github.com/anomalyco/opencode
 #
-# Binary: the upstream flake (input `opencode`), via the home-manager
+# Binaries (CLI and desktop app): the upstream flake (input `opencode`), via the home-manager
 # `programs.opencode` module's `package`. nixpkgs lags upstream releases; the input
 # is pinned to a release tag in flake.nix (edit it, then `nix flake update opencode`). opencode's `autoupdate` is irrelevant for a
 # store-managed binary and is turned off in opencode.json.
@@ -31,12 +31,6 @@
 }: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
-  # Desktop app: Homebrew cask (auto-updating), like the Zed cask. The CLI
-  # above stays Nix-managed; both read the same ~/.config/opencode.
-  flake.modules.darwin.opencode = _: {
-    homebrew.casks = ["opencode-desktop"];
-  };
-
   flake.modules.homeManager.opencode = {
     config,
     pkgs,
@@ -53,6 +47,13 @@ in {
       # 2.0.23 builds without it.
       package = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
     };
+
+    # Desktop app from the same pinned upstream flake input as the CLI, so both
+    # track one version. The Homebrew cask lagged at 1.18.x. Both read the same
+    # ~/.config/opencode.
+    home.packages = [
+      inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode-desktop
+    ];
 
     xdg.configFile = {
       "opencode/opencode.json".source = svc "opencode.json";
