@@ -7,297 +7,311 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  // Zed opens one FSEvent stream per directory, and its default file_scan_exclusions covers only
-  // VCS metadata and editor cruft — not node_modules, not build output. In a large JS monorepo the
-  // initial scan exhausts the process's file descriptors, and the failure does not stay in the
-  // scanner: once EMFILE is hit, Zed can no longer read the project's own .zed/settings.json (so it
-  // silently keeps running whatever loaded last), language servers fail to spawn with errors
-  // blaming the server rather than the cause, and git blame and the terminal panel stop working.
-  // The log signature is thousands of `unable to start FSEvent stream` at
-  // crates/worktree/src/worktree.rs in ~/Library/Logs/Zed/Zed.log.
-  //
-  // This key REPLACES Zed's default rather than extending it, so the eleven defaults are restated
-  // verbatim before the additions. Dropping one silently re-admits that tree.
-  //
-  // Only universally-safe entries belong here. `vendor` is deliberately NOT one of them: it is a
-  // real source directory in Go and PHP projects, so a repo that needs it excluded declares it in
-  // its own .zed/settings.json.
-  "file_scan_exclusions": [
-    // Zed's defaults, restated because this key replaces rather than merges.
-    "**/.git",
-    "**/.svn",
-    "**/.hg",
-    "**/.jj",
-    "**/.sl",
-    "**/.repo",
-    "**/CVS",
-    "**/.DS_Store",
-    "**/Thumbs.db",
-    "**/.classpath",
-    "**/.settings",
-    // Additions: generated or vendored trees no editor needs to watch.
-    "**/node_modules",
-    "**/.direnv",
-    "**/.types",
-    "**/target",
-    "**/dist",
-    "**/build",
-    "**/.turbo",
-    "**/.next",
-    "**/.venv",
-    "**/__pycache__",
-  ],
+	// Zed opens one FSEvent stream per directory, and its default file_scan_exclusions covers only
+	// VCS metadata and editor cruft — not node_modules, not build output. In a large JS monorepo the
+	// initial scan exhausts the process's file descriptors, and the failure does not stay in the
+	// scanner: once EMFILE is hit, Zed can no longer read the project's own .zed/settings.json (so it
+	// silently keeps running whatever loaded last), language servers fail to spawn with errors
+	// blaming the server rather than the cause, and git blame and the terminal panel stop working.
+	// The log signature is thousands of `unable to start FSEvent stream` at
+	// crates/worktree/src/worktree.rs in ~/Library/Logs/Zed/Zed.log.
+	//
+	// This key REPLACES Zed's default rather than extending it, so the eleven defaults are restated
+	// verbatim before the additions. Dropping one silently re-admits that tree.
+	//
+	// Only universally-safe entries belong here. `vendor` is deliberately NOT one of them: it is a
+	// real source directory in Go and PHP projects, so a repo that needs it excluded declares it in
+	// its own .zed/settings.json.
+	"format_on_save": "modifications_if_available",
+	"hard_tabs": true,
+	"sticky_scroll": {
+		"enabled": true,
+	},
+	"autosave": "on_focus_change",
+	"cursor_animation": {
+		"enabled": true,
+	},
+	"reveal_if_open": true,
+	"file_scan_exclusions": [
+		// Zed's defaults, restated because this key replaces rather than merges.
+		"**/.git",
+		"**/.svn",
+		"**/.hg",
+		"**/.jj",
+		"**/.sl",
+		"**/.repo",
+		"**/CVS",
+		"**/.DS_Store",
+		"**/Thumbs.db",
+		"**/.classpath",
+		"**/.settings",
+		// Additions: generated or vendored trees no editor needs to watch.
+		"**/node_modules",
+		"**/.direnv",
+		"**/.types",
+		"**/target",
+		"**/dist",
+		"**/build",
+		"**/.turbo",
+		"**/.next",
+		"**/.venv",
+		"**/__pycache__",
+	],
 
-  // Zed's private_files default is `**/.env*`, which does not match names like `.secrets.env`.
-  // A file it does not match is ordinary content: indexed, searchable, and readable by any AI
-  // feature with project access. Same replaces-not-merges rule, so the defaults are restated.
-  "private_files": [
-    "**/.env*",
-    "**/.secrets.env",
-    "**/secrets.env",
-    "**/*.pem",
-    "**/*.key",
-    "**/*.cert",
-    "**/*.crt",
-    "**/secrets.yml",
-  ],
+	// Zed's private_files default is `**/.env*`, which does not match names like `.secrets.env`.
+	// A file it does not match is ordinary content: indexed, searchable, and readable by any AI
+	// feature with project access. Same replaces-not-merges rule, so the defaults are restated.
+	"private_files": [
+		"**/.env*",
+		"**/.secrets.env",
+		"**/secrets.env",
+		"**/*.pem",
+		"**/*.key",
+		"**/*.cert",
+		"**/*.crt",
+		"**/secrets.yml",
+	],
 
-  // Nushell (the login shell): nu = tree-sitter-nu + `nu --lsp`, nu-lint = linter LSP
-  // (`nu-lint --lsp`, installed by nushell/default.nix). Formatting via nufmt, under "languages".
-  "auto_install_extensions": {
-    "nu": true,
-    "nu-lint": true,
-  },
+	// Nushell (the login shell): nu = tree-sitter-nu + `nu --lsp`, nu-lint = linter LSP
+	// (`nu-lint --lsp`, installed by nushell/default.nix). Formatting via nufmt, under "languages".
+	"auto_install_extensions": {
+		"nu": true,
+		"nu-lint": true,
+	},
 
-  "semantic_tokens": "combined",
-  "code_lens": "on",
-  "cli_default_open_behavior": "new_window",
-  "diff_view_style": "split",
-  "collaboration_panel": {
-    "dock": "left",
-  },
-  "tab_bar": {
-    "show_pinned_tabs_in_separate_row": false,
-    "show": true,
-  },
-  "close_on_file_delete": true,
-  "search": {
-    "center_on_match": true,
-  },
-  "middle_click_paste": false,
-  "use_on_type_format": false,
-  "preferred_line_length": 100,
-  "soft_wrap": "none",
-  "toolbar": {
-    "code_actions": true,
-  },
-  "minimap": {
-    "show": "auto",
-  },
-  "show_signature_help_after_edits": true,
-  "which_key": {
-    "enabled": true,
-  },
-  "buffer_line_height": "comfortable",
-  "redact_private_values": true,
-  "indent_guides": {
-    "background_coloring": "indent_aware",
-    "coloring": "indent_aware",
-  },
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false,
-  },
-  "use_system_window_tabs": true,
-  "outline_panel": {
-    "dock": "left",
-  },
-  "audio": { "experimental.auto_microphone_volume": true },
-  "calls": {
-    "mute_on_join": true,
-  },
-  "tab_size": 2,
-  "terminal": {
-    "toolbar": {
-      "breadcrumbs": false,
-    },
-    "font_family": "JetBrainsMono Nerd Font",
-  },
-  "vim_mode": false,
-  "colorize_brackets": true,
-  "context_servers": {},
-  "edit_predictions": {
-    "provider": "zed",
-    "mode": "subtle",
-  },
-  "git_panel": {
-    "sort_by": "path",
-    "group_by": "staging",
-    "dock": "left",
-    "collapse_untracked_diff": true,
-    "status_style": "icon",
-    "tree_view": true,
-    "sort_by_path": true,
-  },
-  "git": {
-    "inline_blame": {
-      "show_commit_summary": true,
-    },
-  },
-  "project_panel": {
-    "hide_hidden": false,
-    "hide_gitignore": false,
-    "button": true,
-    "dock": "left",
-  },
-  "tabs": {
-    "file_icons": true,
-    "git_status": true,
-  },
-  "title_bar": {
-    "show_branch_status_icon": true,
-    "show_menus": false,
-  },
-  "languages": {
-    // No global formatter or code action is asserted for TypeScript on purpose. A per-project
-    // .zed/settings.json is the only thing that knows which formatter that project actually runs,
-    // and a global default here silently overrides nothing while quietly applying everywhere else.
-    "TypeScript": {
-      "document_symbols": "on",
-      "document_folding_ranges": "on",
-    },
-    "Nix": {
-      "language_servers": ["nixd", "!nil"],
-      "formatter": {
-        "external": {
-          "command": "alejandra", // or "nixfmt"
-          "arguments": ["--quiet", "--"],
-        },
-      },
-    },
-    "Nu": {
-      "formatter": {
-        "external": {
-          "command": "nufmt",
-          "arguments": ["--stdin"],
-        },
-      },
-    },
-  },
-  "icon_theme": {
-    "mode": "system",
-    "light": "Zed (Default)",
-    "dark": "JetBrains New UI Icons (Light)",
-  },
-  "diagnostics": {
-    "inline": {
-      "enabled": true,
-    },
-  },
-  "base_keymap": "JetBrains",
-  "agent_servers": {
-    "claude-acp": {
-      "favorite_config_option_values": {
-        "model": [
-          "opus[1m]"
-        ]
-      },
-      "default_config_options": {
-        "model": "opus[1m]",
-        "mode": "default",
-        "effort": "max"
-      },
-      "type": "registry",
-    },
-    // Custom ACP agent running the Nix-managed opencode, so Zed and the CLI
-    // share one version and ~/.config/opencode. Absolute path: GUI Zed may not
-    // see the shell PATH. Sign in once from a terminal first (`opencode auth login`).
-    "opencode": {
-      "type": "custom",
-      "command": "/etc/profiles/per-user/suddenlygiovanni/bin/opencode",
-      "args": ["acp"],
-    },
-  },
-  "agent": {
-    "play_sound_when_agent_done": "when_hidden",
-    "dock": "right",
-    "tool_permissions": {
-      "default": "allow",
-    },
-    "show_turn_stats": true,
-    "notify_when_agent_waiting": "all_screens",
-    "enable_feedback": false,
-    "single_file_review": false,
-    "use_modifier_to_send": true,
-    "favorite_models": [
-      {
-        "provider": "copilot_chat",
-        "model": "claude-sonnet-4.5",
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "claude-opus-4.5",
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gpt-5.2",
-      },
-      {
-        "provider": "copilot_chat",
-        "model": "gemini-3-pro-preview",
-      },
-      {
-        "provider": "anthropic",
-        "model": "claude-opus-4-5-latest",
-      },
-    ],
-    "default_profile": "write",
-    "default_model": {
-      "provider": "copilot_chat",
-      "model": "claude-opus-4.5",
-    },
-    "model_parameters": [],
-    "inline_assistant_model": {
-      "provider": "copilot_chat",
-      "model": "gpt-5.2",
-    },
-  },
-  "ui_font_size": 16,
-  "buffer_font_size": 16,
-  "theme": {
-    "mode": "system",
-    "light": "JetBrains Light",
-    "dark": "JetBrains Dark",
-  },
-  "buffer_font_family": "JetBrainsMono Nerd Font Mono",
-  "auto_signature_help": true,
-  "inlay_hints": {
-    "show_type_hints": true,
-    "show_background": true,
-    "enabled": true,
-  },
-  "lsp": {
-    "vtsls": {
-      "settings": {
-        "typescript": {
-          "updateImportsOnFileMove": {
-            "enabled": "always",
-          },
-        },
-        "javascript": {
-          "updateImportsOnFileMove": {
-            "enabled": "always",
-          },
-        },
-      },
-      "enable_lsp_tasks": true,
-    },
-    "nixd": {
-      "settings": {
-        "diagnostic": {
-          "suppress": ["sema-extra-with"],
-        },
-      },
-    },
-  },
+	"semantic_tokens": "combined",
+	"code_lens": "on",
+	"cli_default_open_behavior": "new_window",
+	"diff_view_style": "split",
+	"collaboration_panel": {
+		"dock": "right",
+	},
+	"tab_bar": {
+		"show_pinned_tabs_in_separate_row": false,
+		"show": true,
+	},
+	"close_on_file_delete": true,
+	"search": {
+		"center_on_match": true,
+	},
+	"middle_click_paste": false,
+	"use_on_type_format": false,
+	"preferred_line_length": 100,
+	"soft_wrap": "none",
+	"toolbar": {
+		"code_actions": true,
+	},
+	"minimap": {
+		"show": "auto",
+	},
+	"show_signature_help_after_edits": true,
+	"which_key": {
+		"enabled": true,
+	},
+	"buffer_line_height": "comfortable",
+	"redact_private_values": true,
+	"indent_guides": {
+		"background_coloring": "indent_aware",
+		"coloring": "indent_aware",
+	},
+	"telemetry": {
+		"diagnostics": false,
+		"metrics": false,
+	},
+	"use_system_window_tabs": true,
+	"outline_panel": {
+		"dock": "right",
+	},
+	"audio": { "experimental.auto_microphone_volume": true },
+	"calls": {
+		"mute_on_join": true,
+	},
+	"tab_size": 2,
+	"terminal": {
+		"toolbar": {
+			"breadcrumbs": false,
+		},
+		"font_family": "JetBrainsMono Nerd Font",
+	},
+	"vim_mode": false,
+	"colorize_brackets": true,
+	"context_servers": {},
+	"edit_predictions": {
+		"provider": "zed",
+		"mode": "subtle",
+	},
+	"git_panel": {
+		"sort_by": "path",
+		"group_by": "staging",
+		"dock": "right",
+		"collapse_untracked_diff": true,
+		"status_style": "icon",
+		"tree_view": true,
+		"sort_by_path": true,
+	},
+	"git": {
+		"worktree_directory": ".worktrees",
+		"inline_blame": {
+			"show_commit_summary": true,
+		},
+	},
+	"project_panel": {
+		"hide_hidden": false,
+		"hide_gitignore": false,
+		"button": true,
+		"dock": "right",
+	},
+	"tabs": {
+		"file_icons": true,
+		"git_status": true,
+	},
+	"title_bar": {
+		"show_branch_status_icon": true,
+		"show_menus": false,
+	},
+	"languages": {
+		// No global formatter or code action is asserted for TypeScript on purpose. A per-project
+		// .zed/settings.json is the only thing that knows which formatter that project actually runs,
+		// and a global default here silently overrides nothing while quietly applying everywhere else.
+		"TypeScript": {
+			"document_symbols": "on",
+			"document_folding_ranges": "on",
+		},
+		"Nix": {
+			"language_servers": ["nixd", "!nil"],
+			"formatter": {
+				"external": {
+					"command": "alejandra", // or "nixfmt"
+					"arguments": ["--quiet", "--"],
+				},
+			},
+		},
+		"Nu": {
+			"formatter": {
+				"external": {
+					"command": "nufmt",
+					"arguments": ["--stdin"],
+				},
+			},
+		},
+	},
+	"icon_theme": {
+		"mode": "system",
+		"light": "Zed (Default)",
+		"dark": "Zed (Default)",
+	},
+	"diagnostics": {
+		"inline": {
+			"enabled": true,
+		},
+	},
+	"base_keymap": "Zed",
+	"agent_servers": {
+		"claude-acp": {
+			"favorite_config_option_values": {
+				"model": ["opus[1m]"],
+			},
+			"default_config_options": {
+				"model": "opus[1m]",
+				"mode": "plan",
+				"effort": "high",
+			},
+			"type": "registry",
+			// Zed's registry install skips the SDK's platform-specific optional dep
+			// (@anthropic-ai/claude-agent-sdk-darwin-arm64); point at the native install instead.
+			"env": {
+				"CLAUDE_CODE_EXECUTABLE": "/Users/suddenlygiovanni/.local/bin/claude",
+			},
+		},
+		// Custom ACP agent running the Nix-managed opencode, so Zed and the CLI
+		// share one version and ~/.config/opencode. Absolute path: GUI Zed may not
+		// see the shell PATH. Sign in once from a terminal first (`opencode auth login`).
+		"opencode": {
+			"type": "custom",
+			"command": "/etc/profiles/per-user/suddenlygiovanni/bin/opencode",
+			"args": ["acp"],
+		},
+	},
+	"agent": {
+		"play_sound_when_agent_done": "when_hidden",
+		"dock": "left",
+		"tool_permissions": {
+			"default": "allow",
+		},
+		"show_turn_stats": true,
+		"notify_when_agent_waiting": "all_screens",
+		"enable_feedback": false,
+		"single_file_review": false,
+		"use_modifier_to_send": true,
+		"favorite_models": [
+			{
+				"provider": "copilot_chat",
+				"model": "claude-sonnet-4.5",
+			},
+			{
+				"provider": "copilot_chat",
+				"model": "claude-opus-4.5",
+			},
+			{
+				"provider": "copilot_chat",
+				"model": "gpt-5.2",
+			},
+			{
+				"provider": "copilot_chat",
+				"model": "gemini-3-pro-preview",
+			},
+			{
+				"provider": "anthropic",
+				"model": "claude-opus-4-5-latest",
+			},
+		],
+		"default_profile": "write",
+		"default_model": {
+			"provider": "copilot_chat",
+			"model": "claude-opus-4.5",
+		},
+		"model_parameters": [],
+		"inline_assistant_model": {
+			"provider": "copilot_chat",
+			"model": "gpt-5.2",
+		},
+	},
+	"ui_font_size": 16,
+	"buffer_font_size": 16,
+	"theme": {
+		"mode": "system",
+		"light": "JetBrains Light",
+		"dark": "Night Owl Dark",
+	},
+	"buffer_font_family": "JetBrainsMono Nerd Font Mono",
+	"auto_signature_help": true,
+	"inlay_hints": {
+		"show_type_hints": true,
+		"show_background": true,
+		"enabled": true,
+	},
+	"lsp": {
+		"vtsls": {
+			"settings": {
+				"typescript": {
+					"updateImportsOnFileMove": {
+						"enabled": "always",
+					},
+				},
+				"javascript": {
+					"updateImportsOnFileMove": {
+						"enabled": "always",
+					},
+				},
+			},
+			"enable_lsp_tasks": true,
+		},
+		"nixd": {
+			"settings": {
+				"diagnostic": {
+					"suppress": ["sema-extra-with"],
+				},
+			},
+		},
+	},
 }
