@@ -66,19 +66,24 @@ _: {
 
       # ~/.config/direnv/direnv.toml
       #
-      # Auto-trust agent-created git worktrees under the headless monorepo.
+      # Auto-trust git worktrees under the headless monorepo. headless keeps
+      # every worktree (`just worktree add`, Claude Code, Zed) under the main
+      # checkout's .worktrees/ (its docs/git-worktree-guide.md); older Claude
+      # Code worktrees stay under .claude/worktrees/ until they are removed.
       # Fresh `--worktree` sessions are allowed + bootstrapped by the repo's
       # WorktreeCreate hook, and its SessionStart hook re-allows the cwd; the
-      # whitelist covers what those cannot: interactively cd-ing into an
-      # agent's worktree without a manual `direnv allow`, and allow entries
-      # dropped by `direnv prune`. A prefix whitelist matches on the .envrc's
-      # absolute path, implicitly allowing every nested worktree regardless
-      # of content hash.
+      # whitelist covers what those cannot: worktrees made by `just worktree`
+      # or Zed, interactively cd-ing into a worktree without a manual
+      # `direnv allow`, and allow entries dropped by `direnv prune`. A prefix
+      # whitelist matches on the .envrc's absolute path, implicitly allowing
+      # every nested worktree regardless of content hash.
       #
       # SECURITY: any .envrc placed under a whitelisted prefix is executed
-      # by direnv with no prompt. Acceptable for local, agent-owned dirs;
-      # do not extend these prefixes to shared or untrusted locations.
+      # by direnv with no prompt — that includes a branch checked out by hand
+      # into .worktrees/. Acceptable for local dirs; do not extend these
+      # prefixes to shared or untrusted locations.
       config.whitelist.prefix = [
+        "${config.home.homeDirectory}/Developer/work/headless/.worktrees"
         "${config.home.homeDirectory}/Developer/work/headless/.claude/worktrees"
       ];
     };
