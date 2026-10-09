@@ -25,6 +25,7 @@ and consequences. They help future-you (and others) understand:
 | [006](./006-1password-ssh-agent-integration.md)  | 1Password SSH Agent Integration      | Accepted | 2026-01 |
 | [007](./007-flake-parts-dendritic-migration.md)  | Flake-Parts and Dendritic Migration  | Accepted | 2026-02 |
 | [008](./008-nushell-login-shell.md)              | Nushell as the Login Shell           | Accepted | 2026-09 |
+| [009](./009-config-tracking-native-or-out-of-store-symlink.md) | Configuration Tracking — Native Option or Writable Symlink | Accepted | 2026-10 |
 
 ## Creating a New ADR
 
