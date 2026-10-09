@@ -25,6 +25,7 @@ _: {
         hostname = "suddenlyGiovannis-MacBook-Work";
         hostRole = "work";
         homebrew.casks = [
+          "bitwarden" # Vaultwarden desktop app: Touch ID unlock for bwbio (features/bitwarden)
           "claude" # Anthropic's official Claude AI desktop app
           "cursor" # AI-powered code editor
           "figma@beta" # Collaborative team software
