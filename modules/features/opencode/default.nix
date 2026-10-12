@@ -39,12 +39,24 @@ in {
     svc = path:
       config.lib.file.mkOutOfStoreSymlink
       "${dotfilesPath}/modules/features/opencode/${path}";
+    # Through v2.0.27 the desktop SDK still discovers service.json, whereas the prod
+    # CLI registers service-prod.json. Patch only the desktop's bundled SDK; otherwise
+    # it repeatedly starts contenders and never connects to the healthy service.
+    # As of v2.0.27 both clients take the path from service-probe.ts's fallback().
+    desktopPackage = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode-desktop.overrideAttrs (old: {
+      postPatch =
+        (old.postPatch or "")
+        + ''
+          substituteInPlace packages/client/src/service-probe.ts \
+            --replace-fail '"service.json"' '"service-prod.json"'
+        '';
+    });
   in {
     programs.opencode = {
       enable = true;
       # Pinned to the 2.x line (input tag in flake.nix); bump the tag to upgrade.
       # v1.18.x needed a sigtool/cctools override for its darwin codesign step;
-      # 2.0.23 builds without it.
+      # 2.x builds without it.
       package = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
     };
 
@@ -52,7 +64,7 @@ in {
     # track one version. The Homebrew cask lagged at 1.18.x. Both read the same
     # ~/.config/opencode.
     home.packages = [
-      inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode-desktop
+      desktopPackage
     ];
 
     xdg.configFile = {
