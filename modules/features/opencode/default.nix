@@ -4,8 +4,10 @@
 #
 # Binaries (CLI and desktop app): the upstream flake (input `opencode`), via the home-manager
 # `programs.opencode` module's `package`. nixpkgs lags upstream releases; the input
-# is pinned to a release tag in flake.nix (edit it, then `nix flake update opencode`). opencode's `autoupdate` is irrelevant for a
-# store-managed binary and is turned off in opencode.json.
+# is pinned to a release tag in flake.nix (edit it, then `nix flake update opencode`).
+# v2 tags have no GitHub Release; track them via the anomalyco/tap `opencode-v2`
+# formula. Self-update is irrelevant for a store-managed binary and is turned off
+# in opencode.json (`update`, v2's name for v1's `autoupdate`).
 #
 # Config: same split as claude-code/. Everything opencode or its agents edit at
 # runtime is an out-of-store symlink into this directory, so changes land in the
@@ -39,11 +41,27 @@ in {
     svc = path:
       config.lib.file.mkOutOfStoreSymlink
       "${dotfilesPath}/modules/features/opencode/${path}";
-    # Through v2.0.27 the desktop SDK still discovers service.json, whereas the prod
+    upstream = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system};
+    # v2.0.29: the CLI build scripts and electron-builder.config.ts import the root
+    # script/native-arch.ts, but upstream's nix/node_modules.nix fileset omits
+    # script/, so both builds fail with "Cannot find module". The file only imports
+    # node:fs. Drop this once the fileset includes it.
+    withNativeArch = drv:
+      drv.overrideAttrs (old: {
+        postPatch =
+          (old.postPatch or "")
+          + ''
+            install -Dm644 ${inputs.opencode}/script/native-arch.ts script/native-arch.ts
+          '';
+      });
+    cliPackage = withNativeArch upstream.opencode;
+    # Through v2.0.29 the desktop SDK still discovers service.json, whereas the prod
     # CLI registers service-prod.json. Patch only the desktop's bundled SDK; otherwise
     # it repeatedly starts contenders and never connects to the healthy service.
-    # As of v2.0.27 both clients take the path from service-probe.ts's fallback().
-    desktopPackage = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode-desktop.overrideAttrs (old: {
+    # As of v2.0.29 both clients take the path from service-probe.ts's fallback().
+    # desktop.nix inherits src from its `opencode` argument but not postPatch, so it
+    # gets the patched CLI and the native-arch copy of its own.
+    desktopPackage = (withNativeArch (upstream.opencode-desktop.override {opencode = cliPackage;})).overrideAttrs (old: {
       postPatch =
         (old.postPatch or "")
         + ''
@@ -57,7 +75,7 @@ in {
       # Pinned to the 2.x line (input tag in flake.nix); bump the tag to upgrade.
       # v1.18.x needed a sigtool/cctools override for its darwin codesign step;
       # 2.x builds without it.
-      package = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
+      package = cliPackage;
     };
 
     # Desktop app from the same pinned upstream flake input as the CLI, so both
