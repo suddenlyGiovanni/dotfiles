@@ -2,12 +2,21 @@
 # https://opencode.ai/docs/config/
 # https://github.com/anomalyco/opencode
 #
-# Binaries (CLI and desktop app): the upstream flake (input `opencode`), via the home-manager
-# `programs.opencode` module's `package`. nixpkgs lags upstream releases; the input
-# is pinned to a release tag in flake.nix (edit it, then `nix flake update opencode`).
-# v2 tags have no GitHub Release; track them via the anomalyco/tap `opencode-v2`
-# formula. Self-update is irrelevant for a store-managed binary and is turned off
-# in opencode.json (`update`, v2's name for v1's `autoupdate`).
+# Binaries: vendor-managed, like claude-code/. opencode ships near-daily, and its
+# desktop app and CLI meet over a background service whose registration file and
+# port follow the build's release channel. Upstream's own Nix recipe builds a
+# "prod" channel that no official client uses, and it broke outright at v2.0.29,
+# so building from the flake meant carrying patches and lagging releases.
+#   - Desktop: the `opencode-desktop` cask (darwin side below). It auto-updates
+#     itself (greedyCasks in homebrew.nix lets activation upgrade it too) and
+#     bundles its own CLI for its background service.
+#   - CLI: the official v2 installer, once per machine:
+#       curl -fsSL https://opencode.ai/v2/install | bash -s -- --no-modify-path
+#     It installs ~/.opencode/bin/opencode, which opencode recognises as a curl
+#     install and updates itself (`update: "auto"` in opencode.json). PATH comes
+#     from home.sessionPath below, so the installer never edits shell rc files.
+# The home-manager `programs.opencode` module is used purely for configuration;
+# `package = null` opts out of package management.
 #
 # Config: same split as claude-code/. Everything opencode or its agents edit at
 # runtime is an out-of-store symlink into this directory, so changes land in the
@@ -26,64 +35,25 @@
 #   - skills/   : opencode reads ~/.agents/skills natively (agents/).
 #   - node_modules, package.json, bun.lock: opencode installs plugin
 #     dependencies there itself; machine-local, never tracked.
-{
-  inputs,
-  config,
-  ...
-}: let
+{config, ...}: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
-  flake.modules.homeManager.opencode = {
-    config,
-    pkgs,
-    ...
-  }: let
+  flake.modules.darwin.opencode = _: {
+    homebrew.casks = ["opencode-desktop"];
+  };
+
+  flake.modules.homeManager.opencode = {config, ...}: let
     svc = path:
       config.lib.file.mkOutOfStoreSymlink
       "${dotfilesPath}/modules/features/opencode/${path}";
-    upstream = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system};
-    # v2.0.29: the CLI build scripts and electron-builder.config.ts import the root
-    # script/native-arch.ts, but upstream's nix/node_modules.nix fileset omits
-    # script/, so both builds fail with "Cannot find module". The file only imports
-    # node:fs. Drop this once the fileset includes it.
-    withNativeArch = drv:
-      drv.overrideAttrs (old: {
-        postPatch =
-          (old.postPatch or "")
-          + ''
-            install -Dm644 ${inputs.opencode}/script/native-arch.ts script/native-arch.ts
-          '';
-      });
-    cliPackage = withNativeArch upstream.opencode;
-    # Through v2.0.29 the desktop SDK still discovers service.json, whereas the prod
-    # CLI registers service-prod.json. Patch only the desktop's bundled SDK; otherwise
-    # it repeatedly starts contenders and never connects to the healthy service.
-    # As of v2.0.29 both clients take the path from service-probe.ts's fallback().
-    # desktop.nix inherits src from its `opencode` argument but not postPatch, so it
-    # gets the patched CLI and the native-arch copy of its own.
-    desktopPackage = (withNativeArch (upstream.opencode-desktop.override {opencode = cliPackage;})).overrideAttrs (old: {
-      postPatch =
-        (old.postPatch or "")
-        + ''
-          substituteInPlace packages/client/src/service-probe.ts \
-            --replace-fail '"service.json"' '"service-prod.json"'
-        '';
-    });
   in {
     programs.opencode = {
       enable = true;
-      # Pinned to the 2.x line (input tag in flake.nix); bump the tag to upgrade.
-      # v1.18.x needed a sigtool/cctools override for its darwin codesign step;
-      # 2.x builds without it.
-      package = cliPackage;
+      # The official installer owns the binary; see the header.
+      package = null;
     };
 
-    # Desktop app from the same pinned upstream flake input as the CLI, so both
-    # track one version. The Homebrew cask lagged at 1.18.x. Both read the same
-    # ~/.config/opencode.
-    home.packages = [
-      desktopPackage
-    ];
+    home.sessionPath = ["${config.home.homeDirectory}/.opencode/bin"];
 
     xdg.configFile = {
       "opencode/opencode.json".source = svc "opencode.json";

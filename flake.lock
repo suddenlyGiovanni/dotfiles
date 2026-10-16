@@ -295,27 +295,6 @@
         "type": "github"
       }
     },
-    "opencode": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1791968597,
-        "narHash": "sha256-qfT8gQCyGahr5v7v95wNArXrBOAnfQZja1WyJkaCpJI=",
-        "owner": "anomalyco",
-        "repo": "opencode",
-        "rev": "042d0832f5f3a73eaa039a58a7d565776f6d4290",
-        "type": "github"
-      },
-      "original": {
-        "owner": "anomalyco",
-        "ref": "v2.0.29",
-        "repo": "opencode",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "ast-grep-agent-skill": "ast-grep-agent-skill",
@@ -327,8 +306,7 @@
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs",
-        "onepassword-shell-plugins": "onepassword-shell-plugins",
-        "opencode": "opencode"
+        "onepassword-shell-plugins": "onepassword-shell-plugins"
       }
     },
     "systems": {
