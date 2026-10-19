@@ -7,7 +7,7 @@ Guidance for AI coding agents working with this repository.
 - **What**: Declarative macOS dotfiles using nix-darwin + home-manager + flake-parts
 - **Architecture**: Dendritic pattern — each feature is a flake-parts module that can write to both darwin and home-manager sides (cross-cutting modules)
 - **Entry point**: `flake.nix` → `modules/host-assembly.nix` orchestrates builds
-- **Auto-discovery**: `import-tree` discovers all `.nix` files under `modules/` (prefix with `_` to exclude)
+- **Auto-discovery**: `import-tree` discovers all `.nix` files under `modules/features/` (prefix with `_` to exclude)
 
 ## Commands
 
@@ -16,11 +16,16 @@ Guidance for AI coding agents working with this repository.
 ## Critical Constraints
 
 - **Git tracking required**: Run `git add` on new files before building (flakes only see tracked files)
-- **No `xdg.userDirs`**: Linux-only module; causes assertion failures on macOS
-- **Nushell is the login shell**: `users.users.*.shell` in `nushell/default.nix`, applied because `darwin-core.nix` lists the user in `users.knownUsers` (ADR-008). nu gets its environment from `/etc/login-environment.sh` (`session.nix`) in `nushell/env.nu`; GUI apps get the same variables from the `login-environment` launchd agent, and `env.nu` answers Claude.app's `$SHELL -l -i -c` probe (the app can open at login before the agent runs). Never put POSIX syntax where `$SHELL -c` will run it
-- **1Password SSH**: Git signing uses `/Applications/1Password.app/Contents/MacOS/op-ssh-sign`
-- **No specialArgs**: All values flow through the module system (flake-parts options, closure technique, or shared HM options)
-- **Draft convention**: Prefix files with `_` to exclude from auto-discovery
+- **Nushell is the login shell**: never put POSIX syntax where `$SHELL -c` will run it
+- **Rules fire on paths**: [.agents/rules/](./.agents/rules/) holds the constraints that apply to
+  some files only. Read the rule before you edit a file it names; Claude Code loads it by itself.
+
+  | Rule | Covers |
+  |------|--------|
+  | [nix-modules.md](./.agents/rules/nix-modules.md) | `flake.nix`, `modules/**/*.nix`: dendritic shape, discovery, no specialArgs, native option or writable link, no `xdg.userDirs`, zapped casks |
+  | [nushell.md](./.agents/rules/nushell.md) | `*.nu` and the login-shell wiring: where nu's environment comes from, nu-lint config, string traps |
+  | [git-signing.md](./.agents/rules/git-signing.md) | git, ssh and 1Password modules: 1Password signing, unattended runs |
+  | [agent-tooling.md](./.agents/rules/agent-tooling.md) | `.agents/`, `.claude/`, `.opencode/`, `.mcp.json`: the shared/harness split, server lists, hook protocol |
 
 ## File Locations
 
@@ -88,5 +93,5 @@ For detailed guidance, see:
 
 - [docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) — How-to guide with examples
 - [docs/adr/](./docs/adr/) — Architecture Decision Records (rationale for design choices)
-- [docs/adr/007-dendritic-flake-parts-architecture.md](./docs/adr/007-dendritic-flake-parts-architecture.md) — Dendritic architecture ADR
+- [docs/adr/007-flake-parts-dendritic-migration.md](./docs/adr/007-flake-parts-dendritic-migration.md) — Dendritic architecture ADR
 - [docs/TASKS.md](./docs/TASKS.md) — Task tracker for ongoing work
