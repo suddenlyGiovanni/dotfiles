@@ -5,9 +5,36 @@
 # Git integration is automatically enabled based on whether git is active.
 # This module reads config.programs.git.enable to coordinate.
 _: {
-  # bun comes straight from nixpkgs (1.4.2 as of 2026-09-13). If nixpkgs lags a
-  # release you need, reintroduce a version + `passthru.sources` hash overlay under
-  # flake.modules.darwin.bun — see git history for the last one (1.4.0).
+  # ── Overlay: bun 1.4.3 ──────────────────────────────────────────────────────
+  # nixpkgs-unstable is on 1.4.2 (as of 2026-10-19); the work flakes pin 1.4.3.
+  # bun is a prebuilt-binary derivation, so bumping version + source hash is all
+  # that is needed. Drop this overlay once nixpkgs ships >= 1.4.3.
+  #
+  # The hash is upstream's SHASUMS256.txt entry for the asset, in SRI form:
+  #   curl -sL https://github.com/oven-sh/bun/releases/download/bun-v<version>/SHASUMS256.txt
+  flake.modules.darwin.bun = {
+    nixpkgs.overlays = [
+      (_final: prev: {
+        bun = prev.bun.overrideAttrs (finalAttrs: prevAttrs: {
+          version = "1.4.3";
+          # We also replace `src` below, so the version bump is intentional.
+          __intentionallyOverridingVersion = true;
+
+          passthru =
+            prevAttrs.passthru
+            // {
+              sources = {
+                "aarch64-darwin" = prev.fetchurl {
+                  url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
+                  hash = "sha256-gK/UwGm0am+o8+xSC+vHUKeEPkqNW5WD0prUNsAKNAM=";
+                };
+              };
+            };
+        });
+      })
+    ];
+  };
+
   flake.modules.homeManager.bun = {config, ...}: {
     # ── XDG Compliance ──────────────────────────────────────────────────────────
     home.sessionVariables = {
