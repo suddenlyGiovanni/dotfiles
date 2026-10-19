@@ -16,5 +16,32 @@
     },
     "transport": "stdio",
     "workspaceFolder": "${CLAUDE_PROJECT_DIR}"
+  },
+  "lua": {
+    "command": "direnv",
+    "args": ["exec", "${CLAUDE_PROJECT_DIR}", "lua-language-server"],
+    "extensionToLanguage": {
+      ".lua": "lua"
+    },
+    "transport": "stdio",
+    "workspaceFolder": "${CLAUDE_PROJECT_DIR}"
+  },
+  "marksman": {
+    "command": "direnv",
+    "args": ["exec", "${CLAUDE_PROJECT_DIR}", "marksman", "server"],
+    "extensionToLanguage": {
+      ".md": "markdown"
+    },
+    "transport": "stdio",
+    "workspaceFolder": "${CLAUDE_PROJECT_DIR}"
+  },
+  "taplo": {
+    "command": "direnv",
+    "args": ["exec", "${CLAUDE_PROJECT_DIR}", "taplo", "lsp", "stdio"],
+    "extensionToLanguage": {
+      ".toml": "toml"
+    },
+    "transport": "stdio",
+    "workspaceFolder": "${CLAUDE_PROJECT_DIR}"
   }
 }

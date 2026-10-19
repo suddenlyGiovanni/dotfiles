@@ -59,8 +59,9 @@ and language server, and every check uses those same binaries:
   - "Auto-formatted" means re-read the file before editing it again. Fix the lint findings in code
     you touched.
 - **LSP**: the in-repo plugin `.claude/plugins/dotfiles-lsp` (marketplace
-  `.claude-plugin/marketplace.json`) wires `nu --lsp` and `nixd` into Claude Code's LSP tool.
-  Claude Code installs it from the committed HEAD, so changes to it take effect once committed.
+  `.claude-plugin/marketplace.json`) wires `nu --lsp`, `nixd`, `lua-language-server`, `marksman`
+  (`*.md`) and `taplo` (`*.toml`) into Claude Code's LSP tool. Claude Code installs it from the
+  committed HEAD, so changes to it take effect once committed.
 
 ## Known Issues
 

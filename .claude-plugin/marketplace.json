@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "dotfiles-lsp",
-      "description": "Wire Claude Code's LSP tool at the devshell's language servers: nu --lsp for Nushell, nixd for Nix.",
+      "description": "Wire Claude Code's LSP tool at the devshell's language servers: nu --lsp for Nushell, nixd for Nix, lua-language-server for Lua, marksman for Markdown, taplo for TOML.",
       "source": "./.claude/plugins/dotfiles-lsp"
     }
   ]

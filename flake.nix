@@ -192,6 +192,10 @@
               nixd # Nix language server
               nil # Alternative Nix LSP
               nushell # `nu --lsp`, and the Claude Code hooks (.claude/hooks/*.nu)
+              lua-language-server # *.lua (the Neovim config)
+              marksman # *.md: links between docs and ADRs
+              taplo # *.toml
+              just-lsp # justfile
 
               # Utilities
               just # Task runner
