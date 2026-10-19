@@ -1,0 +1,55 @@
+# mcpls, the MCP-to-LSP bridge, with every language server in the devshell
+# (flake.nix → devShells.default). It is for a harness that has no LSP client
+# of its own, such as OpenCode v2 (.opencode/opencode.jsonc): through it the
+# agent gets each server's navigation, findings and fixes as MCP tools.
+#
+# Claude Code reaches these servers through its LSP tool
+# (.claude/plugins/dotfiles-lsp) and uses .claude/mcpls.toml, a subset with only
+# what that tool lacks. The three lists name the same servers (bar Lua, below):
+# change them together.
+#
+# Start it from the repo root under `direnv exec .`, so every server is the
+# devshell's binary. Paths below resolve from this file's directory.
+
+[workspace]
+roots = [".."]
+
+[[lsp_servers]]
+language_id = "nix"
+name = "nixd"
+command = "nixd"
+file_patterns = ["**/*.nix"]
+
+# `nu --lsp` answers few routes; the others would only return errors.
+[[lsp_servers]]
+language_id = "nushell"
+name = "nu"
+command = "nu"
+args = ["--lsp"]
+file_patterns = ["**/*.nu"]
+handles = ["hover", "definition", "document_symbols", "diagnostics"]
+
+# Not here: lua-language-server. Under mcpls 0.7.0 it starts on the fallback
+# workspace instead of the repo and never answers a request (each times out
+# after 30s), though it answers at once when a plain LSP client drives it.
+# Claude Code's LSP tool still serves *.lua through the plugin.
+
+[[lsp_servers]]
+language_id = "markdown"
+name = "marksman"
+command = "marksman"
+args = ["server"]
+file_patterns = ["**/*.md"]
+
+[[lsp_servers]]
+language_id = "toml"
+name = "taplo"
+command = "taplo"
+args = ["lsp", "stdio"]
+file_patterns = ["**/*.toml"]
+
+[[lsp_servers]]
+language_id = "just"
+name = "just"
+command = "just-lsp"
+file_patterns = ["**/justfile"]

@@ -1,5 +1,7 @@
 # mcpls for Claude Code (.mcp.json): only what its built-in LSP tool can't
-# reach. The dotfiles-lsp plugin already gives that tool navigation and
+# reach. The harness-neutral config with every server is .agents/mcpls.toml.
+#
+# The dotfiles-lsp plugin already gives that tool navigation and
 # diagnostics for .nix, .nu, .lua, .md and .toml, and the PostToolUse hook
 # reports lint findings after every edit. The bridge adds two things:
 #

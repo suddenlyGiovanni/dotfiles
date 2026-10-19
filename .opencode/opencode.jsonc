@@ -1,0 +1,68 @@
+// OpenCode v2 project config for the dotfiles repo (layered over the global one
+// in modules/features/opencode/opencode.json).
+//
+// Settings only: what is shared between harnesses lives in .agents/ (see
+// .agents/README.md). OpenCode reads AGENTS.md and .agents/skills natively. It
+// runs none of the Claude Code hooks (.claude/hooks), so AGENTS.md tells every
+// agent to run the gates those hooks call.
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Worktrees go where Zed and Claude Code put them.
+  "worktree": { "directory": ".worktrees" },
+
+  // mcpls bridges the devshell's language servers (.agents/mcpls.toml):
+  // navigation, findings and fixes for Nix, Nushell, Markdown, TOML and the
+  // justfile. OpenCode v2 has no LSP client yet, so this is its only path to
+  // them. It starts through the devshell, so every server is on its PATH.
+  "mcp": {
+    "servers": {
+      "mcpls": {
+        "type": "local",
+        "command": ["direnv", "exec", ".", "mcpls", "--config", ".agents/mcpls.toml", "--log-level", "warn"],
+        "timeout": 30000
+      }
+    }
+  },
+
+  // mcpls exposes 31 tools at 0.7.0. Keep the ones an edit loop uses, so the
+  // rest don't fill every prompt (names follow OpenCode's `<server>_<tool>`).
+  // Not format_document: nixd formats with nixfmt, and this repo formats with
+  // treefmt (`just fmt`).
+  "tools": {
+    "mcpls_*": false,
+    "mcpls_get_diagnostics": true,
+    "mcpls_get_code_actions": true,
+    "mcpls_get_hover": true,
+    "mcpls_get_definition": true,
+    "mcpls_get_references": true,
+    "mcpls_get_document_symbols": true,
+    "mcpls_get_tool_support": true
+  },
+
+  // The servers .claude/plugins/dotfiles-lsp runs, each through the devshell.
+  // OpenCode v2 accepts this key but has no LSP client yet; it is here so the
+  // list is ready when it does.
+  "lsp": {
+    "nixd": {
+      "command": ["direnv", "exec", ".", "nixd"],
+      "extensions": [".nix"]
+    },
+    "nushell": {
+      "command": ["direnv", "exec", ".", "nu", "--lsp"],
+      "extensions": [".nu"]
+    },
+    "lua": {
+      "command": ["direnv", "exec", ".", "lua-language-server"],
+      "extensions": [".lua"]
+    },
+    "marksman": {
+      "command": ["direnv", "exec", ".", "marksman", "server"],
+      "extensions": [".md"]
+    },
+    "taplo": {
+      "command": ["direnv", "exec", ".", "taplo", "lsp", "stdio"],
+      "extensions": [".toml"]
+    }
+  }
+}

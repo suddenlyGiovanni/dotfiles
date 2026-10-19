@@ -72,6 +72,11 @@ and language server, and every check uses those same binaries:
   committed HEAD, so changes to it take effect once committed.
 - **MCP**: `.mcp.json` starts mcpls (`.claude/mcpls.toml`), which bridges what the LSP tool can't
   reach: nixd's code actions (fixes), and just-lsp for the extensionless `justfile`.
+- **Other harnesses**: shared agent tooling lives in `.agents/` (rules, skills, subagents, the full
+  mcpls config); `.claude/` keeps only what is in Claude Code's own format, and links to the rest.
+  [.agents/README.md](./.agents/README.md) maps it. OpenCode (`.opencode/opencode.jsonc`) runs
+  none of the Claude Code hooks above: in it, run `just fmt` after editing and `just check` before
+  you finish, and follow the PreToolUse rules by hand.
 
 ## Known Issues
 
