@@ -26,7 +26,7 @@
 #
 # Optional dependencies for enhanced features:
 #   - ffmpeg (video thumbnails) - not included
-#   - p7zip (archive extraction/preview) - added below
+#   - p7zip (archive extraction/preview) - not included
 #   - jq (JSON preview) - already in home-core.nix
 #   - poppler (PDF preview) - not included
 #   - fd (file searching) - already in fd.nix
@@ -34,7 +34,7 @@
 #   - fzf (quick navigation) - already in fzf.nix
 #   - zoxide (history navigation) - already in zoxide.nix
 #   - resvg (SVG preview)
-#   - ImageMagick (Font, HEIC, JPEG XL preview)
+#   - ImageMagick (Font, HEIC, JPEG XL preview) - not included
 #
 # ══════════════════════════════════════════════════════════════════════════════
 # USAGE
@@ -312,20 +312,5 @@ _: {
       # Flavors are linked to ~/.config/yazi/flavors/<name>.yazi
       flavors = {};
     };
-
-    # ────────────────────────────────────────────────────────────────────────────
-    # Optional Dependencies
-    # ────────────────────────────────────────────────────────────────────────────
-    # These packages enable additional preview and extraction features.
-    # Note: fd, ripgrep, fzf, zoxide, bat, jq are already configured separately.
-    #
-    # Prerequisite: nixpkgs.config.allowUnfree = true (set in darwin.nix)
-    home.packages = with pkgs; [
-      # Archive extraction (with RAR support via unfree unrar)
-      # Requires allowUnfree = true in nixpkgs config
-      (p7zip.override {enableUnfree = true;})
-      # Image format support (HEIC, JPEG XL, fonts)
-      imagemagick
-    ];
   };
 }

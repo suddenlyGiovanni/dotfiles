@@ -21,10 +21,7 @@ _: {
     # ── Packages ────────────────────────────────────────────────────────────────
     # Docker CLI tools (Docker Desktop provides the daemon)
     home.packages = with pkgs; [
-      dive # Tool for exploring each layer in a docker image
       docker-buildx # Docker CLI plugin for extended build capabilities with BuildKit
-      docker-slim # Minify and secure Docker containers
-      lazydocker # A simple terminal UI for both docker and docker-compose
     ];
   };
 }

@@ -38,16 +38,12 @@ _: {
         # Productivity
         "chatgpt" # OpenAI's official ChatGPT desktop app
 
-        # Browsers
-        "ungoogled-chromium" # Google Chromium, sans integration with Google
-
         # Development
         "visual-studio-code" # Open-source code editor
         "warp" # Rust-based terminal
         "discord" # Voice and text chat software
 
         # Utilities
-        "pearcleaner" # Utility to uninstall apps and remove leftover files from old/uninstalled apps
         "tuna" # Application launcher (tunaformac.com)
       ];
 

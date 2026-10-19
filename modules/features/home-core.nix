@@ -26,7 +26,7 @@ in {
       # Note: Many packages are now in dedicated program modules:
       # - 1password.nix: _1password-cli, gh, awscli2 (via shell plugins)
       # - claude-code.nix: claude-code
-      # - docker.nix: dive, docker-buildx, docker-slim, lazydocker
+      # - docker.nix: docker-buildx
       # - nodejs.nix: nodejs_24, pnpm
       # - python.nix: uv
       # - rustup.nix: rustup
@@ -34,10 +34,6 @@ in {
       packages = with pkgs; [
         alejandra # Uncompromising Nix Code Formatter
         biome # Toolchain of the web
-        cocoapods # Manages dependencies for your Xcode projects
-        container # Creating and running Linux containers using lightweight virtual machines on a Mac
-        glow # Render markdown on the CLI, with pizzazz!
-        httpie # A command line HTTP client whose goal is to make CLI human-friendly
         jq # A lightweight and flexible command-line JSON processor
         just # A handy way to save and run project-specific commands
         nixd # nix lsp daemon
