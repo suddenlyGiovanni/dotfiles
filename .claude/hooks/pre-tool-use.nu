@@ -111,8 +111,9 @@ def bash-violation [call: record]: nothing -> any {
 def blank-literals []: string -> string {
     $in
     | str replace --all --regex '(?s)(<<-?\s*)([''"]?)(\w+)\2(.*?)\n.*?\n\s*\3(\s|$)' '$1$3$4'
-    | str replace --all --regex "'[^']*'" "''"
-    | str replace --all --regex '"(?:\\.|[^"\\])*"' '""'
+    # One pass, so the quote that opens first wins: an apostrophe inside a
+    # double-quoted string never pairs with one outside it
+    | str replace --all --regex `(')[^']*'|(")(?:\\.|[^"\\])*"` '$1$1$2$2'
 }
 
 # Each simple command's words, with leading VAR=value assignments and wrappers
