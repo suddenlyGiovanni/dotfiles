@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "mcpls": {
+      "type": "stdio",
+      "command": "direnv",
+      "args": ["exec", ".", "mcpls", "--config", ".claude/mcpls.toml", "--log-level", "warn"]
+    }
+  }
+}

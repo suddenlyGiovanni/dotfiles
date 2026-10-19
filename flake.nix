@@ -188,7 +188,8 @@
             ++ config.pre-commit.settings.enabledPackages
             ++ (with pkgs; [
               # Language servers (Zed, Neovim, and Claude Code via
-              # .claude/plugins/dotfiles-lsp)
+              # .claude/plugins/dotfiles-lsp; mcpls bridges the rest, see
+              # .claude/mcpls.toml)
               nixd # Nix language server
               nil # Alternative Nix LSP
               nushell # `nu --lsp`, and the Claude Code hooks (.claude/hooks/*.nu)
@@ -196,6 +197,7 @@
               marksman # *.md: links between docs and ADRs
               taplo # *.toml
               just-lsp # justfile
+              (callPackage ./modules/devshell/_mcpls.nix {}) # MCP-to-LSP bridge (.mcp.json)
 
               # Utilities
               just # Task runner

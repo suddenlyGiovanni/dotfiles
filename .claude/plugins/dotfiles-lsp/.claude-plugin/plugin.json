@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "dotfiles-lsp",
   "version": "0.2.0",
-  "description": "Wire Claude Code's LSP tool (navigation, hover, symbols, diagnostics after edits) at the devshell's language servers: nu --lsp for *.nu, nixd for *.nix, lua-language-server for *.lua, marksman for *.md, taplo for *.toml. All run through `direnv exec` so they're the flake-pinned binaries Zed and Neovim use.",
+  "description": "Wire Claude Code's LSP tool (navigation, hover, symbols, diagnostics after edits) at the devshell's language servers: nu --lsp for *.nu, nixd for *.nix, lua-language-server for *.lua, marksman for *.md, taplo for *.toml. All run through `direnv exec` so they're the flake-pinned binaries Zed and Neovim use. The bare `justfile` and code actions go through mcpls (.mcp.json) instead.",
   "author": {
     "name": "suddenlyGiovanni"
   },

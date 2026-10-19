@@ -62,6 +62,8 @@ and language server, and every check uses those same binaries:
   `.claude-plugin/marketplace.json`) wires `nu --lsp`, `nixd`, `lua-language-server`, `marksman`
   (`*.md`) and `taplo` (`*.toml`) into Claude Code's LSP tool. Claude Code installs it from the
   committed HEAD, so changes to it take effect once committed.
+- **MCP**: `.mcp.json` starts mcpls (`.claude/mcpls.toml`), which bridges what the LSP tool can't
+  reach: nixd's code actions (fixes), and just-lsp for the extensionless `justfile`.
 
 ## Known Issues
 

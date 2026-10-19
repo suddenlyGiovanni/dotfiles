@@ -1,0 +1,29 @@
+# mcpls for Claude Code (.mcp.json): only what its built-in LSP tool can't
+# reach. The dotfiles-lsp plugin already gives that tool navigation and
+# diagnostics for .nix, .nu, .lua, .md and .toml, and the PostToolUse hook
+# reports lint findings after every edit. The bridge adds two things:
+#
+# - Fix edits. The LSP tool has no code actions; nixd returns its own here.
+# - The bare `justfile`. Claude Code routes a file to a plugin server by its
+#   extension, and `justfile` has none. mcpls routes it by name to just-lsp,
+#   which serves every route for it, findings included.
+#
+# A server with a `handles` list serves only those routes, so mcpls logs one
+# warning at start for nix having no catch-all: that is expected. The bridge
+# starts under `direnv exec`, so every server is the devshell's binary.
+
+[workspace]
+roots = [".."]
+
+[[lsp_servers]]
+language_id = "nix"
+name = "nixd"
+command = "nixd"
+file_patterns = ["**/*.nix"]
+handles = ["code_actions"]
+
+[[lsp_servers]]
+language_id = "just"
+name = "just"
+command = "just-lsp"
+file_patterns = ["**/justfile"]
