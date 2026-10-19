@@ -47,6 +47,10 @@ and language server, and every check uses those same binaries:
   (`*.lua`). `nix fmt`, `just fmt`, the `formatting` flake check and Zed (`.zed/settings.json`) all
   route through it.
 - **Lint**: statix and deadnix (`*.nix`), nu-lint (`*.nu`, always with `--config .nu-lint.toml`).
+- **Git hooks** (`flake.nix` → `perSystem.pre-commit`, git-hooks.nix): treefmt
+  (`--fail-on-change`), statix, deadnix, nu-lint and merge-conflict markers on commit, convco on
+  the message. The devshell installs them; `pre-commit run --all-files` runs them by hand. Never
+  pass `--no-verify`: fix what they report.
 - **Claude Code hooks** (`.claude/settings.json`). They are nu scripts; write new ones in nu, not
   POSIX shell:
   - SessionStart (`.claude/hooks/direnv-prime.nu`) puts the devshell on the Bash tool's PATH.

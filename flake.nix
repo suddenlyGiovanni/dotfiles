@@ -24,6 +24,10 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     import-tree.url = "github:denful/import-tree";
+
+    # Git hooks for this repo's devshell (perSystem.pre-commit below)
+    git-hooks-nix.url = "github:cachix/git-hooks.nix";
+    git-hooks-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:
@@ -32,6 +36,7 @@
 
       imports = [
         inputs.flake-parts.flakeModules.modules
+        inputs.git-hooks-nix.flakeModule
         ./modules/options.nix
         ./modules/hosts.nix
         ./modules/host-assembly.nix
@@ -41,7 +46,11 @@
       ];
 
       # Per-system outputs (formatter, devShells, checks)
-      perSystem = {pkgs, ...}: let
+      perSystem = {
+        config,
+        pkgs,
+        ...
+      }: let
         # What treefmt.toml routes to. One list for `nix fmt`, the devshell (so
         # `just fmt`, Zed and the Claude Code hooks see the same binaries) and
         # the formatting check.
@@ -112,6 +121,62 @@
             );
         };
 
+        # Git hooks, installed into .git/hooks by the devshell's shellHook. They
+        # gate commits with the same binaries as `just check`; the Claude Code
+        # hooks (.claude/hooks) steer the agent before it gets that far.
+        #
+        # Hooks run in alphabetical order of their id, not the order written
+        # here, so none depends on another having run. convco runs at the
+        # commit-msg stage, after all of them.
+        pre-commit = {
+          # The formatting/lint/deadcode checks above already gate `nix flake
+          # check`; a second copy through pre-commit would add nothing.
+          check.enable = false;
+          settings = {
+            excludes = ["^modules/features/agents/skills/"];
+            hooks = {
+              check-merge-conflicts.enable = true;
+
+              # --fail-on-change: a staged file that needed formatting fails
+              # the commit (treefmt still fixes it; re-stage and commit again).
+              treefmt = {
+                enable = true;
+                package = pkgs.writeShellApplication {
+                  name = "treefmt-staged";
+                  runtimeInputs = formatters;
+                  text = ''exec treefmt --fail-on-change --no-cache "$@"'';
+                };
+                entry = "treefmt-staged";
+                pass_filenames = true;
+              };
+
+              # statix takes one target, so it checks the tree like `just lint`
+              statix = {
+                enable = true;
+                entry = "statix check .";
+                pass_filenames = false;
+              };
+
+              deadnix = {
+                enable = true;
+                entry = "deadnix --fail";
+              };
+
+              nu-lint = {
+                enable = true;
+                package = pkgs.nu-lint;
+                entry = "nu-lint --config .nu-lint.toml";
+                pass_filenames = true;
+                types = ["file"];
+                files = "\\.nu$";
+              };
+
+              # Conventional Commits (commit-msg stage)
+              convco.enable = true;
+            };
+          };
+        };
+
         # Development shell for working on these dotfiles
         # Activated automatically via direnv (use flake)
         devShells.default = pkgs.mkShell {
@@ -119,6 +184,8 @@
           packages =
             formatters
             ++ linters
+            ++ [config.pre-commit.settings.package] # `pre-commit run --all-files`
+            ++ config.pre-commit.settings.enabledPackages
             ++ (with pkgs; [
               # Language servers (Zed, Neovim, and Claude Code via
               # .claude/plugins/dotfiles-lsp)
@@ -132,6 +199,7 @@
             ]);
 
           shellHook = ''
+            ${config.pre-commit.installationScript}
             echo "dotfiles development shell"
             echo ""
             just --list
