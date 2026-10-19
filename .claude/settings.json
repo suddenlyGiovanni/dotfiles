@@ -18,8 +18,31 @@
         "hooks": [
           {
             "type": "command",
-            "command": "nu \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/direnv-prime.nu",
+            "command": "nu --stdin \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/direnv-prime.nu",
             "timeout": 120
+          }
+        ]
+      }
+    ],
+    "CwdChanged": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nu --stdin \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/direnv-prime.nu",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nu --stdin \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pre-tool-use.nu",
+            "timeout": 10
           }
         ]
       }
@@ -32,6 +55,17 @@
             "type": "command",
             "command": "direnv exec \"$CLAUDE_PROJECT_DIR\" nu --stdin \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-tool-use.nu",
             "timeout": 60
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "direnv exec \"$CLAUDE_PROJECT_DIR\" nu --stdin \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-gate.nu",
+            "timeout": 300
           }
         ]
       }

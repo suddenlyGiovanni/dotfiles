@@ -53,11 +53,19 @@ and language server, and every check uses those same binaries:
   pass `--no-verify`: fix what they report.
 - **Claude Code hooks** (`.claude/settings.json`). They are nu scripts; write new ones in nu, not
   POSIX shell:
-  - SessionStart (`.claude/hooks/direnv-prime.nu`) puts the devshell on the Bash tool's PATH.
+  - SessionStart and CwdChanged (`.claude/hooks/direnv-prime.nu`) put the devshell of the current
+    directory (the repo, or a `.worktrees/<name>`) on the Bash tool's PATH.
+  - PreToolUse (`.claude/hooks/pre-tool-use.nu`) denies commands that have a `just` recipe
+    (`darwin-rebuild`, `nix flake check|update`, …), a gate piped into `head`/`tail`,
+    `--no-verify`, AI attribution, shell-authored files (`sed -i`, `tee`, `>` into the repo),
+    installs outside nix, and writes to `flake.lock`, `result`, `.direnv/` or `.git/`. The deny
+    reason names the path to take instead.
   - After every Write/Edit, `.claude/hooks/post-tool-use.nu` formats the file with treefmt, lints
     it, and reports back.
   - "Auto-formatted" means re-read the file before editing it again. Fix the lint findings in code
     you touched.
+  - Stop (`.claude/hooks/stop-gate.nu`) runs `just check` when the turn leaves uncommitted
+    `*.nix`/`*.nu`/`*.lua`/`*.toml`/`flake.lock` changes, and sends the turn back once if it fails.
 - **LSP**: the in-repo plugin `.claude/plugins/dotfiles-lsp` (marketplace
   `.claude-plugin/marketplace.json`) wires `nu --lsp`, `nixd`, `lua-language-server`, `marksman`
   (`*.md`) and `taplo` (`*.toml`) into Claude Code's LSP tool. Claude Code installs it from the

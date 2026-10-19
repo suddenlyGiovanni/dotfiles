@@ -21,3 +21,6 @@ unhandled_external_error = "off"
 missing_output_type = "off"
 # Quoted strings are kept for readability.
 string_may_be_bare = "off"
+# nufmt owns pipe spacing, and this rule misreads the `o+e>|` redirection pipe
+# (.claude/hooks/stop-gate.nu) as a `|` with no space before it.
+pipe_spacing = "off"
