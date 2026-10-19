@@ -90,10 +90,27 @@ _: {
 
     # Common directories to skip when searching (respects .gitignore by default with fd)
     walkerSkip = ".git,node_modules,target,.direnv,dist,build,.next,.nuxt,.svelte-kit,__pycache__,.venv,venv,.cache";
+
+    # Nushell 0.116 deprecated the positional `spans` input to external
+    # completers, and the completer `fzf --nushell` prints still declares it, so
+    # every completion warns. Upstream fixed it in junegunn/fzf#4934 after
+    # v0.74.5. Drop this override once nixpkgs ships a release that includes it.
+    fzf = pkgs.fzf.overrideAttrs (old: {
+      patches =
+        (old.patches or [])
+        ++ [
+          (pkgs.fetchpatch {
+            name = "fzf-nushell-completer-0.116.patch";
+            url = "https://github.com/junegunn/fzf/commit/55c122f1.patch";
+            includes = ["shell/completion.nu"];
+            hash = "sha256-yDiRFrmBTjWXs+IAq0rd9A++IuKAa7LV+03tWACCZFg=";
+          })
+        ];
+    });
   in {
     programs.fzf = {
       enable = true;
-      package = mkDefault pkgs.fzf;
+      package = mkDefault fzf;
 
       # ────────────────────────────────────────────────────────────────────────
       # Default Command
