@@ -174,20 +174,70 @@ def attribution-violation [raw: string]: nothing -> any {
 
 # `>`/`>>`/tee into a file inside the repo. Targets outside it (a scratchpad,
 # $TMPDIR, /dev/null) and unexpanded variables are left alone.
+#
+# A relative target resolves against the directory the shell is in at that
+# point: the session's cwd, moved by each `cd` before it. A subshell's `cd`
+# ends with the subshell. After a `cd` to a place the hook can't know ($VAR,
+# `-`), relative targets are skipped; absolute ones are still checked.
 def redirect-violation [code: string, at: record<root: path, cwd: path>]: nothing -> any {
-    let redirects = $code
-    | parse --regex '(?:^|[^0-9&<>=-])\d?>>?\|?\s*(?<target>[^\s;&|()<>]+)'
-    | get target
-    let tees = $code
-    | parse --regex '(?:^|[|;&\s])tee\s+(?<rest>[^;&|\n]*)'
-    | get rest
-    | each {|rest| $rest | split row --regex '\s+' | where $it != '' and not ($it | str starts-with '-') }
-    | flatten
-    let inside = $redirects ++ $tees
-    | where {|target| not ($target =~ '^[&$~]') and $target not-in ['""' "''"] }
-    | where {|target| $at.cwd | path join $target | path expand | str starts-with $"($at.root)/" }
+    mut dirs = [$at.cwd]
+    mut inside = []
+    for part in ($code | parse --regex '(?<seg>[^;&|\n()]*)(?<sep>&&|\|\||[;&|\n()]|$)') {
+        let dir = $dirs | last
+        let words = $part.seg | str trim | split row --regex '\s+' | where $it != ''
+        if ($words | get -o 0) == cd {
+            $dirs = ($dirs | drop | append (cd-target $dir ($words | get -o 1)))
+        } else {
+            let tees = if ($words | get -o 0) == tee {
+                $words | skip 1 | where not ($it | str starts-with '-')
+            } else {
+                []
+            }
+            let targets = $part.seg
+            | parse --regex '(?:^|[^0-9&<>=-])\d?>>?\|?\s*(?<target>[^\s;&|()<>]+)'
+            | get target
+            | append $tees
+            | each {|target| resolve-target $dir $target }
+            | compact
+            | where ($it | str starts-with $"($at.root)/")
+            $inside = $inside ++ $targets
+        }
+        match $part.sep {
+            '(' => {
+                $dirs ++= [
+                    ($dirs | last)
+                ]
+            }
+            ')' if ($dirs | length) > 1 => { $dirs = ($dirs | drop) }
+            _ => { }
+        }
+    }
     if ($inside | is-not-empty) {
         $"Create and change files in the repo with the Write/Edit tools, not shell redirection or tee \(($inside | str join ', ')\). Scratch output belongs outside the repo, e.g. $TMPDIR."
+    }
+}
+
+# Where `cd <arg>` leaves the shell, from `dir`; null when the hook can't know
+def cd-target [dir?: path, arg?: string]: nothing -> any {
+    match $arg {
+        null => $env.HOME
+        '-' => null
+        _ if ($arg | str starts-with '$') => null
+        _ => (resolve-target $dir $arg)
+    }
+}
+
+# The absolute path a target names from `dir`; null for an unexpanded variable,
+# a file descriptor (`&1`), an empty literal, or a relative path from an
+# unknown directory
+def resolve-target [dir?: path, target?: path]: nothing -> any {
+    match $target {
+        null | '""' | "''" => null
+        _ if ($target =~ '^[&$]') => null
+        _ if ($target | str starts-with '~') => ($target | path expand)
+        _ if ($target | str starts-with '/') => ($target | path expand)
+        _ if $dir == null => null
+        _ => ($dir | path join $target | path expand)
     }
 }
 
