@@ -3,6 +3,9 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # A master commit, for security fixes merged ahead of the unstable channel
+    # (nodejs.nix). Hydra builds master, so these come from the binary cache.
+    nixpkgs-master.url = "github:NixOS/nixpkgs/86621d45826059b3b4e96742fb25bfe234e475d7";
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
