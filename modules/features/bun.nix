@@ -5,10 +5,11 @@
 # Git integration is automatically enabled based on whether git is active.
 # This module reads config.programs.git.enable to coordinate.
 _: {
-  # ── Overlay: bun 1.4.3 ──────────────────────────────────────────────────────
-  # nixpkgs-unstable is on 1.4.2 (as of 2026-10-19); the work flakes pin 1.4.3.
+  # ── Overlay: bun 1.4.4 ──────────────────────────────────────────────────────
+  # nixpkgs-unstable is on 1.4.2 (as of 2026-10-23). 1.4.4 carries security
+  # fixes for TLS, WebSocket, the database clients and the package manager.
   # bun is a prebuilt-binary derivation, so bumping version + source hash is all
-  # that is needed. Drop this overlay once nixpkgs ships >= 1.4.3.
+  # that is needed. Drop this overlay once nixpkgs ships >= 1.4.4.
   #
   # The hash is upstream's SHASUMS256.txt entry for the asset, in SRI form:
   #   curl -sL https://github.com/oven-sh/bun/releases/download/bun-v<version>/SHASUMS256.txt
@@ -16,7 +17,7 @@ _: {
     nixpkgs.overlays = [
       (_final: prev: {
         bun = prev.bun.overrideAttrs (finalAttrs: prevAttrs: {
-          version = "1.4.3";
+          version = "1.4.4";
           # We also replace `src` below, so the version bump is intentional.
           __intentionallyOverridingVersion = true;
 
@@ -26,7 +27,7 @@ _: {
               sources = {
                 "aarch64-darwin" = prev.fetchurl {
                   url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
-                  hash = "sha256-gK/UwGm0am+o8+xSC+vHUKeEPkqNW5WD0prUNsAKNAM=";
+                  hash = "sha256-wkDX8My5DCY6hJ/NsJt+5iYw2SE0jtaq/ahrnVd7xRA=";
                 };
               };
             };
