@@ -44,6 +44,11 @@ in {
       enable = mkDefault true;
       package = mkDefault pkgs.nushell;
 
+      # env.nu imports /etc/login-environment.sh (session.nix), which also covers
+      # Homebrew's shellenv and Determinate Nix's profile. HM's loader (on by
+      # default from stateVersion 26.11) would run first and set
+      # __HM_SESS_VARS_SOURCED, so env.nu's guard would skip that import.
+      loadSessionVariables = false;
       envFile.source = ./env.nu;
       configFile.source = ./config.nu;
 
