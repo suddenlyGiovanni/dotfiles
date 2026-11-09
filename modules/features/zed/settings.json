@@ -150,7 +150,8 @@
 		"sort_by_path": true,
 	},
 	"git": {
-		"worktree_directory": ".worktrees",
+		"diff_base": "default_branch",
+  "worktree_directory": ".worktrees",
 		"inline_blame": {
 			"show_commit_summary": true,
 		},
@@ -281,7 +282,7 @@
 	"theme": {
 		"mode": "system",
 		"light": "JetBrains Light",
-		"dark": "Night Owl Dark",
+		"dark": "JetBrains Islands Dark",
 	},
 	"buffer_font_family": "JetBrainsMono Nerd Font Mono",
 	"auto_signature_help": true,
