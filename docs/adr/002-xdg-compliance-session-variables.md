@@ -156,6 +156,7 @@ Audited using [xdg-ninja](https://github.com/b3nj5m1n/xdg-ninja) v0.2.0.2.
 | `~/.1password/`    | 1Password app managed                       |
 | `~/.nix-defexpr/`  | Nix system managed                          |
 | `~/.nix-profile`   | Nix system managed                          |
+| `~/.bunfig.toml`   | Link to `~/.config/.bunfig.toml`, for a process with no `XDG_CONFIG_HOME` (`bun.nix`) |
 
 ## Consequences
 

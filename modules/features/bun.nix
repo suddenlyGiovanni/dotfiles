@@ -50,6 +50,14 @@ _: {
       "${config.xdg.dataHome}/bun/install/global/node_modules/.bin"
     ];
 
+    # ── Global Config for Every Process ────────────────────────────────────────
+    # Bun reads $XDG_CONFIG_HOME/.bunfig.toml when that variable is set, and
+    # ~/.bunfig.toml when it is not. programs.bun writes only the XDG path, so a
+    # process with no XDG_CONFIG_HOME (a Claude.app session, for one) ignores
+    # globalStore and every other setting below.
+    home.file.".bunfig.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/.bunfig.toml";
+
     programs.bun = {
       enable = true; # Bun - all-in-one JavaScript runtime & toolkit
 
