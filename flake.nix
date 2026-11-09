@@ -51,9 +51,16 @@
       # Per-system outputs (formatter, devShells, checks)
       perSystem = {
         config,
+        inputs',
         pkgs,
         ...
       }: let
+        # marksman (F#) and pre-commit (its tests) need .NET, which the unstable
+        # channel can advance past without aarch64-darwin substitutes; Nix then
+        # bootstraps .NET from source on every direnv load. The master pin is
+        # cached, so both come from it.
+        dotnetPkgs = inputs'.nixpkgs-master.legacyPackages;
+
         # What treefmt.toml routes to. One list for `nix fmt`, the devshell (so
         # `just fmt`, Zed and the Claude Code hooks see the same binaries) and
         # the formatting check.
@@ -136,6 +143,7 @@
           # check`; a second copy through pre-commit would add nothing.
           check.enable = false;
           settings = {
+            package = dotnetPkgs.pre-commit;
             excludes = ["^modules/features/agents/skills/"];
             hooks = {
               check-merge-conflicts.enable = true;
@@ -197,7 +205,7 @@
               nil # Alternative Nix LSP
               nushell # `nu --lsp`, and the Claude Code hooks (.claude/hooks/*.nu)
               lua-language-server # *.lua (the Neovim config)
-              marksman # *.md: links between docs and ADRs
+              dotnetPkgs.marksman # *.md: links between docs and ADRs
               taplo # *.toml
               just-lsp # justfile
               (callPackage ./modules/devshell/_mcpls.nix {}) # MCP-to-LSP bridge (.mcp.json)
