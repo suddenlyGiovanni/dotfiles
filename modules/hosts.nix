@@ -29,6 +29,7 @@ _: {
         homebrew.casks = [
           "bitwarden" # Vaultwarden desktop app: Touch ID unlock for bwbio (features/bitwarden)
           "claude" # Anthropic's official Claude AI desktop app
+          "figma@beta" # Collaborative team software
           "microsoft-teams" # Microsoft Teams
           "segger-jlink" # J-Link USB drivers for embedded dev (ESP32 serial)
           "zoom" # Video conferencing client
