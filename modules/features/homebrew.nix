@@ -37,6 +37,7 @@ _: {
       casks = [
         # Productivity
         "chatgpt" # OpenAI's official ChatGPT desktop app
+        "obsidian" # Knowledge base and note-taking app
 
         # Development
         "visual-studio-code" # Open-source code editor
