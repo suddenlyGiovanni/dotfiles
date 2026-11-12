@@ -19,11 +19,14 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bwbio";
-  version = "1.4.2";
+  # >= 1.4.3 keeps the desktop app connection on macOS (upstream PR #4, issue #9):
+  # the failed App Store socket no longer tears down the working Homebrew one
+  # ("Disconnected from Desktop app"). infrastructure/developer still patches 1.4.2.
+  version = "1.4.4";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/bitwarden-cli-bio/-/bitwarden-cli-bio-${finalAttrs.version}.tgz";
-    hash = "sha256-o4cBcq2tfLpEwGw7IIIoyystdefLrGM/YYiLVMM8TiY=";
+    hash = "sha256-KaanJ8CJ8mWh4hRSpwjs57h4EjkhdDXRHTPfnsjjSM0=";
   };
 
   nativeBuildInputs = [makeWrapper];
