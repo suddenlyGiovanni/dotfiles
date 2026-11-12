@@ -1,0 +1,13 @@
+{
+  "marksman": {
+    "command": "marksman",
+    "args": ["server"],
+    "diagnostics": false,
+    "extensionToLanguage": {
+      ".md": "markdown"
+    },
+    "startupTimeout": 120000,
+    "transport": "stdio",
+    "workspaceFolder": "${CLAUDE_PROJECT_DIR}"
+  }
+}

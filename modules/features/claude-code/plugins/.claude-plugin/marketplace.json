@@ -10,6 +10,11 @@
       "name": "thermos",
       "source": "./thermos",
       "description": "Thermo-nuclear branch review: parallel deep-review + code-quality subagents over a diff, synthesized. Ported from cursor/plugins (MIT)."
+    },
+    {
+      "name": "markdown-lsp",
+      "source": "./markdown-lsp",
+      "description": "Markdown LSP (marksman) for Claude Code's LSP tool: wikilink navigation, backlinks, symbols."
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "markdown-lsp",
+  "description": "Wire Claude Code's built-in LSP tool at the globally installed marksman for Markdown navigation: go-to-definition on [[wikilinks]], find-references for backlinks, document and workspace symbols.",
+  "version": "1.0.0",
+  "author": {
+    "name": "suddenlyGiovanni"
+  }
+}
