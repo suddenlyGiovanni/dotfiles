@@ -20,7 +20,8 @@
     "command": "starship statusline claude-code"
   },
   "enabledPlugins": {
-    "frontend-design@claude-plugins-official": false
+    "frontend-design@claude-plugins-official": false,
+    "markdown-lsp@suddenlygiovanni-dotfiles": true
   },
   "skillOverrides": {
     "herdr": "off",
@@ -32,6 +33,12 @@
     "plannotator-setup-goal": "off"
   },
   "extraKnownMarketplaces": {
+    "suddenlygiovanni-dotfiles": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/suddenlygiovanni/Developer/dotfiles/modules/features/claude-code/plugins"
+      }
+    },
     "plannotator": {
       "source": {
         "source": "github",
