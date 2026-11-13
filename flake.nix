@@ -183,7 +183,22 @@
               };
 
               # Conventional Commits (commit-msg stage)
-              convco.enable = true;
+              #
+              # The package override builds convco on its pure-Rust git backend
+              # (gix). In nixpkgs from 2026-11-12, the default backend wants
+              # `libgit2-experimental`, which nixpkgs does not ship, so convco
+              # fails to build. NixOS/nixpkgs#585314 proposes an experimental
+              # libgit2 instead, but that one fails its own tests on macOS.
+              # Drop the override once `pkgs.convco` builds again.
+              convco = {
+                enable = true;
+                package = pkgs.convco.overrideAttrs {
+                  cargoBuildNoDefaultFeatures = true;
+                  cargoBuildFeatures = ["gix"];
+                  cargoCheckNoDefaultFeatures = true;
+                  cargoCheckFeatures = ["gix"];
+                };
+              };
             };
           };
         };

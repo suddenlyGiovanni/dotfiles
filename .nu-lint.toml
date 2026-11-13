@@ -11,9 +11,9 @@
 # must call it as `^ff`, or they recurse; keep `^` explicit everywhere.
 remove_hat_not_builtin = "off"
 # The fzf helpers exist to drive these tools; nu equivalents don't replace them.
-bat_to_open = "off"
-fd_to_glob = "off"
-grep_to_find_or_where = "off"
+cat_to_open = "off"
+find_to_glob = "off"
+grep_to_where = "off"
 # Interactive helpers: a failing command already prints its own error.
 catch_builtin_error_try = "off"
 unhandled_external_error = "off"
