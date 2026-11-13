@@ -163,7 +163,18 @@ that runs as the user from using a credential that needs no presence. Against th
 scope, expiry, and a sandbox that denies reads of the stores and limits the network. A separate
 macOS user or a container for agents is the stronger form.
 
-## 11. Not verified
+## 11. Status
+
+| Step | State |
+|---|---|
+| Tiers A to D | Agreed, 2026-11-13 |
+| Git transport, signing key, no AWS in agent sessions | Built in `modules/features/agent-tier.nix` and the Claude Code env hook. Tested with a throwaway key: a signed commit in 71 ms with no prompt, `ls-remote` over HTTPS on both forges, an SSH remote with no rewrite fails in 0.5 s. Not active until `just switch`; the key is not registered |
+| headless: no secrets exported into agent sessions | Not started (another repository) |
+| `with-secrets` without a prompt, fixed command map | Not started |
+| Rotate the tokens found in transcripts | The user's step |
+| Other harnesses source `~/.config/agent-tier/env.sh` | Not started |
+
+## 12. Not verified
 
 - secretspec's documentation says a Nix-built binary asks for the login keychain password on the
   first read after each upgrade ("Always Allow" then holds until the next upgrade). Not tested
