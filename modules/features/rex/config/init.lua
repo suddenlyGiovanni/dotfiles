@@ -1,0 +1,18 @@
+-- Rex configuration
+-- https://www.superlogical.com/rex/docs/customize/config
+--
+-- This folder is tracked in the dotfiles (modules/features/rex/config) and
+-- linked to ~/.config/rex, so an edit here is the live file.
+--
+-- Rex does not watch the file. After an edit:
+--
+--   rex config check     load the file and report what it found, without applying
+--   rex config reload    make the running server read it again
+--
+-- The file runs top to bottom on each load. A syntax error keeps the bindings
+-- of the last good load. To split it, put a Lua file beside this one and load
+-- it with require: require("keys") reads keys.lua.
+--
+-- Bind a key:      rex.bind("cmd+d", "pane.split", { direction = "right" })
+-- Take one away:   rex.unbind("cmd+d")
+-- Reference:       https://www.superlogical.com/rex/docs/reference/lua
