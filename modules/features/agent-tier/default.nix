@@ -57,6 +57,17 @@ _: {
     envFile = "${config.xdg.configHome}/agent-tier/env.sh";
     sshKeygen = "${pkgs.openssh}/bin/ssh-keygen";
 
+    # Who may sign as the user: every email the git identities use, and the
+    # user's signing key without its comment.
+    allowedSigners = "${config.xdg.configHome}/git/allowed_signers";
+    signerPrincipals = lib.concatStringsSep "," (lib.unique (
+      [config.programs.git.settings.user.email]
+      ++ lib.filter (email: email != null) (
+        map (lib.attrByPath ["contents" "user" "email"] null) config.programs.git.includes
+      )
+    ));
+    userSigningKey = lib.concatStringsSep " " (lib.take 2 (lib.splitString " " config.dotfiles.sshKeys.git-signing));
+
     # Where the agent pushes, and the CLI whose keychain entry holds the token.
     forges =
       [
@@ -127,17 +138,39 @@ _: {
       '';
     };
 
-    home.packages = [agent-tier-check];
+    # `git log --show-signature` checks a signature against this file. The forges
+    # do their own check against the keys registered there.
+    programs.git.settings.gpg.ssh.allowedSignersFile = allowedSigners;
 
-    # `hostname` can be a DHCP name; LocalHostName is the name macOS shows.
-    home.activation.agentSigningKey = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      if [ ! -f ${lib.escapeShellArg signingKey} ]; then
-        run mkdir -p ${lib.escapeShellArg (dirOf signingKey)}
-        run ${sshKeygen} -q -t ed25519 -N "" \
-          -C "agent signing key ($(/usr/sbin/scutil --get LocalHostName))" \
-          -f ${lib.escapeShellArg signingKey}
-        noteEcho "Created ${signingKey}. Run agent-tier-check: it prints the commands that register it."
-      fi
-    '';
+    home = {
+      packages = [agent-tier-check];
+
+      activation = {
+        # `hostname` can be a DHCP name; LocalHostName is the name macOS shows.
+        agentSigningKey = lib.hm.dag.entryAfter ["writeBoundary"] ''
+          if [ ! -f ${lib.escapeShellArg signingKey} ]; then
+            run mkdir -p ${lib.escapeShellArg (dirOf signingKey)}
+            run ${sshKeygen} -q -t ed25519 -N "" \
+              -C "agent signing key ($(/usr/sbin/scutil --get LocalHostName))" \
+              -f ${lib.escapeShellArg signingKey}
+            noteEcho "Created ${signingKey}. Run agent-tier-check: it prints the commands that register it."
+          fi
+        '';
+
+        # One line per key that may sign as the user: the user's own key (known to
+        # Nix) and this machine's agent key (made above, so read here). Written at
+        # activation because the agent key is not in the Nix store.
+        gitAllowedSigners = lib.hm.dag.entryAfter ["agentSigningKey"] ''
+          if [[ ! -v DRY_RUN ]]; then
+            {
+              echo ${lib.escapeShellArg "${signerPrincipals} ${userSigningKey}"}
+              if [ -f ${lib.escapeShellArg "${signingKey}.pub"} ]; then
+                echo ${lib.escapeShellArg signerPrincipals} "$(${pkgs.coreutils}/bin/cut -d' ' -f1,2 ${lib.escapeShellArg "${signingKey}.pub"})"
+              fi
+            } > ${lib.escapeShellArg allowedSigners}
+          fi
+        '';
+      };
+    };
   };
 }
