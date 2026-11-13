@@ -207,8 +207,8 @@ So:
 
 | Recommendation | Status |
 |---|---|
-| 1. Scheduled `nix store optimise` | Done: `modules/features/nix-store-optimise.nix`, a root launchd daemon, Sunday 04:15. It builds; the first real run and its saving are still to be observed after a `just switch` |
-| 2. Prune stale roots | Not done; it deletes worktrees, so it is a decision. Candidates: 22 `headless` worktrees hold a `.direnv` profile (16 of them with a clean tree), and the dotfiles worktree `.claude/worktrees/open-code-nix-setup-3176a9` holds a `result` link |
+| 1. Scheduled `nix store optimise` | Done: `modules/features/nix-store-optimise.nix`, a root launchd daemon, Sunday 04:15. First run on 2026-11-13: the Nix volume went from 50,529 MiB to 42,354 MiB on disk, **8.0 GiB freed**, 379,133 links, in about 11 minutes. Afterwards `nix store verify --recursive` re-hashed the 759 paths of the running system without a finding. Open: the process ended on a broken-pipe signal and wrote no summary, so it is not proven that the pass covered the whole store; a second run that frees next to nothing would prove it |
+| 2. Prune stale roots | Partly done on 2026-11-13: 14 of the 31 `headless` worktrees removed, the 6 that were clean and in `main` and the 8 that were in `main` with uncommitted files. Those files are in `headless`'s stash, one entry per worktree, labelled "removed worktree <name>". Branches were kept. 196 store paths (1.6 GiB by NAR size) became collectable. Left: 6 clean, pushed worktrees, 11 with work that exists only there, and the dotfiles worktree `.claude/worktrees/open-code-nix-setup-3176a9`, which holds a `result` link |
 | 3. User-level registry pinned to the dotfiles' nixpkgs | Not done, untested on Determinate Nix |
 | 4. `onepassword-shell-plugins` follows the dotfiles' nixpkgs | Done: the lock drops its second nixpkgs (`nixpkgs_2`); the host builds |
 | 5–6. A shared team pin | Out of scope: it needs the team |
