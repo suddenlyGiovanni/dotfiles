@@ -30,8 +30,11 @@ paths:
     `permissionDecisionReason`, and exit 0.
   - To send a Stop back, print `{"decision": "block", "reason": …}`. Always honour
     `stop_hook_active`.
-  - `CLAUDE_ENV_FILE` is shared between hooks, so append to it. Claude Code clears it on every
-    CwdChanged event.
+  - Read `$in` in the first statement of `main` (`let payload_text = $in`). In any later statement
+    it is empty, and the hook then runs on an empty payload without an error.
+  - Each hook gets its own `CLAUDE_ENV_FILE` (`session-env/<session>/<event>-hook-<n>.sh`), and
+    Claude Code sources all of them before each Bash command. A hook may overwrite its own file.
+    The env hooks write through `modules/features/claude-code/hooks/direnv-env.nu`.
 - **Test a hook before you rely on it**. Pipe a sample payload into it:
   `{tool_name: Bash, tool_input: {command: 'just build'}} | to json | nu --stdin .claude/hooks/pre-tool-use.nu`.
   Check both an allowed case and a denied case.
