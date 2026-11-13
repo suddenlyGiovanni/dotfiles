@@ -11,7 +11,8 @@ Guidance for AI coding agents working with this repository.
 
 ## Commands
 
-`just --list` is the source of truth.
+`just --list` is the source of truth. `just help` prints the devshell overview. The devshell itself
+prints nothing when it loads, except one line that points at `just help` on a terminal.
 
 ## Critical Constraints
 

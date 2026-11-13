@@ -230,11 +230,20 @@
               nvd # Nix package version diff tool
             ]);
 
+          # The shellHook runs on every shell load: each `direnv exec <cmd>`,
+          # each stale reload, each command an agent runs. An agent harness
+          # reads stderr with the output, so an overview printed here cost
+          # ~35 lines per load. The overview is `just help`, a command the
+          # reader asks for; the hook prints one line that points at it, and
+          # only when stderr is a terminal. (The pattern is headless's
+          # nix/modules/devshell/help.nix.) fd 2, not fd 1: on `cd`, the shell
+          # captures direnv's stdout to eval the export, so fd 1 is a pipe
+          # even when a human is watching.
           shellHook = ''
             ${config.pre-commit.installationScript}
-            echo "dotfiles development shell"
-            echo ""
-            just --list
+            if [ -t 2 ]; then
+              echo "dotfiles devshell ready — run 'just help' for the recipes" >&2
+            fi
           '';
         };
       };
