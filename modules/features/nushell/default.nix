@@ -60,18 +60,14 @@ in {
         abbreviations = mkNushellInline (toNushell {} abbreviations);
       };
 
-      # HM writes aliases last, sorted by name, after every integration. That
-      # matters for `open`: nu's built-in shadows macOS /usr/bin/open (which tools
-      # like Emacs shell out to), and fzf's integration still needs the built-in.
-      # `nu-open` sorts first, so it keeps pointing at the built-in.
-      # https://www.nushell.sh/book/configuration.html#macos-keeping-usr-bin-open-as-open
-      shellAliases =
-        import ../fish/_aliases.nix
-        // {
-          nu-open = "open";
-          open = "^open";
-        };
+      # HM writes aliases last, after every integration. The `open` alias is not
+      # among them: see open-alias.nu.
+      shellAliases = import ../fish/_aliases.nix;
     };
+
+    # `open` as macOS open, loaded after config.nu and after every vendor
+    # autoload file, so that none of them gets the alias in place of nu's built-in.
+    xdg.configFile."nushell/autoload/open-alias.nu".source = ./open-alias.nu;
 
     home.packages = [
       pkgs.nufmt # Nushell formatter
