@@ -21,10 +21,11 @@
 # The file is this hook's own, so it is overwritten, not appended to. The snapshot
 # holds every variable the environment exports, its secrets included, on disk.
 #
-# The file ends with the agent tier line: it sources the exports that give an
-# agent session its own git configuration and no AWS one (agent-tier/default.nix). It
-# comes last, so a project environment cannot undo it, and it does nothing on a
-# machine that has no such file.
+# The file starts and ends with the agent tier line: it sources the exports that
+# give an agent session its own git configuration and no AWS one
+# (agent-tier/default.nix). First, so an `.envrc` that direnv loads sees
+# `AGENT_TIER=1` and can leave the user's secrets out. Last, so a project
+# environment cannot undo it. It does nothing on a machine that has no such file.
 #
 # Input (stdin, JSON): { "hook_event_name": "SessionStart" | "CwdChanged", "cwd": …, "new_cwd": … }
 const LOAD_LINE = 'command -v direnv >/dev/null && eval "$(DIRENV_LOG_FORMAT= direnv export bash)"'
@@ -79,7 +80,7 @@ def hook-payload []: string -> record {
 # writes this first: a snapshot that fails, or never finishes, must not leave the
 # file without them.
 def write-load-line [env_file: path]: nothing -> nothing {
-    [$LOAD_LINE $AGENT_TIER_LINE ''] | str join "\n" | save --force $env_file
+    [$AGENT_TIER_LINE $LOAD_LINE $AGENT_TIER_LINE ''] | str join "\n" | save --force $env_file
 }
 
 # The env file with the snapshot of a directory, then the two lines. Leaves the
@@ -88,10 +89,18 @@ def write-snapshot [dir: path, env_file: path]: nothing -> nothing {
     if not ($dir | path exists) { return }
     cd $dir
 
-    let exported = with-env {DIRENV_LOG_FORMAT: ''} { ^direnv export bash | complete }
+    let exported = with-env ({DIRENV_LOG_FORMAT: ''} | merge (agent-tier-marker)) { ^direnv export bash | complete }
     if $exported.exit_code == 0 and ($exported.stdout | is-not-empty) {
-        [$exported.stdout $LOAD_LINE $AGENT_TIER_LINE ''] | str join "\n" | save --force $env_file
+        [$AGENT_TIER_LINE $exported.stdout $LOAD_LINE $AGENT_TIER_LINE ''] | str join "\n" | save --force $env_file
     }
+}
+
+# `AGENT_TIER=1` for the snapshot, on a machine that has the agent tier. An
+# `.envrc` reads it to leave the user's secrets out of an agent's environment;
+# without it here, the snapshot would write them to the env file.
+def agent-tier-marker []: nothing -> record {
+    let config_home = $env.XDG_CONFIG_HOME? | default ($env.HOME | path join .config)
+    if ($config_home | path join agent-tier env.sh | path exists) { {AGENT_TIER: '1'} } else { {} }
 }
 
 # What to tell the agent when direnv found an `.envrc` it may not load in a
