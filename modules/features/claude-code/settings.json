@@ -53,7 +53,7 @@
       }
     }
   },
-  "outputStyle": "Explanatory",
+  "outputStyle": "Concise",
   "sandbox": {
     "enabled": false,
     "allowUnsandboxedCommands": true
