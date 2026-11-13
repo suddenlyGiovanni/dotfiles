@@ -76,7 +76,7 @@ a prompt.
 |---|---|---|
 | Git transport | HTTPS, with `glab auth git-credential` as the credential helper | Works today. The token is already in the keychain on every colleague's Mac that ran `glab auth login`. |
 | Commit signing | A per-machine Ed25519 key on disk, registered on GitLab with usage type "Signing" only | Commits stay verified, and an agent's commits are distinguishable from the human's. The key cannot log in anywhere. dev.thingos.io supports the signing-only type (the current key uses it). Alternative: unsigned commits, which `main` already accepts. |
-| Tokens for installs | A short allowlist in the macOS keychain, read through secretspec's `keyring` provider, placed before `bw://` in the provider chain | Narrow: only read tokens. The team module already has the option for it (`developer.secretspec.settings`). Alternative: one Touch ID before leaving that keeps the whole vault session for N hours; simpler, but it exposes the whole vault. |
+| Tokens for installs | A short allowlist in the macOS keychain, read through secretspec's `keyring` provider, placed before `bw://` in the provider chain, and injected into the install command only (section 10) | Narrow: only read tokens. The team module already has the option for it (`developer.secretspec.settings`). Alternative: one Touch ID before leaving that keeps the whole vault session for N hours; simpler, but it exposes the whole vault. |
 | `with-secrets` | A path that never prompts: read the chain, and fail in under a second with the name of the missing secret | Today it calls `bwbio unlock` first, always. |
 | headless FIFO | In agent sessions, skip the FIFO and take the allowlist from the keychain. Separately, land the bound that #344 describes | Removes the largest stall. The durable fix is a `secretspec.toml` in headless, which puts both repos on one mechanism. |
 | Token identity | A separate personal access token named for agent use, least scopes, short expiry | A project access token (bot user, any GitLab licence, at most 365 days) attributes agent work to a bot, but each project's maintainers must create it. Team decision, later. |
@@ -106,7 +106,64 @@ for unattended runs.
 2. Keychain allowlist, or a time-boxed vault session.
 3. Separate personal token now; project access tokens with the team later, or never.
 
-## 8. Not verified
+## 8. Follow-up, 2026-11-13: the setup is also too open
+
+Presence gating is all or nothing. While the vault is locked, an agent can do nothing. While it is
+unlocked, an agent holds everything the user holds.
+
+- **headless puts seven secrets into every agent command.** With 1Password unlocked, a direnv load
+  exports `GITLAB_TOKEN`, `NPM_READ_TOKEN`, `JIRA_API_TOKEN`, `CONFLUENCE_API_TOKEN`,
+  `WEBLATE_API_TOKEN`, `DEPLOY_READ_PASSWORD` and `CLOUDFLARE_API_TOKEN_MINTER` (names read from
+  `direnv exec . env`, values not printed). The last one mints Cloudflare tokens.
+- **Token-shaped strings are already in the transcripts**: GitLab tokens in 11 files (3 distinct
+  values), Atlassian tokens in 8, npm tokens in 4, AWS access key ids in 4. Some may be examples.
+  The transcripts are plain files under `~/.config/claude/projects`. Rotate the three GitLab values.
+- **Every AWS profile is an administrator role** (`internal-tools-admin` is the default, then
+  `SystemAdministrator` and `AdministratorAccess`). For eight hours after `aws sso login`, any
+  agent command can use them.
+
+So the agent tier is not only for unattended runs. It also takes these secrets out of the agent's
+reach when the user is present.
+
+## 9. Tasks by tier
+
+Counted over 95,282 Bash calls that agents made on this machine.
+
+| Tier | Tasks | Calls | Unattended | Credentials |
+|---|---|---|---|---|
+| A. Local work | Edit, build, test, lint, format, commit | `git commit` 1,099 | Yes | A signing key, or none |
+| B. Development with the team | Fetch and push branches, merge requests, issues, pipeline status, package installs, read and comment in Jira and Confluence | `glab mr`, `issue`, `api` 1,534; `gh` 259; fetch, pull, clone 133; `git push` 64; installs 47 | Yes | The agent's own narrow ones, delivered by a channel from section 10 |
+| C. Operations | AWS, Cloudflare tokens and deploys, `alchemy`, `terraform`, `pulumi`, the deploy server, store releases, merges into protected branches, `sudo` | `alchemy` 16; `wrangler` 6; `terraform` or `pulumi` 6; `aws` 5; `sudo` 1 | No | The user's, with presence. Never in an agent's environment |
+| D. Credential administration | Create, rotate or read a secret; write to a vault | `op` 10; `secretspec` 29; `with-secrets` 24 | No | The user only |
+
+An agent still authors tier C changes (infrastructure code, pipelines). The apply runs with the
+user present, or in CI behind a protected environment. If agents later need to read cloud state, a
+separate read-only role is the way, not the user's profiles.
+
+## 10. Delivery channels
+
+The agent needs a capability, not the value. Ranked; use the first that fits.
+
+| Channel | How the secret travels | Agent's environment | Fits |
+|---|---|---|---|
+| 1. The tool's own helper | Store to tool, through a pipe, when the tool asks | Nothing | git over HTTPS (credential helper), `glab` and `gh` (keychain), AWS (`credential_process`) |
+| 2. A connector the harness holds | The harness keeps the OAuth token; the agent gets tool calls | Nothing | Jira, Confluence, GitLab merge requests through MCP tools |
+| 3. Injection into one command | A broker starts one fixed command with the secret in that process only | Nothing; the child holds it while it runs | Package installs (`with-secrets -S install bun install`) |
+| 4. Injection at the network edge | The process holds a placeholder; a local proxy swaps in the real value for allowed hosts | A placeholder | What 1 to 3 cannot cover. Needs a prototype |
+| Not a channel | A secret exported into the shell (direnv, `.env`, a FIFO read by `.envrc`) | The value, in every command | Nothing |
+
+Channel 3 holds only if the agent cannot choose the command: `with-secrets env` would print
+everything. The map from command to secrets must be fixed in configuration the agent cannot edit
+(`~/.config/secretspec/commands/`, generated by Nix), and a hook must deny any other command under
+the broker.
+
+The limit: an agent runs as the same macOS user. Channels 1 to 3 keep values out of the
+conversation, the history and the logs, which closes accidental leaks. They do not stop a process
+that runs as the user from using a credential that needs no presence. Against that, the bounds are
+scope, expiry, and a sandbox that denies reads of the stores and limits the network. A separate
+macOS user or a container for agents is the stronger form.
+
+## 11. Not verified
 
 - secretspec's documentation says a Nix-built binary asks for the login keychain password on the
   first read after each upgrade ("Always Allow" then holds until the next upgrade). Not tested
