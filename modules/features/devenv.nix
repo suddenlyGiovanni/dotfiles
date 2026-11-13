@@ -51,10 +51,16 @@
 # in this repo enables nix-direnv (see direnv.nix), so the environment loads
 # automatically on `cd` into the project once you `direnv allow`.
 #
-# Pick one per project: `direnv allow` (the environment in the current shell)
-# or `devenv allow` (a subshell). The hook leaves a shell alone once DEVENV_ROOT
-# is set, but in nu its pre_prompt hook runs before direnv's env_change hook,
-# so in a direnv project it can still show "not allowed" once per entry.
+# The two loaders coexist. direnv's prompt hook runs first (config.nu loads
+# before the vendor autoload dir), it sets DEVENV_ROOT, and the devenv hook
+# leaves a shell alone once DEVENV_ROOT is set: no subshell, no "not allowed"
+# message (tested in an interactive nu, 2026-11-13). So:
+#   .envrc, `direnv allow`      direnv loads it in place, for the terminal and,
+#                               through claude-code/hooks/direnv-env.nu, for agents
+#   devenv.nix only             the hook starts a subshell after `devenv allow`;
+#                               agents get nothing until the repo gains an .envrc
+# Never `direnv deny` a repo to prefer the hook: agents load through direnv
+# only, and Starship then reports "denied".
 #
 # ══════════════════════════════════════════════════════════════════════════════
 # BINARY CACHE (not configured here)
