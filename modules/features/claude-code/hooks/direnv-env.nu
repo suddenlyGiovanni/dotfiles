@@ -21,8 +21,14 @@
 # The file is this hook's own, so it is overwritten, not appended to. The snapshot
 # holds every variable the environment exports, its secrets included, on disk.
 #
+# The file ends with the agent tier line: it sources the exports that give an
+# agent session its own git configuration and no AWS one (agent-tier.nix). It
+# comes last, so a project environment cannot undo it, and it does nothing on a
+# machine that has no such file.
+#
 # Input (stdin, JSON): { "hook_event_name": "SessionStart" | "CwdChanged", "cwd": …, "new_cwd": … }
 const LOAD_LINE = 'command -v direnv >/dev/null && eval "$(DIRENV_LOG_FORMAT= direnv export bash)"'
+const AGENT_TIER_LINE = '[ ! -r "${XDG_CONFIG_HOME:-$HOME/.config}/agent-tier/env.sh" ] || . "${XDG_CONFIG_HOME:-$HOME/.config}/agent-tier/env.sh"'
 
 # Check what every event needs, then hand the payload to the event's own function.
 # An event this hook is not registered for does nothing.
@@ -69,13 +75,14 @@ def hook-payload []: string -> record {
     if ($parsed | describe) =~ ^record { $parsed } else { {} }
 }
 
-# The env file with the load line alone. Every event writes this first: a
-# snapshot that fails, or never finishes, must not leave the file without it.
+# The env file with the load line and the agent tier line alone. Every event
+# writes this first: a snapshot that fails, or never finishes, must not leave the
+# file without them.
 def write-load-line [env_file: path]: nothing -> nothing {
-    [$LOAD_LINE ''] | str join "\n" | save --force $env_file
+    [$LOAD_LINE $AGENT_TIER_LINE ''] | str join "\n" | save --force $env_file
 }
 
-# The env file with the snapshot of a directory, then the load line. Leaves the
+# The env file with the snapshot of a directory, then the two lines. Leaves the
 # file as it is when the directory is gone or direnv has nothing to export.
 def write-snapshot [dir: path, env_file: path]: nothing -> nothing {
     if not ($dir | path exists) { return }
@@ -83,7 +90,7 @@ def write-snapshot [dir: path, env_file: path]: nothing -> nothing {
 
     let exported = with-env {DIRENV_LOG_FORMAT: ''} { ^direnv export bash | complete }
     if $exported.exit_code == 0 and ($exported.stdout | is-not-empty) {
-        [$exported.stdout $LOAD_LINE ''] | str join "\n" | save --force $env_file
+        [$exported.stdout $LOAD_LINE $AGENT_TIER_LINE ''] | str join "\n" | save --force $env_file
     }
 }
 
