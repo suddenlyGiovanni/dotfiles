@@ -77,6 +77,22 @@
             "type": "command",
             "command": "/bin/sh -c 'rex __internal session-start --agent claude --feature-session-naming=false 2>/dev/null || true'",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "nu --no-config-file --stdin \"$HOME\"/.config/claude/hooks/direnv-env.nu",
+            "timeout": 120
+          }
+        ]
+      }
+    ],
+    "CwdChanged": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "nu --no-config-file --stdin \"$HOME\"/.config/claude/hooks/direnv-env.nu",
+            "timeout": 120
           }
         ]
       }
