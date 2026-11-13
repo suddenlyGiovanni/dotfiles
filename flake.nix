@@ -76,6 +76,66 @@
           deadnix # Unused Nix code
           nu-lint # *.nu (--config .nu-lint.toml: 1.3 doesn't discover it)
         ];
+
+        mcpls = pkgs.callPackage ./modules/devshell/_mcpls.nix {}; # MCP-to-LSP bridge (.mcp.json)
+
+        # `just info`: the devshell overview (modules/devshell/_info.nix). Each
+        # row is a binary the devshell puts on PATH; the overview marks one that
+        # the running shell resolves to something else.
+        devshellInfo = let
+          tool = name: package: note: {inherit name package note;};
+          date = inputs.nixpkgs.lastModifiedDate;
+        in
+          pkgs.callPackage ./modules/devshell/_info.nix {
+            nixpkgsPin = "${inputs.nixpkgs.shortRev} (${builtins.substring 0 4 date}-${builtins.substring 4 2 date}-${builtins.substring 6 2 date})";
+            hookNames = pkgs.lib.attrNames (pkgs.lib.filterAttrs (_: hook: hook.enable) config.pre-commit.settings.hooks);
+            toolGroups = [
+              {
+                title = "Task runner";
+                tools = [
+                  (tool "just" pkgs.just "the recipes; `just check` is every gate")
+                  (tool "nvd" pkgs.nvd "what `just diff` compares generations with")
+                ];
+              }
+              {
+                title = "Formatters (treefmt.toml)";
+                tools = [
+                  (tool "treefmt" pkgs.treefmt "routes each file to its formatter")
+                  (tool "alejandra" pkgs.alejandra "*.nix")
+                  (tool "nufmt" pkgs.nufmt "*.nu")
+                  (tool "stylua" pkgs.stylua "*.lua")
+                ];
+              }
+              {
+                title = "Linters";
+                tools = [
+                  (tool "statix" pkgs.statix "*.nix antipatterns")
+                  (tool "deadnix" pkgs.deadnix "unused Nix code")
+                  (tool "nu-lint" pkgs.nu-lint "*.nu, always with --config .nu-lint.toml")
+                ];
+              }
+              {
+                title = "Commit hooks";
+                tools = [
+                  (tool "pre-commit" config.pre-commit.settings.package "runs the hooks")
+                  (tool "convco" config.pre-commit.settings.hooks.convco.package "Conventional Commits, on the message")
+                ];
+              }
+              {
+                title = "Language servers";
+                tools = [
+                  (tool "nixd" pkgs.nixd "*.nix")
+                  (tool "nil" pkgs.nil "*.nix, the alternative")
+                  (tool "nu" pkgs.nushell "*.nu (`nu --lsp`), and the Claude Code hooks")
+                  (tool "lua-language-server" pkgs.lua-language-server "*.lua")
+                  (tool "marksman" dotnetPkgs.marksman "*.md")
+                  (tool "taplo" pkgs.taplo "*.toml")
+                  (tool "just-lsp" pkgs.just-lsp "justfile")
+                  (tool "mcpls" mcpls "bridges the servers to MCP (.mcp.json)")
+                ];
+              }
+            ];
+          };
       in {
         # `nix fmt`: treefmt over the whole tree (config: treefmt.toml)
         formatter = pkgs.writeShellApplication {
@@ -223,17 +283,18 @@
               dotnetPkgs.marksman # *.md: links between docs and ADRs
               taplo # *.toml
               just-lsp # justfile
-              (callPackage ./modules/devshell/_mcpls.nix {}) # MCP-to-LSP bridge (.mcp.json)
+              mcpls
 
               # Utilities
               just # Task runner
               nvd # Nix package version diff tool
+              devshellInfo # `just info`
             ]);
 
           # The shellHook runs on every shell load: each `direnv exec <cmd>`,
           # each stale reload, each command an agent runs. An agent harness
           # reads stderr with the output, so an overview printed here cost
-          # ~35 lines per load. The overview is `just help`, a command the
+          # ~35 lines per load. The overview is `just info`, a command the
           # reader asks for; the hook prints one line that points at it, and
           # only when stderr is a terminal. (The pattern is headless's
           # nix/modules/devshell/help.nix.) fd 2, not fd 1: on `cd`, the shell
@@ -242,7 +303,7 @@
           shellHook = ''
             ${config.pre-commit.installationScript}
             if [ -t 2 ]; then
-              echo "dotfiles devshell ready — run 'just help' for the recipes" >&2
+              echo "dotfiles devshell ready — 'just info' for the tools and layout, 'just' for the recipes" >&2
             fi
           '';
         };

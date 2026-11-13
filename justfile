@@ -32,13 +32,14 @@ _darwin_rebuild := require('darwin-rebuild')
 default:
     @just --list
 
-# Ungrouped on purpose: `just --list` prints it above the groups. It is the
-# overview the devshell used to print on every load (flake.nix, shellHook).
-[doc('Print the devshell overview: what this shell is, and the recipes')]
-help:
-    @echo "dotfiles development shell"
-    @echo ""
-    @just --list
+# Ungrouped on purpose: `just --list` prints it above the groups. The command
+# is built in modules/devshell/_info.nix and comes from the devshell. `help` is
+# an alias because headless names the same thing `just help`.
+[doc('Print the devshell overview: host, pinned tool versions (and whether this shell has them), git hooks, repo layout')]
+info:
+    @devshell-info
+
+alias help := info
 
 # ── Dev ───────────────────────────────────────────────────────────────────────
 

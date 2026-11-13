@@ -11,8 +11,11 @@ Guidance for AI coding agents working with this repository.
 
 ## Commands
 
-`just --list` is the source of truth. `just help` prints the devshell overview. The devshell itself
-prints nothing when it loads, except one line that points at `just help` on a terminal.
+`just --list` is the source of truth. `just info` prints the devshell overview: the host, the tool
+versions the devshell pins, the git hooks and the repo layout. It marks a tool with `!` when the
+shell you are in does not have the pinned binary; reload the shell before you trust a gate. The
+devshell itself prints nothing when it loads, except one line that points at `just info` on a
+terminal.
 
 ## Critical Constraints
 
