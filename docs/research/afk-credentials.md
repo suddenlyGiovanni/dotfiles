@@ -169,12 +169,47 @@ macOS user or a container for agents is the stronger form.
 |---|---|
 | Tiers A to D | Agreed, 2026-11-13 |
 | Git transport, signing key, no AWS in agent sessions | Built in `modules/features/agent-tier/` and the Claude Code env hook; `agent-tier-check` and [AGENT-TIER.md](../AGENT-TIER.md) cover the setup. Tested with a throwaway key: a signed commit in 71 ms with no prompt, `ls-remote` over HTTPS on both forges, an SSH remote with no rewrite fails in 0.5 s. Active on the work host since 2026-11-13: the key is registered as signing-only on github.com and dev.thingos.io, `agent-tier-check` passes, and a push through the tier took 1.9 s with no prompt |
-| headless: no secrets exported into agent sessions | Not started (another repository) |
+| An `.envrc` can tell an agent from a person | Done. The env hook sources the tier before direnv loads, and takes its snapshot with `AGENT_TIER=1`, so the snapshot file holds no secret |
+| headless: no secrets exported into agent sessions | Committed on the branch `fix/agent-tier-no-secrets` (`1f4cc916a1`), not pushed. See section 12 |
 | `with-secrets` without a prompt, fixed command map | Not started |
 | Rotate the tokens found in transcripts | The user's step |
 | Other harnesses source `~/.config/agent-tier/env.sh` | Not started |
 
-## 12. Not verified
+## 12. headless: what the change does, and what it showed
+
+Of the seven secrets that headless exported, its code uses three: `GITLAB_TOKEN` and
+`NPM_READ_TOKEN` (the registries in `bunfig.toml`; publishing; the `alchemy-gitlab` tool) and
+`CLOUDFLARE_API_TOKEN_MINTER` (infrastructure deploys, tier C). The other four belong to other
+work and reach headless only because one 1Password Environment serves everything.
+
+The `.envrc` now skips the secrets slot in an agent tier session. It recognises one in two ways:
+
+- `AGENT_TIER` is set: a Bash command, after the env file sourced the tier.
+- `CLAUDE_CODE_CHILD_SESSION` is set and `~/.config/agent-tier/env.sh` exists: a hook process,
+  which never sources the tier. headless runs six hook commands through `direnv exec`. Not
+  `CLAUDECODE`: an IDE extension sets it in its integrated terminal, where a person works.
+
+Measured in the worktree, 1Password unlocked:
+
+| Who loads the `.envrc` | Secrets in the environment | Load time |
+|---|---|---|
+| A person, plain terminal | 7 | 7.7 s first, 2.2 s after |
+| A person, IDE terminal (`CLAUDECODE=1`) | 7 | |
+| An agent's Bash command | 0 | 0.24 s |
+| An agent's hook | 0 | 0.25 s |
+| An agent on a machine without the tier | 7 (unchanged) | |
+
+Installs without the tokens: `bun install --frozen-lockfile` passes on a current tree, and on a
+tree with `node_modules` removed it installs 2,408 packages from bun's cache in 2.3 s. So an
+agent can set up a worktree with no registry token. A package that is not in the cache still
+needs one; that is the case for injection into one command (section 10, channel 3).
+
+The commit ran the repository's hooks in 2.3 s and is signed with the agent key.
+
+Not covered: a session started with `claude` from a terminal that already loaded the secrets
+inherits them from that terminal, whatever the `.envrc` does. The desktop app does not.
+
+## 13. Not verified
 
 - secretspec's documentation says a Nix-built binary asks for the login keychain password on the
   first read after each upgrade ("Always Allow" then holds until the next upgrade). Not tested
