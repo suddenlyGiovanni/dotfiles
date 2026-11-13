@@ -103,14 +103,14 @@ def github-login [host: string]: nothing -> record {
     if $token.exit_code == 0 {
         passed $name 'gh has a token in the keychain'
     } else {
-        failed $name 'gh is not logged in' --fix $"gh auth login --hostname ($host) --git-protocol https --web"
+        failed $name 'gh is not logged in' --fix $"^gh auth login --hostname ($host) --git-protocol https --web"
     }
 }
 
 # glab's token is a personal access token with an expiry date: warn before it ends.
 def gitlab-login [host: string]: nothing -> record {
     let name = $"($host) login"
-    let fix = $"glab auth login --hostname ($host)"
+    let fix = $"^glab auth login --hostname ($host)"
     let token = ^glab api personal_access_tokens/self --hostname $host | complete
     if $token.exit_code != 0 { return (failed $name 'glab is not logged in, or its token has expired' --fix $fix) }
 
@@ -144,7 +144,7 @@ def github-registration [host: string, key: path]: nothing -> record {
     let name = $"($host) signing key"
     let keys = ^gh api user/ssh_signing_keys --hostname $host | complete
     if $keys.exit_code != 0 {
-        let fix = $"gh auth refresh --hostname ($host) --scopes admin:ssh_signing_key"
+        let fix = $"^gh auth refresh --hostname ($host) --scopes admin:ssh_signing_key"
         return (
             failed $name 'gh may not read the signing keys: its token lacks the scope' --fix $fix
         )
@@ -154,18 +154,19 @@ def github-registration [host: string, key: path]: nothing -> record {
     if $registered {
         passed $name 'registered as a signing key'
     } else {
-        failed $name 'not registered' --fix $"gh ssh-key add ($key).pub --type signing --title \"(key-title)\""
+        failed $name 'not registered' --fix $"^gh ssh-key add ($key).pub --type signing --title \"(key-title)\""
     }
 }
 
 # On GitLab the key must be signing-only: a key that may also authenticate could log in.
 def gitlab-registration [host: string, key: path]: nothing -> record {
     let name = $"($host) signing key"
-    let add = $"glab ssh-key add ($key).pub --usage-type signing --title \"(key-title)\""
+    # glab takes its host from the repository it runs in, and gitlab.com outside one.
+    let add = $"GITLAB_HOST=($host) ^glab ssh-key add ($key).pub --usage-type signing --title \"(key-title)\""
     let keys = ^glab api user/keys --hostname $host | complete
     if $keys.exit_code != 0 {
         return (
-        failed $name 'glab cannot read the keys' --fix $"glab auth login --hostname ($host)"
+        failed $name 'glab cannot read the keys' --fix $"^glab auth login --hostname ($host)"
     )
     }
 

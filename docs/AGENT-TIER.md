@@ -30,18 +30,25 @@ key can do nothing but sign.
 `agent-tier-check` tests every step below and prints the command for each one that is missing.
 Run it first, run it after each step, and stop when every line says `ok`.
 
+Two things about the commands:
+
+- The `^` in front of `gh` and `glab` makes nu run the program itself. Without it, nu runs the
+  1Password wrapper, which uses another token than the one in the keychain.
+- `glab` takes its host from the repository it runs in, and `gitlab.com` anywhere else. The
+  `GITLAB_HOST=` prefix names the work GitLab wherever you are.
+
 1. **1Password.** Open the app and sign in. In Settings, Developer: turn on "Use the SSH agent"
    and "Integrate with 1Password CLI". This gives a terminal your own keys.
 2. **GitHub login.** A browser opens; approve it.
 
    ```bash
-   gh auth login --hostname github.com --git-protocol https --web --scopes admin:ssh_signing_key
+   ^gh auth login --hostname github.com --git-protocol https --web --scopes admin:ssh_signing_key
    ```
 
    Already logged in, and the check says the token lacks the scope:
 
    ```bash
-   gh auth refresh --hostname github.com --scopes admin:ssh_signing_key
+   ^gh auth refresh --hostname github.com --scopes admin:ssh_signing_key
    ```
 
 3. **GitLab login** (work host). Create a personal access token at
@@ -49,7 +56,7 @@ Run it first, run it after each step, and stop when every line says `ok`.
    `write_repository` and an expiry date of at most one year. Then paste it when asked:
 
    ```bash
-   glab auth login --hostname dev.thingos.io
+   ^glab auth login --hostname dev.thingos.io
    ```
 
    Answer "HTTPS" for the git protocol and "yes" to authenticating git with the token.
@@ -63,11 +70,11 @@ Run it first, run it after each step, and stop when every line says `ok`.
    key cannot log in.
 
    ```bash
-   gh ssh-key add ~/.ssh/agent-signing.pub --type signing --title "Agent signing key - <machine>"
+   ^gh ssh-key add ~/.ssh/agent-signing.pub --type signing --title "Agent signing key - <machine>"
    ```
 
    ```bash
-   glab ssh-key add ~/.ssh/agent-signing.pub --usage-type signing --title "Agent signing key - <machine>"
+   GITLAB_HOST=dev.thingos.io ^glab ssh-key add ~/.ssh/agent-signing.pub --usage-type signing --title "Agent signing key - <machine>"
    ```
 
 5. **Delete the old machine's key** on both forges, if this machine replaces one:
