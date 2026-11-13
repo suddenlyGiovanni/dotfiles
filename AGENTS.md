@@ -97,6 +97,7 @@ and language server, and every check uses those same binaries:
 For detailed guidance, see:
 
 - [docs/CUSTOMIZATION.md](./docs/CUSTOMIZATION.md) — How-to guide with examples
+- [docs/AGENT-TIER.md](./docs/AGENT-TIER.md) — Credentials on a new machine: what lives where, and the setup that `agent-tier-check` verifies
 - [docs/adr/](./docs/adr/) — Architecture Decision Records (rationale for design choices)
 - [docs/adr/007-flake-parts-dendritic-migration.md](./docs/adr/007-flake-parts-dendritic-migration.md) — Dendritic architecture ADR
 - [docs/TASKS.md](./docs/TASKS.md) — Task tracker for ongoing work

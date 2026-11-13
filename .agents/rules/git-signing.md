@@ -13,8 +13,9 @@ paths:
 - **The user's keys need the user**. The 1Password agent prompts for each signature and each SSH
   connection, so a run with no user present cannot use them. Do not change the user's git
   configuration to work around this.
-- **Agent sessions have their own tier** (`modules/features/agent-tier.nix`,
-  [research](../../docs/research/afk-credentials.md)). A harness sources
+- **Agent sessions have their own tier** (`modules/features/agent-tier/`,
+  [runbook](../../docs/AGENT-TIER.md)). `agent-tier-check` says what a machine still needs. A
+  harness sources
   `~/.config/agent-tier/env.sh` before each command. git then reads
   `~/.config/git/agent.gitconfig`: HTTPS with the CLI's credential helper, commits signed with
   `~/.ssh/agent-signing`, no SSH. Change the tier in that module, never in `git/default.nix`.
