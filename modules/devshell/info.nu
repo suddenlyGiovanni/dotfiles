@@ -20,7 +20,12 @@ def main [
     let info = open $data
 
     [
-        ['dotfiles devshell: nix-darwin + home-manager, one flake for two Macs']
+        [
+            (
+                'dotfiles devshell: nix-darwin + home-manager, one flake for two Macs'
+                | paint default_bold
+            )
+        ]
         (host-rows $info.nixpkgsPin | section 'Host')
         (tools-section $info.toolGroups)
         (hook-rows ...$info.hookNames | section 'Git hooks')
@@ -70,9 +75,9 @@ def hook-rows [...hook_names: string]: nothing -> list<list<string>> {
         ''
     }
     let status = if ($hook | is-not-empty) and ($hook | path exists) {
-        'installed'
+        'installed' | paint green
     } else {
-        'not installed (the devshell installs them when it loads)'
+        'not installed (the devshell installs them when it loads)' | paint yellow
     }
 
     [
@@ -99,7 +104,7 @@ def tools-section [groups: table]: nothing -> list<string> {
 
     let lines = $tools
     | each {|tool| [(if $tool.pinned { ' ' } else { '!' }) $tool.name $tool.version $tool.note] }
-    | align
+    | align red_bold cyan default_dimmed default_dimmed
     | wrap line
     let grouped = $tools | merge $lines | group-by group --to-table | each {|group|
         [$"  ($group.group)"] ++ $group.items.line
@@ -111,26 +116,52 @@ def tools-section [groups: table]: nothing -> list<string> {
             '  ! marks a tool that is missing from PATH, or is not the pinned binary: this'
             '  shell is older than the flake. Reload it (`direnv reload`, or a new terminal'
             '  or agent session) before you trust a gate.'
-        ]
+        ] | each { paint yellow }
     }
 
-    ['Tools this devshell pins'] ++ $grouped ++ $stale_note
+    [
+        ('Tools this devshell pins' | paint default_bold)
+    ] ++ $grouped ++ $stale_note
 }
 
-# A title, then the rows as aligned lines.
+# A title, then the rows as aligned lines with the first column highlighted.
 def section [title: string]: list<list<string>> -> list<string> {
-    [$title] ++ ($in | align)
+    [
+        ($title | paint default_bold)
+    ] ++ ($in | align cyan)
 }
 
-# Rows of cells as indented lines, each column as wide as its longest cell.
-def align []: list<list<string>> -> list<string> {
+# Rows of cells as indented lines, each column as wide as its longest cell and
+# painted in its style, if it has one. Widths count what is visible, and the
+# padding goes after the paint, so color never moves a column.
+def align [...styles: string]: list<list<string>> -> list<string> {
     let rows = $in
     let widths = $rows
-    | each {|row| $row | each { str length --grapheme-clusters } }
+    | each {|row| $row | each { visible-length } }
     | reduce {|lengths, widest| $widest | zip $lengths | each { math max } }
 
     $rows | each {|row|
-        let cells = $row | zip $widths | each {|cell| $cell | first | fill --width ($cell | last) }
+        let cells = $row | wrap text | merge ($widths | wrap width) | merge ($styles | wrap style) | each {|cell|
+            let padding = '' | fill --width ($cell.width - ($cell.text | visible-length))
+            ($cell.text | paint $cell.style?) + $padding
+        }
         $"  ($cells | str join '  ' | str trim --right)"
     }
+}
+
+# The number of characters a terminal shows: color codes do not count.
+def visible-length []: string -> int {
+    ansi strip | str length --grapheme-clusters
+}
+
+# The text in a style, when a style is given and color is on. A column without
+# a style passes null.
+#
+# Color is only for a person at a terminal. An agent reads the output through a
+# pipe and must not get escape codes; NO_COLOR and TERM=dumb turn it off too.
+def paint [style: oneof<string, nothing>]: string -> string {
+    let text = $in
+    let color_on = (is-terminal --stdout) and ($env.NO_COLOR? | is-empty) and ($env.TERM? != 'dumb')
+
+    if $color_on and ($style | is-not-empty) { $"(ansi $style)($text)(ansi reset)" } else { $text }
 }
