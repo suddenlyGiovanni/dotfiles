@@ -21,9 +21,27 @@
 #
 #   devenv init            Scaffold devenv.nix + .envrc in the current project
 #   devenv shell           Enter the dev environment
+#   devenv allow           Trust this project for auto activation
+#   devenv revoke          Stop auto activating this project
 #   devenv up              Start declared processes/services
 #   devenv test            Run the environment's tests
 #   devenv update          Update the project's devenv inputs
+#
+# ══════════════════════════════════════════════════════════════════════════════
+# AUTO ACTIVATION (devenv hook, since 2.1)
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# https://devenv.sh/auto-activation/
+#
+# On every prompt the hook runs `devenv hook-should-activate`; in a trusted
+# project (`devenv allow`, which looks for devenv.nix) it starts `devenv shell`
+# as a subshell, and leaving the project exits it again. devenv's own flake
+# installs the hook where nu and fish load it by themselves; the nixpkgs package
+# ships only completions. So devenv-hooks below generates the hooks from the same
+# binary at build time, at the same places:
+#   nu    share/nushell/vendor/autoload/devenv-hook.nu ($nu.vendor-autoload-dirs)
+#   fish  share/fish/vendor_conf.d/devenv-hook.fish
+#   zsh   sourced from programs.zsh.initContent (zsh has no vendor dir)
 #
 # ══════════════════════════════════════════════════════════════════════════════
 # DIRENV INTEGRATION
@@ -32,6 +50,11 @@
 # `devenv init` writes an `.envrc` containing `use devenv`. The direnv module
 # in this repo enables nix-direnv (see direnv.nix), so the environment loads
 # automatically on `cd` into the project once you `direnv allow`.
+#
+# Pick one per project: `direnv allow` (the environment in the current shell)
+# or `devenv allow` (a subshell). The hook leaves a shell alone once DEVENV_ROOT
+# is set, but in nu its pre_prompt hook runs before direnv's env_change hook,
+# so in a direnv project it can still show "not allowed" once per entry.
 #
 # ══════════════════════════════════════════════════════════════════════════════
 # BINARY CACHE (not configured here)
@@ -50,7 +73,16 @@
 #   - direnv.nix: auto-loads the environment via `use devenv`
 #
 _: {
-  flake.modules.homeManager.devenv = {pkgs, ...}: {
-    home.packages = [pkgs.devenv];
+  flake.modules.homeManager.devenv = {pkgs, ...}: let
+    devenv-hooks = pkgs.runCommand "devenv-hooks-${pkgs.devenv.version}" {nativeBuildInputs = [pkgs.devenv];} ''
+      export HOME=$TMPDIR
+      mkdir -p $out/share/nushell/vendor/autoload $out/share/fish/vendor_conf.d $out/share/devenv
+      devenv hook nu > $out/share/nushell/vendor/autoload/devenv-hook.nu
+      devenv hook fish > $out/share/fish/vendor_conf.d/devenv-hook.fish
+      devenv hook zsh > $out/share/devenv/hook.zsh
+    '';
+  in {
+    home.packages = [pkgs.devenv devenv-hooks];
+    programs.zsh.initContent = "source ${devenv-hooks}/share/devenv/hook.zsh";
   };
 }
