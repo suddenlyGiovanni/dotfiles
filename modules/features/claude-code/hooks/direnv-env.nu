@@ -22,7 +22,7 @@
 # holds every variable the environment exports, its secrets included, on disk.
 #
 # The file ends with the agent tier line: it sources the exports that give an
-# agent session its own git configuration and no AWS one (agent-tier.nix). It
+# agent session its own git configuration and no AWS one (agent-tier/default.nix). It
 # comes last, so a project environment cannot undo it, and it does nothing on a
 # machine that has no such file.
 #
