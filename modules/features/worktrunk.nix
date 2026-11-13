@@ -36,34 +36,18 @@
 # and completions) comes from the module for each enabled shell: nu, fish, zsh
 # and bash.
 #
-# ONE COPY OF THE NU INTEGRATION, NOT TWO
-#
-# The package also ships the nu integration as a vendor autoload file
-# (share/nushell/vendor/autoload/wt.nu). nu loads autoload files after
-# config.nu, so after the alias `open = ^open` (nushell/default.nix). The `wt`
-# function in that file then calls macOS `open` where it means nu's built-in:
-# `wt switch` prints "Switched" and stays in the old directory. The module's
-# copy is sourced from config.nu before the aliases and works, but the autoload
-# copy loads later and wins. So the package here is the nixpkgs one without
-# that file.
+# nu gets the integration twice, with the same content: the module sources it
+# from config.nu, and the package ships it as a vendor autoload file
+# (share/nushell/vendor/autoload/wt.nu), which loads later and wins. Its `wt`
+# function reads a file with nu's `open`, so it depends on the `open` alias
+# loading after it: nushell/open-alias.nu.
 #
 # Not enabled: `claudeCodeIntegration`. It adds WorktreeCreate and WorktreeRemove
 # hooks to Claude Code for every project, and headless ships its own.
 _: {
-  flake.modules.homeManager.worktrunk = {pkgs, ...}: let
-    # A view of the package, not a rebuild: links to everything but the file.
-    worktrunk = pkgs.symlinkJoin {
-      name = "worktrunk-${pkgs.worktrunk.version}";
-      paths = [pkgs.worktrunk];
-      postBuild = ''
-        rm $out/share/nushell/vendor/autoload/wt.nu
-      '';
-      inherit (pkgs.worktrunk) meta version;
-    };
-  in {
+  flake.modules.homeManager.worktrunk = {pkgs, ...}: {
     programs.worktrunk = {
       enable = true;
-      package = worktrunk;
       settings = {
         skip-shell-integration-prompt = true;
         worktree-path = ".worktrees/{{ branch }}";
