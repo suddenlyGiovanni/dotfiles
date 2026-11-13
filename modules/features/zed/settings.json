@@ -214,7 +214,7 @@
 			},
 			"default_config_options": {
 				"model": "opus[1m]",
-				"mode": "plan",
+				"mode": "auto",
 				"effort": "high",
 			},
 			"type": "registry",
