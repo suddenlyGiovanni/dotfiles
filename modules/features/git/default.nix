@@ -57,6 +57,8 @@ _: {
       # Global ignores
       ignores = [
         ".DS_Store"
+        # Linked worktrees inside a repository (worktrunk.nix sets this layout)
+        ".worktrees/"
       ];
 
       # Directory-based identity configuration using conditional includes
