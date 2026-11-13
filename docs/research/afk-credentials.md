@@ -168,7 +168,7 @@ macOS user or a container for agents is the stronger form.
 | Step | State |
 |---|---|
 | Tiers A to D | Agreed, 2026-11-13 |
-| Git transport, signing key, no AWS in agent sessions | Built in `modules/features/agent-tier/` and the Claude Code env hook; `agent-tier-check` and [AGENT-TIER.md](../AGENT-TIER.md) cover the setup. Tested with a throwaway key: a signed commit in 71 ms with no prompt, `ls-remote` over HTTPS on both forges, an SSH remote with no rewrite fails in 0.5 s. Not active until `just switch`; the key is not registered |
+| Git transport, signing key, no AWS in agent sessions | Built in `modules/features/agent-tier/` and the Claude Code env hook; `agent-tier-check` and [AGENT-TIER.md](../AGENT-TIER.md) cover the setup. Tested with a throwaway key: a signed commit in 71 ms with no prompt, `ls-remote` over HTTPS on both forges, an SSH remote with no rewrite fails in 0.5 s. Active on the work host since 2026-11-13: the key is registered as signing-only on github.com and dev.thingos.io, `agent-tier-check` passes, and a push through the tier took 1.9 s with no prompt |
 | headless: no secrets exported into agent sessions | Not started (another repository) |
 | `with-secrets` without a prompt, fixed command map | Not started |
 | Rotate the tokens found in transcripts | The user's step |
