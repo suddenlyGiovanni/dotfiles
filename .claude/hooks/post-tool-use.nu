@@ -1,8 +1,8 @@
 # PostToolUse hook (matcher: Write|Edit): format the file the agent just wrote,
 # lint it, and hand anything worth knowing back to the model.
 #
-# Formatting goes through treefmt (treefmt.toml): the same table `just fmt`,
-# `nix fmt`, the `formatting` flake check and Zed use, so this step can't
+# Formatting goes through treefmt (perSystem.treefmt in flake.nix): the same
+# table `just fmt`, `nix fmt`, the `treefmt` flake check and Zed use, so this step can't
 # format differently from the gate. Linting runs the file's own linters, the
 # same ones `just lint` and the `lint` flake check run:
 #   *.nu   nu-lint (.nu-lint.toml)

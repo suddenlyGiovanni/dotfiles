@@ -44,7 +44,7 @@ alias help := info
 # ── Dev ───────────────────────────────────────────────────────────────────────
 
 [group('dev')]
-[doc('Format all files with treefmt (Nix, Nu, Lua; see treefmt.toml)')]
+[doc('Format all files with treefmt (Nix, Nu, Lua; the table is perSystem.treefmt in flake.nix)')]
 fmt *paths:
     treefmt {{ paths }}
 

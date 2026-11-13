@@ -31,6 +31,10 @@
     # Git hooks for this repo's devshell (perSystem.pre-commit below)
     git-hooks-nix.url = "github:cachix/git-hooks.nix";
     git-hooks-nix.inputs.nixpkgs.follows = "nixpkgs";
+
+    # The formatter table for this repo (perSystem.treefmt below)
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs:
@@ -40,6 +44,7 @@
       imports = [
         inputs.flake-parts.flakeModules.modules
         inputs.git-hooks-nix.flakeModule
+        inputs.treefmt-nix.flakeModule
         ./modules/options.nix
         ./modules/hosts.nix
         ./modules/host-assembly.nix
@@ -61,15 +66,11 @@
         # cached, so both come from it.
         dotnetPkgs = inputs'.nixpkgs-master.legacyPackages;
 
-        # What treefmt.toml routes to. One list for `nix fmt`, the devshell (so
-        # `just fmt`, Zed and the Claude Code hooks see the same binaries) and
-        # the formatting check.
-        formatters = with pkgs; [
-          treefmt
-          alejandra # *.nix
-          nufmt # *.nu
-          stylua # *.lua
-        ];
+        # The formatters behind `treefmt` (perSystem.treefmt below), also put on
+        # PATH by name for an editor or a person who calls one directly.
+        # treefmt-nix has no nufmt module, so nufmt is named here and wired as
+        # a custom formatter below.
+        formatters = builtins.attrValues config.treefmt.build.programs ++ [pkgs.nufmt];
 
         linters = with pkgs; [
           statix # Nix antipatterns
@@ -98,12 +99,14 @@
                 ];
               }
               {
-                title = "Formatters (treefmt.toml)";
+                title = "Formatters (perSystem.treefmt in flake.nix)";
                 tools = [
-                  (tool "treefmt" pkgs.treefmt "routes each file to its formatter")
-                  (tool "alejandra" pkgs.alejandra "*.nix")
+                  # The wrapper has no version of its own; show treefmt's.
+                  (tool "treefmt" config.treefmt.build.wrapper "routes each file to its formatter"
+                    // {version = pkgs.lib.getVersion config.treefmt.package;})
+                  (tool "alejandra" config.treefmt.build.programs.alejandra "*.nix")
                   (tool "nufmt" pkgs.nufmt "*.nu")
-                  (tool "stylua" pkgs.stylua "*.lua")
+                  (tool "stylua" config.treefmt.build.programs.stylua "*.lua")
                 ];
               }
               {
@@ -137,24 +140,46 @@
             ];
           };
       in {
-        # `nix fmt`: treefmt over the whole tree (config: treefmt.toml)
-        formatter = pkgs.writeShellApplication {
-          name = "treefmt";
-          runtimeInputs = formatters;
-          text = ''exec ${pkgs.treefmt}/bin/treefmt "$@"'';
+        # The one formatter table for this repo (treefmt-nix). It builds a
+        # `treefmt` wrapper that carries the generated config and the
+        # formatters' store paths, and everything that formats runs that
+        # wrapper, so no two paths can disagree: `nix fmt`, `just fmt` /
+        # `just fmt-check`, the `treefmt` flake check, the git hook, the Claude
+        # Code PostToolUse hook (.claude/hooks/post-tool-use.nu) and Zed's
+        # project formatter (.zed/settings.json).
+        #
+        # Formatters only. The linters (statix, deadnix, nu-lint) stay a
+        # separate gate: under treefmt they would run in fix mode, and deadnix
+        # would delete a binding between the edit that adds it and the edit
+        # that uses it.
+        treefmt = {
+          programs = {
+            alejandra.enable = true; # *.nix
+            # *.lua. Reads modules/features/neovim/nvim/stylua.toml, which
+            # stylua searches for upward from each file.
+            stylua.enable = true;
+          };
+          settings = {
+            global.excludes = [
+              ".direnv/**"
+              "result/**"
+              # Vendored agent skills: upstream content we don't own;
+              # reformatting would drift from upstream.
+              "modules/features/agents/skills/**"
+            ];
+            formatter = {
+              alejandra.options = ["--quiet"];
+              nufmt = {
+                command = pkgs.lib.getExe pkgs.nufmt;
+                includes = ["*.nu"];
+              };
+            };
+          };
         };
 
-        # CI-ready checks — `nix flake check` runs all of these
+        # CI-ready checks — `nix flake check` runs all of these. treefmt-nix
+        # adds `checks.treefmt`: any file that needs formatting fails it.
         checks = {
-          # treefmt formats in place, so it runs on a writable copy; --ci turns
-          # any change into a failure.
-          formatting = pkgs.runCommand "check-formatting" {nativeBuildInputs = formatters;} ''
-            cp -r ${./.} src
-            chmod -R u+w src
-            cd src
-            treefmt --ci
-            touch $out
-          '';
           lint = pkgs.runCommand "check-lint" {nativeBuildInputs = linters;} ''
             cd ${./.}
             statix check .
@@ -208,18 +233,11 @@
             hooks = {
               check-merge-conflicts.enable = true;
 
-              # --fail-on-change: a staged file that needed formatting fails
-              # the commit (treefmt still fixes it; re-stage and commit again).
-              treefmt = {
-                enable = true;
-                package = pkgs.writeShellApplication {
-                  name = "treefmt-staged";
-                  runtimeInputs = formatters;
-                  text = ''exec treefmt --fail-on-change --no-cache "$@"'';
-                };
-                entry = "treefmt-staged";
-                pass_filenames = true;
-              };
+              # git-hooks.nix takes the wrapper from perSystem.treefmt and runs
+              # it on the staged files with --fail-on-change --no-cache: a
+              # staged file that needed formatting fails the commit (treefmt
+              # still fixes it; re-stage and commit again).
+              treefmt.enable = true;
 
               # statix takes one target, so it checks the tree like `just lint`
               statix = {
@@ -268,7 +286,8 @@
         devShells.default = pkgs.mkShell {
           name = "dotfiles-dev";
           packages =
-            formatters
+            [config.treefmt.build.wrapper] # `treefmt`, with its config baked in
+            ++ formatters
             ++ linters
             ++ [config.pre-commit.settings.package] # `pre-commit run --all-files`
             ++ config.pre-commit.settings.enabledPackages

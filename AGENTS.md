@@ -52,9 +52,10 @@ terminal.
 The devshell (`flake.nix` → `devShells.default`, loaded by direnv) carries every formatter, linter
 and language server, and every check uses those same binaries:
 
-- **Format**: `treefmt.toml` is the one table: alejandra (`*.nix`), nufmt (`*.nu`) and stylua
-  (`*.lua`). `nix fmt`, `just fmt`, the `formatting` flake check and Zed (`.zed/settings.json`) all
-  route through it.
+- **Format**: `perSystem.treefmt` in `flake.nix` (treefmt-nix) is the one table: alejandra
+  (`*.nix`), nufmt (`*.nu`) and stylua (`*.lua`). There is no `treefmt.toml`: the devshell's
+  `treefmt` is a wrapper with the generated config baked in. `nix fmt`, `just fmt`, the `treefmt`
+  flake check and Zed (`.zed/settings.json`) all route through it.
 - **Lint**: statix and deadnix (`*.nix`), nu-lint (`*.nu`, always with `--config .nu-lint.toml`).
 - **Git hooks** (`flake.nix` → `perSystem.pre-commit`, git-hooks.nix): treefmt
   (`--fail-on-change`), statix, deadnix, nu-lint and merge-conflict markers on commit, convco on

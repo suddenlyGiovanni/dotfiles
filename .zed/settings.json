@@ -1,9 +1,10 @@
 // Project settings for the dotfiles repo (layered over the global ones in
 // modules/features/zed/settings.json).
 //
-// Format through treefmt (treefmt.toml), the same table `just fmt`, `nix fmt`,
-// the formatting flake check and the Claude Code hook use. treefmt and the
-// formatters come from the flake devshell, which Zed loads via direnv.
+// Format through treefmt (perSystem.treefmt in flake.nix), the same table
+// `just fmt`, `nix fmt`, the treefmt flake check and the Claude Code hook use.
+// The `treefmt` command is a wrapper with that table baked in; it comes from
+// the flake devshell, which Zed loads via direnv.
 {
 	"git": {
 		"worktree_directory": ".worktrees",

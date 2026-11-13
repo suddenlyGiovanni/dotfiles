@@ -11,7 +11,8 @@
   writeText,
   nushell,
   # [{ title = "Formatters"; tools = [{ name = "treefmt"; package = …; note = "…"; }]; }]
-  # `name` is the binary's name on PATH.
+  # `name` is the binary's name on PATH. A tool may carry its own `version`,
+  # for a wrapper whose derivation has none.
   toolGroups,
   # Ids of the enabled git hooks.
   hookNames,
@@ -27,7 +28,7 @@
           map (tool: {
             inherit (tool) name note;
             path = "${lib.getBin tool.package}/bin/${tool.name}";
-            version = lib.getVersion tool.package;
+            version = tool.version or (lib.getVersion tool.package);
           })
           group.tools;
       })
