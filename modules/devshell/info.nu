@@ -17,19 +17,19 @@
 def main [
     data: path # the JSON file that _info.nix builds
 ]: nothing -> nothing {
-    let info = open $data
+	let info = open $data
 
-    [
-        [
-            (
+	[
+		[
+			(
                 'dotfiles devshell: nix-darwin + home-manager, one flake for two Macs'
                 | paint default_bold
             )
-        ]
-        (host-rows $info.nixpkgsPin | section 'Host')
-        (tools-section $info.toolGroups)
-        (hook-rows ...$info.hookNames | section 'Git hooks')
-        (
+		]
+		(host-rows $info.nixpkgsPin | section 'Host')
+		(tools-section $info.toolGroups)
+		(hook-rows ...$info.hookNames | section 'Git hooks')
+		(
             # Only where to start: AGENTS.md holds the full map.
             [
                 ['AGENTS.md' 'what an agent reads first']
@@ -39,62 +39,64 @@ def main [
                 ['docs/adr/' 'why things are the way they are']
             ] | section 'Where to start'
         )
-        (
+		(
             [
                 ['just' 'the recipes']
                 ['just check' 'every gate: format, lint, dead code, flake validation']
                 ['just build' 'build this host; `just switch` applies it']
             ] | section 'Next'
         )
-    ] | each { str join "\n" } | str join "\n\n" | print
+	] | each { str join "\n" } | str join "\n\n" | print
 }
 
 def host-rows [nixpkgs_pin: string]: nothing -> list<list<string>> {
-    let host = try {
-        ^scutil --get LocalHostName | str trim
-    } catch {
-        'unknown'
-    }
-    let system = try {
-        '/run/current-system' | path expand | path basename
-    } catch {
-        'unknown'
-    }
+	let host = try {
+		^scutil --get LocalHostName | str trim
+	} catch {
+		'unknown'
+	}
 
-    [
-        ['This Mac' $host]
-        ['Running system' $system]
-        ['nixpkgs pin' $nixpkgs_pin]
-    ]
+	let system = try {
+		'/run/current-system' | path expand | path basename
+	} catch {
+		'unknown'
+	}
+
+	[
+		['This Mac' $host]
+		['Running system' $system]
+		['nixpkgs pin' $nixpkgs_pin]
+	]
 }
 
 def hook-rows [...hook_names: string]: nothing -> list<list<string>> {
-    let hook = try {
-        ^git rev-parse --git-path hooks/pre-commit | str trim
-    } catch {
-        ''
-    }
-    let status = if ($hook | is-not-empty) and ($hook | path exists) {
-        'installed' | paint green
-    } else {
-        'not installed (the devshell installs them when it loads)' | paint yellow
-    }
+	let hook = try {
+		^git rev-parse --git-path hooks/pre-commit | str trim
+	} catch {
+		''
+	}
 
-    [
-        ['Status' $status]
-        [
-            'Hooks'
-            ($hook_names | str join ', ')
-        ]
-        ['By hand' 'pre-commit run --all-files']
-    ]
+	let status = if ($hook | is-not-empty) and ($hook | path exists) {
+		'installed' | paint green
+	} else {
+		'not installed (the devshell installs them when it loads)' | paint yellow
+	}
+
+	[
+		['Status' $status]
+		[
+			'Hooks'
+			($hook_names | str join ', ')
+		]
+		['By hand' 'pre-commit run --all-files']
+	]
 }
 
 # One heading per group, then its tools. The columns line up across the groups.
 # A tool that PATH does not resolve to the pinned binary gets a `!`, and a note
 # under the table says what to do about it.
 def tools-section [groups: table]: nothing -> list<string> {
-    let tools = $groups | each {|group|
+	let tools = $groups | each {|group|
         $group.tools | each {|tool|
             $tool
             | insert group $group.title
@@ -102,45 +104,47 @@ def tools-section [groups: table]: nothing -> list<string> {
         }
     } | flatten
 
-    let lines = $tools
-    | each {|tool| [(if $tool.pinned { ' ' } else { '!' }) $tool.name $tool.version $tool.note] }
-    | align red_bold cyan default_dimmed default_dimmed
-    | wrap line
-    let grouped = $tools | merge $lines | group-by group --to-table | each {|group|
+	let lines = $tools
+	| each {|tool| [(if $tool.pinned { ' ' } else { '!' }) $tool.name $tool.version $tool.note] }
+	| align red_bold cyan default_dimmed default_dimmed
+	| wrap line
+
+	let grouped = $tools | merge $lines | group-by group --to-table | each {|group|
         [$"  ($group.group)"] ++ $group.items.line
     } | flatten
 
-    let stale_note = if ($tools | all {|tool| $tool.pinned }) { [] } else {
-        [
-            ''
-            '  ! marks a tool that is missing from PATH, or is not the pinned binary: this'
-            '  shell is older than the flake. Reload it (`direnv reload`, or a new terminal'
-            '  or agent session) before you trust a gate.'
-        ] | each { paint yellow }
-    }
+	let stale_note = if ($tools | all {|tool| $tool.pinned }) { [] } else {
+		[
+			''
+			'  ! marks a tool that is missing from PATH, or is not the pinned binary: this'
+			'  shell is older than the flake. Reload it (`direnv reload`, or a new terminal'
+			'  or agent session) before you trust a gate.'
+		] | each { paint yellow }
+	}
 
-    [
-        ('Tools this devshell pins' | paint default_bold)
-    ] ++ $grouped ++ $stale_note
+	[
+		('Tools this devshell pins' | paint default_bold)
+	] ++ $grouped ++ $stale_note
 }
 
 # A title, then the rows as aligned lines with the first column highlighted.
 def section [title: string]: list<list<string>> -> list<string> {
-    [
-        ($title | paint default_bold)
-    ] ++ ($in | align cyan)
+	[
+		($title | paint default_bold)
+	] ++ ($in | align cyan)
 }
 
 # Rows of cells as indented lines, each column as wide as its longest cell and
 # painted in its style, if it has one. Widths count what is visible, and the
 # padding goes after the paint, so color never moves a column.
 def align [...styles: string]: list<list<string>> -> list<string> {
-    let rows = $in
-    let widths = $rows
-    | each {|row| $row | each { visible-length } }
-    | reduce {|lengths, widest| $widest | zip $lengths | each { math max } }
+	let rows = $in
 
-    $rows | each {|row|
+	let widths = $rows
+	| each {|row| $row | each { visible-length } }
+	| reduce {|lengths, widest| $widest | zip $lengths | each { math max } }
+
+	$rows | each {|row|
         let cells = $row | wrap text | merge ($widths | wrap width) | merge ($styles | wrap style) | each {|cell|
             let padding = '' | fill --width ($cell.width - ($cell.text | visible-length))
             ($cell.text | paint $cell.style?) + $padding
@@ -151,7 +155,7 @@ def align [...styles: string]: list<list<string>> -> list<string> {
 
 # The number of characters a terminal shows: color codes do not count.
 def visible-length []: string -> int {
-    ansi strip | str length --grapheme-clusters
+	ansi strip | str length --grapheme-clusters
 }
 
 # The text in a style, when a style is given and color is on. A column without
@@ -160,8 +164,9 @@ def visible-length []: string -> int {
 # Color is only for a person at a terminal. An agent reads the output through a
 # pipe and must not get escape codes; NO_COLOR and TERM=dumb turn it off too.
 def paint [style: oneof<string, nothing>]: string -> string {
-    let text = $in
-    let color_on = (is-terminal --stdout) and ($env.NO_COLOR? | is-empty) and ($env.TERM? != 'dumb')
+	let text = $in
 
-    if $color_on and ($style | is-not-empty) { $"(ansi $style)($text)(ansi reset)" } else { $text }
+	let color_on = (is-terminal --stdout) and ($env.NO_COLOR? | is-empty) and ($env.TERM? != 'dumb')
+
+	if $color_on and ($style | is-not-empty) { $"(ansi $style)($text)(ansi reset)" } else { $text }
 }

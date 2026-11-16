@@ -1,0 +1,9 @@
+# nufmt layout for the Nushell files, run through treefmt (perSystem.treefmt in
+# flake.nix). The same layout as the headless repository: tabs, one indent unit
+# per level, 100 columns, one blank line between statements.
+{
+	indent: 1
+	indent_char: "tab"
+	line_length: 100
+	margin: 1
+}

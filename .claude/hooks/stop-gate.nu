@@ -23,50 +23,61 @@ const EXTENSIONS = [nix nu lua toml]
 const MAX_LINES = 60
 
 def main []: string -> nothing {
-    let payload = try { $in | from json } catch { {} }
-    if ($payload.stop_hook_active? | default false) { return }
-    cd ($env.FILE_PWD | path join .. .. | path expand)
+	let payload = try { $in | from json } catch { {} }
 
-    let changed = changed-files
-    if ($changed | is-empty) { return }
-    let stamp = ^git rev-parse --git-path claude-stop-gate | str trim | path expand
-    let fingerprint = $changed | each {|file| [$file (content-hash $file)] | str join ' ' } | str join (char nl) | hash sha256
-    if ($stamp | path exists) and (open --raw $stamp | str trim) == $fingerprint { return }
-    $fingerprint | save --force $stamp
+	if ($payload.stop_hook_active? | default false) { return }
 
-    # Merged at the source, so the log keeps the order the errors came in
-    let result = ^just check o+e>| complete
-    if $result.exit_code == 0 { return }
+	cd ($env.FILE_PWD | path join .. .. | path expand)
 
-    let log = $result.stdout | ansi strip | lines | where ($it | str trim | is-not-empty)
-    let shown = $log | last $MAX_LINES
-    let header = [
-        $"`just check` failed on the uncommitted changes \(($changed | str join ', ')\)."
-        "Fix what it reports in code you touched. If a failure predates this change, say so instead of fixing unrelated code."
-        ...(
+	let changed = changed-files
+
+	if ($changed | is-empty) { return }
+
+	let stamp = ^git rev-parse --git-path claude-stop-gate | str trim | path expand
+
+	let fingerprint = $changed | each {|file| [$file (content-hash $file)] | str join ' ' } | str join (char nl) | hash sha256
+
+	if ($stamp | path exists) and (open --raw $stamp | str trim) == $fingerprint { return }
+
+	$fingerprint | save --force $stamp
+
+	# Merged at the source, so the log keeps the order the errors came in
+	let result = ^just check o+e>| complete
+
+	if $result.exit_code == 0 { return }
+
+	let log = $result.stdout | ansi strip | lines | where ($it | str trim | is-not-empty)
+
+	let shown = $log | last $MAX_LINES
+
+	let header = [
+		$"`just check` failed on the uncommitted changes \(($changed | str join ', ')\)."
+		"Fix what it reports in code you touched. If a failure predates this change, say so instead of fixing unrelated code."
+		...(
             if ($log | length) > $MAX_LINES { [$"Last ($MAX_LINES) of ($log | length) lines:"] } else { [] }
         )
-    ]
-    {
-        decision: block
-        reason: ($header ++ $shown | str join (char nl))
-    } | to json --raw | print
+	]
+
+	{
+		decision: block
+		reason: ($header ++ $shown | str join (char nl))
+	} | to json --raw | print
 }
 
 # Uncommitted (staged, unstaged or untracked) files the gate looks at
 def changed-files []: nothing -> list<string> {
-    ^git status --porcelain=v1 --untracked-files=all -z
-    | split row (char nul)
-    | where ($it | str length) > 3
-    | each { str substring 3.. }
-    | where ($it | path basename) == flake.lock or ($it | path parse | get extension) in $EXTENSIONS
-    | sort
+	^git status --porcelain=v1 --untracked-files=all -z
+	| split row (char nul)
+	| where ($it | str length) > 3
+	| each { str substring 3.. }
+	| where ($it | path basename) == flake.lock or ($it | path parse | get extension) in $EXTENSIONS
+	| sort
 }
 
 def content-hash [file: path]: nothing -> string {
-    if ($file | path exists) {
-        open --raw $file | hash sha256
-    } else {
-        'deleted'
-    }
+	if ($file | path exists) {
+		open --raw $file | hash sha256
+	} else {
+		'deleted'
+	}
 }

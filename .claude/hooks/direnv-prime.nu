@@ -26,30 +26,34 @@ const SHARED_HOOK = path self ../../modules/features/claude-code/hooks/direnv-en
 
 def main []: string -> nothing {
 
-    # `$in` holds the payload in the first statement only; later it is empty.
-    let payload_text = $in
+	# `$in` holds the payload in the first statement only; later it is empty.
+	let payload_text = $in
 
-    if (which direnv | is-empty) { return }
+	if (which direnv | is-empty) { return }
 
-    let trusted_dir = session-start-dir $payload_text
-    if $trusted_dir != null {
-        cd $trusted_dir
-        try { ^direnv allow . }
-    }
+	let trusted_dir = session-start-dir $payload_text
 
-    $payload_text | ^nu --no-config-file --stdin $SHARED_HOOK
+	if $trusted_dir != null {
+		cd $trusted_dir
+
+		try { ^direnv allow . }
+	}
+
+	$payload_text | ^nu --no-config-file --stdin $SHARED_HOOK
 }
 
 # The session's directory when the payload is a SessionStart for a directory
 # that exists; null for any other event, or a payload that is not JSON.
 def session-start-dir [payload_text: string]: nothing -> oneof<string, nothing> {
-    let parsed = try {
-        $payload_text | from json
-    } catch {
-        null
-    }
-    let payload = if ($parsed | describe) =~ ^record { $parsed } else { {} }
-    let dir = $payload.cwd? | default $env.PWD
+	let parsed = try {
+		$payload_text | from json
+	} catch {
+		null
+	}
 
-    if $payload.hook_event_name? == 'SessionStart' and ($dir | path exists) { $dir } else { null }
+	let payload = if ($parsed | describe) =~ ^record { $parsed } else { {} }
+
+	let dir = $payload.cwd? | default $env.PWD
+
+	if $payload.hook_event_name? == 'SessionStart' and ($dir | path exists) { $dir } else { null }
 }

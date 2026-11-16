@@ -174,6 +174,8 @@
               alejandra.options = ["--quiet"];
               nufmt = {
                 command = pkgs.lib.getExe pkgs.nufmt;
+                # Relative: treefmt runs each formatter from the tree root.
+                options = ["--config" "nufmt.nuon"];
                 includes = ["*.nu"];
               };
             };

@@ -20,8 +20,9 @@ def capture-foreign-env [
     --arguments (-a): list<string> = []
     # Additional command line arguments to pass to the foreign shell
 ]: string -> record {
-    let script_contents = $in
-    let env_out = with-env {SCRIPT_TO_SOURCE: $script_contents} {
+	let script_contents = $in
+
+	let env_out = with-env {SCRIPT_TO_SOURCE: $script_contents} {
         ^$shell ...$arguments -c `
         env
         echo '<ENV_CAPTURE_EVAL_FENCE>'
@@ -29,37 +30,38 @@ def capture-foreign-env [
         echo '<ENV_CAPTURE_EVAL_FENCE>'
         env -0 -u _ -u _AST_FEATURES -u SHLVL` # Filter out known changing variables
     }
-    | split row '<ENV_CAPTURE_EVAL_FENCE>'
-    | {
-        before: (
+	| split row '<ENV_CAPTURE_EVAL_FENCE>'
+	| {
+		before: (
             $in
             | first
             | str trim
             | lines
         )
-        after: (
+		after: (
             $in
             | last
             | str trim
             | split row (char --integer 0)
         )
-    }
+	}
 
-    # Unfortunate Assumption:
-    # No changed env var contains newlines (not cleanly parseable)
-    $env_out.after
-    | where $it not-in $env_out.before # Only get changed lines
-    | parse "{key}={value}"
-    | transpose --header-row --as-record
-    | if $in == [] { {} } else { $in }
+	# Unfortunate Assumption:
+	# No changed env var contains newlines (not cleanly parseable)
+	$env_out.after
+	| where $it not-in $env_out.before # Only get changed lines
+	| parse "{key}={value}"
+	| transpose --header-row --as-record
+	| if $in == [] { {} } else { $in }
 }
 
 # Skip when the parent already carries it: a POSIX shell, or an outer nu.
 if ($env.__HM_SESS_VARS_SOURCED? | is-empty) and ('/etc/login-environment.sh' | path exists) {
-    load-env ('. /etc/login-environment.sh' | capture-foreign-env)
-    # load-env hands PATH back as a string, and the sourced scripts prepend
-    # entries that were already present.
-    $env.PATH = $env.PATH | split row (char esep) | uniq
+	load-env ('. /etc/login-environment.sh' | capture-foreign-env)
+
+	# load-env hands PATH back as a string, and the sourced scripts prepend
+	# entries that were already present.
+	$env.PATH = $env.PATH | split row (char esep) | uniq
 }
 
 # Claude.app resolves its environment by running
@@ -72,12 +74,13 @@ if ($env.__HM_SESS_VARS_SOURCED? | is-empty) and ('/etc/login-environment.sh' | 
 # has run, hand the probe to /bin/sh, which inherits it. nu doesn't expose its
 # argv; the probe is the last argument. A probe that parses as nu stays in nu.
 if ($env.CLAUDE_DESKTOP_RESOLVING_ENVIRONMENT? == "1") and ($env.__HM_SESS_VARS_SOURCED? | is-not-empty) {
-    let probe = ^/bin/ps -ww -o args= -p $nu.pid
-    | lines
-    | first
-    | parse --regex ' -c (?<script>.+)'
-    | get --optional 0.script
-    if $probe != null and not ($probe | nu-check) {
-        exec /bin/sh -c $probe
-    }
+	let probe = ^/bin/ps -ww -o args= -p $nu.pid
+	| lines
+	| first
+	| parse --regex ' -c (?<script>.+)'
+	| get --optional 0.script
+
+	if $probe != null and not ($probe | nu-check) {
+		exec /bin/sh -c $probe
+	}
 }

@@ -44,6 +44,9 @@ string_may_be_bare = "off"
 # nufmt owns pipe spacing, and this rule misreads the `o+e>|` redirection pipe
 # (.claude/hooks/stop-gate.nu) as a `|` with no space before it.
 pipe_spacing = "off"
+# nufmt owns the layout (nufmt.nuon): it indents with tabs, which this rule
+# reads as pasted whitespace on every indented line.
+normalize_pasted_whitespace = "off"
 # These scripts report to a person or an agent in a terminal, who reads the
 # message and its help. A URL would point at nothing more useful, and a label
 # would point at a line of the script, not at the cause.

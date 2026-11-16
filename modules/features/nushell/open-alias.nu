@@ -8,4 +8,5 @@
 # config.nu it broke the vendor files that read a file with `open`:
 # worktrunk's `wt switch` and devenv's hook both lost their change of directory.
 alias nu-open = open
+
 alias open = ^open
