@@ -21,6 +21,10 @@ A script here is a program someone else reads and changes. Hold it to the bar of
   it from a `writeShellApplication` wrapper (`exec nu --no-config-file ${./script.nu} …`).
 - **Bash** only where bash is the subject: `.envrc`, which direnv evaluates with bash. Never POSIX
   syntax where `$SHELL -c` runs it: that shell is nu ([nushell.md](./nushell.md)).
+- **Nushell's own commands before an external program.** They return structured data and raise
+  Nushell errors, and they come with the nu we pin: `http get` over curl, `mktemp`, `cp`, `ps`,
+  `open` with the official formats plugin for a `.plist`. Call an external program only for what
+  Nushell cannot do (git, codesign, hdiutil, direnv), and run nu itself as `$nu.current-exe`.
 
 ## Shape: `main` is the table of contents
 
