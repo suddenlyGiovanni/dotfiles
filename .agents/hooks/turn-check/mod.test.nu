@@ -30,7 +30,7 @@ def main []: nothing -> nothing {
 
 # An empty git repository in a new temporary folder.
 def new-repository []: nothing -> string {
-	let folder = ^/usr/bin/mktemp -d -t turn-check-test | str trim
+	let folder = mktemp --directory --tmpdir 'turn-check-test.XXXXXX'
 
 	^git -C $folder init --quiet
 

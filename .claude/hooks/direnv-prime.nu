@@ -33,7 +33,8 @@ def main []: string -> nothing {
 
 	if $start_dir != null { agent-environment trust $start_dir }
 
-	$payload_text | ^nu --no-config-file --stdin $ENVIRONMENT_HOOK
+	# The nu running this hook, not whichever nu comes first on PATH
+	$payload_text | ^$nu.current-exe --no-config-file --stdin $ENVIRONMENT_HOOK
 }
 
 # The session's directory when the payload is a SessionStart; null for any

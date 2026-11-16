@@ -74,11 +74,14 @@ if ($env.__HM_SESS_VARS_SOURCED? | is-empty) and ('/etc/login-environment.sh' | 
 # has run, hand the probe to /bin/sh, which inherits it. nu doesn't expose its
 # argv; the probe is the last argument. A probe that parses as nu stays in nu.
 if ($env.CLAUDE_DESKTOP_RESOLVING_ENVIRONMENT? == "1") and ($env.__HM_SESS_VARS_SOURCED? | is-not-empty) {
-	let probe = ^/bin/ps -ww -o args= -p $nu.pid
-	| lines
-	| first
-	| parse --regex ' -c (?<script>.+)'
-	| get --optional 0.script
+	# `ps --long` gives a process's full command line, as `ps -o args=` does.
+	let command = ps --long | where pid == $nu.pid | get --optional 0.command
+
+	let probe = if $command == null {
+		null
+	} else {
+		$command | parse --regex ' -c (?<script>.+)' | get --optional 0.script
+	}
 
 	if $probe != null and not ($probe | nu-check) {
 		exec /bin/sh -c $probe
