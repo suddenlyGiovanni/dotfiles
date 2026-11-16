@@ -27,6 +27,10 @@ in {
   #   not a shell, and some (Claude.app) probe `$SHELL -l -i -c` with POSIX
   #   syntax that nu rejects. The export only reaches apps launched after it,
   #   so env.nu also answers Claude.app's probe for when the app opens first.
+  # - an agent's commands source it before they run
+  #   (agents/hooks/agent-environment). A session inherits its app's
+  #   environment, and an app that opens at login starts before the export:
+  #   launchd holds the agent below until login completes.
   flake.modules.darwin.session = {
     config,
     pkgs,
@@ -36,10 +40,16 @@ in {
     brew = "${config.homebrew.prefix}/bin/brew";
 
     loginEnvironment = pkgs.writeText "login-environment.sh" ''
+      # Whoever sources this gets the whole login environment, whatever it started
+      # with. The scripts below each skip themselves when their include guard is
+      # set, and a caller can hold a guard next to stale values: an agent session
+      # started from a shell before the last switch. So drop the guards first. A
+      # shell that already holds the environment does not source this file at all
+      # (nushell/env.nu).
+      unset __NIX_DARWIN_SET_ENVIRONMENT_DONE __HM_SESS_VARS_SOURCED __ETC_PROFILE_NIX_SOURCED
+
       # nix-darwin system environment: PATH (nix profiles), NIX_*, XDG_*_DIRS, TERMINFO_DIRS
-      if [ -z "''${__NIX_DARWIN_SET_ENVIRONMENT_DONE-}" ]; then
-        . ${config.system.build.setEnvironment}
-      fi
+      . ${config.system.build.setEnvironment}
 
       # Homebrew (nix-homebrew)
       if [ -x ${brew} ]; then
