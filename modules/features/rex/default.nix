@@ -3,69 +3,78 @@
 # https://www.superlogical.com/rex/docs/customize/config
 #
 # The app itself is not installed from here: Rex Beta is a download with no
-# Homebrew cask, and it updates itself. This module tracks what configures it.
+# Homebrew cask, and it updates itself. This module tracks everything that
+# configures it:
 #
-#   ./config/         linked to ~/.config/rex. Rex reads init.lua there, and the
-#                     Lua files beside it that init.lua loads with require.
-#   rex               the CLI on PATH. It ships inside the app bundle, which
-#                     puts it on no PATH by itself.
-#   preferences       what the app's Settings window stores, in the macOS
-#                     domain com.superlogical.rex.
+#   What                    Where Rex reads it                  Tracked as
+#   init.lua and its Lua    ~/.config/rex/                      ./config/, linked
+#   Settings window         macOS preferences, com.superlogical.rex   ./preferences.json, written on switch
+#   Claude Code skill       ~/.config/claude/skills/rex         agents/skills/rex, linked
+#   Claude Code hook        ~/.config/claude/settings.json      claude-code/settings.json
+#   the rex CLI             inside the app bundle               a wrapper on PATH
 #
-# WHY AN OUT-OF-STORE LINK
+# WHY TWO MECHANISMS
 #
-# Rex never writes init.lua, so a store copy would work (ADR-009). The link is
-# out-of-store so that an edit is live: `rex config reload` applies it with no
-# switch, and `rex config check` validates it first. Rex does not watch the file.
+# - ./config is an out-of-store link (ADR-009). Rex never writes init.lua, and
+#   the link makes an edit live: `rex config check` validates it, `rex config
+#   reload` applies it, no switch. Rex does not watch the file.
+# - The Settings window cannot be linked. macOS replaces a preferences file
+#   when it writes one, so a link into the repository becomes a plain file at
+#   the first change (tested 2026-11-16). Instead, a switch writes the values
+#   of ./preferences.json, and `rex-settings-capture` copies the live values
+#   back into that file (capture.nu). Change a setting in the app, run the
+#   capture, review the diff, commit.
 #
-# PREFERENCES
+# NOT TRACKED, ON PURPOSE
 #
-# A switch writes the values below, so a change made in the Settings window
-# lasts until the next switch. To keep one, copy it here:
-#
-#   defaults read com.superlogical.rex
-#
-# Not tracked, on purpose: RexSync.servers (the servers this Mac connects to),
-# Workspace.lastFocusedSession and Workspace.programActivitySeen (state).
+# - State in the preferences: window frames, the servers this Mac connects to
+#   (RexSync.servers), the last session, what was seen, update timestamps.
+#   capture.nu lists them.
+# - ~/.local/state/rex (sessions, scrollback, logs), ~/Library/Caches and
+#   ~/Library/Application Support/rex (the server socket, the bundled server).
+# - The terminfo entry and the SSH include of `rex terminfo setup`: not set up
+#   on this Mac. Rex terminals use xterm-256color without it.
+# - ~/.codex/hooks.json, written by `rex skill setup` for Codex: these dotfiles
+#   do not manage ~/.codex.
 {config, ...}: let
   inherit (config.dotfiles.user) dotfilesPath;
+  moduleDir = "${dotfilesPath}/modules/features/rex";
 in {
   flake.modules.darwin.rex = {
-    system.defaults.CustomUserPreferences."com.superlogical.rex" = {
-      "Workspace.appIcon" = "default";
-      "Workspace.interfaceStyle" = "blendTheme";
-      "Workspace.darkThemeID" = "cobalt-foundry";
-      "Workspace.lightThemeID" = "merino-light";
-      "Workspace.paneDensity" = "comfortable";
-      "Workspace.paneHeaderVisibility" = "always";
-      "Workspace.inactivePaneFadeMode" = "both";
-      "Workspace.notificationPosition" = "top-right";
-
-      # Sparkle: check for updates and install them.
-      SUEnableAutomaticChecks = true;
-      SUAutomaticallyUpdate = true;
-    };
+    system.defaults.CustomUserPreferences."com.superlogical.rex" =
+      builtins.fromJSON (builtins.readFile ./preferences.json);
   };
 
   flake.modules.homeManager.rex = {
     config,
+    lib,
     pkgs,
     ...
   }: let
     cli = "/Applications/Rex Beta.app/Contents/Helpers/Rex Server.rex/Contents/MacOS/rex";
+    link = config.lib.file.mkOutOfStoreSymlink;
   in {
-    xdg.configFile."rex".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/modules/features/rex/config";
+    xdg.configFile = {
+      "rex".source = link "${moduleDir}/config";
 
-    # A wrapper, not a link: the path has spaces, and the message says what is
-    # missing on a Mac that has no Rex yet.
+      # `rex skill setup` wrote this skill as a plain folder; the same file is
+      # tracked for every agent in agents/skills/rex (~/.agents/skills/rex).
+      "claude/skills/rex".source = link "${dotfilesPath}/modules/features/agents/skills/rex";
+    };
+
     home.packages = [
+      # A wrapper, not a link: the path has spaces, and the message says what is
+      # missing on a Mac that has no Rex yet.
       (pkgs.writeShellScriptBin "rex" ''
-        if [ ! -x ${pkgs.lib.escapeShellArg cli} ]; then
+        if [ ! -x ${lib.escapeShellArg cli} ]; then
           echo "rex: Rex Beta is not installed (https://www.superlogical.com/rex/docs/installation)" >&2
           exit 127
         fi
-        exec ${pkgs.lib.escapeShellArg cli} "$@"
+        exec ${lib.escapeShellArg cli} "$@"
+      '')
+
+      (pkgs.writeShellScriptBin "rex-settings-capture" ''
+        exec ${lib.getExe pkgs.nushell} --no-config-file ${./capture.nu} ${lib.escapeShellArg "${moduleDir}/preferences.json"}
       '')
     ];
   };

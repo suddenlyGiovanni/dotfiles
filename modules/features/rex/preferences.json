@@ -1,0 +1,32 @@
+{
+  "SUAutomaticallyUpdate": true,
+  "SUEnableAutomaticChecks": true,
+  "Workspace.appIcon": "default",
+  "Workspace.darkThemeID": "cobalt-foundry",
+  "Workspace.inactivePaneFadeMode": "both",
+  "Workspace.interfaceStyle": "blendTheme",
+  "Workspace.lightThemeID": "merino-light",
+  "Workspace.notificationPosition": "top-right",
+  "Workspace.paneDensity": "comfortable",
+  "Workspace.paneHeaderVisibility": "always",
+  "Workspace.showsPaneHeaders": true,
+  "Workspace.sidebarPosition": "left",
+  "Workspace.sidebarShowsActivity": false,
+  "Workspace.tabIconTintMode": "off",
+  "Workspace.tabStyle": "vertical",
+  "Workspace.terminalFontName": "JetBrainsMonoNL Nerd Font Mono",
+  "Workspace.terminalFontPointSize": 12.5,
+  "Workspace.terminalFontSmoothing": false,
+  "Workspace.terminalSmoothScrolling": true,
+  "Workspace.terminalUseThemePalette": false,
+  "Workspace.terminalUsesDisplayP3": true,
+  "Workspace.usesPaneGlass": true,
+  "Workspace.usesStandardInactiveWindowPaneStyles": true,
+  "rex.agents.names-sessions": true,
+  "rex.server.automatic-restart-enabled": true,
+  "rex.server.block-plugin-reload-enabled": false,
+  "rex.server.run-mode": "bundled",
+  "rex.server.web-client-origin-patterns": [
+    "https://rex.superlogical.com"
+  ]
+}
