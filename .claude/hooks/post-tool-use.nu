@@ -1,14 +1,10 @@
-# PostToolUse hook (matcher: Write|Edit): run the git hooks on the file the
-# agent just wrote, and hand anything worth knowing back to the model.
+# PostToolUse hook (matcher: Write|Edit): the Claude Code adapter for the
+# file-check module (.agents/hooks/file-check), which runs the git hooks on the
+# file the agent just wrote, as `git commit` would.
 #
-# It calls `just lint <file>`, the recipe a person runs, which runs the git
-# hooks (perSystem.pre-commit in flake.nix) on that file: treefmt first, then
-# the linters. `git commit` and `nix flake check` run the same hooks, so what
-# the model reads here is what would block the commit.
-#
-# A file treefmt reformats fails its hook once ("files were modified"), so the
-# hooks run a second time on the formatted file; that run is the verdict, and
-# its line numbers match what the model reads next.
+# This file holds only what is Claude Code's: reading its payload into the
+# check's request, and turning the outcome into the text the model reads, cut
+# to a length that fits its context.
 #
 # Input (stdin, JSON): { "tool_input": { "file_path": "<absolute path>", … }, … }
 # Output: exit 0 (a PostToolUse hook cannot block). `additionalContext` in the
@@ -16,6 +12,7 @@
 # already formatted file prints nothing. Runs as
 # `direnv exec <repo> nu --stdin <this file>` (.claude/settings.json), which
 # puts the devshell's just and pre-commit on PATH.
+use ../../.agents/hooks/file-check
 
 const MAX_LINES = 60
 
@@ -24,20 +21,16 @@ def main []: string -> nothing {
 	# `$in` holds the payload in the first statement only; later it is empty.
 	let payload_text = $in
 
-	let root = $env.FILE_PWD | path join .. .. | path expand
+	let request = $payload_text | request-from-payload
 
-	let file = $payload_text | edited-file $root
-
-	if $file == null { return }
-
-	cd $root
+	if $request == null { return }
 
 	let notes = if (which just pre-commit | length) < 2 {
 		[
 			'post-tool-use.nu: just or pre-commit is not on PATH (devshell not loaded?), so the file was not checked'
 		]
 	} else {
-		check-file $file
+		file-check $request | notes-for $request.file
 	}
 
 	if ($notes | is-not-empty) {
@@ -45,60 +38,42 @@ def main []: string -> nothing {
 	}
 }
 
-# The path the payload names, when it is a regular file inside the repository;
-# null for anything else, which is none of this hook's business.
-def edited-file [root: path]: string -> oneof<string, nothing> {
+# The check's request for the file a Claude Code write names; null for a payload
+# that is not JSON or names no file.
+def request-from-payload []: string -> oneof<record, nothing> {
+	let payload_text = $in
+
 	let file = try {
-		from json | get --optional tool_input.file_path
+		$payload_text | from json | get --optional tool_input.file_path
 	} catch {
 		null
 	}
 
-	let inside = ($file | describe) == string and ($file | str starts-with $"($root)/")
-
-	if $inside and ($file | path exists) { $file }
-}
-
-# Run the hooks, and once more if treefmt changed the file.
-def check-file [file: path]: nothing -> list<string> {
-	let before = open --raw $file | hash sha256
-
-	let first = run-hooks $file
-
-	let formatted = (open --raw $file | hash sha256) != $before
-
-	let verdict = if $formatted { run-hooks $file } else { $first }
-
-	let format_note = if $formatted {
-		[$"Auto-formatted by treefmt: ($file) \(re-read it before editing again\)"]
-	} else { [] }
-
-	let findings = if $verdict.exit_code != 0 {
-		[
-			$"The git hooks failed on ($file). Fix what they report in code you touched; `just lint ($file)` reruns them."
-			...($verdict.output | hook-failures | capped-lines)
-		]
-	} else { [] }
-
-	$format_note ++ $findings
-}
-
-# `just lint <file>`: its exit code, and stdout and stderr together.
-def run-hooks [file: path]: nothing -> record<exit_code: int, output: string> {
-	let run = ^just lint $file | complete
+	if $file == null { return null }
 
 	{
-		exit_code: $run.exit_code
-		output: ($run.stdout + $run.stderr)
+		file: $file
+		root: ($env.FILE_PWD | path join .. .. | path expand)
 	}
 }
 
-# pre-commit's report without the hooks that passed or had nothing to check.
-def hook-failures []: string -> string {
-	ansi strip
-	| lines
-	| where $it !~ '\.{3,}(\(no files to check\))?(Passed|Skipped)$'
-	| str join "\n"
+# What the model reads about the outcome: a note when the file was reformatted,
+# and the failures, cut to MAX_LINES lines.
+def notes-for [file: path]: record -> list<string> {
+	let outcome = $in
+
+	let format_note = if $outcome.formatted {
+		[$"Auto-formatted by treefmt: ($file) \(re-read it before editing again\)"]
+	} else { [] }
+
+	let failure_notes = if not $outcome.passed {
+		[
+			$"The git hooks failed on ($file). Fix what they report in code you touched; `just lint ($file)` reruns them."
+			...($outcome.failures | capped-lines)
+		]
+	} else { [] }
+
+	$format_note ++ $failure_notes
 }
 
 # At most MAX_LINES lines, with a note on how many were left out.
