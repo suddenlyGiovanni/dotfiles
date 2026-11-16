@@ -2,9 +2,11 @@
 # https://www.superlogical.com/rex/docs/installation
 # https://www.superlogical.com/rex/docs/customize/config
 #
-# The app itself is not installed from here: Rex Beta is a download with no
-# Homebrew cask, and it updates itself. This module tracks everything that
-# configures it:
+# Rex Beta has no Homebrew cask and its docs give no download link. On a Mac
+# without it, a switch downloads it from the app's own update feed and checks
+# its signature (install.nu, below); after that the app updates itself.
+#
+# This module also tracks everything that configures it:
 #
 #   What                    Where Rex reads it                  Tracked as
 #   init.lua and its Lua    ~/.config/rex/                      ./config/, linked
@@ -41,8 +43,33 @@
   moduleDir = "${dotfilesPath}/modules/features/rex";
 in {
   flake.modules.darwin.rex = {
+    config,
+    lib,
+    pkgs,
+    ...
+  }: let
+    # install.nu: on a Mac without Rex, download the newest build named by the
+    # app's own update feed, and copy it to /Applications only if it is signed
+    # by Superlogical (Apple team AG92C3PT77) and notarized. The feed is the
+    # one the installed app reads (its SUFeedURL); the builds are arm64 only.
+    installSpec = pkgs.writeText "rex-install.json" (builtins.toJSON {
+      feed = "https://blob.superlogical.com/public/rex-app/preview-arm64/appcast.xml";
+      team = "AG92C3PT77";
+      app = "Rex Beta.app";
+      target = "/Applications";
+      owner = config.system.primaryUser;
+    });
+  in {
     system.defaults.CustomUserPreferences."com.superlogical.rex" =
       builtins.fromJSON (builtins.readFile ./preferences.json);
+
+    # Runs on every switch, and does nothing once the app is there: Sparkle
+    # inside the app keeps it current. A failed download warns and lets the
+    # switch finish.
+    system.activationScripts.postActivation.text = lib.mkIf pkgs.stdenv.hostPlatform.isAarch64 ''
+      ${lib.getExe pkgs.nushell} --no-config-file ${./install.nu} ${installSpec} \
+        || echo "warning: Rex Beta is not installed; the next switch tries again" >&2
+    '';
   };
 
   flake.modules.homeManager.rex = {
