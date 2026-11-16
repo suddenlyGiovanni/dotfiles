@@ -239,6 +239,17 @@
                 files = "(^|/)\\.envrc$|\\.(sh|bash)$";
               };
 
+              # The Nushell unit tests for the changed *.nu files: each
+              # `<name>.test.nu` beside its code (modules/devshell/test-nu.nu).
+              # `just test-nu` runs the same script.
+              nu-tests = {
+                enable = true;
+                name = "nu-tests";
+                entry = "${pkgs.lib.getExe pkgs.nushell} --no-config-file modules/devshell/test-nu.nu";
+                files = "\\.nu$";
+                pass_filenames = true;
+              };
+
               # git-hooks.nix takes the wrapper from perSystem.treefmt and runs
               # it on the staged files with --fail-on-change --no-cache: a
               # staged file that needed formatting fails the commit (treefmt

@@ -51,6 +51,18 @@ A script here is a program someone else reads and changes. Hold it to the bar of
   what it reads; one line above each command with what it returns or when it fails. Name a Nushell
   idiom the reader may not know once (`$in`, `| complete`, closures), not on every use.
 
+## Tests
+
+- **A test sits beside its code**: `<name>.test.nu` next to `<name>.nu`, a standalone script that
+  imports the module (`use <name>.nu`) and `std/assert`, and fails on the first wrong result
+  ([the Nushell book](https://www.nushell.sh/book/testing.html)).
+  [tool-guard.test.nu](../hooks/tool-guard.test.nu) is the example: a table of cases, one loop.
+- **The deciding step is what gets tested.** Keep it pure, so a case is a record in and a value
+  out, and the effects stay in the steps around it.
+- **One entry point**: `just test` runs every suite; `just test-nu [files]` runs the Nushell tests
+  for those files, or all of them. The nu-tests git hook runs them for each changed `*.nu` file,
+  so the edit hook, `git commit` and `nix flake check` run them as well.
+
 ## Before you finish
 
 The edit hook runs `just lint <file>` after every edit: the git hooks, so treefmt (nufmt, shfmt)

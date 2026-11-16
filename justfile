@@ -58,8 +58,21 @@ fmt *files:
 lint *files:
     @if [ "$#" -eq 0 ]; then pre-commit run --all-files; else pre-commit run --files "$@"; fi
 
+# Every test suite, one after another. A new suite gets its own recipe and joins
+# this list. The git hooks run the suites too, so `just lint` and `just check`
+# include them.
 [group('dev')]
-[doc('Run all checks: the git hooks on every file, then the flake checks')]
+[doc('Run every test suite')]
+test: test-nu
+
+[group('dev')]
+[doc('Run the Nushell unit tests for files (a test, or the <name>.test.nu beside a <name>.nu), or every one')]
+[positional-arguments]
+test-nu *files:
+    @nu --no-config-file modules/devshell/test-nu.nu "$@"
+
+[group('dev')]
+[doc('Run all checks: the git hooks (with the tests) on every file, then the flake checks')]
 check: lint validate
 
 # ── Build ─────────────────────────────────────────────────────────────────────
