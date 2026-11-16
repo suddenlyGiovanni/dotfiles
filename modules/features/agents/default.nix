@@ -11,6 +11,7 @@
 #     AGENTS.md     global instructions, one file for every agent
 #     work/AGENTS.md  instructions for every work repository (work host only)
 #     forks/AGENTS.md instructions for every fork or clone of someone else's project
+#     personal/AGENTS.md  instructions for every personal project
 #     skills/       global skills; kept empty on purpose. Claude Code ranks personal
 #                   skills above project ones, so a global copy shadows the
 #                   (newer) project version. Only add skills that are never
@@ -40,6 +41,7 @@
 #   ~/Developer/work/   work host only. What every colleague should share
 #                       belongs in infrastructure/developer instead.
 #   ~/Developer/forks/  every host.
+#   ~/Developer/personal/  every host.
 #
 # ~/Developer/dotfiles sits outside these folders and gets none of them.
 #
@@ -84,6 +86,7 @@ in {
         ".agents/skills".source = link "${agentsDir}/skills";
       }
       // folderInstructions "forks"
+      // folderInstructions "personal"
       // lib.optionalAttrs config.dotfiles.isWorkHost (folderInstructions "work");
 
     xdg.configFile = {

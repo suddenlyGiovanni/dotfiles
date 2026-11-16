@@ -75,6 +75,7 @@ Decided on 2026-11-16 ([TASKS.md](../TASKS.md), Planned):
 | Personal, every machine | the user layer, from these dotfiles, in Claude Code's own formats; skills and MCP servers as plugins of the `suddenlygiovanni-dotfiles` marketplace |
 | Remote MCP servers with OAuth | claude.ai connectors, on the account |
 | Work, every work repository | a team plugin marketplace in `infrastructure/developer`; meanwhile `~/Developer/work/CLAUDE.md` (from `modules/features/agents/work/AGENTS.md`, work host only) |
+| Personal projects | `~/Developer/personal/CLAUDE.md` (from `modules/features/agents/personal/AGENTS.md`, every host) |
 | Forks and clones of other projects | `~/Developer/forks/CLAUDE.md` (from `modules/features/agents/forks/AGENTS.md`, every host) |
 | Work, one repository | that repository's `.claude/`, `.mcp.json` and `CLAUDE.md`, committed |
 | Personal, one work repository | `CLAUDE.local.md`, `.claude/settings.local.json` |
