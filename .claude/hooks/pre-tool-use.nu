@@ -1,5 +1,5 @@
 # PreToolUse hook (matcher: Bash|Edit|Write|MultiEdit|NotebookEdit): the Claude
-# Code adapter for .agents/hooks/tool-guard.nu, which decides whether a tool call
+# Code adapter for the tool-guard module (.agents/hooks/tool-guard), which decides whether a tool call
 # takes a path this repository has a better way for.
 #
 # This file holds only what is Claude Code's: reading its payload into the
@@ -11,7 +11,7 @@
 # at exit 0, whose reason reaches the model. Runs as `nu --stdin <this file>`
 # (.claude/settings.json) on the Home Manager nu: it needs nothing from the
 # devshell.
-use ../../.agents/hooks/tool-guard.nu
+use ../../.agents/hooks/tool-guard
 
 # Check the tool call in the payload, and refuse it when the guard says no.
 def main []: string -> nothing {
@@ -22,7 +22,7 @@ def main []: string -> nothing {
 
 	if $call == null { return }
 
-	let verdict = tool-guard check $call
+	let verdict = tool-guard $call
 
 	if not $verdict.allowed {
 		$verdict.reason | deny-answer | to json --raw | print
@@ -68,7 +68,7 @@ def deny-answer []: string -> record {
 		hookSpecificOutput: {
 			hookEventName: PreToolUse
 			permissionDecision: deny
-			permissionDecisionReason: $"($in) \(.agents/hooks/tool-guard.nu\)"
+			permissionDecisionReason: $"($in) \(.agents/hooks/tool-guard\)"
 		}
 	}
 }

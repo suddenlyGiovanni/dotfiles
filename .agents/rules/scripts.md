@@ -41,6 +41,25 @@ A script here is a program someone else reads and changes. Hold it to the bar of
 - **A resource is released whatever fails.** Nushell has no try/finally: wrap the body in one
   helper that runs the cleanup and raises the failure again.
 
+## Modules: one reason to change per file
+
+- **Past one concern, a script becomes a module folder**
+  ([the Nushell book](https://www.nushell.sh/book/modules/creating_modules.html)):
+  `<name>/mod.nu` holds the public contract, and each concern is a submodule beside it. Group
+  what changes for the same reason; split what changes for different ones.
+  [.agents/hooks/tool-guard/](../hooks/tool-guard/mod.nu) is the example: the contract in
+  `mod.nu`, then `shell-words.nu`, `command-rules.nu`, `redirects.nu` and `write-rules.nu`.
+- **The contract is the exports.** `mod.nu` exports `main`, so `use <path>/<name>` gives the
+  command `<name>`. A submodule exports what `mod.nu` needs; everything else stays private.
+- **Types state the contract.** Every exported command declares its input and output types and
+  documents each parameter with a `# …` comment beside it, so `help <name>` explains it.
+- **Document the module at the top of `mod.nu`**: what it is for, a short example call, and one
+  line per submodule. Each submodule opens with what it is responsible for.
+- **Names follow the Nushell style guide**
+  ([style guide](https://www.nushell.sh/book/style_guide.html)): kebab-case commands and flags,
+  snake_case variables and parameters, full words over abbreviations, at most two positional
+  parameters.
+
 ## Written for the reader
 
 - **Long flags** where the tool has them: `--recursive`, not `-r`. nu-lint reports a short flag in
@@ -53,10 +72,13 @@ A script here is a program someone else reads and changes. Hold it to the bar of
 
 ## Tests
 
-- **A test sits beside its code**: `<name>.test.nu` next to `<name>.nu`, a standalone script that
-  imports the module (`use <name>.nu`) and `std/assert`, and fails on the first wrong result
-  ([the Nushell book](https://www.nushell.sh/book/testing.html)).
-  [tool-guard.test.nu](../hooks/tool-guard.test.nu) is the example: a table of cases, one loop.
+- **A test sits in the folder of its code**: a `*.test.nu` standalone script that imports the
+  module and `std/assert`, and fails on the first wrong result
+  ([the Nushell book](https://www.nushell.sh/book/testing.html)). In a module folder,
+  `mod.test.nu` tests the contract (`use ../<name>`) and `<submodule>.test.nu` a submodule's edge
+  cases (`use <submodule>.nu`). [tool-guard](../hooks/tool-guard/mod.test.nu) is the example: a
+  table of cases, one loop.
+- **A change to a file runs the tests in its folder**, so a module folder is tested as a unit.
 - **The deciding step is what gets tested.** Keep it pure, so a case is a record in and a value
   out, and the effects stay in the steps around it.
 - **One entry point**: `just test` runs every suite; `just test-nu [files]` runs the Nushell tests

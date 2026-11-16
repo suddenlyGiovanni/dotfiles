@@ -1,14 +1,15 @@
-# Tests for tool-guard.nu: sample tool calls and the verdict each must get.
+# Tests for the tool-guard module's contract: sample tool calls and the verdict
+# each must get, through `tool-guard`, the one command the module exports.
 #
 # A standalone test script, as the Nushell book describes
 # (https://www.nushell.sh/book/testing.html): it runs every case and fails on
 # the first verdict that differs. Run it with `just test-nu`, or directly with
-# `nu --no-config-file .agents/hooks/tool-guard.test.nu`.
+# `nu --no-config-file .agents/hooks/tool-guard/mod.test.nu`.
 #
 # Each case names the call, whether it is allowed, and for a refusal a phrase
 # its reason must contain. The paths are made up: the guard never reads them.
 use std/assert
-use tool-guard.nu
+use ../tool-guard
 
 # The repository, the session's directory and the home directory of every case
 const CONTEXT = {root: '/repo', cwd: '/repo', home: '/home/me'}
@@ -30,6 +31,7 @@ const COMMANDS = [
 	['git log -n 5' true null]
 	# A gate piped into head or tail
 	['just check | tail -5' false 'head/tail']
+	['just test 2>&1 | tail -3' false 'head/tail']
 	['just lint 2>&1 | head' false 'head/tail']
 	['just check > /tmp/log 2>&1; tail /tmp/log' true null]
 	# Shell edits and writes into the repository
@@ -53,6 +55,8 @@ const COMMANDS = [
 	['echo "a > b"' true null]
 	['git commit -m "mention sed -i and brew install"' true null]
 	["cat <<'EOF'\nsed -i x y\nEOF" true null]
+	# …but the command after a heredoc is one
+	["cat <<'EOF'\ntext\nEOF\nsed -i s/a/b/ flake.nix" false 'sed -i']
 	# Installs outside nix
 	['brew install foo' false 'nix']
 	['pip install --user foo' false 'nix']
@@ -89,7 +93,7 @@ def main []: nothing -> nothing {
 
 # Fail unless the guard's verdict on the case's call is the expected one.
 def assert-verdict [case: record]: nothing -> nothing {
-	let verdict = tool-guard check $case.call
+	let verdict = tool-guard $case.call
 
 	let subject = $case.call.command? | default $case.call.path?
 

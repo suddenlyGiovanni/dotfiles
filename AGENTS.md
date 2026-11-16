@@ -65,13 +65,13 @@ files, and `nix flake check` on every tracked file. A file that passes `just lin
   `*.nu` files, and merge-conflict markers; convco on the message. The devshell installs them.
   Never pass `--no-verify`: fix what they report.
 - **Tests**: `just test` runs every suite; `just test-nu [files]` the Nushell tests, each a
-  `<name>.test.nu` beside its code ([scripts.md](./.agents/rules/scripts.md)).
+  `*.test.nu` in the folder of its code ([scripts.md](./.agents/rules/scripts.md)).
 - **Claude Code hooks** (`.claude/settings.json`). They are nu scripts; write new ones in nu, not
   POSIX shell. Each is an adapter: the rules live in a harness-neutral core under
   `.agents/hooks/` or behind a `just` recipe ([agent-tooling.md](./.agents/rules/agent-tooling.md)):
   - SessionStart and CwdChanged (`.claude/hooks/direnv-prime.nu`) put the devshell of the current
     directory (the repo, or a `.worktrees/<name>`) on the Bash tool's PATH.
-  - PreToolUse (`.claude/hooks/pre-tool-use.nu`, core `.agents/hooks/tool-guard.nu` with its
+  - PreToolUse (`.claude/hooks/pre-tool-use.nu`, core `.agents/hooks/tool-guard/` with its
     tests) denies commands that have a `just` recipe
     (`darwin-rebuild`, `nix flake check|update`, …), a gate piped into `head`/`tail`,
     `--no-verify`, AI attribution, shell-authored files (`sed -i`, `tee`, `>` into the repo),
