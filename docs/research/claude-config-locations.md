@@ -8,7 +8,7 @@ settings, desktop, mcp, authentication) and the files on disk.
 
 | World | Where | Read by | Tracked |
 |---|---|---|---|
-| Claude Code configuration | `CLAUDE_CONFIG_DIR=~/.config/claude` (shells and launchd) | the terminal CLI and the desktop app's Code tab | settings, keybindings, CLAUDE.md, rules, hooks, commands, output styles, themes, workflows, skills, MCP servers (the `hm` plugin): `modules/features/claude-code/` |
+| Claude Code configuration | `CLAUDE_CONFIG_DIR=~/.config/claude` (shells and launchd) | the terminal CLI and the desktop app's Code tab | settings, keybindings, CLAUDE.md, rules, hooks, commands, output styles, themes, workflows, skills, the `hey` MCP server (the `hm` plugin): `modules/features/claude-code/` and the modules named in its header |
 | The desktop app's own data | `~/Library/Application Support/Claude/` | the desktop app | no |
 | Account-synced | claude.ai | Cowork's skills, plugins and connectors; the Code tab's account settings (branch prefix, auto-archive) | not local |
 
@@ -19,9 +19,8 @@ writes, such as the output style, lands in the tracked `settings.json` through i
 ## Inside `~/.config/claude`
 
 - **Configuration, tracked**: the links listed above.
-- **Configuration, not tracked**: `.claude.json` holds personal MCP servers (none now: they are
-  declared in Nix), per-project trust, UI choices and account state together. Claude rewrites it
-  whole, so it cannot be a link.
+- **Configuration, not tracked**: `.claude.json` holds personal MCP servers (none now), per-project
+  trust, UI choices and account state together. Claude rewrites it whole, so it cannot be a link.
 - **State**: `projects/` (transcripts, 4.2 GB), `history.jsonl`, `file-history/`, `session-env/`,
   `backups/`, `jobs/`, `daemon/`, `plans/`. Cleaned up after `cleanupPeriodDays` (30 by default),
   except `history.jsonl`.
@@ -55,8 +54,29 @@ itself when the terminal CLI runs (`autoUpdatesProtectedForNative`).
 - `~/.claude` and `~/.claude.json`, last written on 2026-11-02 by a client that started without
   `CLAUDE_CONFIG_DIR`, held nothing the live configuration lacked; moved to the Trash. The
   `env.nu` probe fix keeps the desktop app on `CLAUDE_CONFIG_DIR` from the start.
-- The user-scope `cloudflare` MCP server moved from `.claude.json` into
-  `programs.claude-code.mcpServers`.
+- The user-scope `cloudflare` MCP server (`mcp.cloudflare.com`, never authorised) was removed from
+  `.claude.json`. Cloudflare stays a claude.ai connector ("Cloudflare Developer Platform"), which
+  reaches every Claude surface.
+
+## The layers, and where each kind of configuration goes
+
+Claude Code has these layers, highest first: managed (`/Library/Application
+Support/ClaudeCode/managed-settings.json` and `managed-settings.d/`, settings only, not
+overridable), local (`.claude/settings.local.json`, `CLAUDE.local.md`), project (`.claude/`,
+`.mcp.json`, `CLAUDE.md`), user (`CLAUDE_CONFIG_DIR`). Settings are read only from the project
+root and the user folder. `CLAUDE.md` is the one file read from every folder above the working
+directory as well, concatenated from the root down. Plugins carry skills, agents, hooks, MCP and
+LSP servers and output styles, and are enabled at user or project scope.
+
+Decided on 2026-11-16 ([TASKS.md](../TASKS.md), Planned):
+
+| Kind | Home |
+|---|---|
+| Personal, every machine | the user layer, from these dotfiles, in Claude Code's own formats; skills and MCP servers as plugins of the `suddenlygiovanni-dotfiles` marketplace |
+| Remote MCP servers with OAuth | claude.ai connectors, on the account |
+| Work, every work repository | a team plugin marketplace in `infrastructure/developer`; meanwhile `~/Developer/work/CLAUDE.md` (from `modules/features/agents/work/AGENTS.md`, work host only) |
+| Work, one repository | that repository's `.claude/`, `.mcp.json` and `CLAUDE.md`, committed |
+| Personal, one work repository | `CLAUDE.local.md`, `.claude/settings.local.json` |
 
 ## Open
 

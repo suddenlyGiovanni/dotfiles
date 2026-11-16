@@ -5,6 +5,17 @@
 # The home-manager `programs.claude-code` module is used purely for declarative
 # configuration; package management is opted out via `package = null` so the
 # curl-installed binary at ~/.local/bin/claude keeps owning updates.
+#
+# ONE SOURCE OF TRUTH (decided 2026-11-16)
+#
+# Claude Code's own file formats are the source of truth; Nix only places them
+# and sets CLAUDE_CONFIG_DIR. Settings, hooks, rules and the rest are files in
+# this folder, linked into the config dir. Skills and MCP servers belong in
+# plugins of the `suddenlygiovanni-dotfiles` marketplace, enabled in the tracked
+# settings.json, not in `programs.claude-code.skills` / `.mcpServers`. The
+# modules that still use those options (gws, hunk, herdr, hey-cli, ast-grep
+# below) move over one at a time (docs/TASKS.md). Remote servers that need OAuth
+# are claude.ai connectors, on the account, not here.
 {
   inputs,
   config,
