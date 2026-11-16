@@ -240,7 +240,7 @@
               };
 
               # The Nushell unit tests for the changed *.nu files: each
-              # `<name>.test.nu` beside its code (modules/devshell/test-nu.nu).
+              # `*.test.nu` in each file's folder (modules/devshell/test-nu.nu).
               # `just test-nu` runs the same script.
               nu-tests = {
                 enable = true;

@@ -1,6 +1,6 @@
 # test-nu: run the Nushell unit tests, and fail if one fails.
 #
-# A test is a `<name>.test.nu` file beside the code it tests: a standalone
+# A test is a `*.test.nu` file in the folder of the code it tests: a standalone
 # script that exits non-zero on a failed assertion
 # (https://www.nushell.sh/book/testing.html). This runner only finds and runs
 # them. `just test-nu` calls it, and so does the nu-tests git hook
@@ -8,8 +8,10 @@
 # `git commit` and `nix flake check` all run the same tests.
 #
 #   test-nu                every test in the repository
-#   test-nu <files>…       the tests for those files: a test file itself, or the
-#                          `<name>.test.nu` beside a `<name>.nu`; other files have none
+#   test-nu <files>…       the tests for those files: every `*.test.nu` in each
+#                          file's folder. A module folder (`<name>/mod.nu` and its
+#                          submodules) is the unit: a change to any of its files
+#                          runs all of its tests.
 
 # Run the tests for the files given, or every test.
 def main [
@@ -18,7 +20,7 @@ def main [
 	let tests = if ($files | is-empty) {
 		all-tests
 	} else {
-		$files | each { test-for } | compact | uniq
+		$files | each { tests-beside } | flatten | uniq
 	}
 
 	if ($tests | is-empty) {
@@ -41,17 +43,11 @@ def all-tests []: nothing -> list<string> {
 	| sort
 }
 
-# The test that covers a file, or null when it has none.
-def test-for []: string -> oneof<string, nothing> {
-	let file = $in
+# The tests in a file's folder, which cover it; none for a folder without tests.
+def tests-beside []: string -> list<string> {
+	let folder = $in | path dirname
 
-	let test = if ($file | str ends-with '.test.nu') {
-		$file
-	} else {
-		$file | str replace --regex '\.nu$' '.test.nu'
-	}
-
-	if ($test | str ends-with '.test.nu') and ($test | path exists) { $test }
+	glob ($folder | path join '*.test.nu') | each { path relative-to $env.PWD } | sort
 }
 
 # Run one test with the nu that runs this script; its outcome and output.

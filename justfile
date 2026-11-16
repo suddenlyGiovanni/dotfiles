@@ -66,7 +66,7 @@ lint *files:
 test: test-nu
 
 [group('dev')]
-[doc('Run the Nushell unit tests for files (a test, or the <name>.test.nu beside a <name>.nu), or every one')]
+[doc('Run the Nushell unit tests for files (the *.test.nu in each file folder), or every one')]
 [positional-arguments]
 test-nu *files:
     @nu --no-config-file modules/devshell/test-nu.nu "$@"
