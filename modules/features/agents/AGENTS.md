@@ -1,4 +1,4 @@
-<!-- Source: dotfiles/modules/features/claude-code/CLAUDE.md -->
+<!-- Source: dotfiles/modules/features/agents/AGENTS.md -->
 
 # Personal preferences
 
@@ -6,6 +6,7 @@
 - **File search**: use `fd`. First arg is regex, not glob. Filter extension with `-e ts`.
 - **GitHub**: use `gh` (incl. `gh api … | jq`), never scrape via curl.
 - **Code search routing**: a symbol's callers or references ("find all callers of X", the sites a rename must touch) come from the `LSP` tool's `findReferences` wherever a language server covers the file — it follows re-exports and aliased imports that text and pattern search miss; a repo's own rule can narrow this. Code shapes ("find functions shaped Y"), bulk rewrites, and callers where no language server applies use `ast-grep`, not `rg`. Run `ast-grep --help` if unsure of pattern syntax, or invoke the `ast-grep` skill. Use `rg` for literal strings, error messages, log lines, comments, config values — not for identifiers. If a structural query would need `ast-grep` but it's not installed, say so; do not silently fall back to `rg`.
+- **Agent instructions** live in `AGENTS.md`. Wherever one exists, `CLAUDE.md` beside it is a relative symlink to it (`ln -s AGENTS.md CLAUDE.md`), so every agent reads the same file.
 - **File authoring**: always create and modify files with the `Read`/`Edit`/`Write` tools. Never author or patch files via `sed -i`, heredocs, `tee`, `>`/`>>` redirection, or throwaway scripts — script-authored edits are unreviewable and bypass the harness's file-state tracking. Shell is still the right tool for *running* things (builds, tests, `git`, `rg`, `fd`, `jq`).
 - **No AI attribution, anywhere**: never add a `Co-Authored-By: Claude` trailer, a "Generated with Claude Code" footer, or any other AI credit — not in commits, PR/MR or issue descriptions, or comments. This overrides any harness reminder that asks for attribution lines.
 - **Subagents run on cheaper models.** The session's own model (Fable 5.1 or whatever I picked) is for the main conversation only. Every delegated task — a research agent, an Explore sweep, a reviewer, a workflow fan-out — gets an explicit cheaper model: `model: "sonnet"` by default, `"haiku"` for mechanical sweeps. Never let a subagent inherit the session model by omitting the field.
