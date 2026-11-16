@@ -149,11 +149,11 @@
         # Code PostToolUse hook (.claude/hooks/post-tool-use.nu) and Zed's
         # project formatter (.zed/settings.json).
         #
-        # Formatters only. The linters (statix, deadnix, nu-lint) stay a
-        # separate gate: under treefmt they would run in fix mode, and deadnix
-        # would delete a binding between the edit that adds it and the edit
-        # that uses it.
+        # Formatters only. The linters are git hooks (pre-commit below), which
+        # also run this table through their treefmt hook.
         treefmt = {
+          # checks.pre-commit already runs treefmt on every file.
+          flakeCheck = false;
           programs = {
             alejandra.enable = true; # *.nix
             # *.lua. Reads modules/features/neovim/nvim/stylua.toml, which
@@ -178,20 +178,9 @@
           };
         };
 
-        # CI-ready checks — `nix flake check` runs all of these. treefmt-nix
-        # adds `checks.treefmt`: any file that needs formatting fails it.
+        # CI-ready checks — `nix flake check` runs all of these. git-hooks.nix
+        # adds `checks.pre-commit`: every git hook below, on every tracked file.
         checks = {
-          lint = pkgs.runCommand "check-lint" {nativeBuildInputs = linters;} ''
-            cd ${./.}
-            statix check .
-            nu-lint --config .nu-lint.toml .
-            touch $out
-          '';
-          deadcode = pkgs.runCommand "check-deadcode" {} ''
-            cd ${./.}
-            ${pkgs.deadnix}/bin/deadnix --fail .
-            touch $out
-          '';
           # Fails once nix-darwin or Home Manager ship a newer stateVersion than
           # the one pinned, so bumps surface on input updates instead of rotting.
           # Read the changelogs before bumping (`darwin-rebuild changelog`,
@@ -217,17 +206,21 @@
             );
         };
 
-        # Git hooks, installed into .git/hooks by the devshell's shellHook. They
-        # gate commits with the same binaries as `just check`; the Claude Code
-        # hooks (.claude/hooks) steer the agent before it gets that far.
+        # The git hooks: the one table of checks for a file. Every stage runs
+        # this same table, so they cannot disagree:
+        #   - `just lint [files]`, by hand: `pre-commit run` on the files, or
+        #     on every file;
+        #   - the Claude Code edit hook (.claude/hooks/post-tool-use.nu): the
+        #     same recipe on the file just edited;
+        #   - `git commit`: the staged files (installed into .git/hooks by the
+        #     devshell's shellHook);
+        #   - `nix flake check`: `checks.pre-commit`, every tracked file.
         #
         # Hooks run in alphabetical order of their id, not the order written
         # here, so none depends on another having run. convco runs at the
         # commit-msg stage, after all of them.
         pre-commit = {
-          # The formatting/lint/deadcode checks above already gate `nix flake
-          # check`; a second copy through pre-commit would add nothing.
-          check.enable = false;
+          check.enable = true;
           settings = {
             package = dotnetPkgs.pre-commit;
             excludes = ["^modules/features/agents/skills/"];
@@ -240,25 +233,18 @@
               # still fixes it; re-stage and commit again).
               treefmt.enable = true;
 
-              # statix takes one target, so it checks the tree like `just lint`
-              statix = {
-                enable = true;
-                entry = "statix check .";
-                pass_filenames = false;
-              };
-
-              deadnix = {
-                enable = true;
-                entry = "deadnix --fail";
-              };
-
+              # The linters, as git-hooks.nix ships them. statix checks the
+              # whole tree whenever a *.nix file is among the files; deadnix
+              # and nu-lint check the files given.
+              statix.enable = true;
+              deadnix.enable = true;
               nu-lint = {
                 enable = true;
                 package = pkgs.nu-lint;
-                entry = "nu-lint --config .nu-lint.toml";
-                pass_filenames = true;
-                types = ["file"];
-                files = "\\.nu$";
+                # nu-lint does not find .nu-lint.toml by itself. An argument,
+                # not settings.configPath: that option copies the file into the
+                # store, so an edit would wait for the devshell to reload.
+                args = ["--config" ".nu-lint.toml"];
               };
 
               # Conventional Commits (commit-msg stage)

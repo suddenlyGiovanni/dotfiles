@@ -50,17 +50,18 @@ terminal.
 ## Feedback Loop
 
 The devshell (`flake.nix` → `devShells.default`, loaded by direnv) carries every formatter, linter
-and language server, and every check uses those same binaries:
+and language server. The git hooks are the one check for a file, and every stage runs them:
+`just lint [files]` by hand, the edit hook after each Write/Edit, `git commit` on the staged
+files, and `nix flake check` on every tracked file. A file that passes `just lint` passes them all.
 
-- **Format**: `perSystem.treefmt` in `flake.nix` (treefmt-nix) is the one table: alejandra
-  (`*.nix`), nufmt (`*.nu`) and stylua (`*.lua`). There is no `treefmt.toml`: the devshell's
-  `treefmt` is a wrapper with the generated config baked in. `nix fmt`, `just fmt`, the `treefmt`
-  flake check and Zed (`.zed/settings.json`) all route through it.
-- **Lint**: statix and deadnix (`*.nix`), nu-lint (`*.nu`, always with `--config .nu-lint.toml`).
+- **Format**: `perSystem.treefmt` in `flake.nix` (treefmt-nix) maps each file type to its
+  formatter: alejandra (`*.nix`), nufmt (`*.nu`) and stylua (`*.lua`). There is no
+  `treefmt.toml`: the devshell's `treefmt` is a wrapper with the generated config baked in. `just
+  fmt`, `nix fmt`, Zed (`.zed/settings.json`) and the `treefmt` git hook all run it.
 - **Git hooks** (`flake.nix` → `perSystem.pre-commit`, git-hooks.nix): treefmt
-  (`--fail-on-change`), statix, deadnix, nu-lint and merge-conflict markers on commit, convco on
-  the message. The devshell installs them; `pre-commit run --all-files` runs them by hand. Never
-  pass `--no-verify`: fix what they report.
+  (`--fail-on-change`), statix and deadnix (`*.nix`), nu-lint (`*.nu`, with `.nu-lint.toml`,
+  every rule group an error) and merge-conflict markers; convco on the message. The devshell
+  installs them. Never pass `--no-verify`: fix what they report.
 - **Claude Code hooks** (`.claude/settings.json`). They are nu scripts; write new ones in nu, not
   POSIX shell:
   - SessionStart and CwdChanged (`.claude/hooks/direnv-prime.nu`) put the devshell of the current
@@ -70,8 +71,8 @@ and language server, and every check uses those same binaries:
     `--no-verify`, AI attribution, shell-authored files (`sed -i`, `tee`, `>` into the repo),
     installs outside nix, and writes to `flake.lock`, `result`, `.direnv/` or `.git/`. The deny
     reason names the path to take instead.
-  - After every Write/Edit, `.claude/hooks/post-tool-use.nu` formats the file with treefmt, lints
-    it, and reports back.
+  - After every Write/Edit, `.claude/hooks/post-tool-use.nu` runs `just lint <file>` and reports
+    back what the git hooks reported.
   - "Auto-formatted" means re-read the file before editing it again. Fix the lint findings in code
     you touched.
   - Stop (`.claude/hooks/stop-gate.nu`) runs `just check` when the turn leaves uncommitted

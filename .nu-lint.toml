@@ -1,8 +1,9 @@
 # nu-lint configuration — https://codeberg.org/wvhulle/nu-lint
-# Every CLI caller passes `--config .nu-lint.toml`: `just lint`, the `lint`
-# flake check, the git hook and the Claude Code PostToolUse hook. (Zed's
-# nu-lint extension starts `nu-lint --lsp` with no way to pass it, so the
-# editor may show the rules below anyway.)
+# nu-lint does not find this file by itself. The nu-lint git hook passes
+# `--config .nu-lint.toml` (perSystem.pre-commit in flake.nix), and every stage
+# runs that hook: `just lint`, the edit hook, `git commit`, `nix flake check`.
+# (Zed's nu-lint extension starts `nu-lint --lsp` with no way to pass it, so
+# the editor may show the rules below anyway.)
 #
 # Every group is an error: a finding blocks the commit and the flake check.
 # `nu-lint rules groups` lists the groups and their rules. A rule is turned

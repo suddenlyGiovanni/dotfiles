@@ -31,9 +31,9 @@ Common tasks using the `justfile` at the repository root:
 
 ```shell
 # From ~/Developer/dotfiles
-just fmt         # Format all Nix files
-just lint        # Lint Nix files
-just check       # Run all checks (format, lint, deadcode, flake validation)
+just fmt         # Format every file, or the files named
+just lint        # Run the git hooks (format, then lint) on every file, or the files named
+just check       # Run all checks (the git hooks, then the flake checks)
 just build       # Build without applying
 just switch      # Apply configuration
 just update      # Update flake inputs
@@ -303,7 +303,7 @@ Configuration flows through the dendritic architecture:
 just build
 ```
 
-### Run all checks (format, lint, deadcode, flake validation)
+### Run all checks (the git hooks, then the flake checks)
 
 ```shell
 just check

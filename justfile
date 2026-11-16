@@ -44,29 +44,23 @@ alias help := info
 # ── Dev ───────────────────────────────────────────────────────────────────────
 
 [group('dev')]
-[doc('Format all files with treefmt (Nix, Nu, Lua; the table is perSystem.treefmt in flake.nix)')]
-fmt *paths:
-    treefmt {{ paths }}
+[doc('Format files, or every file, with treefmt (the table is perSystem.treefmt in flake.nix)')]
+[positional-arguments]
+fmt *files:
+    @treefmt "$@"
+
+# The one check for a file: the git hooks, as `git commit` runs them. The
+# Claude Code edit hook calls this recipe, and `nix flake check` runs the same
+# hooks, so a file that passes here passes there.
+[group('dev')]
+[doc('Run the git hooks (format, then lint) on files, or on every file (the table is perSystem.pre-commit in flake.nix)')]
+[positional-arguments]
+lint *files:
+    @if [ "$#" -eq 0 ]; then pre-commit run --all-files; else pre-commit run --files "$@"; fi
 
 [group('dev')]
-[doc('Fail if any file needed formatting (treefmt has no dry run: it formats them too)')]
-fmt-check:
-    treefmt --ci
-
-[group('dev')]
-[doc('Lint Nix files with statix and Nu files with nu-lint')]
-lint:
-    statix check .
-    nu-lint --config .nu-lint.toml .
-
-[group('dev')]
-[doc('Find unused code in Nix files')]
-deadcode:
-    deadnix .
-
-[group('dev')]
-[doc('Run all checks (format, lint, deadcode, flake validation)')]
-check: fmt-check lint deadcode validate
+[doc('Run all checks: the git hooks on every file, then the flake checks')]
+check: lint validate
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 

@@ -37,8 +37,6 @@ const GATES = [
     build-host
     diff
     lint
-    deadcode
-    fmt-check
     validate
 ]
 

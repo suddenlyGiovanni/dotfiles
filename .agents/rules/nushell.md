@@ -17,8 +17,8 @@ paths:
   `env.nu` also answers Claude.app's `$SHELL -l -i -c` probe, because the app can open at login
   before the agent runs.
 - **Never put POSIX syntax where `$SHELL -c` runs it**. That shell is nu.
-- **Lint with the config**. Always run nu-lint as `nu-lint --config .nu-lint.toml`. nu-lint 1.3
-  does not discover the file by itself.
+- **Lint through the hooks**. `just lint <file>` runs nu-lint as the git hook does, with
+  `--config .nu-lint.toml`; nu-lint does not find that file by itself.
 - **String traps**. nufmt and the nu parser do not warn about these:
   - In `$'…'` and `$"…"`, nu runs every `(…)` as code. Build a regex that has groups by joining
     strings: `'\bjust\s+(' + ($names | str join '|') + ')'`.

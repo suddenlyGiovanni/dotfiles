@@ -1,129 +1,109 @@
-# PostToolUse hook (matcher: Write|Edit): format the file the agent just wrote,
-# lint it, and hand anything worth knowing back to the model.
+# PostToolUse hook (matcher: Write|Edit): run the git hooks on the file the
+# agent just wrote, and hand anything worth knowing back to the model.
 #
-# Formatting goes through treefmt (perSystem.treefmt in flake.nix): the same
-# table `just fmt`, `nix fmt`, the `treefmt` flake check and Zed use, so this step can't
-# format differently from the gate. Linting runs the file's own linters, the
-# same ones `just lint` and the `lint` flake check run:
-#   *.nu   nu-lint (.nu-lint.toml)
-#   *.nix  statix (statix.toml) + deadnix
-# Both happen here, in order, so the linters see the formatted file and their
-# line numbers match what the model reads next.
+# It calls `just lint <file>`, the recipe a person runs, which runs the git
+# hooks (perSystem.pre-commit in flake.nix) on that file: treefmt first, then
+# the linters. `git commit` and `nix flake check` run the same hooks, so what
+# the model reads here is what would block the commit.
+#
+# A file treefmt reformats fails its hook once ("files were modified"), so the
+# hooks run a second time on the formatted file; that run is the verdict, and
+# its line numbers match what the model reads next.
 #
 # Input (stdin, JSON): { "tool_input": { "file_path": "<absolute path>", … }, … }
-# Output: exit 0 (a PostToolUse hook can't block). `additionalContext` in the
+# Output: exit 0 (a PostToolUse hook cannot block). `additionalContext` in the
 # PostToolUse envelope is the only stdout that reaches the model; a clean,
-# already-formatted file prints nothing. Runs as
+# already formatted file prints nothing. Runs as
 # `direnv exec <repo> nu --stdin <this file>` (.claude/settings.json), which
-# puts the devshell's nu, treefmt and linters on PATH.
+# puts the devshell's just and pre-commit on PATH.
 
-const MAX_FINDINGS = 40
+const MAX_LINES = 60
 
+# Check the file the payload names, and report what the model must read.
 def main []: string -> nothing {
-    let payload = $in
+    # `$in` holds the payload in the first statement only; later it is empty.
+    let payload_text = $in
     let root = $env.FILE_PWD | path join .. .. | path expand
-    let file = try {
-        $payload | from json | get tool_input.file_path
-    } catch { return }
-    # Only regular files inside this repo; anything else is none of our business
-    if ($file | describe) != string or not ($file | str starts-with $"($root)/") or not ($file | path exists) {
-        return
-    }
+    let file = $payload_text | edited-file $root
+    if $file == null { return }
     cd $root
 
-    let missing = [treefmt nu-lint statix deadnix] | where (which $it | is-empty)
-    let notes = if ($missing | is-not-empty) {
+    let notes = if (which just pre-commit | length) < 2 {
         [
-            $"post-tool-use.nu: ($missing | str join ', ') not on PATH \(devshell not loaded?\), so nothing was formatted or linted"
+            'post-tool-use.nu: just or pre-commit is not on PATH (devshell not loaded?), so the file was not checked'
         ]
     } else {
-        (format-file $file) ++ (lint-file $file)
+        check-file $file
     }
-    if ($notes | is-empty) { return }
-
-    {
-        hookSpecificOutput: {
-            hookEventName: PostToolUse
-            additionalContext: ($notes | str join (char nl))
-        }
+    if ($notes | is-not-empty) {
+        $notes | envelope | to json --raw | print
     }
-    | to json --raw
-    | print
 }
 
-# treefmt logs "formatted N files (M changed)"; excluded or unmatched paths
-# are "(0 changed)".
-def format-file [file: path]: nothing -> list<string> {
-    let result = ^treefmt $file | complete
-    let log = $result.stdout + $result.stderr
-    if $result.exit_code != 0 {
-        [$"treefmt failed on ($file):" $log]
-    } else if ($log | str contains '(1 changed)') {
+# The path the payload names, when it is a regular file inside the repository;
+# null for anything else, which is none of this hook's business.
+def edited-file [root: path]: string -> oneof<string, nothing> {
+    let file = try {
+        from json | get --optional tool_input.file_path
+    } catch {
+        null
+    }
+    let inside = ($file | describe) == string and ($file | str starts-with $"($root)/")
+    if $inside and ($file | path exists) { $file }
+}
+
+# Run the hooks, and once more if treefmt changed the file.
+def check-file [file: path]: nothing -> list<string> {
+    let before = open --raw $file | hash sha256
+    let first = run-hooks $file
+    let formatted = (open --raw $file | hash sha256) != $before
+    let verdict = if $formatted { run-hooks $file } else { $first }
+
+    let format_note = if $formatted {
         [
             $"Auto-formatted by treefmt: ($file) \(re-read it before editing again\)"
         ]
-    } else {
-        []
+    } else { [] }
+    let findings = if $verdict.exit_code != 0 {
+        [
+            $"The git hooks failed on ($file). Fix what they report in code you touched; `just lint ($file)` reruns them."
+            ...($verdict.output | hook-failures | capped-lines)
+        ]
+    } else { [] }
+    $format_note ++ $findings
+}
+
+# `just lint <file>`: its exit code, and stdout and stderr together.
+def run-hooks [file: path]: nothing -> record<exit_code: int, output: string> {
+    let run = ^just lint $file | complete
+    {
+        exit_code: $run.exit_code
+        output: ($run.stdout + $run.stderr)
     }
 }
 
-def lint-file [file: path]: nothing -> list<string> {
-    let linted = match ($file | path parse | get extension) {
-        nu => {
-            tool: nu-lint
-            findings: (nu-lint-findings $file)
-        }
-        nix => {
-            tool: 'statix + deadnix'
-            findings: ((statix-findings $file) ++ (deadnix-findings $file))
-        }
-        _ => {
-            tool: ''
-            findings: []
-        }
-    }
-    let total = $linted.findings | length
-    if $total == 0 { return [] }
-    [
-        $"($linted.tool) reported ($total) finding\(s\) on this file. Fix the ones in code you touched; `just lint` runs the same checks."
-        ...($linted.findings | first $MAX_FINDINGS)
-        ...(
-            if $total > $MAX_FINDINGS { [$"… ($total - $MAX_FINDINGS) more not shown."] } else { [] }
-        )
-    ]
-}
-
-# Errors and warnings as `path:line:col: severity(rule): message`; hints are
-# style nits. nu-lint 1.3 doesn't discover .nu-lint.toml by itself.
-def nu-lint-findings [file: path]: nothing -> list<string> {
-    ^nu-lint --config .nu-lint.toml --format compact $file
-    | complete
-    | get stdout
+# pre-commit's report without the hooks that passed or had nothing to check.
+def hook-failures []: string -> string {
+    ansi strip
     | lines
-    | where $it =~ ':\d+:\d+: (error|warning)'
+    | where $it !~ '\.{3,}(\(no files to check\))?(Passed|Skipped)$'
+    | str join "\n"
 }
 
-# errfmt is `path>line:col:severity:code:message`; reshaped to match the rest
-def statix-findings [file: path]: nothing -> list<string> {
-    ^statix check --format errfmt $file
-    | complete
-    | get stdout
-    | lines
-    | parse '{path}>{line}:{col}:{severity}:{code}:{message}'
-    | each {|f|
-        let severity = if $f.severity == E { 'error' } else { 'warning' }
-        $"($f.path):($f.line):($f.col): ($severity)\(statix ($f.code)\): ($f.message)"
-    }
+# At most MAX_LINES lines, with a note on how many were left out.
+def capped-lines []: string -> list<string> {
+    let all = lines
+    let total = $all | length
+    if $total <= $MAX_LINES { return $all }
+    $all | first $MAX_LINES | append $"… ($total - $MAX_LINES) more lines not shown."
 }
 
-def deadnix-findings [file: path]: nothing -> list<string> {
-    ^deadnix --output-format json $file
-    | complete
-    | get stdout
-    | lines
-    | each {|report_line|
-        let report = $report_line | from json
-        $report.results | each {|r| $"($report.file):($r.line):($r.column): warning\(deadnix\): ($r.message)" }
+# The notes, as the PostToolUse envelope Claude Code hands to the model.
+def envelope []: list<string> -> record {
+    {
+        hookSpecificOutput: {
+            hookEventName: PostToolUse
+            additionalContext: ($in | str join (char nl))
+        }
     }
-    | flatten
 }

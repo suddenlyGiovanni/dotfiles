@@ -270,7 +270,7 @@ These migration steps have been completed. For reference:
 4. **Test the configuration**:
 
    ```bash
-   just check   # Format, lint, deadcode
+   just check   # The git hooks (format, lint), then the flake checks
    just build   # Build without applying
    just switch  # Apply configuration
    ```
