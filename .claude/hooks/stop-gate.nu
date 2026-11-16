@@ -59,9 +59,7 @@ def changed-files []: nothing -> list<string> {
     | split row (char nul)
     | where ($it | str length) > 3
     | each { str substring 3.. }
-    | where {|file|
-        ($file | path basename) == flake.lock or ($file | path parse | get extension) in $EXTENSIONS
-    }
+    | where ($it | path basename) == flake.lock or ($it | path parse | get extension) in $EXTENSIONS
     | sort
 }
 

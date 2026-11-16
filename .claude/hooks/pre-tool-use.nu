@@ -95,7 +95,7 @@ def bash-violation [call: record]: nothing -> any {
         {|| attribution-violation $raw }
         {|| masked-gate-violation $code }
         {||
-            $code | split-commands | each {|words| command-violation ...$words } | compact | get -o 0
+            $code | split-commands | each {|words| command-violation ...$words } | compact | get --optional 0
         }
         {|| redirect-violation $code ($call | select root cwd) }
     ]
@@ -109,23 +109,30 @@ def bash-violation [call: record]: nothing -> any {
 # Blank quoted strings and heredoc bodies, keeping the quotes and the heredoc
 # markers, so only the shell's own words are left to match
 def blank-literals []: string -> string {
-    $in
-    | str replace --all --regex '(?s)(<<-?\s*)([''"]?)(\w+)\2(.*?)\n.*?\n\s*\3(\s|$)' '$1$3$4'
-    # One pass, so the quote that opens first wins: an apostrophe inside a
-    # double-quoted string never pairs with one outside it
-    | str replace --all --regex `(')[^']*'|(")(?:\\.|[^"\\])*"` '$1$1$2$2'
+    blank-heredoc-bodies | blank-quoted-strings
+}
+
+# A heredoc keeps its `<<MARKER` and loses its body and closing marker
+def blank-heredoc-bodies []: string -> string {
+    str replace --all --regex '(?s)(<<-?\s*)([''"]?)(\w+)\2(.*?)\n.*?\n\s*\3(\s|$)' '$1$3$4'
+}
+
+# A quoted string keeps its two quotes and loses what is between them. One
+# pass, so the quote that opens first wins: an apostrophe inside a
+# double-quoted string never pairs with one outside it
+def blank-quoted-strings []: string -> string {
+    str replace --all --regex `(')[^']*'|(")(?:\\.|[^"\\])*"` '$1$1$2$2'
 }
 
 # Each simple command's words, with leading VAR=value assignments and wrappers
 # (sudo, env, …) dropped
 def split-commands []: string -> list<list<string>> {
-    $in
-    | split row --regex '&&|\|\||[;|\n()`]|\$\('
+    split row --regex '&&|\|\||[;|\n()`]|\$\('
     | each {|segment|
         $segment
         | str trim
         | split row --regex '\s+'
-        | where $it != ''
+        | compact --empty
         | skip while {|word| $word =~ '^[A-Za-z_][A-Za-z0-9_]*=' or $word in $WRAPPERS }
     }
     | where ($it | is-not-empty)
@@ -134,7 +141,7 @@ def split-commands []: string -> list<list<string>> {
 def command-violation [...words: string]: nothing -> any {
     let word = $words | first | path basename
     let args = $words | skip 1
-    let sub = $args | get -o 0
+    let sub = $args | get --optional 0
     let flags = $args | where ($it | str starts-with '-')
     let key = [$word] ++ ($args | first 2) | str join ' '
     let recipe = $RECIPES | items {|name, reason| if ($key | str starts-with $name) { $reason } } | compact
@@ -185,11 +192,11 @@ def redirect-violation [code: string, at: record<root: path, cwd: path>]: nothin
     mut inside = []
     for part in ($code | parse --regex '(?<seg>[^;&|\n()]*)(?<sep>&&|\|\||[;&|\n()]|$)') {
         let dir = $dirs | last
-        let words = $part.seg | str trim | split row --regex '\s+' | where $it != ''
-        if ($words | get -o 0) == cd {
-            $dirs = ($dirs | drop | append (cd-target $dir ($words | get -o 1)))
+        let words = $part.seg | str trim | split row --regex '\s+' | compact --empty
+        if ($words | get --optional 0) == cd {
+            $dirs = ($dirs | drop | append (cd-target $dir ($words | get --optional 1)))
         } else {
-            let tees = if ($words | get -o 0) == tee {
+            let tees = if ($words | get --optional 0) == tee {
                 $words | skip 1 | where not ($it | str starts-with '-')
             } else {
                 []

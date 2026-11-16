@@ -1,11 +1,30 @@
 # nu-lint configuration — https://codeberg.org/wvhulle/nu-lint
-# nu-lint 1.3's CLI doesn't discover this file on its own, so every CLI caller
-# passes `--config .nu-lint.toml`: `just lint`, the `lint` flake check and the
-# Claude Code PostToolUse hook. (Zed's nu-lint extension starts `nu-lint --lsp`
-# with no way to pass it, so the editor may show the rules below anyway.)
+# Every CLI caller passes `--config .nu-lint.toml`: `just lint`, the `lint`
+# flake check, the git hook and the Claude Code PostToolUse hook. (Zed's
+# nu-lint extension starts `nu-lint --lsp` with no way to pass it, so the
+# editor may show the rules below anyway.)
 #
-# The nu files here are shell config: helpers that shadow and drive external
-# tools on purpose. These rules argue against exactly that, so they're off.
+# Every group is an error: a finding blocks the commit and the flake check.
+# `nu-lint rules groups` lists the groups and their rules. A rule is turned
+# off below only with its reason beside it.
+[groups]
+catch-runtime-failures = "error"
+isolate-side-effects = "error"
+annotate-types = "error"
+adopt-nu-syntax = "error"
+pipe-instead-of-loop = "error"
+parse-structured-data = "error"
+replace-external-tools = "error"
+stream-in-process = "error"
+remove-dead-code = "error"
+reduce-complexity = "error"
+format-whitespace = "error"
+follow-naming-conventions = "error"
+document-interfaces = "error"
+forward-parser-diagnostics = "error"
+translate-bash-syntax = "error"
+migrate-deprecated-syntax = "error"
+
 [rules]
 # Wrappers that shadow an external (`def ff`, `def man`, the 1Password `def gh`)
 # must call it as `^ff`, or they recurse; keep `^` explicit everywhere.
@@ -24,3 +43,15 @@ string_may_be_bare = "off"
 # nufmt owns pipe spacing, and this rule misreads the `o+e>|` redirection pipe
 # (.claude/hooks/stop-gate.nu) as a `|` with no space before it.
 pipe_spacing = "off"
+# These scripts report to a person or an agent in a terminal, who reads the
+# message and its help. A URL would point at nothing more useful, and a label
+# would point at a line of the script, not at the cause.
+add_url_to_error = "off"
+add_label_to_error = "off"
+# A helper with one caller is fine: its name is what the reader gains
+# (.agents/rules/scripts.md).
+single_call_command = "off"
+# The only producers piped onward are fd and rg feeding fzf in the interactive
+# helpers (nushell/config.nu): fzf's result is the one that matters, and rg
+# exits 1 when nothing matches, which is not a failure there.
+non_final_failure_check = "off"

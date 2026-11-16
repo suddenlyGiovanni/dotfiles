@@ -105,6 +105,8 @@ def install-build [build: record, spec: record]: nothing -> nothing {
 }
 
 # Download a URL into a folder under its own file name; returns the file.
+# curl writes the file itself, so the step has one effect, and --fail turns an
+# HTTP error into a failed step instead of a saved error page.
 def download [url: string, folder: path]: nothing -> string {
     let file = $folder | path join (
         $url
@@ -112,7 +114,13 @@ def download [url: string, folder: path]: nothing -> string {
         | get path
         | path basename
     )
-    http get --raw $url | save --raw $file
+    let fetched = ^/usr/bin/curl --fail --silent --show-error --location --output $file $url | complete
+    if $fetched.exit_code != 0 {
+        error make {
+            msg: $"cannot download ($url): ($fetched.stderr | str trim)"
+            help: 'Check the network. The next switch tries again.'
+        }
+    }
     $file
 }
 
@@ -121,7 +129,10 @@ def assert-signed-by [app: path, team: string]: nothing -> nothing {
     # codesign prints its details on stderr.
     let details = ^/usr/bin/codesign --display --verbose=2 $app | complete | get stderr | lines
     if $"TeamIdentifier=($team)" not-in $details {
-        error make {msg: $"($app) is not signed by Apple team ($team)"}
+        error make {
+            msg: $"($app) is not signed by Apple team ($team)"
+            help: 'The download may not come from Superlogical. Check the feed URL in modules/features/rex/default.nix.'
+        }
     }
 }
 
@@ -131,6 +142,7 @@ def assert-notarized [app: path]: nothing -> nothing {
     if $assessment.exit_code != 0 or $assessment.stderr !~ 'source=Notarized Developer ID' {
         error make {
             msg: $"Gatekeeper does not accept ($app) as notarized: ($assessment.stderr | str trim)"
+            help: 'Apple has not notarized this build. Wait for the next one, or install Rex Beta by hand.'
         }
     }
 }
@@ -157,7 +169,10 @@ def with-mounted-image [image: path, body: closure]: nothing -> nothing {
     let volume = $image | path dirname | path join volume
     let mounted = ^/usr/bin/hdiutil attach -nobrowse -readonly -noautoopen -mountpoint $volume $image | complete
     if $mounted.exit_code != 0 {
-        error make {msg: $"cannot mount ($image): ($mounted.stderr | str trim)"}
+        error make {
+            msg: $"cannot mount ($image): ($mounted.stderr | str trim)"
+            help: 'The download may be incomplete. The next switch downloads it again.'
+        }
     }
     with-cleanup { do $body $volume } {
         ^/usr/bin/hdiutil detach -quiet $volume | complete
@@ -174,5 +189,5 @@ def with-cleanup [body: closure, cleanup: closure]: nothing -> nothing {
         $error.msg
     }
     do $cleanup
-    if $failure != null { error make {msg: $failure} }
+    if $failure != null { error make {msg: $failure, help: 'Raised again after the cleanup ran.'} }
 }
