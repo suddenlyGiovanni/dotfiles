@@ -42,8 +42,11 @@ Plan steps 1 to 4 are built and applied on the work Mac, and checked after two r
   and recorded `~/.local/share/android/sdk`, and created its AVD in `~/.local/share/android/avd`,
   where `emulator -list-avds` finds it. In `~/Library` it wrote nothing; Toolbox wrote
   `studio.vmoptions`. Nothing new appeared in the home folder.
-- **Not tested yet**: a Gradle sync of `connect`; Toolbox's "Per-tool JVM options file location",
-  which should move `studio.vmoptions` beside the app.
+- **JVM options beside the app**: with Toolbox's "Per-tool JVM options file location", Toolbox
+  writes `~/Applications/Android Studio.app.vmoptions`, and the IDE's log names that file
+  (`jb.vmOptionsFile`) and the 10000 MB heap from it. After that start nothing was written under
+  `~/Library/Application Support/Google`, so every `AndroidStudio*` folder there is a leftover.
+- **Not tested yet**: a Gradle sync of `connect`.
 
 ## What the team repository already defines
 
@@ -176,7 +179,8 @@ idea.log.path=<cacheHome>/Google/${idea.paths.selector}/log
 
 | Piece | Why |
 |---|---|
-| `~/Library/Application Support/Google/AndroidStudio<version>/studio.vmoptions` | The launcher looks for user VM options in the OS configuration folder, hard-coded to `~/Library/Application Support` on macOS, and Toolbox writes its lines there. `STUDIO_VM_OPTIONS` could move it, but it replaces Toolbox's file. One file per version stays |
+| `~/Applications/Android Studio.app.vmoptions` | The launcher looks for user VM options beside the app, then in `~/Library/Application Support`; both are hard-coded. Toolbox writes the first when "Per-tool JVM options file location" is chosen for the IDE, a setting made by hand, and then nothing is left under `~/Library/Application Support/Google`. `STUDIO_VM_OPTIONS` could move the file, but it replaces Toolbox's. Toolbox's "System, config and logs directory" stays empty: it would set JVM options, which win over `idea.properties` |
+| `~/java_error_in_studio_<pid>.log`, `~/java_error_in_studio.hprof` | Where the IDE's bundled VM options send a JVM crash log and a heap dump. Written only on a crash; two lines in Toolbox's "Edit JVM options" would move them |
 | `~/.android` | a link, for `adb` |
 | `~/.emulator_console_auth_token` | the emulator console's token, documented in the home directory; appears only when the console is used |
 | `~/Library/Preferences/com.google.android.studio.plist`, `com.android.Emulator.plist` | macOS preferences |
@@ -201,7 +205,7 @@ idea.log.path=<cacheHome>/Google/${idea.paths.selector}/log
 | Toolbox | its settings | `.settings.json`, with account and project state beside the settings | fixed | not tracked; the two values that matter (`~/.local/bin`, `~/Applications`) go in the module's comment | nobody |
 | Android Studio | where its folders are | `~/Library/{Application Support,Caches,Logs}/Google/…` | `~/.config`, `~/.local/share`, `~/.cache` under `Google/<version>` | `idea.properties` from the module, `STUDIO_PROPERTIES` | these dotfiles; later the team module |
 | Android Studio, WebStorm | personal IDE settings | in the configuration folder | same | Backup and Sync on the JetBrains account | the account |
-| Android Studio, WebStorm | VM options | `<default config>/*.vmoptions` | fixed | not tracked: Toolbox rewrites the file; the heap is set in Toolbox | nobody |
+| Android Studio, WebStorm | VM options | `<default config>/*.vmoptions` | beside the app (`<App>.app.vmoptions`), by Toolbox's per-tool setting | not tracked: Toolbox rewrites the file; the heap is set in Toolbox | nobody |
 | Android Studio, WebStorm | project settings: required plugins, code style, run configurations | `.idea/` (headless tracks four files, connect none), `.editorconfig` | same | git | project repos |
 | Android | SDK, AVDs, preferences, Gradle home | `~/Library/Android/sdk`, `~/.android`, `~/.gradle` | the XDG layout above | the variables from the module; contents never (`adbkey` is a secret, the rest is downloaded) | these dotfiles; later the team module |
 | Java | JDK outside a devshell | none | Nix Zulu 17 | `programs.java` | these dotfiles |

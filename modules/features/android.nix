@@ -64,8 +64,10 @@ _: {
       # - ${idea.paths.selector} is a JVM property the launcher sets ("AndroidStudio2026.2.2"). It
       #   keeps one folder per IDE version, so an upgrade imports the previous settings.
       # - The file expands JVM properties only, not environment variables: the paths are absolute.
-      # - The user .vmoptions file does not follow: the launcher and Toolbox keep it under
-      #   ~/Library/Application Support/Google/<version>.
+      # - The user .vmoptions file does not follow: the launcher reads it beside the app, then
+      #   under ~/Library/Application Support/Google/<version>. Toolbox writes the first when the
+      #   IDE's "Per-tool JVM options file location" is chosen, by hand, once. Leave its "System,
+      #   config and logs directory" empty: a JVM option wins over this file.
       xdg.configFile."android-studio/idea.properties".text = ''
         idea.config.path=${config.xdg.configHome}/Google/''${idea.paths.selector}
         idea.plugins.path=${config.xdg.dataHome}/Google/''${idea.paths.selector}

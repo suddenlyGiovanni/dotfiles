@@ -164,7 +164,7 @@ Audited using [xdg-ninja](https://github.com/b3nj5m1n/xdg-ninja) v0.2.0.2.
 | VS Code | `~/.vscode`  | Microsoft declined XDG support ([issue #3884](https://github.com/microsoft/vscode/issues/3884)) |
 | SSH     | `~/.ssh`     | Required by OpenSSH standard; keys must remain here           |
 | Xcode   | `~/Library/Developer`, `/Library/Developer` | No switch, apart from DerivedData |
-| Android Studio | `~/Library/Application Support/Google/<version>/studio.vmoptions` | The launcher hard-codes the folder on macOS, and JetBrains Toolbox writes the file there |
+| Android Studio | `~/Applications/Android Studio.app.vmoptions` | The launcher reads user VM options beside the app or under `~/Library/Application Support`, both hard-coded; JetBrains Toolbox writes the file |
 
 [mobile-toolchain-locations.md](../research/mobile-toolchain-locations.md) has the sources for the
 Android, JetBrains and Xcode rows.
