@@ -1,6 +1,7 @@
-<!-- Source: dotfiles/modules/features/agents/work/AGENTS.md, linked as ~/Developer/work/CLAUDE.md
-     and ~/Developer/work/AGENTS.md on the work host. Claude Code loads it for every repository under
-     ~/Developer/work, after the personal instructions and before the repository's own. -->
+<!-- Source: dotfiles/modules/features/agents/work/AGENTS.md, linked as ~/Developer/work/AGENTS.md on
+     the work host, with CLAUDE.md beside it linking to that. Claude Code loads it for every
+     repository under ~/Developer/work, after the personal instructions and before the repository's
+     own. -->
 
 # Work
 

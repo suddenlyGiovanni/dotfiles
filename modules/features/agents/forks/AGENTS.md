@@ -1,5 +1,5 @@
-<!-- Source: dotfiles/modules/features/agents/forks/AGENTS.md, linked as ~/Developer/forks/CLAUDE.md
-     and ~/Developer/forks/AGENTS.md. Claude Code loads it for every repository under
+<!-- Source: dotfiles/modules/features/agents/forks/AGENTS.md, linked as ~/Developer/forks/AGENTS.md,
+     with CLAUDE.md beside it linking to that. Claude Code loads it for every repository under
      ~/Developer/forks, after the personal instructions and before the repository's own. -->
 
 # Forks

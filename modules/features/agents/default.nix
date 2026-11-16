@@ -36,7 +36,7 @@
 # folder: Claude Code loads CLAUDE.md from every directory above the one it
 # starts in, so ~/Developer/<folder>/CLAUDE.md reaches every repository in that
 # folder and nothing else. Each folder's file is <folder>/AGENTS.md here, linked
-# as CLAUDE.md and as AGENTS.md (for agents that read that name):
+# as ~/Developer/<folder>/AGENTS.md; CLAUDE.md beside it links to that AGENTS.md:
 #
 #   ~/Developer/work/   work host only. What every colleague should share
 #                       belongs in infrastructure/developer instead.
@@ -74,11 +74,12 @@ in {
     agentsDir = "${dotfilesPath}/modules/features/agents";
     link = config.lib.file.mkOutOfStoreSymlink;
     agentsMd = link "${agentsDir}/AGENTS.md";
+    # CLAUDE.md links to the AGENTS.md beside it, as in every repository.
     folderInstructions = folder: let
-      source = link "${agentsDir}/${folder}/AGENTS.md";
+      agentsFile = "Developer/${folder}/AGENTS.md";
     in {
-      "Developer/${folder}/CLAUDE.md".source = source;
-      "Developer/${folder}/AGENTS.md".source = source;
+      ${agentsFile}.source = link "${agentsDir}/${folder}/AGENTS.md";
+      "Developer/${folder}/CLAUDE.md".source = link "${config.home.homeDirectory}/${agentsFile}";
     };
   in {
     home.file =

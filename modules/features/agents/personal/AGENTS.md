@@ -1,6 +1,6 @@
 <!-- Source: dotfiles/modules/features/agents/personal/AGENTS.md, linked as
-     ~/Developer/personal/CLAUDE.md and ~/Developer/personal/AGENTS.md. Claude Code loads it for
-     every repository under ~/Developer/personal, after the personal instructions and before the
+     ~/Developer/personal/AGENTS.md, with CLAUDE.md beside it linking to that. Claude Code loads it
+     for every repository under ~/Developer/personal, after the personal instructions and before the
      repository's own. The dotfiles live outside this folder and do not get it. -->
 
 # Personal projects
