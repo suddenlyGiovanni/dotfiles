@@ -33,8 +33,17 @@ Plan steps 1 to 4 are built and applied on the work Mac, and checked after two r
   sources, and `agent-environment` sources it before each command and for its direnv snapshot.
   After the second reboot the Claude app again had none of the variables, and its session had all
   of them. [ADR-002](../adr/002-xdg-compliance-session-variables.md) has the three consumers.
-- **Not tested yet**: Android Studio's first start under the XDG folders; whether an IDE started
-  from a Toolbox that opened at login inherits Toolbox's environment; a Gradle sync of `connect`.
+- **Toolbox does not pass its environment on**: started from a Toolbox that had none of the
+  variables, Android Studio had all of them. Its parent process is launchd: Toolbox launches an
+  IDE through macOS. So a Toolbox that opens at login is harmless, and no start-after-export step
+  is needed.
+- **Android Studio's first start**: it ran on the XDG folders (its log names all four paths),
+  imported the old settings by itself, found the SDK through `ANDROID_HOME` in its setup wizard
+  and recorded `~/.local/share/android/sdk`, and created its AVD in `~/.local/share/android/avd`,
+  where `emulator -list-avds` finds it. In `~/Library` it wrote nothing; Toolbox wrote
+  `studio.vmoptions`. Nothing new appeared in the home folder.
+- **Not tested yet**: a Gradle sync of `connect`; Toolbox's "Per-tool JVM options file location",
+  which should move `studio.vmoptions` beside the app.
 
 ## What the team repository already defines
 
@@ -234,12 +243,9 @@ a new ADR in place of 0004 for Xcode); `.xcode-version` and `GEM_HOME` in the pr
 
 To test in step 4, because no document settles them:
 
-- **Toolbox and the environment.** Confirmed in part: Toolbox starts at login without the
-  variables, like every app that opens at login. Still open: whether an IDE started from its
-  window inherits that. The `~/.local/bin/studio` launcher and the Dock are not affected. If it
-  does inherit: the export agent starts Toolbox after exporting, in place of Toolbox's own start
-  at login.
-- Toolbox still updates and rolls back Android Studio with the folders moved.
+- Done: Toolbox and the environment. Toolbox starts at login without the variables, and an IDE
+  started from its window has them all the same.
+- Toolbox still updates Android Studio with the folders moved.
 - The Gradle sync of `connect` in Android Studio uses `~/.local/share/gradle` and JDK 17.
 - Done: `adb devices` reads its key through the link and leaves `~/.android` a link.
 
