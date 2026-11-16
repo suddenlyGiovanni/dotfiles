@@ -28,6 +28,7 @@ terminal.
   |------|--------|
   | [nix-modules.md](./.agents/rules/nix-modules.md) | `flake.nix`, `modules/**/*.nix`: dendritic shape, discovery, no specialArgs, native option or writable link, no `xdg.userDirs`, zapped casks |
   | [nushell.md](./.agents/rules/nushell.md) | `*.nu` and the login-shell wiring: where nu's environment comes from, nu-lint config, string traps |
+  | [scripts.md](./.agents/rules/scripts.md) | `*.nu`, `*.sh`, `.envrc`: which language, `main` as the table of contents, writing for the reader, the checks no tool makes |
   | [git-signing.md](./.agents/rules/git-signing.md) | git, ssh and 1Password modules: 1Password signing, unattended runs |
   | [agent-tooling.md](./.agents/rules/agent-tooling.md) | `.agents/`, `.claude/`, `.opencode/`, `.mcp.json`: the shared/harness split, server lists, hook protocol |
 

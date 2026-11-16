@@ -28,3 +28,7 @@ paths:
   list in `hosts.nix`.
 - **Track new files**. A flake sees only files that git tracks. Run `git add` on a new file before
   you run `just build`.
+- **Shell in Nix is checked at build time**. Build a command with `writeShellApplication`, which
+  runs ShellCheck and fails the build on a finding, not `writeShellScriptBin`. Past three
+  statements, the shell belongs in a Nushell file beside the module
+  ([scripts.md](./scripts.md)).
