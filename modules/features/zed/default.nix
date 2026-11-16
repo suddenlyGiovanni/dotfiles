@@ -22,9 +22,12 @@ in {
     # which gives `file:line:column` only to a command it knows by name (the
     # Vitest UI's "open in editor", through the test-view hub).
     home.packages = [
-      (pkgs.writeShellScriptBin "zed" ''
-        exec "/Applications/Zed Preview.app/Contents/MacOS/cli" "$@"
-      '')
+      (pkgs.writeShellApplication {
+        name = "zed";
+        text = ''
+          exec "/Applications/Zed Preview.app/Contents/MacOS/cli" "$@"
+        '';
+      })
     ];
     home.sessionVariables.LAUNCH_EDITOR = "zed";
 

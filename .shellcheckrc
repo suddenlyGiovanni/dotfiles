@@ -1,0 +1,11 @@
+# ShellCheck configuration — https://www.shellcheck.net/wiki/Directive
+# Read by the shellcheck git hook (perSystem.pre-commit in flake.nix), so by
+# `just lint`, the edit hook, `git commit` and `nix flake check` alike.
+
+# .envrc has no shebang; direnv evaluates it with bash.
+shell=bash
+
+# Every optional check as well. The ShellCheck wiki calls them subjective and
+# warns that they may conflict; turn one off here by name, with its reason,
+# when it contradicts how these scripts are written.
+enable=all

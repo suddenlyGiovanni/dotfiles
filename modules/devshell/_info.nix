@@ -7,7 +7,7 @@
 # nix/modules/devshell/help.nix.
 {
   lib,
-  writeShellScriptBin,
+  writeShellApplication,
   writeText,
   nushell,
   # [{ title = "Formatters"; tools = [{ name = "treefmt"; package = …; note = "…"; }]; }]
@@ -35,6 +35,9 @@
       toolGroups;
   });
 in
-  writeShellScriptBin "devshell-info" ''
-    exec ${lib.getExe nushell} --no-config-file ${./info.nu} ${data}
-  ''
+  writeShellApplication {
+    name = "devshell-info";
+    text = ''
+      exec ${lib.getExe nushell} --no-config-file ${./info.nu} ${data}
+    '';
+  }

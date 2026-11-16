@@ -92,17 +92,23 @@ in {
     home.packages = [
       # A wrapper, not a link: the path has spaces, and the message says what is
       # missing on a Mac that has no Rex yet.
-      (pkgs.writeShellScriptBin "rex" ''
-        if [ ! -x ${lib.escapeShellArg cli} ]; then
-          echo "rex: Rex Beta is not installed (https://www.superlogical.com/rex/docs/installation)" >&2
-          exit 127
-        fi
-        exec ${lib.escapeShellArg cli} "$@"
-      '')
+      (pkgs.writeShellApplication {
+        name = "rex";
+        text = ''
+          if [[ ! -x ${lib.escapeShellArg cli} ]]; then
+            echo "rex: Rex Beta is not installed (https://www.superlogical.com/rex/docs/installation)" >&2
+            exit 127
+          fi
+          exec ${lib.escapeShellArg cli} "$@"
+        '';
+      })
 
-      (pkgs.writeShellScriptBin "rex-settings-capture" ''
-        exec ${lib.getExe pkgs.nushell} --no-config-file ${./capture.nu} ${lib.escapeShellArg "${moduleDir}/preferences.json"}
-      '')
+      (pkgs.writeShellApplication {
+        name = "rex-settings-capture";
+        text = ''
+          exec ${lib.getExe pkgs.nushell} --no-config-file ${./capture.nu} ${lib.escapeShellArg "${moduleDir}/preferences.json"}
+        '';
+      })
     ];
   };
 }

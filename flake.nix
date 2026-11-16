@@ -159,6 +159,8 @@
             # *.lua. Reads modules/features/neovim/nvim/stylua.toml, which
             # stylua searches for upward from each file.
             stylua.enable = true;
+            # *.sh, *.bash and .envrc. Its default layout: tabs.
+            shfmt.enable = true;
           };
           settings = {
             global.excludes = [
@@ -226,6 +228,14 @@
             excludes = ["^modules/features/agents/skills/"];
             hooks = {
               check-merge-conflicts.enable = true;
+
+              # Shell files (pre-commit tells them by extension or shebang),
+              # with .shellcheckrc: every optional check, bash for .envrc.
+              shellcheck = {
+                enable = true;
+                types = ["file"];
+                files = "(^|/)\\.envrc$|\\.(sh|bash)$";
+              };
 
               # git-hooks.nix takes the wrapper from perSystem.treefmt and runs
               # it on the staged files with --fail-on-change --no-cache: a

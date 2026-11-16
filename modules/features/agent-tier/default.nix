@@ -87,9 +87,12 @@ _: {
     checkData = pkgs.writeText "agent-tier-check.json" (builtins.toJSON {
       inherit envFile gitConfig signingKey forges;
     });
-    agent-tier-check = pkgs.writeShellScriptBin "agent-tier-check" ''
-      exec ${lib.getExe pkgs.nushell} --no-config-file ${./check.nu} ${checkData}
-    '';
+    agent-tier-check = pkgs.writeShellApplication {
+      name = "agent-tier-check";
+      text = ''
+        exec ${lib.getExe pkgs.nushell} --no-config-file ${./check.nu} ${checkData}
+      '';
+    };
 
     # Both spellings of an SSH remote, rewritten to HTTPS.
     httpsFor = host: ''
