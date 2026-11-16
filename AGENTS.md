@@ -61,13 +61,18 @@ files, and `nix flake check` on every tracked file. A file that passes `just lin
   fmt`, `nix fmt`, Zed (`.zed/settings.json`) and the `treefmt` git hook all run it.
 - **Git hooks** (`flake.nix` → `perSystem.pre-commit`, git-hooks.nix): treefmt
   (`--fail-on-change`), statix and deadnix (`*.nix`), nu-lint (`*.nu`, with `.nu-lint.toml`,
-  every rule group an error) and merge-conflict markers; convco on the message. The devshell
-  installs them. Never pass `--no-verify`: fix what they report.
+  every rule group an error), ShellCheck (`*.sh`, `.envrc`), the Nushell unit tests of the changed
+  `*.nu` files, and merge-conflict markers; convco on the message. The devshell installs them.
+  Never pass `--no-verify`: fix what they report.
+- **Tests**: `just test` runs every suite; `just test-nu [files]` the Nushell tests, each a
+  `<name>.test.nu` beside its code ([scripts.md](./.agents/rules/scripts.md)).
 - **Claude Code hooks** (`.claude/settings.json`). They are nu scripts; write new ones in nu, not
-  POSIX shell:
+  POSIX shell. Each is an adapter: the rules live in a harness-neutral core under
+  `.agents/hooks/` or behind a `just` recipe ([agent-tooling.md](./.agents/rules/agent-tooling.md)):
   - SessionStart and CwdChanged (`.claude/hooks/direnv-prime.nu`) put the devshell of the current
     directory (the repo, or a `.worktrees/<name>`) on the Bash tool's PATH.
-  - PreToolUse (`.claude/hooks/pre-tool-use.nu`) denies commands that have a `just` recipe
+  - PreToolUse (`.claude/hooks/pre-tool-use.nu`, core `.agents/hooks/tool-guard.nu` with its
+    tests) denies commands that have a `just` recipe
     (`darwin-rebuild`, `nix flake check|update`, …), a gate piped into `head`/`tail`,
     `--no-verify`, AI attribution, shell-authored files (`sed -i`, `tee`, `>` into the repo),
     installs outside nix, and writes to `flake.lock`, `result`, `.direnv/` or `.git/`. The deny

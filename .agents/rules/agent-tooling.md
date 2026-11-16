@@ -24,6 +24,11 @@ paths:
 - **Release the plugin**. Claude Code caches a plugin by its version, and installs it from the
   committed HEAD. Bump `version` in `plugin.json` when you change the plugin. The change takes
   effect after the commit, in a new session.
+- **A hook is an adapter around a core**. The core is harness-neutral: a Nushell module in
+  `.agents/hooks/` that takes a plain record and returns a verdict, with a `<name>.test.nu` beside
+  it, or a `just` recipe. The adapter in `.claude/hooks/` only reads Claude Code's payload into the
+  core's record and turns the result into Claude Code's answer. A new rule goes into the core and
+  its test, never into the adapter.
 - **Hooks are nu, and speak Claude Code's protocol**. Each hook reads its JSON payload on stdin
   (`nu --stdin`).
   - To deny a PreToolUse call, print `hookSpecificOutput.permissionDecision: "deny"` with
@@ -35,6 +40,7 @@ paths:
   - Each hook gets its own `CLAUDE_ENV_FILE` (`session-env/<session>/<event>-hook-<n>.sh`), and
     Claude Code sources all of them before each Bash command. A hook may overwrite its own file.
     The env hooks write through `modules/features/claude-code/hooks/direnv-env.nu`.
-- **Test a hook before you rely on it**. Pipe a sample payload into it:
+- **Test a hook before you rely on it**. The core's cases go in its `<name>.test.nu` (`just
+  test-nu <file>`). For the adapter, pipe a sample payload into it:
   `{tool_name: Bash, tool_input: {command: 'just build'}} | to json | nu --stdin .claude/hooks/pre-tool-use.nu`.
   Check both an allowed case and a denied case.
