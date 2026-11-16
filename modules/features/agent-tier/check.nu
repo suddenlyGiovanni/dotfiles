@@ -108,9 +108,11 @@ def forge-checks [forge: record, tier: record]: nothing -> list<record> {
 def github-login [host: string]: nothing -> record {
 	let name = $"($host) login"
 
-	let token = ^gh auth token --hostname $host | complete
+	# The exit code is the answer; unlike `gh auth token`, `gh auth status` never
+	# hands the token itself to this script.
+	let status = ^gh auth status --hostname $host | complete
 
-	if $token.exit_code == 0 {
+	if $status.exit_code == 0 {
 		passed $name 'gh has a token in the keychain'
 	} else {
 		failed $name 'gh is not logged in' --fix $"^gh auth login --hostname ($host) --git-protocol https --web"
