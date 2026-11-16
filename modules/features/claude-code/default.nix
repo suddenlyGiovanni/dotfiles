@@ -59,20 +59,6 @@ in {
         # flake input `ast-grep-agent-skill`.
         ast-grep = "${inputs.ast-grep-agent-skill}/ast-grep/skills/ast-grep";
       };
-      # User-level MCP servers, declared here instead of with `claude mcp add
-      # --scope user`, which writes them into ${configDir}/.claude.json next to
-      # OAuth and trust state that can't be tracked. Home Manager delivers them
-      # as the `hm` plugin inside the config dir, so the terminal CLI and the
-      # desktop app's Code tab both load them (as `plugin:hm:<name>`). A server
-      # that belongs to one tool is declared in that tool's module instead
-      # (hey-cli.nix). OAuth servers ask to be authorised once, with /mcp.
-      mcpServers = {
-        # Cloudflare's remote MCP server (docs, account, Workers); OAuth.
-        cloudflare = {
-          type = "http";
-          url = "https://mcp.cloudflare.com/mcp";
-        };
-      };
       # NOTE: `settings` is intentionally left unset. The upstream module only
       # writes ${configDir}/settings.json when `settings` or `marketplaces` is
       # non-empty, and it writes it as a *read-only* nix-store symlink — which
