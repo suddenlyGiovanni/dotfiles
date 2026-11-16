@@ -13,9 +13,10 @@ paths:
   `users.users.*.shell` is set in `nushell/default.nix`. It applies because `darwin-core.nix` lists
   the user in `users.knownUsers`.
 - **Where the environment comes from**. nu reads `/etc/login-environment.sh` (`session.nix`) in
-  `nushell/env.nu`. GUI apps get the same variables from the `login-environment` launchd agent.
-  `env.nu` also answers Claude.app's `$SHELL -l -i -c` probe, because the app can open at login
-  before the agent runs.
+  `nushell/env.nu`. GUI apps get the same variables from the `login-environment` launchd agent,
+  which launchd holds until login completes: an app that opens at login starts without them. So
+  an agent's commands source the file themselves (`agents/hooks/agent-environment`), and `env.nu`
+  answers Claude.app's `$SHELL -l -i -c` probe.
 - **Never put POSIX syntax where `$SHELL -c` runs it**. That shell is nu.
 - **Lint through the hooks**. `just lint <file>` runs nu-lint as the git hook does, with
   `--config .nu-lint.toml`; nu-lint does not find that file by itself.

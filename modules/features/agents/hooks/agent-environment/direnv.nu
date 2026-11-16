@@ -1,15 +1,25 @@
 # What direnv says about a directory: its environment, whether its `.envrc` may
 # load, and allowing it. Every command here runs direnv in the directory given.
+use login.nu
 
 # `direnv export bash` for a directory, with AGENT_TIER=1 on a machine that has
 # the agent tier, so the `.envrc` leaves the user's secrets out of it; null when
 # direnv fails or has nothing to export.
+#
+# direnv runs in a POSIX shell that has loaded the login environment (login.nu).
+# An `.envrc` reads it: a devshell keeps an ANDROID_HOME that is set and falls
+# back to a default when it is not, and the export would save that default.
 export def export-for [
 	dir: path # the directory whose environment to export
 ]: nothing -> oneof<string, nothing> {
 	cd $dir
 
-	let exported = with-env ({DIRENV_LOG_FORMAT: ''} | merge (tier-marker)) { ^direnv export bash | complete }
+	let command = [
+		(login load-line)
+		'exec direnv export bash'
+	] | str join "\n"
+
+	let exported = with-env ({DIRENV_LOG_FORMAT: ''} | merge (tier-marker)) { ^sh -c $command | complete }
 
 	if $exported.exit_code == 0 and ($exported.stdout | is-not-empty) { $exported.stdout }
 }

@@ -8,11 +8,13 @@ use ../agent-environment
 def main []: nothing -> nothing {
 	assert str contains (agent-environment fallback-script) 'direnv export bash' 'the fallback loads the environment per command'
 
+	assert str contains (agent-environment fallback-script) '/etc/login-environment.sh' 'the fallback starts from the login environment'
+
 	assert equal (agent-environment snapshot-script '/no/such/directory') null 'no snapshot of a directory that is gone'
 
 	assert equal (agent-environment blocked-notice '/no/such/directory') null 'no notice for a directory that is gone'
 
 	agent-environment trust '/no/such/directory'
 
-	print 'agent-environment: 4 cases passed'
+	print 'agent-environment: 5 cases passed'
 }

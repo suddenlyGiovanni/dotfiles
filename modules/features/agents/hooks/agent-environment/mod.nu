@@ -1,5 +1,6 @@
 # agent-environment: give an agent's commands the environment a terminal shows
-# in a directory, through direnv, in any repository on this machine.
+# in a directory: the login environment, then the directory's own through
+# direnv, in any repository on this machine.
 #
 # Harness-neutral and user-level: it serves every repository on the machine, so
 # it lives with the shared agent tooling, not in one repository's .agents/. A
@@ -19,6 +20,7 @@
 #
 #   script.nu   the shell script a harness runs before each command
 #   direnv.nu   what direnv says about a directory, and allowing it
+#   login.nu    the line that loads the login environment
 use script.nu
 use direnv.nu
 
