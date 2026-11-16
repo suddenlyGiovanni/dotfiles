@@ -117,26 +117,25 @@ def install-build [build: record, spec: record]: nothing -> nothing {
 }
 
 # Download a URL into a folder under its own file name; returns the file.
-# curl writes the file itself, so the step has one effect, and --fail turns an
-# HTTP error into a failed step instead of a saved error page.
 def download [url: string, folder: path]: nothing -> string {
-	let file = $folder | path join (
-        $url
-        | url parse
-        | get path
-        | path basename
-    )
+	let file = $folder | path join ($url | file-name)
 
-	let fetched = ^/usr/bin/curl --fail --silent --show-error --location --output $file $url | complete
-
-	if $fetched.exit_code != 0 {
-		error make {
-			msg: $"cannot download ($url): ($fetched.stderr | str trim)"
-			help: 'Check the network. The next switch tries again.'
-		}
-	}
+	fetch-bytes $url | save --raw $file
 
 	$file
+}
+
+# The last segment of a URL's path, e.g. `Rex-0.1.0-1973.dmg`.
+def file-name []: string -> string {
+	url parse | get path | path basename
+}
+
+# The body of a URL as raw bytes, streamed to whoever reads it. `http get`
+# follows redirects and fails on an HTTP error with the status and the URL
+# ("HTTP Error 404 (Not Found): …"), so an error page is never taken for the
+# file, and the failed download leaves none behind.
+def fetch-bytes [url: string]: nothing -> binary {
+	http get --raw $url
 }
 
 # Fail unless the app is signed with a certificate of the Apple team.
@@ -165,9 +164,11 @@ def assert-notarized [app: path]: nothing -> nothing {
 }
 
 # Copy the app, and give it to the owner: Sparkle then updates it without
-# asking for a password. An empty owner keeps the copier as the owner.
+# asking for a password. An empty owner keeps the copier as the owner. The copy
+# keeps the bundle's links, modes, timestamps and extended attributes, which its
+# code signature covers (`codesign --verify --deep --strict` passes on it).
 def copy-app [app: path, destination: path, --owner: string = '']: nothing -> nothing {
-	^/usr/bin/ditto $app $destination
+	cp --recursive --no-dereference --preserve [mode timestamps links xattr] $app $destination
 
 	if ($owner | is-not-empty) { ^/usr/sbin/chown -R $owner $destination }
 }
@@ -176,7 +177,7 @@ def copy-app [app: path, destination: path, --owner: string = '']: nothing -> no
 
 # Run the body with a new empty folder, then delete the folder.
 def with-scratch-folder [body: closure]: nothing -> nothing {
-	let folder = ^/usr/bin/mktemp -d -t rex-install | str trim
+	let folder = mktemp --directory --tmpdir 'rex-install.XXXXXX'
 
 	with-cleanup { do $body $folder } { rm --recursive --force $folder }
 }
