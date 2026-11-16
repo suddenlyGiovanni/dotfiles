@@ -251,10 +251,14 @@ and 6 are done; 5, the Xcode module, is open.
 Phase 2, later, not started: WebStorm on the same layout; merge requests to
 `infrastructure/developer` (the same variables in `mobile-toolchain.nix`, one SDK root, Toolbox,
 a new ADR in place of 0004 for Xcode); `.xcode-version` and `GEM_HOME` in the project repos.
-Two more for that phase, found while validating: connect's `studio` script hard-codes
-`/Applications/Android\ Studio.app`, the cask's path, where `studio` from `PATH` works for the
-cask and for Toolbox; and the team's `ANDROID_NDK` names 29.0.14206865 while connect's build
-downloads 27.1.12297006.
+Found while validating, and fixed on connect's branch `fix/tool-paths-from-environment` (five
+commits, not merged): the `studio` script named `/Applications/Android\ Studio.app`, the cask's
+path, where `studio` from `PATH` works for the cask and for Toolbox; the VS Code launch config
+named `/opt/homebrew/bin/node`; the README removed `~/.cocoapods` whatever `CP_HOME_DIR` says;
+`prepare_ci.sh` overwrote `ANDROID_HOME` and exported an `ANDROID_NDK` that nothing reads (the
+build takes NDK 27.1.12297006 from React Native's version catalog); and the devshell and the
+Fastfile fixed Xcode at `/Applications/Xcode.app`, where they now follow `xcode-select`. The
+team's `mobile-toolchain.nix` still exports that `ANDROID_NDK`.
 
 To test in step 4, because no document settles them:
 
