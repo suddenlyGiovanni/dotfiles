@@ -54,9 +54,11 @@ See [ADR-007](./adr/007-flake-parts-dendritic-migration.md) for architecture dec
     the team repository.
 - [ ] **Mobile toolchain on XDG paths, set here first** (decided 2026-11-16,
   [mobile-toolchain-locations.md](./research/mobile-toolchain-locations.md)). Work host only.
-  - Phase 1: the `jetbrains-toolbox` cask; `android.nix` (SDK, AVDs, preferences, Gradle home,
-    JDK, Android Studio's folders); `cocoapods.nix`; the hand migration and its tests; an `xcode`
-    module (`xcodes`, a declared version, `xcode-provision`, an activation check).
+  - Phase 1, done: the `jetbrains-toolbox` cask; `android.nix` (SDK, AVDs, preferences, Gradle
+    home, JDK, Android Studio's folders); `cocoapods.nix`; the hand migration; agent commands
+    loading the login environment themselves.
+  - Phase 1, open: Android Studio's first start under the XDG folders; how Toolbox launches an
+    IDE; an `xcode` module (`xcodes`, a declared version, `xcode-provision`, an activation check).
   - Phase 2, later: WebStorm on the same layout; merge requests to `infrastructure/developer`;
     `.xcode-version` and `GEM_HOME` in the project repos.
 

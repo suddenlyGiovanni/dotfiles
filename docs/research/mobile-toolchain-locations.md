@@ -17,6 +17,25 @@ says so.
 - **IDE settings**: persistence stays with JetBrains' Backup and Sync. The work here is where the
   IDE keeps its folders, not what is in them.
 
+## Applied and validated on 2026-11-16
+
+Plan steps 1 to 4 are built and applied on the work Mac, and checked after two reboots.
+
+- **Holds**: all the variables in launchd and in a Nushell login shell; `adb`, `emulator` and
+  `java` from the new places; `~/.android` as a link, through which `adb` reads its key; the
+  headless devshell keeping the XDG `ANDROID_HOME`, with `GRADLE_USER_HOME` and `CP_HOME_DIR`
+  passed through. No old folder came back.
+- **Found**: an app that opens at login starts before the environment is exported. launchd holds
+  the `login-environment` agent until login completes ("pending spawn, domain in on-demand-only
+  mode"); the export itself takes 0.2 s. The Claude app started 5 s before it finished, so an
+  agent's devshell fell back to `~/Library/Android/sdk`, which no longer exists.
+- **Fixed for agents**: `/etc/login-environment.sh` clears the include guards of the scripts it
+  sources, and `agent-environment` sources it before each command and for its direnv snapshot.
+  After the second reboot the Claude app again had none of the variables, and its session had all
+  of them. [ADR-002](../adr/002-xdg-compliance-session-variables.md) has the three consumers.
+- **Not tested yet**: Android Studio's first start under the XDG folders; whether an IDE started
+  from a Toolbox that opened at login inherits Toolbox's environment; a Gradle sync of `connect`.
+
 ## What the team repository already defines
 
 `infrastructure/developer` (clone: `~/Developer/work/developer`) splits tooling into a machine layer
@@ -183,14 +202,14 @@ Not exported, on purpose: `DEVELOPER_DIR` for the machine (it would override `xc
 everywhere; the devshells set it), `ANDROID_SDK_ROOT` (deprecated; the devshells still derive it
 from `ANDROID_HOME`), `STUDIO_VM_OPTIONS` (see above).
 
-The login environment (`home.sessionVariables`) reaches shells and, through the
-`login-environment` launchd agent, GUI apps started after login. Every variable above depends on
-that for Android Studio.
+The login environment (`home.sessionVariables`) reaches shells, an agent's commands (which source
+it themselves) and, through the `login-environment` launchd agent, GUI apps started after login.
+Every variable above depends on that last route for Android Studio.
 
 ## Plan
 
-Phase 1, these dotfiles, work host only. One commit each, `just check` before each, nothing
-pushed.
+Phase 1, these dotfiles, work host only. One commit each, `just check` before each. Steps 1 to 4
+are done; 5 and 6 are open.
 
 1. **Toolbox cask.** `jetbrains-toolbox` in the work host's casks (`hosts.nix`). Once, by hand:
    `brew install --cask --adopt jetbrains-toolbox`, because the app is already there and
@@ -215,13 +234,14 @@ a new ADR in place of 0004 for Xcode); `.xcode-version` and `GEM_HOME` in the pr
 
 To test in step 4, because no document settles them:
 
-- **Toolbox and the environment.** Toolbox starts at login from its own launchd agent, possibly
-  before `login-environment` has run. An IDE started from Toolbox may then miss
-  `STUDIO_PROPERTIES` and open on the default folders. The `~/.local/bin/studio` launcher and
-  the Dock are not affected. If it happens: turn off Toolbox's start at login.
+- **Toolbox and the environment.** Confirmed in part: Toolbox starts at login without the
+  variables, like every app that opens at login. Still open: whether an IDE started from its
+  window inherits that. The `~/.local/bin/studio` launcher and the Dock are not affected. If it
+  does inherit: the export agent starts Toolbox after exporting, in place of Toolbox's own start
+  at login.
 - Toolbox still updates and rolls back Android Studio with the folders moved.
 - The Gradle sync of `connect` in Android Studio uses `~/.local/share/gradle` and JDK 17.
-- `adb devices` writes its key through the link, and a device stays authorised.
+- Done: `adb devices` reads its key through the link and leaves `~/.android` a link.
 
 ## Open
 
