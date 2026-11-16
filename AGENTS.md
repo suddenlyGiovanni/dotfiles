@@ -69,20 +69,22 @@ files, and `nix flake check` on every tracked file. A file that passes `just lin
 - **Claude Code hooks** (`.claude/settings.json`). They are nu scripts; write new ones in nu, not
   POSIX shell. Each is an adapter: the rules live in a harness-neutral core under
   `.agents/hooks/` or behind a `just` recipe ([agent-tooling.md](./.agents/rules/agent-tooling.md)):
-  - SessionStart and CwdChanged (`.claude/hooks/direnv-prime.nu`) put the devshell of the current
-    directory (the repo, or a `.worktrees/<name>`) on the Bash tool's PATH.
+  - SessionStart and CwdChanged (`.claude/hooks/direnv-prime.nu`, core
+    `modules/features/agents/hooks/agent-environment/`) put the devshell of the current directory
+    (the repo, or a `.worktrees/<name>`) on the Bash tool's PATH.
   - PreToolUse (`.claude/hooks/pre-tool-use.nu`, core `.agents/hooks/tool-guard/` with its
     tests) denies commands that have a `just` recipe
     (`darwin-rebuild`, `nix flake check|update`, …), a gate piped into `head`/`tail`,
     `--no-verify`, AI attribution, shell-authored files (`sed -i`, `tee`, `>` into the repo),
     installs outside nix, and writes to `flake.lock`, `result`, `.direnv/` or `.git/`. The deny
     reason names the path to take instead.
-  - After every Write/Edit, `.claude/hooks/post-tool-use.nu` runs `just lint <file>` and reports
-    back what the git hooks reported.
+  - After every Write/Edit, `.claude/hooks/post-tool-use.nu` (core `.agents/hooks/file-check/`)
+    runs `just lint <file>` and reports back what the git hooks reported.
   - "Auto-formatted" means re-read the file before editing it again. Fix the lint findings in code
     you touched.
-  - Stop (`.claude/hooks/stop-gate.nu`) runs `just check` when the turn leaves uncommitted
-    `*.nix`/`*.nu`/`*.lua`/`*.toml`/`flake.lock` changes, and sends the turn back once if it fails.
+  - Stop (`.claude/hooks/stop-gate.nu`, core `.agents/hooks/turn-check/`) runs `just check` when
+    the turn leaves uncommitted `*.nix`/`*.nu`/`*.lua`/`*.toml`/`*.sh`/`.envrc`/`flake.lock`
+    changes, and sends the turn back once if it fails.
 - **LSP**: the in-repo plugin `.claude/plugins/dotfiles-lsp` (marketplace
   `.claude-plugin/marketplace.json`) wires `nu --lsp`, `nixd`, `lua-language-server`, `marksman`
   (`*.md`) and `taplo` (`*.toml`) into Claude Code's LSP tool. Claude Code installs it from the

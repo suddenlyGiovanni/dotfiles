@@ -39,7 +39,11 @@ paths:
     it is empty, and the hook then runs on an empty payload without an error.
   - Each hook gets its own `CLAUDE_ENV_FILE` (`session-env/<session>/<event>-hook-<n>.sh`), and
     Claude Code sources all of them before each Bash command. A hook may overwrite its own file.
-    The env hooks write through `modules/features/claude-code/hooks/direnv-env.nu`.
+    The env hooks write through `modules/features/claude-code/hooks/direnv-env.nu`, the adapter
+    for the user-level core `modules/features/agents/hooks/agent-environment/`.
+- **Two homes for cores**. `.agents/hooks/` holds this repository's own (the guard, the checks).
+  `modules/features/agents/hooks/` holds the user-level ones, which serve every repository on the
+  machine (the environment). Both follow the same module and test conventions.
 - **Test a hook before you rely on it**. The core's cases go in its folder's `mod.test.nu`
   (`just test-nu <file>`). For the adapter, pipe a sample payload into it:
   `{tool_name: Bash, tool_input: {command: 'just build'}} | to json | nu --stdin .claude/hooks/pre-tool-use.nu`.
