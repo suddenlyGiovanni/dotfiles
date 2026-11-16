@@ -10,6 +10,7 @@
 #     default.nix   fan-out (this file)
 #     AGENTS.md     global instructions, one file for every agent
 #     work/AGENTS.md  instructions for every work repository (work host only)
+#     forks/AGENTS.md instructions for every fork or clone of someone else's project
 #     skills/       global skills; kept empty on purpose. Claude Code ranks personal
 #                   skills above project ones, so a global copy shadows the
 #                   (newer) project version. Only add skills that are never
@@ -30,12 +31,17 @@
 # both render read-only nix-store copies, which defeats the single editable
 # source. Add another agent by adding one more link below.
 #
-# Between the global file and a repository's own there is one more layer, for
-# work: Claude Code loads CLAUDE.md from every directory above the one it
-# starts in, so ~/Developer/work/CLAUDE.md reaches every work repository and
-# nothing else. On the work host it links to work/AGENTS.md (also as
-# ~/Developer/work/AGENTS.md, for agents that read that name). What every
-# colleague should share still belongs in infrastructure/developer.
+# Between the global file and a repository's own there is one more layer, by
+# folder: Claude Code loads CLAUDE.md from every directory above the one it
+# starts in, so ~/Developer/<folder>/CLAUDE.md reaches every repository in that
+# folder and nothing else. Each folder's file is <folder>/AGENTS.md here, linked
+# as CLAUDE.md and as AGENTS.md (for agents that read that name):
+#
+#   ~/Developer/work/   work host only. What every colleague should share
+#                       belongs in infrastructure/developer instead.
+#   ~/Developer/forks/  every host.
+#
+# ~/Developer/dotfiles sits outside these folders and gets none of them.
 #
 # ── SKILLS ───────────────────────────────────────────────────────────────────
 #
@@ -66,16 +72,19 @@ in {
     agentsDir = "${dotfilesPath}/modules/features/agents";
     link = config.lib.file.mkOutOfStoreSymlink;
     agentsMd = link "${agentsDir}/AGENTS.md";
-    workAgentsMd = link "${agentsDir}/work/AGENTS.md";
+    folderInstructions = folder: let
+      source = link "${agentsDir}/${folder}/AGENTS.md";
+    in {
+      "Developer/${folder}/CLAUDE.md".source = source;
+      "Developer/${folder}/AGENTS.md".source = source;
+    };
   in {
     home.file =
       {
         ".agents/skills".source = link "${agentsDir}/skills";
       }
-      // lib.optionalAttrs config.dotfiles.isWorkHost {
-        "Developer/work/CLAUDE.md".source = workAgentsMd;
-        "Developer/work/AGENTS.md".source = workAgentsMd;
-      };
+      // folderInstructions "forks"
+      // lib.optionalAttrs config.dotfiles.isWorkHost (folderInstructions "work");
 
     xdg.configFile = {
       "claude/CLAUDE.md".source = agentsMd;
