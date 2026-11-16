@@ -46,7 +46,14 @@ Plan steps 1 to 4 are built and applied on the work Mac, and checked after two r
   writes `~/Applications/Android Studio.app.vmoptions`, and the IDE's log names that file
   (`jb.vmOptionsFile`) and the 10000 MB heap from it. After that start nothing was written under
   `~/Library/Application Support/Google`, so every `AndroidStudio*` folder there is a leftover.
-- **Not tested yet**: a Gradle sync of `connect`.
+- **Gradle sync of `connect`**: `android/` is not in the checkout; `just android prebuild --clean`
+  generates it. Opened with `studio connect/android`, the sync finished in 6 min 28 s. Gradle put
+  its 6.3 GB under `~/.local/share/gradle`, and its daemon runs on the Nix Zulu 17 with
+  `ANDROID_HOME`, `ANDROID_USER_HOME` and `GRADLE_USER_HOME` in its environment. The IDE wrote
+  `sdk.dir=~/.local/share/android/sdk` into `local.properties`, and Gradle added NDK
+  27.1.12297006 and CMake 3.22.1 to that SDK. No `~/.gradle`, `~/.m2` or `~/.kotlin` appeared.
+- **Leftovers**: the 23 old `AndroidStudio*` folders and WebStorm 2026.2's three, about 36 GB,
+  are in the Trash. Toolbox recreated none of them.
 
 ## What the team repository already defines
 
@@ -189,7 +196,7 @@ idea.log.path=<cacheHome>/Google/${idea.paths.selector}/log
 | `~/.expo` | Expo's only override is `__UNSAFE_EXPO_HOME_DIRECTORY`, which its source calls a shell-only escape hatch |
 | `~/.gem/headless-ios` | the headless devshell hard-codes it; a project change, later |
 | `~/.bundle` | no variable confirmed |
-| Whatever the first Android build adds (Kotlin daemon, Maven local) | unknown until it runs; audit `~` with xdg-ninja afterwards |
+| `~/Library/Application Support/kotlin/daemon` | the Kotlin daemon's run files, made by the first Gradle sync. Under `~/Library`, not in `~`; the sync added nothing else outside the layout |
 
 ## Configuration: what is tracked, and by whom
 
@@ -222,7 +229,7 @@ Every variable above depends on that last route for Android Studio.
 ## Plan
 
 Phase 1, these dotfiles, work host only. One commit each, `just check` before each. Steps 1 to 4
-are done; 5 and 6 are open.
+and 6 are done; 5, the Xcode module, is open.
 
 1. **Toolbox cask.** `jetbrains-toolbox` in the work host's casks (`hosts.nix`). Once, by hand:
    `brew install --cask --adopt jetbrains-toolbox`, because the app is already there and
@@ -244,6 +251,10 @@ are done; 5 and 6 are open.
 Phase 2, later, not started: WebStorm on the same layout; merge requests to
 `infrastructure/developer` (the same variables in `mobile-toolchain.nix`, one SDK root, Toolbox,
 a new ADR in place of 0004 for Xcode); `.xcode-version` and `GEM_HOME` in the project repos.
+Two more for that phase, found while validating: connect's `studio` script hard-codes
+`/Applications/Android\ Studio.app`, the cask's path, where `studio` from `PATH` works for the
+cask and for Toolbox; and the team's `ANDROID_NDK` names 29.0.14206865 while connect's build
+downloads 27.1.12297006.
 
 To test in step 4, because no document settles them:
 
