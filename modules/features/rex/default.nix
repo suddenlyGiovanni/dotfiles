@@ -103,10 +103,14 @@ in {
         '';
       })
 
+      # The formats plugin reads .plist files; nixpkgs builds it for the same
+      # Nushell version, and --plugins loads it for this run only.
       (pkgs.writeShellApplication {
         name = "rex-settings-capture";
         text = ''
-          exec ${lib.getExe pkgs.nushell} --no-config-file ${./capture.nu} ${lib.escapeShellArg "${moduleDir}/preferences.json"}
+          exec ${lib.getExe pkgs.nushell} --no-config-file \
+            --plugins ${lib.escapeShellArg "[${lib.getExe pkgs.nushellPlugins.formats}]"} \
+            ${./capture.nu} ${lib.escapeShellArg "${moduleDir}/preferences.json"}
         '';
       })
     ];
