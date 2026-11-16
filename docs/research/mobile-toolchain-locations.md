@@ -251,8 +251,9 @@ and 6 are done; 5, the Xcode module, is open.
 Phase 2, later, not started: WebStorm on the same layout; merge requests to
 `infrastructure/developer` (the same variables in `mobile-toolchain.nix`, one SDK root, Toolbox,
 a new ADR in place of 0004 for Xcode); `.xcode-version` and `GEM_HOME` in the project repos.
-Found while validating, and fixed on connect's branch `fix/tool-paths-from-environment` (five
-commits, not merged): the `studio` script named `/Applications/Android\ Studio.app`, the cask's
+Found while validating, and fixed in connect's merge request
+[!2141](https://dev.thingos.io/project/connect/-/merge_requests/2141) (five commits, open): the
+`studio` script named `/Applications/Android\ Studio.app`, the cask's
 path, where `studio` from `PATH` works for the cask and for Toolbox; the VS Code launch config
 named `/opt/homebrew/bin/node`; the README removed `~/.cocoapods` whatever `CP_HOME_DIR` says;
 `prepare_ci.sh` overwrote `ANDROID_HOME` and exported an `ANDROID_NDK` that nothing reads (the
