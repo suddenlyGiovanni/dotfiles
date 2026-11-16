@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (Updated 2026-01-20)
+Accepted (Updated 2026-11-16)
 
 ## Date
 
@@ -90,6 +90,8 @@ Tool-specific XDG variables are defined in their respective program modules:
 | `programs/bun.nix`       | `BUN_INSTALL`                                    |
 | `programs/claude-code.nix` | `CLAUDE_CONFIG_DIR`                            |
 | `programs/1password.nix` | `OP_CONFIG_DIR`                                  |
+| `features/android.nix` (work host) | `ANDROID_HOME`, `ANDROID_AVD_HOME`, `ANDROID_USER_HOME`, `GRADLE_USER_HOME`, `STUDIO_PROPERTIES` |
+| `features/cocoapods.nix` (work host) | `CP_HOME_DIR`, `CP_CACHE_DIR`          |
 
 This co-location pattern means:
 - **Self-contained modules**: All config for a tool lives in one file
@@ -108,12 +110,21 @@ file is sourced by:
 New shell sessions pick up these variables automatically. Existing terminals require reloading or
 starting a new session.
 
+The variables are declared once, in the feature modules, and every consumer derives its
+environment from that declaration. None is a source for another.
+
 Consumers that can't source a POSIX script get the same variables from `/etc/login-environment.sh`
 (`session.nix`), which sources nix-darwin's `set-environment`, Homebrew's `shellenv` and
 `hm-session-vars.sh`:
 
 - Nushell, the login shell, imports it in `env.nu` ([ADR-008](./008-nushell-login-shell.md))
-- GUI apps get it from a launchd agent that runs `launchctl setenv` at every login
+- GUI apps inherit it from launchd, which an agent fills with `launchctl setenv` at every login.
+  launchd holds that agent until login completes, so an app that opens at login starts without the
+  variables; an app started later has them. Measured on 2026-11-16: the export itself takes 0.2 s,
+  and it finished 5 to 7 s after the first apps had started.
+- An agent's commands source it before they run (`agents/hooks/agent-environment`), so an agent
+  session does not depend on when its app started. The file clears the include guards of the
+  scripts it sources, so a caller with stale values gets the current ones.
 
 
 ### macOS Consideration
@@ -140,6 +151,11 @@ Audited using [xdg-ninja](https://github.com/b3nj5m1n/xdg-ninja) v0.2.0.2.
 | Claude     | `~/.claude`    | `~/.config/claude`              | `programs/claude-code.nix` |
 | 1Password  | `~/.op`        | `~/.config/op`                  | `programs/1password.nix` |
 | zsh        | `~/.zcompdump` | `~/.cache/zsh/`                 | `programs/zsh.nix`       |
+| Android SDK | `~/Library/Android/sdk` | `~/.local/share/android/sdk` | `features/android.nix`   |
+| Android AVDs, preferences | `~/.android` | `~/.local/share/android/avd`, `~/.config/android` | `features/android.nix` |
+| Gradle     | `~/.gradle`    | `~/.local/share/gradle`         | `features/android.nix`   |
+| Android Studio | `~/Library/{Application Support,Caches,Logs}/Google` | `~/.config`, `~/.local/share` and `~/.cache`, under `Google/<version>` | `features/android.nix` |
+| CocoaPods  | `~/.cocoapods`, `~/Library/Caches/CocoaPods` | `~/.local/share/cocoapods`, `~/.cache/cocoapods` | `features/cocoapods.nix` |
 
 ### ❌ Non-Compliant (Tool Limitations)
 
@@ -147,6 +163,11 @@ Audited using [xdg-ninja](https://github.com/b3nj5m1n/xdg-ninja) v0.2.0.2.
 | ------- | ------------ | ------------------------------------------------------------- |
 | VS Code | `~/.vscode`  | Microsoft declined XDG support ([issue #3884](https://github.com/microsoft/vscode/issues/3884)) |
 | SSH     | `~/.ssh`     | Required by OpenSSH standard; keys must remain here           |
+| Xcode   | `~/Library/Developer`, `/Library/Developer` | No switch, apart from DerivedData |
+| Android Studio | `~/Library/Application Support/Google/<version>/studio.vmoptions` | The launcher hard-codes the folder on macOS, and JetBrains Toolbox writes the file there |
+
+[mobile-toolchain-locations.md](../research/mobile-toolchain-locations.md) has the sources for the
+Android, JetBrains and Xcode rows.
 
 ### 📝 Acceptable Exceptions
 
@@ -157,6 +178,7 @@ Audited using [xdg-ninja](https://github.com/b3nj5m1n/xdg-ninja) v0.2.0.2.
 | `~/.nix-defexpr/`  | Nix system managed                          |
 | `~/.nix-profile`   | Nix system managed                          |
 | `~/.bunfig.toml`   | Link to `~/.config/.bunfig.toml`, for a process with no `XDG_CONFIG_HOME` (`bun.nix`) |
+| `~/.android`       | Link to `~/.config/android`, for `adb`, which builds its key path from `$HOME/.android` and reads no variable (`android.nix`) |
 
 ## Consequences
 
