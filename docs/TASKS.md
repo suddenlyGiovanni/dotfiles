@@ -18,6 +18,21 @@ See [ADR-007](./adr/007-flake-parts-dendritic-migration.md) for architecture dec
 
 ---
 
+## Open Discussions
+
+- [ ] **Split the development environment from the configuration that is switched** (2026-11-16).
+  One flake holds both: the `perSystem` devshell, formatter table and git hooks for working on
+  this repo, and the darwin and Home Manager configurations that `just switch` applies. The
+  question is whether the development side moves to devenv, as the team's repositories do.
+  - For: the team's pattern; devenv's hooks are the same git-hooks.nix module, so the checks
+    carry over unchanged.
+  - Against: a second lock file means a second nixpkgs and more copies in the Nix store
+    ([nix-store-sharing.md](./research/nix-store-sharing.md)).
+  - Decided so far: settle the feedback loop first (`just lint` runs the git hooks at every
+    stage), then revisit.
+
+---
+
 ## Icebox (Future Improvements)
 
 Potential enhancements, not currently prioritized:
