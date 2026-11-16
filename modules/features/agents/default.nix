@@ -9,6 +9,7 @@
 #   agents/
 #     default.nix   fan-out (this file)
 #     AGENTS.md     global instructions, one file for every agent
+#     work/AGENTS.md  instructions for every work repository (work host only)
 #     skills/       global skills; kept empty on purpose. Claude Code ranks personal
 #                   skills above project ones, so a global copy shadows the
 #                   (newer) project version. Only add skills that are never
@@ -28,6 +29,13 @@
 # Deliberately not `programs.claude-code.context` / `programs.opencode.context`:
 # both render read-only nix-store copies, which defeats the single editable
 # source. Add another agent by adding one more link below.
+#
+# Between the global file and a repository's own there is one more layer, for
+# work: Claude Code loads CLAUDE.md from every directory above the one it
+# starts in, so ~/Developer/work/CLAUDE.md reaches every work repository and
+# nothing else. On the work host it links to work/AGENTS.md (also as
+# ~/Developer/work/AGENTS.md, for agents that read that name). What every
+# colleague should share still belongs in infrastructure/developer.
 #
 # ── SKILLS ───────────────────────────────────────────────────────────────────
 #
@@ -50,12 +58,24 @@
 {config, ...}: let
   dotfilesPath = config.dotfiles.user.dotfilesPath;
 in {
-  flake.modules.homeManager.agents = {config, ...}: let
+  flake.modules.homeManager.agents = {
+    config,
+    lib,
+    ...
+  }: let
     agentsDir = "${dotfilesPath}/modules/features/agents";
     link = config.lib.file.mkOutOfStoreSymlink;
     agentsMd = link "${agentsDir}/AGENTS.md";
+    workAgentsMd = link "${agentsDir}/work/AGENTS.md";
   in {
-    home.file.".agents/skills".source = link "${agentsDir}/skills";
+    home.file =
+      {
+        ".agents/skills".source = link "${agentsDir}/skills";
+      }
+      // lib.optionalAttrs config.dotfiles.isWorkHost {
+        "Developer/work/CLAUDE.md".source = workAgentsMd;
+        "Developer/work/AGENTS.md".source = workAgentsMd;
+      };
 
     xdg.configFile = {
       "claude/CLAUDE.md".source = agentsMd;
