@@ -54,6 +54,20 @@ _: {
         sso_role_name = AdministratorAccess
         region = eu-central-1
         output = json
+
+        # sops access for cloud/infrastructure (KMS decrypt/encrypt only, 12 h sessions).
+        # That repo's .envrc sets AWS_PROFILE=infrastructure-sops.
+        # Authenticate with: aws sso login --profile infrastructure-sops
+        [sso-session tes]
+        sso_start_url = https://ssoins-6987e4b204e53bd6.portal.eu-central-1.app.aws/
+        sso_region = eu-central-1
+        sso_registration_scopes = sso:account:access
+
+        [profile infrastructure-sops]
+        sso_session = tes
+        sso_account_id = 832394005187
+        sso_role_name = infrastructure-sops
+        region = eu-central-1
       '';
     };
   };
