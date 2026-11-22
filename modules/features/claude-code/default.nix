@@ -112,12 +112,8 @@ in {
     #                  ~/.agents/skills from the agents module + plugin
     #                  dirs); whole-dir symlinking would clobber those. Individual
     #                  skills are surfaced via per-skill symlinks (below).
-    #   - agents/    : surfaced per-AGENT (below), not whole-dir, because the
-    #                  thermos plugin's agents are surfaced into this same
-    #                  namespace and home-manager cannot have claude/agents be a
-    #                  symlink AND manage claude/agents/<file> entries under it.
-    #                  Your own personal agents live in agents/ and each gets a
-    #                  one-line entry here — same pattern as the thermos agents.
+    #   - agents/    : no global agents. A personal agent would get a one-line
+    #                  per-file entry here, so plugin agents can share the dir.
     xdg.configFile = let
       svc = path:
         config.lib.file.mkOutOfStoreSymlink
@@ -131,28 +127,6 @@ in {
       "claude/hooks".source = svc "hooks";
       "claude/workflows".source = svc "workflows";
       "claude/themes".source = svc "themes";
-
-      # ── Thermos (ported from cursor/plugins) ───────────────────────────────
-      # Canonical content lives as a SELF-CONTAINED Claude plugin under
-      # plugins/thermos/ (with .claude-plugin/plugin.json), catalogued by
-      # plugins/.claude-plugin/marketplace.json. That makes it promotable: a
-      # project's .claude/settings.json can point extraKnownMarketplaces at this
-      # repo and enable `thermos` for the whole team — same artifact, scope
-      # chosen by which settings.json enables it.
-      #
-      # For PERSONAL/global use we surface the plugin's pieces loosely so they
-      # stay editable in place (cheap iteration), instead of loading the plugin
-      # read-only/cached (the native binary can only load plugins via the
-      # marketplace cache; the HM --plugin-dir route needs package != null).
-      # Per-item symlinks straight into the plugin dir — single source of truth
-      # (plugins/thermos/), nothing copied or duplicated:
-      "claude/skills/thermos".source = svc "plugins/thermos/skills/thermos";
-      "claude/skills/thermo-nuclear-review".source = svc "plugins/thermos/skills/thermo-nuclear-review";
-      "claude/skills/thermo-nuclear-code-quality-review".source = svc "plugins/thermos/skills/thermo-nuclear-code-quality-review";
-      "claude/agents/thermo-nuclear-review-subagent.md".source =
-        svc "plugins/thermos/agents/thermo-nuclear-review-subagent.md";
-      "claude/agents/thermo-nuclear-code-quality-review-subagent.md".source =
-        svc "plugins/thermos/agents/thermo-nuclear-code-quality-review-subagent.md";
     };
 
     # Note: The native installer places the binary at ~/.local/bin/claude

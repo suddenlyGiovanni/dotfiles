@@ -20,35 +20,17 @@
     "command": "starship statusline claude-code"
   },
   "enabledPlugins": {
-    "frontend-design@claude-plugins-official": false,
     "markdown-lsp@suddenlygiovanni-dotfiles": true
   },
   "skillOverrides": {
     "herdr": "off",
-    "hunk-review": "off",
-    "plannotator-annotate": "off",
-    "plannotator-last": "off",
-    "plannotator-review": "off",
-    "plannotator-setup-goal": "off"
+    "hunk-review": "off"
   },
   "extraKnownMarketplaces": {
     "suddenlygiovanni-dotfiles": {
       "source": {
         "source": "directory",
         "path": "/Users/suddenlygiovanni/Developer/dotfiles/modules/features/claude-code/plugins"
-      }
-    },
-    "plannotator": {
-      "source": {
-        "source": "github",
-        "repo": "backnotprop/plannotator"
-      },
-      "autoUpdate": true
-    },
-    "cloudflare": {
-      "source": {
-        "source": "github",
-        "repo": "cloudflare/skills"
       }
     }
   },
