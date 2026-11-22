@@ -13,8 +13,6 @@
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     onepassword-shell-plugins.url = "github:1Password/shell-plugins";
     onepassword-shell-plugins.inputs.nixpkgs.follows = "nixpkgs";
-    hey-cli.url = "github:basecamp/hey-cli";
-    hey-cli.inputs.nixpkgs.follows = "nixpkgs";
     hunk.url = "github:modem-dev/hunk";
     hunk.inputs.nixpkgs.follows = "nixpkgs";
 

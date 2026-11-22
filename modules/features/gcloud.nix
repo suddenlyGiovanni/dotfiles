@@ -6,8 +6,9 @@
 # write to the store; add components declaratively instead:
 #   pkgs.google-cloud-sdk.withExtraComponents [pkgs.google-cloud-sdk.components.<name>]
 #
-# Mainly here so `gws auth setup` (see gws.nix) can create the Cloud project and
-# OAuth client. Auth state lives in ~/.config/gcloud (already the default) and
+# Mainly here so gws can create the Cloud project and OAuth client: gws itself
+# lives in the family vault's devenv (~/Documents/family, `just google-setup`).
+# Auth state lives in ~/.config/gcloud (already the default) and
 # isn't declared here; log in with `gcloud auth login`.
 _: {
   flake.modules.homeManager.gcloud = {pkgs, ...}: {

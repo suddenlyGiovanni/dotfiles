@@ -20,7 +20,7 @@
 #     stdout isn't a TTY, so agents and pipes still get plain diffs.
 #   - Claude: the module's enableClaudeIntegration hardcodes ~/.claude/skills,
 #     but our Claude config dir is XDG, so the hunk-review skill is registered
-#     through programs.claude-code (same as hey-cli.nix) and stays pinned to
+#     through programs.claude-code (as ast-grep's is) and stays pinned to
 #     the installed binary's rev.
 {inputs, ...}: {
   flake.modules.homeManager.hunk = {

@@ -25,7 +25,6 @@
   },
   "skillOverrides": {
     "herdr": "off",
-    "hey": "off",
     "hunk-review": "off",
     "plannotator-annotate": "off",
     "plannotator-last": "off",

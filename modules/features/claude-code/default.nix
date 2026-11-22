@@ -13,8 +13,8 @@
 # this folder, linked into the config dir. Skills and MCP servers belong in
 # plugins of the `suddenlygiovanni-dotfiles` marketplace, enabled in the tracked
 # settings.json, not in `programs.claude-code.skills` / `.mcpServers`. The
-# modules that still use those options (gws, hunk, herdr, hey-cli, ast-grep
-# below) move over one at a time (docs/TASKS.md). Remote servers that need OAuth
+# modules that still use those options (hunk, herdr, ast-grep below) move over
+# one at a time (docs/TASKS.md). Remote servers that need OAuth
 # are claude.ai connectors, on the account, not here.
 {
   inputs,

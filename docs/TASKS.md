@@ -39,9 +39,12 @@ See [ADR-007](./adr/007-flake-parts-dendritic-migration.md) for architecture dec
   [claude-config-locations.md](./research/claude-config-locations.md)). Claude Code's own formats
   are the source of truth; Nix only places files and sets `CLAUDE_CONFIG_DIR`.
   - Move each `programs.claude-code.skills` / `.mcpServers` use into a plugin of the
-    `suddenlygiovanni-dotfiles` marketplace, enabled in the tracked `settings.json`: `hey-cli.nix`
-    (MCP server; call `hey` by name), `gws.nix`, `hunk.nix`, `herdr/`, the `ast-grep` skill
-    (flake input). Each loses its Nix pin, unless the plugin references a pinned git source.
+    `suddenlygiovanni-dotfiles` marketplace, enabled in the tracked `settings.json`: `hunk.nix`,
+    `herdr/`, the `ast-grep` skill (flake input). Each loses its Nix pin, unless the plugin
+    references a pinned git source.
+  - Done 2026-11-22: `hey-cli.nix` and `gws.nix` left the dotfiles. Only the family vault
+    (`~/Documents/family`) uses them, so its devenv pins both and its `family-tools` plugin loads
+    them there alone.
   - Then `programs.claude-code` keeps only `configDir` and `package = null`.
 - [ ] **Work-global Claude layer in `infrastructure/developer`** (decided 2026-11-16).
   - A team plugin marketplace inside that repository: work conventions, shared skills, team MCP
